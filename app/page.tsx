@@ -299,15 +299,17 @@ export default function HomePage() {
           <div className="max-w-3xl space-y-6">
             <HeroTextAnimation />
 
-            <div className="pt-2 flex flex-wrap gap-4 items-center animate-fade-up delay-200">
-              <Button asChild size="lg" className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-extrabold border-0 shadow-md hover-lift-sm h-12 px-8 rounded-xl text-sm md:text-base">
-                <Link href="/apply">
-                  Apply for Admission <ArrowRight className="ml-2 size-4" />
+            <div className="pt-2 flex flex-row flex-wrap items-center justify-start gap-3 sm:gap-4 animate-fade-up delay-200">
+              <Button asChild size="lg" className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-extrabold border-0 shadow-md hover-lift-sm h-12 px-7 sm:px-8 rounded-xl text-sm sm:text-base">
+                <Link href="/apply" className="flex items-center gap-2">
+                  Apply <ArrowRight className="size-4" />
                 </Link>
               </Button>
               
-              <Button asChild size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 h-12 px-7 rounded-xl text-sm md:text-base backdrop-blur-md">
-                <Link href="/about">Discover Wellstar Bright</Link>
+              <Button asChild size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 h-12 px-6 sm:px-7 rounded-xl text-sm sm:text-base backdrop-blur-md">
+                <Link href="/about">
+                  Discover
+                </Link>
               </Button>
             </div>
           </div>
