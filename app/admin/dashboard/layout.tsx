@@ -47,8 +47,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [router]);
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-  }, [dark]);
+    const isDark = typeof window !== "undefined" && localStorage.getItem("ns_theme") === "dark";
+    setDark(isDark);
+    document.documentElement.classList.toggle("dark", isDark);
+  }, []);
+
+  const toggleDark = () => {
+    const nextDark = !dark;
+    setDark(nextDark);
+    document.documentElement.classList.toggle("dark", nextDark);
+    try { localStorage.setItem("ns_theme", nextDark ? "dark" : "light"); } catch(_) {}
+  };
 
   const logout = () => {
     sessionStorage.removeItem("ns_admin_demo");
@@ -150,7 +159,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Input placeholder="Search students, teachers, classes…" className="pl-9 bg-secondary/50 border-none focus-visible:ring-1" />
             </div>
             <div className="ml-auto flex items-center gap-3">
-              <Button variant="ghost" size="icon" onClick={() => setDark((d) => !d)} aria-label="Toggle theme" className="rounded-full">
+              <Button variant="ghost" size="icon" onClick={toggleDark} aria-label="Toggle theme" className="rounded-full">
                 {dark ? <Sun className="size-5" /> : <Moon className="size-5" />}
               </Button>
               <Button variant="ghost" size="icon" aria-label="Notifications" className="relative rounded-full">

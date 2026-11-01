@@ -196,7 +196,7 @@ export default function RootLayout({
           id="theme-initializer"
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
-            __html: `try{if(localStorage.getItem('ns_theme')==='dark'||(!('ns_theme'in localStorage)&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');else document.documentElement.classList.remove('dark');}catch(_){}`,
+            __html: `try{if(localStorage.getItem('ns_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(_){}`,
           }}
         />
         <LoaderProvider>
