@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.exe
+*.dmg
+*.zip
+*.AppImage
+*.deb
+*.tar.gz
+*.blockmap
+.env*
+*.log

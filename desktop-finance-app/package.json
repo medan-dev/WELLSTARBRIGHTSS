@@ -1,0 +1,82 @@
+{
+  "name": "wellstar-finance-desktop",
+  "version": "1.0.0",
+  "description": "Offline-First Isolated Finance & POS Desktop Executable for Bursars and Accountants",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build-exe": "electron-builder --win portable",
+    "build:win": "electron-builder --win",
+    "build:win:portable": "electron-builder --win portable",
+    "build:win:installer": "electron-builder --win nsis",
+    "build:linux": "electron-builder --linux AppImage deb tar.gz",
+    "build:linux:tar": "electron-builder --linux tar.gz",
+    "build:mac": "electron-builder --mac dmg zip",
+    "build:all": "electron-builder -wml"
+  },
+  "keywords": [
+    "school-finance",
+    "offline-pos",
+    "receipt-printer",
+    "electron"
+  ],
+  "author": "Wellstar Bright School Management",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^34.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.wellstar.finance.pos",
+    "productName": "Wellstar Finance POS",
+    "icon": "logo.png",
+    "win": {
+      "target": [
+        "portable",
+        "nsis"
+      ],
+      "icon": "logo.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "mac": {
+      "category": "public.app-category.finance",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "logo.png"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "category": "Office;Finance",
+      "target": [
+        "AppImage",
+        "deb",
+        "tar.gz"
+      ],
+      "icon": "logo.png"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  }
+}

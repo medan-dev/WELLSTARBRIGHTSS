@@ -1,0 +1,68 @@
+name: Build Cross-Platform Desktop Finance App
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+    paths:
+      - 'desktop-finance-app/**'
+
+jobs:
+  release:
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: desktop-finance-app/package-lock.json
+
+      - name: Install Linux dependencies (Ubuntu only)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libarchive-tools libfuse2
+
+      - name: Install dependencies
+        working-directory: desktop-finance-app
+        run: npm ci
+
+      - name: Build Windows Executables
+        if: runner.os == 'Windows'
+        working-directory: desktop-finance-app
+        run: npm run build:win
+
+      - name: Build macOS DMG and ZIP
+        if: runner.os == 'macOS'
+        working-directory: desktop-finance-app
+        run: npm run build:mac
+
+      - name: Build Linux AppImage and DEB
+        if: runner.os == 'Linux'
+        working-directory: desktop-finance-app
+        run: npm run build:linux
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: finance-pos-${{ runner.os }}
+          path: |
+            desktop-finance-app/dist/*.exe
+            desktop-finance-app/dist/*.dmg
+            desktop-finance-app/dist/*.zip
+            desktop-finance-app/dist/*.AppImage
+            desktop-finance-app/dist/*.deb
+            desktop-finance-app/dist/*.tar.gz
+          if-no-files-found: warn
+

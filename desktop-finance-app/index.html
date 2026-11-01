@@ -1,0 +1,2272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wellstar Bright — Bursar Financial Workstation</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- WORKSTATION SHIFT SECURITY & TERMINAL ACCESS OVERLAY -->
+  <div class="lock-overlay" id="terminalLockOverlay">
+    <div class="lock-split-layout">
+      <!-- INSTITUTIONAL HERO PANEL -->
+      <div class="lock-hero-panel">
+        <!-- Institutional Header -->
+        <div class="lock-brand-row">
+          <div class="lock-crest-box">
+            <img src="logo.png" alt="School Crest" class="brand-crest-img" id="loginBrandLogo">
+          </div>
+          <div>
+            <span class="lock-school-title" id="loginSchoolTitle">Wellstar Bright Secondary School</span>
+            <span class="lock-school-subtitle" id="loginSchoolSubtitle">Office of the Bursar &bull; Accounts &amp; Finance</span>
+          </div>
+        </div>
+
+        <!-- Workstation Overview -->
+        <div class="lock-hero-pitch">
+          <p class="lock-kicker">Point of Sale &bull; Financial ERP</p>
+          <h1 class="lock-hero-heading">
+            Authorized Counter Workstation
+          </h1>
+          <p class="lock-hero-desc">
+            Authorized workstation for school fee collections, thermal receipt printing, petty cash disbursements, and shift reconciliation under Ministry of Education &amp; Sports standards.
+          </p>
+
+          <!-- Core Capability Badges -->
+          <div class="lock-value-grid">
+            <div class="lock-value-card">
+              <span class="val-icon-box text-emerald">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
+              </span>
+              <span class="val-card-text">Offline-First Counter Resilience</span>
+            </div>
+
+            <div class="lock-value-card">
+              <span class="val-icon-box text-blue">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+              </span>
+              <span class="val-card-text">Audit-Locked Sequential Receipts</span>
+            </div>
+
+            <div class="lock-value-card">
+              <span class="val-icon-box text-amber">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </span>
+              <span class="val-card-text">Staff Payroll &amp; PAYE / NSSF</span>
+            </div>
+
+            <div class="lock-value-card">
+              <span class="val-icon-box text-purple">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+              </span>
+              <span class="val-card-text">Double-Entry Ledger Balancing</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Institutional Footer -->
+        <div class="lock-trust-footer">
+          <svg class="svg-icon text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+          <span id="loginTrustText">Mukono Campus, Uganda &bull; Ministry of Education &amp; Sports Reg.</span>
+        </div>
+      </div>
+
+      <!-- RIGHT LOGIN FORM PANEL -->
+      <div class="lock-form-panel">
+        <div class="lock-form-card">
+          <!-- Mobile Brand Heading -->
+          <div class="lock-mobile-brand">
+            <div class="lock-crest-box small">
+              <img src="logo.png" alt="School Crest" class="brand-crest-img">
+            </div>
+            <div>
+              <h2 class="lock-form-title">Bursar Finance Workstation</h2>
+              <p class="lock-form-subtitle" id="loginSchoolMobileSubtitle">Wellstar Bright Secondary School</p>
+            </div>
+          </div>
+
+          <div class="lock-form-head">
+            <div class="lock-head-flex">
+              <div>
+                <h2 class="lock-form-title">Operator Shift Sign In</h2>
+                <p class="lock-form-subtitle">Authenticate with your staff credentials and verify drawer float.</p>
+              </div>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <span class="status-pill sync-pill" style="padding: 4px 8px; font-size: 11px;">
+                  <span class="status-dot offline" id="lockStatusDot"></span>
+                  <span id="lockStatusText">Server</span>
+                </span>
+                <button type="button" class="btn btn-outline btn-sm" id="btnLoginThemeToggle" title="Toggle Light / Dark Theme" style="padding: 6px 12px; font-size: 11px; white-space: nowrap;">
+                  <span id="loginThemeToggleIcon">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                  </span>
+                  <span id="loginThemeToggleText">Theme</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remote Lockout Warning Banner -->
+          <div class="remote-lockout-banner" id="remoteLockoutBanner" style="display: none;">
+            <div class="lockout-head">
+              <svg class="svg-icon text-rose" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span>WORKSTATION SUSPENDED</span>
+            </div>
+            <p>This workstation PC has been remotely locked out by the Super Administrator. All counter transactions, fee receipting, and petty cash disbursements are frozen.</p>
+          </div>
+
+          <!-- Shift Profile Quick-Select -->
+          <div class="role-autofill-box">
+            <div class="role-autofill-header">
+              <span class="role-autofill-title">
+                <svg class="svg-icon text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Shift Role Preset:
+              </span>
+            </div>
+            <div class="role-autofill-grid">
+              <button type="button" class="role-pill-btn" data-fill="admin">
+                Super Admin
+              </button>
+              <button type="button" class="role-pill-btn text-emerald" data-fill="bursar">
+                Chief Bursar
+              </button>
+              <button type="button" class="role-pill-btn text-blue" data-fill="cashier">
+                Cashier 1
+              </button>
+            </div>
+          </div>
+
+          <!-- Sign-In Form -->
+          <form id="cashierAuthForm" class="lock-form-stack">
+            <div class="form-group">
+              <label>Authorized Staff Account *</label>
+              <select id="authCashierSelect" class="lock-input">
+                <option value="CPA Sarah Namubiru" data-role="BURSAR" data-pin="1234">CPA Sarah Namubiru (Chief Bursar &amp; Head of Finance)</option>
+                <option value="Joseph Kato" data-role="CASHIER" data-pin="5566" selected>Joseph Kato (Senior Counter Cashier 1)</option>
+                <option value="Grace Auma" data-role="CASHIER" data-pin="5577">Grace Auma (Counter Cashier 2)</option>
+                <option value="Dr. Arthur Ssentongo" data-role="SUPER_ADMIN" data-pin="9900">Dr. Arthur Ssentongo (Super Administrator)</option>
+                <option value="Robert Mugisha" data-role="AUDITOR" data-pin="7788">Robert Mugisha (Senior Financial Auditor)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Opening Physical Cash Drawer Float (<span class="currencyPrefixLabel">UGX</span>) *</label>
+              <div class="input-with-prefix">
+                <span class="input-curr-prefix currencyPrefixLabel">UGX</span>
+                <input type="number" id="authDrawerFloat" class="lock-input" value="150000" step="1000" required>
+              </div>
+              <div class="input-subhint">Physical currency verified in counter drawer at shift start</div>
+            </div>
+
+            <div class="form-group">
+              <div class="field-label-row">
+                <label>4-Digit Security Authorization PIN *</label>
+                <button type="button" id="btnTogglePinVisibility" class="btn-text-toggle">
+                  <span id="pinToggleIcon">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </span>
+                  <span id="pinToggleLabel">Show</span>
+                </button>
+              </div>
+              <input type="password" id="authPinInput" class="lock-input pin-field" maxlength="4" placeholder="••••" required autofocus>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" id="btnUnlockTerminal">
+              <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+              <span>Authenticate &amp; Open Shift</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP CONTAINER -->
+  <div class="app-container">
+    <!-- TOP STATUS & CONTROL BAR -->
+    <header class="top-bar">
+      <!-- Left: School Brand & Crest -->
+      <div class="brand">
+        <div class="brand-crest-top">
+          <img src="logo.png" alt="School Crest" class="top-logo-img" id="topBrandLogo">
+        </div>
+        <div class="brand-info">
+          <div class="brand-title" id="topSchoolName">Wellstar Bright Secondary School</div>
+          <div class="brand-sub" id="topSchoolSub">Mukono • Bursar Workstation &amp; Financial ERP</div>
+        </div>
+      </div>
+
+      <!-- Right: Shift Controls, Actions & Profile -->
+      <div class="top-controls">
+        <div class="status-pill drawer-pill" id="drawerPill" title="Current Physical Cash Float">
+          <svg class="svg-icon text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
+          <span id="topDrawerAmt">Drawer: UGX 0</span>
+        </div>
+
+        <button class="btn btn-outline" id="btnThemeToggle" title="Toggle Light / Dark Theme" type="button">
+          <span id="topThemeToggleIcon">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          </span>
+          <span id="topThemeToggleText">Dark Mode</span>
+        </button>
+
+        <!-- Live Central Server Sync Connectivity Status -->
+        <div class="status-pill sync-pill" id="serverSyncPill" title="Connection status with central PostgreSQL server">
+          <span class="status-dot offline" id="statusDot"></span>
+          <span id="statusText">Checking Connection...</span>
+        </div>
+
+        <button class="btn btn-outline" id="btnSyncNow" title="Sync with Central Server" type="button">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+          <span>Sync Now</span>
+        </button>
+
+        <button class="btn btn-ghost btn-icon-only" id="btnTopSettings" title="System Configuration" type="button">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+
+        <!-- USER PROFILE MENU (Replacing Terminal Lock) -->
+        <div class="user-profile-wrapper" id="userProfileWrapper">
+          <button type="button" class="user-profile-btn" id="btnUserProfileTrigger" title="Account &amp; Profile Options">
+            <span class="user-avatar-circle" id="topAvatarInitials">JK</span>
+            <div class="user-profile-text">
+              <span class="user-name" id="topCashierName">Joseph Kato</span>
+              <span class="user-role-label" id="topCashierRole">Senior Cashier</span>
+            </div>
+            <svg class="svg-icon profile-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+
+          <!-- Profile Dropdown Menu -->
+          <div class="user-profile-dropdown" id="userProfileDropdown">
+            <div class="dropdown-header">
+              <div class="dropdown-avatar" id="dropdownAvatarInitials">JK</div>
+              <div class="dropdown-user-info">
+                <div class="dropdown-user-name" id="dropdownCashierName">Joseph Kato</div>
+                <div class="dropdown-user-role" id="dropdownCashierRole">Senior Counter Cashier</div>
+              </div>
+            </div>
+            <div class="dropdown-body">
+              <button type="button" class="dropdown-item" id="btnMenuProfile">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>View Profile</span>
+              </button>
+              <div class="dropdown-divider"></div>
+              <button type="button" class="dropdown-item dropdown-logout" id="btnMenuLogout">
+                <svg class="svg-icon text-rose" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN BODY -->
+    <div class="main-layout">
+      <!-- SIDEBAR MODULE NAVIGATION -->
+      <nav class="sidebar" id="sidebarNav">
+        <!-- Sidebar Toggle Header -->
+        <div class="sidebar-header">
+          <span class="sidebar-header-title">Modules</span>
+          <button type="button" class="sidebar-toggle-btn" id="btnToggleSidebar" title="Minimize Sidebar">
+            <svg class="svg-icon toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+        </div>
+
+        <div class="nav-section-label">Counter &amp; Billing</div>
+        <button class="nav-item active" data-tab="dashboard" title="Executive Dashboard">
+          <span class="nav-icon">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+          </span>
+          <span>Executive Dashboard</span>
+        </button>
+        <button class="nav-item" data-tab="pos" title="Fee POS Counter">
+          <span class="nav-icon">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v.5"/><path d="M12 6v.5"/></svg>
+          </span>
+          <span>Fee POS Counter</span>
+        </button>
+        <button class="nav-item" data-tab="receipts" title="Receipts Ledger">
+          <span class="nav-icon">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+          </span>
+          <span>Receipts Ledger</span>
+        </button>
+        <button class="nav-item" data-tab="fees" title="Fees &amp; Billing">
+          <span class="nav-icon">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </span>
+          <span>Fees &amp; Billing</span>
+        </button>
+
+        <div class="nav-section-label">Treasury &amp; Disbursements</div>
+        <button class="nav-item" data-tab="expenses" title="Petty Cash &amp; Vouchers">
+          <span class="nav-icon">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+          </span>
+          <span>Petty Cash &amp; Vouchers</span>
+        </button>
+        <button class="nav-item" data-tab="payroll" title="Staff Payroll &amp; Slips">
+          <span class="nav-icon">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </span>
+          <span>Staff Payroll &amp; Slips</span>
+        </button>
+        <button class="nav-item" data-tab="bank" title="Bank &amp; Cash Accounts">
+          <span class="nav-icon">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+          </span>
+          <span>Bank &amp; Cash Accounts</span>
+        </button>
+
+        <div class="nav-section-label">Operations &amp; Audit</div>
+        <button class="nav-item" data-tab="meals" title="Meal Cards">
+          <span class="nav-icon">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M7 15h.01"/><path d="M11 15h2"/></svg>
+          </span>
+          <span>Meal Cards</span>
+        </button>
+        <button class="nav-item" data-tab="reports" title="Shift Reconciliation">
+          <span class="nav-icon">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg>
+          </span>
+          <span>Shift Reconciliation</span>
+        </button>
+
+        <div class="nav-section-label">System &amp; Data</div>
+        <button class="nav-item" data-tab="settings" title="System Settings">
+          <span class="nav-icon">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          </span>
+          <span>System Settings</span>
+        </button>
+        <button class="nav-item" data-tab="queue" title="Sync Outbox">
+          <span class="nav-icon">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>
+          </span>
+          <span>Sync Outbox</span>
+          <span class="nav-pill" id="queueCount">0</span>
+        </button>
+
+        <!-- Sidebar Bottom Sign Out -->
+        <div class="sidebar-footer">
+          <button type="button" class="sidebar-logout-btn" id="btnSidebarLogout" title="Log Out of the System">
+            <span class="nav-icon">
+              <svg class="svg-icon text-rose" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+            </span>
+            <span>Log Out of the System</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- CONTENT PANES -->
+      <main class="content-area">
+        <!-- PANE: EXECUTIVE ANALYTICS DASHBOARD -->
+        <section class="pane active" id="pane-dashboard">
+          <div class="dash-hero-card">
+            <div class="dash-hero-left">
+              <h1 class="dash-hero-title">Financial Operations &amp; Accounts</h1>
+              <p class="dash-hero-desc">Tuition fee collections, cashier counter reconciliation, and operational expense budgets.</p>
+            </div>
+            <div class="dash-hero-actions">
+              <div class="timeframe-pill" id="dashTimeframePills">
+                <button class="tf-btn" data-period="today">Today</button>
+                <button class="tf-btn active" data-period="shift">This Shift</button>
+                <button class="tf-btn" data-period="term">Term 1</button>
+                <button class="tf-btn" data-period="year">Full Year</button>
+              </div>
+              <button class="btn btn-primary" id="btnDashQuickPOS">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v.5"/><path d="M12 6v.5"/></svg>
+                <span>New Fee POS</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- KPI METRICS OVERVIEW -->
+          <div class="dash-kpi-grid">
+            <div class="kpi-glass-card gradient-emerald">
+              <div class="kpi-top">
+                <span class="kpi-title">Tuition Collections</span>
+                <div class="kpi-icon-badge">
+                  <svg class="svg-icon text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
+                </div>
+              </div>
+              <div class="kpi-main-val" id="dashTotalCollections">UGX 0</div>
+              <div class="kpi-hint" id="dashReceiptCount">0 verified receipts issued</div>
+              <canvas class="kpi-sparkline" id="sparkCollections" height="36"></canvas>
+            </div>
+
+            <div class="kpi-glass-card gradient-blue">
+              <div class="kpi-top">
+                <span class="kpi-title">Cash in Drawer</span>
+                <div class="kpi-icon-badge">
+                  <svg class="svg-icon text-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                </div>
+              </div>
+              <div class="kpi-main-val" id="dashDrawerFloat">UGX 150,000</div>
+              <div class="kpi-hint">Physical cash currently in desk drawer</div>
+              <canvas class="kpi-sparkline" id="sparkDrawer" height="36"></canvas>
+            </div>
+
+            <div class="kpi-glass-card gradient-amber">
+              <div class="kpi-top">
+                <span class="kpi-title">Outstanding Fee Arrears</span>
+                <div class="kpi-icon-badge">
+                  <svg class="svg-icon text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+                </div>
+              </div>
+              <div class="kpi-main-val" id="dashFeeArrears">UGX 14,200,000</div>
+              <div class="kpi-hint">Uncollected student tuition balance</div>
+              <canvas class="kpi-sparkline" id="sparkArrears" height="36"></canvas>
+            </div>
+
+            <div class="kpi-glass-card gradient-purple">
+              <div class="kpi-top">
+                <span class="kpi-title">Total Solvency Reserves</span>
+                <div class="kpi-icon-badge">
+                  <svg class="svg-icon text-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                </div>
+              </div>
+              <div class="kpi-main-val" id="dashLiquidReserves">UGX 51,100,000</div>
+              <div class="kpi-hint">Combined Bank, Cash Drawer &amp; Mobile Money</div>
+              <canvas class="kpi-sparkline" id="sparkReserves" height="36"></canvas>
+            </div>
+          </div>
+
+          <!-- MAIN CHARTS ROW 1 -->
+          <div class="dash-charts-row">
+            <!-- REVENUE VS EXPENSES SPLINE AREA CHART -->
+            <div class="chart-box-card wide">
+              <div class="chart-box-header">
+                <div>
+                  <h2 class="chart-box-title">
+                    <svg class="svg-icon title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                    Fee Collections Inflow vs Disbursement Burn
+                  </h2>
+                  <p class="chart-box-sub">Daily/Monthly financial trajectory &amp; operational expenses velocity (<span class="currencyPrefixLabel">UGX</span>)</p>
+                </div>
+                <div class="chart-legend-pills">
+                  <span class="legend-pill"><span class="dot emerald"></span> Fee Inflow</span>
+                  <span class="legend-pill"><span class="dot rose"></span> Disbursements</span>
+                  <span class="legend-pill"><span class="dot blue"></span> Net Liquidity</span>
+                </div>
+              </div>
+              <div class="canvas-host">
+                <canvas id="dashAreaChart" height="240"></canvas>
+              </div>
+            </div>
+
+            <!-- PAYMENT CHANNEL DONUT CHART -->
+            <div class="chart-box-card compact">
+              <div class="chart-box-header">
+                <div>
+                  <h2 class="chart-box-title">
+                    <svg class="svg-icon title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10h-10z"/></svg>
+                    Payment Channel Share
+                  </h2>
+                  <p class="chart-box-sub">Collections volume by settlement gateway</p>
+                </div>
+              </div>
+              <div class="canvas-host pie-host">
+                <canvas id="dashDonutChart" height="200"></canvas>
+              </div>
+              <div class="dash-channel-legend" id="dashChannelLegend">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+
+          <!-- CHARTS ROW 2 -->
+          <div class="dash-charts-row">
+            <!-- DEPARTMENT BUDGET VS SPEND BAR CHART -->
+            <div class="chart-box-card">
+              <div class="chart-box-header">
+                <div>
+                  <h2 class="chart-box-title">
+                    <svg class="svg-icon title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg>
+                    Department Spending vs Budget Allocation
+                  </h2>
+                  <p class="chart-box-sub">Cost center disbursements and variance control (<span class="currencyPrefixLabel">UGX</span>)</p>
+                </div>
+                <div class="chart-legend-pills">
+                  <span class="legend-pill"><span class="dot purple"></span> Budget</span>
+                  <span class="legend-pill"><span class="dot amber"></span> Actual Spent</span>
+                </div>
+              </div>
+              <div class="canvas-host">
+                <canvas id="dashBarChart" height="220"></canvas>
+              </div>
+            </div>
+
+            <!-- CLASS RECOVERY GAUGE & ACTION DOCK -->
+            <div class="chart-box-card">
+              <div class="chart-box-header">
+                <div>
+                  <h2 class="chart-box-title">
+                    <svg class="svg-icon title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    Class Collection Progress &amp; Action Dock
+                  </h2>
+                  <p class="chart-box-sub">Tuition clearance rates across Senior 1 to Senior 6</p>
+                </div>
+              </div>
+              
+              <div class="class-recovery-bars" id="dashClassBars">
+                <!-- Dynamically populated -->
+              </div>
+
+              <div class="dash-quick-dock">
+                <button class="dock-btn" id="dockBtnPos">
+                  <span class="dock-icon">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v.5"/><path d="M12 6v.5"/></svg>
+                  </span>
+                  <span>New Fee POS</span>
+                </button>
+                <button class="dock-btn" id="dockBtnExpense">
+                  <span class="dock-icon">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                  </span>
+                  <span>Pay Voucher</span>
+                </button>
+                <button class="dock-btn" id="dockBtnPayroll">
+                  <span class="dock-icon">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  </span>
+                  <span>Staff Payroll</span>
+                </button>
+                <button class="dock-btn" id="dockBtnBank">
+                  <span class="dock-icon">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                  </span>
+                  <span>Bank Deposit</span>
+                </button>
+                <button class="dock-btn" id="dockBtnReport">
+                  <span class="dock-icon">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+                  </span>
+                  <span>Shift Audit</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- CHARTS ROW 3: GAUGE + HEATMAP -->
+          <div class="dash-charts-row dash-row3" id="dashRow3">
+            <!-- FEE RECOVERY GAUGE RING -->
+            <div class="chart-box-card scroll-reveal" id="dashGaugeCard">
+              <div class="chart-box-header">
+                <div>
+                  <h2 class="chart-box-title">
+                    <svg class="svg-icon title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+                    Fee Recovery Rate
+                  </h2>
+                  <p class="chart-box-sub">Term tuition clearance vs total invoiced</p>
+                </div>
+                <span class="kpi-hint" id="dashCashierTag">Cashier: —</span>
+              </div>
+              <div class="gauge-canvas-host">
+                <canvas id="dashGaugeChart" height="180"></canvas>
+                <div class="gauge-center-label">
+                  <div class="gauge-pct" id="dashRecoveryRateBadge">—</div>
+                  <div class="gauge-sub">Recovery</div>
+                </div>
+              </div>
+              <div class="gauge-meta-row">
+                <div class="gauge-meta-item">
+                  <span class="gauge-meta-label">Collected</span>
+                  <span class="gauge-meta-val" id="dashTotalCollections2">—</span>
+                </div>
+                <div class="gauge-meta-item">
+                  <span class="gauge-meta-label">Arrears</span>
+                  <span class="gauge-meta-val text-amber" id="dashFeeArrears2">—</span>
+                </div>
+                <div class="gauge-meta-item">
+                  <span class="gauge-meta-label">Transactions</span>
+                  <span class="gauge-meta-val" id="dashReceiptCount2">—</span>
+                </div>
+              </div>
+              <div class="recovery-progress-track">
+                <div class="recovery-progress-fill" id="dashRecoveryProgress"></div>
+              </div>
+            </div>
+
+            <!-- WEEKLY ACTIVITY HEATMAP -->
+            <div class="chart-box-card wide scroll-reveal" id="dashHeatmapCard">
+              <div class="chart-box-header">
+                <div>
+                  <h2 class="chart-box-title">
+                    <svg class="svg-icon title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+                    Collections Activity Heatmap
+                  </h2>
+                  <p class="chart-box-sub">Daily transaction density — last 10 weeks (Mon–Fri)</p>
+                </div>
+              </div>
+              <canvas id="dashHeatmap" height="130"></canvas>
+              <div class="heatmap-legend-row">
+                <span class="heatmap-legend-label">Less</span>
+                <div class="heatmap-legend-swatches" id="dashHeatmapLegend"></div>
+                <span class="heatmap-legend-label">More</span>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- PANE 1: POS & FEE COLLECTION -->
+        <section class="pane" id="pane-pos">
+          <div class="grid-2col">
+            <!-- Left: Student Lookup -->
+            <div class="card">
+              <div class="card-header">
+                <h2>Student Directory &amp; Roster</h2>
+              </div>
+              
+              <div class="search-box">
+                <input type="text" id="studentSearchInput" placeholder="Search student name, registration # or class...">
+              </div>
+
+              <div class="student-list" id="studentListContainer">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Right: Payment & Instant Receipting -->
+            <div class="card">
+              <div class="card-header">
+                <h2>Fee Collection &amp; Receipt Voucher</h2>
+              </div>
+
+              <div id="paymentFormArea">
+                <div class="empty-hint" id="noStudentSelectedHint">
+                  Select a student from the left roster to process payment and issue an official receipt voucher.
+                </div>
+
+                <form id="posPaymentForm" style="display: none;" class="form-stack">
+                  <div class="selected-student-summary" id="studentSummaryBox">
+                    <!-- Student details & balance -->
+                  </div>
+
+                  <div class="form-group">
+                    <label>Amount to Collect (<span class="currencyPrefixLabel">UGX</span>) *</label>
+                    <div class="input-with-prefix">
+                      <span class="input-curr-prefix currencyPrefixLabel">UGX</span>
+                      <input type="number" id="payAmountInput" required min="100" step="100" placeholder="e.g. 250000">
+                    </div>
+                    <div class="quick-amt-pills" id="posQuickAmtPills">
+                      <button type="button" class="quick-amt-btn" data-amt="50000">50k</button>
+                      <button type="button" class="quick-amt-btn" data-amt="100000">100k</button>
+                      <button type="button" class="quick-amt-btn" data-amt="250000">250k</button>
+                      <button type="button" class="quick-amt-btn" data-amt="500000">500k</button>
+                      <button type="button" class="quick-amt-btn" data-amt="full">Full Balance</button>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Payment Method *</label>
+                      <select id="payMethodSelect">
+                        <option value="CASH">Cash (Desk Drawer Float)</option>
+                        <option value="BANK_DEPOSIT">Bank Deposit Slip</option>
+                        <option value="MOBILE_MONEY">Mobile Money (MTN / Airtel)</option>
+                        <option value="POS_CARD">Debit / Credit Card (POS)</option>
+                        <option value="CHEQUE">Bank Cheque</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Reference # / Slip / MoMo Tx ID</label>
+                      <input type="text" id="payRefInput" placeholder="Optional reference">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Cashier Notes / Remarks</label>
+                    <input type="text" id="payNotesInput" placeholder="e.g. Term 1 Tuition installment">
+                  </div>
+
+                  <div class="action-buttons">
+                    <button type="submit" class="btn btn-primary btn-lg" id="btnIssueReceipt">
+                      <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+                      <span>Issue &amp; Print Official Receipt</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PANE 2: RECEIPTS HISTORY -->
+        <section class="pane" id="pane-receipts">
+          <div class="card">
+            <div class="card-header">
+              <h2>Receipts Issued (Offline &amp; Synced)</h2>
+              <input type="text" id="receiptSearch" placeholder="Filter receipt # or student..." class="input-sm">
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="receiptsTable">
+                <thead>
+                  <tr>
+                    <th>Receipt #</th>
+                    <th>Student Name</th>
+                    <th>Amount</th>
+                    <th>Method</th>
+                    <th>Cashier</th>
+                    <th>Sync Status</th>
+                    <th>Issued At</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="receiptsTableBody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- PANE 3: FEES & STUDENT BILLING -->
+        <section class="pane" id="pane-fees">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2>Student Fee Billing &amp; Arrears Register</h2>
+                <p class="text-muted" style="font-size: 11px;">Class fee structures, discounts, scholarships, and outstanding balances</p>
+              </div>
+              <button class="btn btn-primary btn-sm" id="btnOpenBillModal">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="16"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
+                <span>New Student Bill</span>
+              </button>
+            </div>
+
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Class</th>
+                    <th>Term Billed</th>
+                    <th>Total Invoiced</th>
+                    <th>Discount</th>
+                    <th>Paid Amount</th>
+                    <th>Arrears Balance</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="feesTableBody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- PANE 4: EXPENSES & PETTY CASH -->
+        <section class="pane" id="pane-expenses">
+          <!-- TOP EXPENSE CATEGORY SUMMARY TILES -->
+          <div class="expense-summary-grid">
+            <div class="expense-summary-card">
+              <div class="exp-sum-label">Total Operational Expenses</div>
+              <div class="exp-sum-val text-rose" id="expTotalDisbursed">UGX 0</div>
+              <div class="exp-sum-sub" id="expTotalCount">0 Vouchers Issued</div>
+            </div>
+            <div class="expense-summary-card">
+              <div class="exp-sum-label">Power, Fuel &amp; Utilities</div>
+              <div class="exp-sum-val" id="expUtilitiesTotal">UGX 0</div>
+              <div class="exp-sum-sub">Electricity, Generator &amp; Water</div>
+            </div>
+            <div class="expense-summary-card">
+              <div class="exp-sum-label">Kitchen &amp; Boarding Food</div>
+              <div class="exp-sum-val" id="expFoodTotal">UGX 0</div>
+              <div class="exp-sum-sub">Produce, Groceries &amp; Firewood</div>
+            </div>
+            <div class="expense-summary-card">
+              <div class="exp-sum-label">Academics, Fleet &amp; Repairs</div>
+              <div class="exp-sum-val" id="expAcademicsTotal">UGX 0</div>
+              <div class="exp-sum-sub">Exam Printing, Fleet &amp; Campus</div>
+            </div>
+          </div>
+
+          <div class="grid-2col" style="margin-top: 18px;">
+            <!-- Left: Issue Expense Voucher Form -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2>Issue &amp; Disburse Expense Voucher</h2>
+                  <p class="text-muted" style="font-size: 11px;">Record institutional expenses, electricity/utility bills, or supplies with automatic balance deduction</p>
+                </div>
+              </div>
+
+              <form id="expenseForm" class="form-stack">
+                <div class="form-group">
+                  <label>Payee / Vendor Name *</label>
+                  <input type="text" id="expPaidTo" required placeholder="e.g. Umeme Uganda Ltd, Mukwano Wholesalers, TotalEnergies">
+                </div>
+
+                <div class="form-group">
+                  <label>Expense Category *</label>
+                  <div style="display: flex; gap: 8px;">
+                    <select id="expCategorySelect" class="form-control" style="flex: 1;" required>
+                      <option value="">-- Choose Category --</option>
+                      <option value="Electricity Bill">Electricity Bill (Umeme / Power)</option>
+                      <option value="Water & Sanitation">Water &amp; Sanitation Utility</option>
+                      <option value="Diesel & Fuel">Diesel &amp; Generator Fuel</option>
+                      <option value="Kitchen Food Supplies">Kitchen Food &amp; Boarding Supplies</option>
+                      <option value="Stationery & Printing">Stationery &amp; Examination Printing</option>
+                      <option value="Science Lab Supplies">Science Lab Chemicals &amp; Equipment</option>
+                      <option value="Campus Repairs & Maintenance">Campus Repairs &amp; Maintenance</option>
+                      <option value="Transport & Bus Maintenance">Vehicle Fuel &amp; Bus Servicing</option>
+                      <option value="Security Services">Security &amp; Guard Personnel</option>
+                      <option value="Internet & Telecoms">Internet &amp; School Communications</option>
+                      <option value="Medical & Clinic">Medical Clinic &amp; First Aid</option>
+                      <option value="__CUSTOM__">Type Custom Category Manually...</option>
+                    </select>
+                  </div>
+                  <input type="text" id="expCategoryCustom" placeholder="Type custom category name..." style="display: none; margin-top: 8px;" class="form-control">
+                </div>
+
+                <div class="form-group">
+                  <label>Expense Title / Description *</label>
+                  <input type="text" id="expTitle" required placeholder="e.g. March Campus Electricity Bill, 500kg Posho & Beans">
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Amount to Disburse (<span class="currencyPrefixLabel">UGX</span>) *</label>
+                    <div class="input-with-prefix">
+                      <span class="input-curr-prefix currencyPrefixLabel">UGX</span>
+                      <input type="number" id="expAmount" required min="500" step="100" placeholder="e.g. 350000">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Disburse / Deduct From *</label>
+                    <select id="expPaidFrom" required>
+                      <option value="DRAWER">Main Cash Drawer (Desk Float)</option>
+                      <option value="STANBIC">Stanbic School Operating Account</option>
+                      <option value="MOMO">Mobile Money Merchant Float</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Department</label>
+                    <select id="expDept">
+                      <option value="Administration">Administration</option>
+                      <option value="Kitchen & Food">Kitchen &amp; Food</option>
+                      <option value="Transport & Bus">Transport &amp; Bus</option>
+                      <option value="Science & Academics">Science &amp; Academics</option>
+                      <option value="Repairs & Campus">Repairs &amp; Campus</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Bill / Invoice / Receipt Ref #</label>
+                    <input type="text" id="expInvoiceRef" placeholder="e.g. BILL-9012, INV-4482">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Disbursement Purpose / Remarks</label>
+                  <textarea id="expDesc" rows="2" placeholder="Audit remarks, authorization notes..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="btnSubmitExpense">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  <span>Issue Voucher &amp; Deduct Amount</span>
+                </button>
+              </form>
+            </div>
+
+            <!-- Right: Expenses Vouchers Register -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2>Disbursed Expense Vouchers</h2>
+                  <p class="text-muted" style="font-size: 11px;">Audited disbursement records with payment voucher slips</p>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <select id="expFilterCategory" class="input-sm">
+                    <option value="ALL">All Categories</option>
+                    <option value="Electricity Bill">Electricity Bills</option>
+                    <option value="Water & Sanitation">Water Utility</option>
+                    <option value="Diesel & Fuel">Diesel &amp; Fuel</option>
+                    <option value="Kitchen Food Supplies">Kitchen Food</option>
+                    <option value="Stationery & Printing">Stationery</option>
+                    <option value="Science Lab Supplies">Science Lab</option>
+                    <option value="Campus Repairs & Maintenance">Campus Repairs</option>
+                    <option value="Transport & Bus Maintenance">Transport</option>
+                  </select>
+                  <input type="text" id="expenseSearch" placeholder="Search payee, title, voucher #..." class="input-sm" style="width: 170px;">
+                </div>
+              </div>
+
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Voucher #</th>
+                      <th>Date</th>
+                      <th>Expense Item &amp; Payee</th>
+                      <th>Category</th>
+                      <th>Paid From</th>
+                      <th>Amount</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="expensesTableBody">
+                    <!-- Populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PANE 5: STAFF PAYROLL & COMPENSATION -->
+        <section class="pane" id="pane-payroll">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2>Faculty &amp; Staff Payroll Roster</h2>
+                <p class="text-muted" style="font-size: 11px;">Salaries, allowances, statutory PAYE/NSSF deductions, and official payslips</p>
+              </div>
+              <button class="btn btn-primary btn-sm" id="btnOpenPayrollModal">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="16"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
+                <span>Run Staff Payroll</span>
+              </button>
+            </div>
+
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Payslip Ref</th>
+                    <th>Staff Member</th>
+                    <th>Month</th>
+                    <th>Gross Pay</th>
+                    <th>PAYE Tax</th>
+                    <th>NSSF (5%)</th>
+                    <th>Net Salary</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="payrollTableBody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- PANE 6: BANK & CASH DRAWER -->
+        <section class="pane" id="pane-bank">
+          <!-- TOP LIQUID BALANCES GRID -->
+          <div class="bank-positions-grid">
+            <div class="position-item">
+              <div class="pos-top">
+                <span class="pos-title">Main Cash Drawer Float</span>
+                <span class="pos-icon text-emerald">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
+                </span>
+              </div>
+              <div class="pos-val text-emerald" id="drawerPositionVal">UGX 0</div>
+              <div class="pos-sub">Physical cash currently inside counter drawer</div>
+            </div>
+
+            <div class="position-item">
+              <div class="pos-top">
+                <span class="pos-title">Stanbic Operating Account</span>
+                <span class="pos-icon text-blue">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                </span>
+              </div>
+              <div class="pos-val text-blue" id="stanbicPositionVal">UGX 42,500,000</div>
+              <div class="pos-sub">A/C # 9030018892019 • Main Operations</div>
+            </div>
+
+            <div class="position-item">
+              <div class="pos-top">
+                <span class="pos-title">Mobile Money Merchant</span>
+                <span class="pos-icon text-amber">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>
+                </span>
+              </div>
+              <div class="pos-val text-amber" id="momoPositionVal">UGX 8,450,000</div>
+              <div class="pos-sub">Merchant Code # 612991 • MTN / Airtel Pay</div>
+            </div>
+
+            <div class="position-item">
+              <div class="pos-top">
+                <span class="pos-title">Total Solvency Reserves</span>
+                <span class="pos-icon text-purple">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m16 10-4 4-4-4"/></svg>
+                </span>
+              </div>
+              <div class="pos-val text-purple" id="totalSolvencyVal">UGX 51,100,000</div>
+              <div class="pos-sub">Verified real-time school liquid assets</div>
+            </div>
+          </div>
+
+          <!-- MIDDLE ROW: TRANSFER FORM & AUDIT SUMMARY -->
+          <div class="grid-2col" style="margin-top: 18px;">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2>Record Cash Banking &amp; Account Transfer</h2>
+                  <p class="text-muted" style="font-size: 11px;">Deposit counter cash to bank, sweep MoMo funds, or withdraw desk float</p>
+                </div>
+              </div>
+              <form id="cashTransferForm" class="form-stack">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Transfer From (Source) *</label>
+                    <select id="trfFromSelect">
+                      <option value="DRAWER">Main Cash Drawer Float</option>
+                      <option value="MOMO">Mobile Money Merchant Account</option>
+                      <option value="STANBIC">Stanbic School Operating Account</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Transfer To (Destination) *</label>
+                    <select id="trfToSelect">
+                      <option value="STANBIC">Stanbic School Operating Account</option>
+                      <option value="DRAWER">Main Cash Drawer Float</option>
+                      <option value="MOMO">Mobile Money Merchant Account</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Amount to Transfer (<span class="currencyPrefixLabel">UGX</span>) *</label>
+                    <div class="input-with-prefix">
+                      <span class="input-curr-prefix currencyPrefixLabel">UGX</span>
+                      <input type="number" id="trfAmount" required min="1000" step="500" placeholder="e.g. 1500000">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Banking Slip / Reference # *</label>
+                    <input type="text" id="trfRef" required placeholder="e.g. STANBIC-DEP-48921">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Transaction Memo / Purpose *</label>
+                  <input type="text" id="trfMemo" required placeholder="e.g. Daily cash collection deposit to Mukono Stanbic branch">
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="btnSubmitTransfer">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                  <span>Execute Transfer &amp; Post to Ledger</span>
+                </button>
+              </form>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2>Bank Movement Audit Summary</h2>
+                  <p class="text-muted" style="font-size: 11px;">Verified electronic settlements &amp; bank ledger statistics</p>
+                </div>
+              </div>
+              <div class="shift-summary-grid" style="margin-top: 0;">
+                <div class="shift-kpi-card">
+                  <div class="kpi-label">Total Bank Deposits</div>
+                  <div class="kpi-val text-emerald" id="bankTotalDeposits">UGX 0</div>
+                  <div class="kpi-sub">Direct deposits &amp; counter banking</div>
+                </div>
+                <div class="shift-kpi-card">
+                  <div class="kpi-label">Total Outflows &amp; EFTs</div>
+                  <div class="kpi-val text-rose" id="bankTotalOutflows">UGX 0</div>
+                  <div class="kpi-sub">Supplier payments &amp; withdrawals</div>
+                </div>
+              </div>
+              <div style="margin-top: 16px; display: flex; gap: 8px;">
+                <button type="button" class="btn btn-outline btn-sm" id="btnExportBankCsv" style="flex: 1;">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                  <span>Export Statement (CSV)</span>
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="window.print()" style="flex: 1;">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+                  <span>Print Statement</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- BOTTOM ROW: BANK & ACCOUNT TRANSACTIONS STATEMENT LEDGER (TRANSPARENT & AUDITED) -->
+          <div class="card" style="margin-top: 18px;">
+            <div class="card-header">
+              <div>
+                <h2>Bank Account Statements &amp; Transaction Ledger</h2>
+                <p class="text-muted" style="font-size: 11px;">Transparent, neutral double-entry transaction history with timestamps, bank slip references &amp; account movement</p>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <select id="bankAccountFilter" class="input-sm">
+                  <option value="ALL">All Accounts &amp; Gateways</option>
+                  <option value="STANBIC">Stanbic School Operating</option>
+                  <option value="DRAWER">Main Cash Drawer</option>
+                  <option value="MOMO">Mobile Money Merchant</option>
+                </select>
+                <input type="text" id="bankSearchInput" placeholder="Filter reference, narrative or date..." class="input-sm" style="width: 200px;">
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table class="data-table" id="bankLedgerTable">
+                <thead>
+                  <tr>
+                    <th>Date &amp; Time</th>
+                    <th>Reference / Slip #</th>
+                    <th>Description / Narrative</th>
+                    <th>Account Movement</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Officer</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="bankLedgerTableBody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- PANE 7: MEAL CARDS (FINANCE & ACCOUNTS ISSUANCE & EXPIRY MANAGEMENT) -->
+        <section class="pane" id="pane-meals">
+          <!-- TOP MEAL CARDS KPI SUMMARY METRICS -->
+          <div class="meal-summary-grid">
+            <div class="expense-summary-card">
+              <div class="exp-sum-label">Total Meal Cards</div>
+              <div class="exp-sum-val" id="mealTotalCards">0</div>
+              <div class="exp-sum-sub">All registered student cards</div>
+            </div>
+            <div class="expense-summary-card">
+              <div class="exp-sum-label">Active &amp; Valid Cards</div>
+              <div class="exp-sum-val text-emerald" id="mealActiveCards">0</div>
+              <div class="exp-sum-sub">Within expiry &amp; fee cleared</div>
+            </div>
+            <div class="expense-summary-card">
+              <div class="exp-sum-label">Expiring Soon (&lt; 7 Days)</div>
+              <div class="exp-sum-val" style="color: #f59e0b;" id="mealExpiringCards">0</div>
+              <div class="exp-sum-sub">Pending renewal payment</div>
+            </div>
+            <div class="expense-summary-card">
+              <div class="exp-sum-label">Expired / Arrears Locked</div>
+              <div class="exp-sum-val text-rose" id="mealSuspendedCards">0</div>
+              <div class="exp-sum-sub">Requires fee settlement</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2>Student Meal Cards (Accounts &amp; Finance Office)</h2>
+                <p class="text-muted" style="font-size: 11px;">Issued by Accounts based on fee clearance • 1-Month standard or 1-Week duration with expiry dates &amp; daily ticking</p>
+              </div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-outline btn-sm" id="btnAutoIssueMeals">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                  <span>Auto-Issue (1-Month Cards)</span>
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnOpenIssueMealModal">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="16"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
+                  <span>Issue Meal Card</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- FILTER & SEARCH BAR -->
+            <div style="padding: 12px 18px; border-bottom: 1px solid var(--border-color); display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <input type="text" id="mealSearchInput" placeholder="Search student name, class or card #..." class="input-sm" style="width: 250px;">
+                <select id="mealDurationFilter" class="input-sm">
+                  <option value="ALL">All Card Durations</option>
+                  <option value="1_MONTH">1 Month Cards (30 Days)</option>
+                  <option value="1_WEEK">1 Week Cards (7 Days)</option>
+                  <option value="2_WEEKS">2 Weeks Cards (14 Days)</option>
+                  <option value="FULL_TERM">Full Term Cards (90 Days)</option>
+                </select>
+                <select id="mealStatusFilter" class="input-sm">
+                  <option value="ALL">All Card Statuses</option>
+                  <option value="ACTIVE">Active (Valid)</option>
+                  <option value="EXPIRING_SOON">Expiring Soon (&lt; 7 Days)</option>
+                  <option value="EXPIRED">Expired Cards</option>
+                  <option value="SUSPENDED_ARREARS">Suspended (Fee Arrears)</option>
+                </select>
+              </div>
+              <div class="text-muted" style="font-size: 11px;">
+                Showing <strong id="mealFilteredCount">0</strong> meal cards
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table class="data-table" id="mealCardsTable">
+                <thead>
+                  <tr>
+                    <th>Card # &amp; Duration</th>
+                    <th>Student Name &amp; Class</th>
+                    <th>Issue &amp; Expiry Date</th>
+                    <th>Fee Clearance</th>
+                    <th>Meal Plan</th>
+                    <th>Days of Week (Mon - Sun Ticks)</th>
+                    <th>Card Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="mealCardsTableBody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- PANE 8: SHIFT REPORTS & SUMMARY -->
+        <section class="pane" id="pane-reports">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2>Cashier Shift Financial Audit &amp; Reconciliation</h2>
+                <div class="card-sub-header">Live workstation metrics, collections distribution &amp; cash-flow trajectory</div>
+              </div>
+              <div class="header-actions">
+                <button class="btn btn-outline btn-sm" id="btnRefreshCharts">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                  <span>Refresh Visuals</span>
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="window.print()">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+                  <span>Print Shift Summary</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="shift-summary-grid">
+              <div class="shift-kpi-card">
+                <div class="kpi-label">Opening Drawer Float</div>
+                <div class="kpi-val" id="repOpeningFloat">UGX 150,000</div>
+                <div class="kpi-sub">Verified at shift start</div>
+              </div>
+              <div class="shift-kpi-card">
+                <div class="kpi-label">Total Fee Collections</div>
+                <div class="kpi-val text-emerald" id="repTotalCollected">UGX 0</div>
+                <div class="kpi-sub" id="repCollectionCount">0 Receipts Issued</div>
+              </div>
+              <div class="shift-kpi-card">
+                <div class="kpi-label">Total Petty Cash Disbursed</div>
+                <div class="kpi-val text-rose" id="repTotalExpenses">UGX 0</div>
+                <div class="kpi-sub" id="repExpenseCount">0 Vouchers Approved</div>
+              </div>
+              <div class="shift-kpi-card">
+                <div class="kpi-label">Expected Drawer Cash Balance</div>
+                <div class="kpi-val text-blue" id="repNetDrawer">UGX 150,000</div>
+                <div class="kpi-sub">Float + Cash Collections - Expenses</div>
+              </div>
+            </div>
+
+            <!-- ANIMATED CHARTS SECTION -->
+            <div class="reports-charts-grid" style="margin-top: 24px;">
+              <div class="chart-container-card">
+                <div class="chart-header">
+                  <div class="chart-title">Payment Channel Distribution</div>
+                  <div class="chart-subtitle">Revenue volume by settlement method</div>
+                </div>
+                <div class="chart-canvas-wrapper">
+                  <canvas id="channelChart" height="220"></canvas>
+                </div>
+              </div>
+
+              <div class="chart-container-card">
+                <div class="chart-header">
+                  <div class="chart-title">Shift Inflows vs Disbursements</div>
+                  <div class="chart-subtitle">Cash flow trajectory &amp; physical drawer health</div>
+                </div>
+                <div class="chart-canvas-wrapper">
+                  <canvas id="shiftFlowChart" height="220"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-header" style="margin-top: 24px; padding-left: 0; padding-right: 0;">
+              <h3>Collections Breakdown by Payment Channel</h3>
+            </div>
+            <div class="channel-breakdown-row" id="channelBreakdownRow">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </section>
+
+        <!-- PANE 8: SYSTEM SETTINGS & CONFIGURATION (NEW DEDICATED MODULE) -->
+        <section class="pane" id="pane-settings">
+          <div class="settings-container">
+            <div class="settings-head-banner">
+              <div>
+                <h1 class="settings-main-title">System Configuration &amp; Institutional Profile</h1>
+                <p class="settings-main-desc">Customize school branding, official crest, base operating currency, thermal receipt layout, and central gateway connectivity.</p>
+              </div>
+              <div class="settings-top-actions">
+                <button type="button" class="btn btn-outline" id="btnResetSettingsDefaults">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                  <span>Reset Defaults</span>
+                </button>
+                <button type="button" class="btn btn-primary" id="btnSaveSystemSettingsTop">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  <span>Save Configuration</span>
+                </button>
+              </div>
+            </div>
+
+            <form id="fullSystemSettingsForm" class="settings-grid">
+              <!-- SECTION 1: INSTITUTIONAL BRANDING -->
+              <div class="card settings-card">
+                <div class="card-header">
+                  <div class="settings-section-head">
+                    <span class="settings-sec-icon text-amber">
+                      <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    </span>
+                    <div>
+                      <h2>Institutional Profile &amp; Branding</h2>
+                      <p class="text-muted text-xs">Official school credentials, crest logo, and academic term</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-stack">
+                  <div class="form-group">
+                    <label>Full Institution / System Name *</label>
+                    <input type="text" id="cfgSchoolName" class="form-control" value="Wellstar Bright Secondary School" required>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Short Display Name *</label>
+                      <input type="text" id="cfgSchoolShortName" class="form-control" value="Wellstar Bright" required>
+                    </div>
+                    <div class="form-group">
+                      <label>Campus / Subtitle *</label>
+                      <input type="text" id="cfgSchoolSub" class="form-control" value="Mukono • Bursar Workstation & Financial ERP" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Official School Motto</label>
+                    <input type="text" id="cfgSchoolMotto" class="form-control" value="Education is our Pride">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Official Logo / Crest Image Path or URL</label>
+                    <div class="logo-preview-row">
+                      <div class="logo-preview-box">
+                        <img src="logo.png" alt="Preview Crest" id="cfgLogoPreview">
+                      </div>
+                      <div style="flex: 1;">
+                        <input type="text" id="cfgLogoUrl" class="form-control" value="logo.png" placeholder="e.g. logo.png or https://...">
+                        <div class="input-subhint">Defaults to local official logo.png. Can also accept any image URL.</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Active Academic Year</label>
+                      <input type="text" id="cfgAcademicYear" class="form-control" value="2026">
+                    </div>
+                    <div class="form-group">
+                      <label>Current Active Term</label>
+                      <select id="cfgActiveTerm" class="form-control">
+                        <option value="Term 1" selected>Term 1 (First Term)</option>
+                        <option value="Term 2">Term 2 (Second Term)</option>
+                        <option value="Term 3">Term 3 (Third Term)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group" style="margin-top: 12px;">
+                    <label>Workstation Visual Theme</label>
+                    <select id="cfgThemeMode" class="form-control">
+                      <option value="light" selected>Light Theme (Default - Recommended for Offices &amp; Counters)</option>
+                      <option value="dark">Dark Theme (Night Shift Deep Navy Mode)</option>
+                    </select>
+                    <div class="input-subhint">Default is Light Theme. Switch to Dark Theme optionally anytime.</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SECTION 2: CURRENCY & ACCOUNTING FORMAT -->
+              <div class="card settings-card">
+                <div class="card-header">
+                  <div class="settings-section-head">
+                    <span class="settings-sec-icon text-emerald">
+                      <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
+                    </span>
+                    <div>
+                      <h2>Fiscal Currency &amp; Accounting Formats</h2>
+                      <p class="text-muted text-xs">Standard operational currency and counter drawer float</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-stack">
+                  <div class="form-group">
+                    <label>Base Operational Currency Preset *</label>
+                    <select id="cfgCurrencyPreset" class="form-control">
+                      <option value="UGX" selected>UGX - Ugandan Shilling (UGX / Shs)</option>
+                      <option value="USD">USD - United States Dollar ($)</option>
+                      <option value="KES">KES - Kenyan Shilling (KSh)</option>
+                      <option value="RWF">RWF - Rwandan Franc (RWF / RF)</option>
+                      <option value="EUR">EUR - European Euro (€)</option>
+                      <option value="GBP">GBP - British Pound (£)</option>
+                      <option value="CUSTOM">Custom Currency Code...</option>
+                    </select>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Currency Symbol / Prefix *</label>
+                      <input type="text" id="cfgCurrencySymbol" class="form-control" value="UGX" required>
+                    </div>
+                    <div class="form-group">
+                      <label>Decimal Places</label>
+                      <select id="cfgDecimalPlaces" class="form-control">
+                        <option value="0" selected>0 (e.g. 150,000 - Standard for UGX/RWF)</option>
+                        <option value="2">2 (e.g. 150,000.00 - Standard for USD/EUR)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Default Opening Physical Cash Drawer Float *</label>
+                    <div class="input-with-prefix">
+                      <span class="input-curr-prefix currencyPrefixLabel">UGX</span>
+                      <input type="number" id="cfgDefaultFloat" class="form-control" value="150000" step="1000" required>
+                    </div>
+                    <div class="input-subhint">Suggested drawer float presented to cashiers at start of day</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SECTION 3: RECEIPT & THERMAL PRINTER -->
+              <div class="card settings-card">
+                <div class="card-header">
+                  <div class="settings-section-head">
+                    <span class="settings-sec-icon text-blue">
+                      <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+                    </span>
+                    <div>
+                      <h2>Thermal Receipt &amp; Printer Configuration</h2>
+                      <p class="text-muted text-xs">Configure the official header and legal disclaimers on printed slips</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-stack">
+                  <div class="form-group">
+                    <label>Receipt Header Title *</label>
+                    <input type="text" id="cfgReceiptTitle" class="form-control" value="WELLSTAR BRIGHT SECONDARY SCHOOL" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Receipt Subtitle / Document Type</label>
+                    <input type="text" id="cfgReceiptSub" class="form-control" value="Official Tuition & Fees Payment Receipt">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Receipt Footer Disclaimer</label>
+                    <input type="text" id="cfgReceiptFooter" class="form-control" value="Official Computer-Generated Receipt • Valid Without Official Seal">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Thermal Paper Width</label>
+                    <select id="cfgReceiptWidth" class="form-control">
+                      <option value="80mm" selected>80mm (Standard Desktop ESC/POS Thermal Slip)</option>
+                      <option value="58mm">58mm (Compact Mobile POS Receipt)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SECTION 4: WORKSTATION GATEWAY & BACKUP -->
+              <div class="card settings-card">
+                <div class="card-header">
+                  <div class="settings-section-head">
+                    <span class="settings-sec-icon text-purple">
+                      <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="m17 5-5-3-5 3"/><path d="m17 19-5 3-5-3"/><circle cx="12" cy="12" r="3"/></svg>
+                    </span>
+                    <div>
+                      <h2>Central Gateway &amp; Offline Data Management</h2>
+                      <p class="text-muted text-xs">Workstation hardware ID and database backup export</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-stack">
+                  <div class="form-group">
+                    <label>Workstation Hardware Machine ID</label>
+                    <input type="text" id="cfgMachineId" class="form-control" value="WS-POS-01" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Central Super Admin Server URL</label>
+                    <input type="text" id="cfgServerUrl" class="form-control" value="http://localhost:3000">
+                    <div class="input-subhint">Central PostgreSQL ERP API endpoint for live sync</div>
+                  </div>
+
+                  <div class="data-mgmt-box">
+                    <div class="data-mgmt-title">Local Offline Database Telemetry</div>
+                    <div class="data-stats-row">
+                      <span class="data-stat-chip">Students: <strong id="cfgStatStudents">0</strong></span>
+                      <span class="data-stat-chip">Receipts: <strong id="cfgStatReceipts">0</strong></span>
+                      <span class="data-stat-chip">Expenses: <strong id="cfgStatExpenses">0</strong></span>
+                      <span class="data-stat-chip">Outbox: <strong id="cfgStatQueue">0</strong></span>
+                    </div>
+
+                    <div class="data-actions-row">
+                      <button type="button" class="btn btn-outline btn-sm" id="btnExportDataJson">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        <span>Export Backup JSON</span>
+                      </button>
+                      <button type="button" class="btn btn-outline btn-sm" id="btnImportDataJson">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                        <span>Import Backup JSON</span>
+                      </button>
+                      <input type="file" id="fileImportBackup" style="display: none;" accept=".json">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FULL WIDTH SUBMIT BAR -->
+              <div class="settings-submit-card">
+                <div class="submit-note">
+                  Changes take effect immediately across all screens, charts, currency symbols, and receipts upon saving.
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg" id="btnSaveSystemSettings">
+                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  <span>Apply &amp; Save All System Settings</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- PANE 9: SYNC OUTBOX -->
+        <section class="pane" id="pane-queue">
+          <div class="card">
+            <div class="card-header">
+              <h2>Pending Offline Sync Outbox</h2>
+              <button class="btn btn-primary btn-sm" id="btnFlushQueue">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>
+                <span>Force Sync All Records</span>
+              </button>
+            </div>
+            <p class="text-muted">
+              These transactions are saved locally with tamper-proof receipt numbering. They automatically stream to the central Super Admin PostgreSQL database whenever this PC is connected to the school network or internet.
+            </p>
+            <div class="table-container" style="margin-top: 15px;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Identifier</th>
+                    <th>Amount</th>
+                    <th>Created Offline</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="queueTableBody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- PRINTABLE THERMAL RECEIPT SLIP MODAL -->
+  <div class="receipt-modal-backdrop" id="receiptModal">
+    <div class="receipt-paper" id="receiptSlip">
+      <div class="school-receipt-header">
+        <div class="receipt-logo">
+          <img src="logo.png" alt="Crest" class="receipt-crest-img" id="rSlipLogo">
+        </div>
+        <div class="receipt-school-name" id="rSlipSchoolName">WELLSTAR BRIGHT SECONDARY SCHOOL</div>
+        <div class="receipt-school-motto" id="rSlipSchoolMotto">“EDUCATION IS OUR PRIDE” • MUKONO</div>
+        <div class="receipt-school-sub" id="rSlipReceiptSub">Official Tuition &amp; Fees Payment Receipt</div>
+        <div class="receipt-divider">================================</div>
+      </div>
+
+      <div class="receipt-meta">
+        <div><strong>Receipt No:</strong> <span id="rSlipNo">-</span></div>
+        <div><strong>Date:</strong> <span id="rSlipDate">-</span></div>
+        <div><strong>Workstation:</strong> <span id="rSlipWorkstation">-</span></div>
+        <div><strong>Cashier:</strong> <span id="rSlipCashier">Bursar Counter</span></div>
+      </div>
+      <div class="receipt-divider">--------------------------------</div>
+
+      <div class="receipt-student">
+        <div><strong>Student:</strong> <span id="rSlipStudent">-</span></div>
+        <div><strong>Class:</strong> <span id="rSlipClass">-</span></div>
+        <div><strong>Term:</strong> <span id="rSlipTerm">Term 1 2026</span></div>
+      </div>
+      <div class="receipt-divider">--------------------------------</div>
+
+      <div class="receipt-amount-row">
+        <span>AMOUNT PAID:</span>
+        <span class="r-bold-amt" id="rSlipAmount">UGX 0</span>
+      </div>
+      <div class="receipt-meta">
+        <div><strong>Method:</strong> <span id="rSlipMethod">CASH</span></div>
+        <div><strong>Reference:</strong> <span id="rSlipRef">N/A</span></div>
+      </div>
+      <div class="receipt-divider">--------------------------------</div>
+      <div class="receipt-meta" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 8px; border-radius: 6px;">
+        <div style="display: flex; justify-content: space-between;"><span>Previous Balance:</span> <span id="rSlipPrevBalance" style="font-weight: 600;">UGX 0</span></div>
+        <div style="display: flex; justify-content: space-between;"><span>Less Paid Now:</span> <span id="rSlipPaidNow" style="color: #059669; font-weight: 700;">-UGX 0</span></div>
+        <div style="display: flex; justify-content: space-between; font-size: 11.5px; font-weight: 800; border-top: 1px dashed #cbd5e1; padding-top: 5px; margin-top: 4px;">
+          <span>REMAINING BALANCE:</span> <span id="rSlipBalance" style="color: #dc2626;">UGX 0</span>
+        </div>
+      </div>
+      <div class="receipt-divider">================================</div>
+
+      <div class="receipt-footer">
+        <p id="rSlipFooterText">Thank you for your payment!</p>
+        <p class="small" id="rSlipFooterDisclaimer">Official Computer-Generated Receipt • Valid Without Official Seal</p>
+      </div>
+
+      <div class="receipt-actions no-print">
+        <button class="btn btn-primary" id="btnPrintReceiptNow">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+          <span>Print Receipt Slip</span>
+        </button>
+        <button class="btn btn-outline" id="btnCloseReceipt">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRINTABLE OFFICIAL STAFF PAYSLIP MODAL -->
+  <div class="receipt-modal-backdrop" id="payslipModal">
+    <div class="receipt-paper" style="width: 380px;">
+      <div class="school-receipt-header">
+        <div class="receipt-logo">
+          <img src="logo.png" alt="Crest" class="receipt-crest-img" id="psSlipLogo">
+        </div>
+        <div class="receipt-school-name" id="psSlipSchoolName">WELLSTAR BRIGHT SECONDARY SCHOOL</div>
+        <div class="receipt-school-motto" id="psSlipSchoolMotto">“EDUCATION IS OUR PRIDE” • MUKONO</div>
+        <div class="receipt-school-sub">Confidential Staff Salary Payslip</div>
+        <div class="receipt-divider">================================</div>
+      </div>
+
+      <div class="receipt-meta">
+        <div><strong>Payslip Ref:</strong> <span id="psRef">-</span></div>
+        <div><strong>Staff Member:</strong> <span id="psName">-</span></div>
+        <div><strong>Period:</strong> <span id="psPeriod">March 2026</span></div>
+      </div>
+      <div class="receipt-divider">--------------------------------</div>
+
+      <div class="receipt-meta" style="line-height: 1.8;">
+        <div style="display: flex; justify-content: space-between;">
+          <span>Gross Earnings:</span>
+          <strong id="psGross">UGX 0</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; color: var(--accent-rose);">
+          <span>PAYE Tax (URA):</span>
+          <span id="psPaye">- UGX 0</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; color: var(--accent-amber);">
+          <span>NSSF Employee (5%):</span>
+          <span id="psNssf">- UGX 0</span>
+        </div>
+      </div>
+      <div class="receipt-divider">================================</div>
+
+      <div class="receipt-amount-row" style="color: var(--accent-emerald);">
+        <span>NET SALARY PAID:</span>
+        <span class="r-bold-amt" id="psNet">UGX 0</span>
+      </div>
+
+      <div class="receipt-actions no-print">
+        <button class="btn btn-primary" onclick="window.print()">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+          <span>Print Payslip</span>
+        </button>
+        <button class="btn btn-outline" id="btnClosePayslip">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRINTABLE OFFICIAL EXPENSE PAYMENT VOUCHER MODAL -->
+  <div class="receipt-modal-backdrop" id="expenseVoucherModal">
+    <div class="receipt-paper" style="width: 420px; font-family: 'Inter', sans-serif;">
+      <div class="school-receipt-header">
+        <div class="receipt-logo">
+          <img src="logo.png" alt="Crest" class="receipt-crest-img" id="expSlipLogo">
+        </div>
+        <div class="receipt-school-name" id="expSlipSchoolName">WELLSTAR BRIGHT SECONDARY SCHOOL</div>
+        <div class="receipt-school-motto" id="expSlipSchoolMotto">“EDUCATION IS OUR PRIDE” • MUKONO</div>
+        <div class="receipt-school-sub" style="font-weight: 700; color: var(--accent-rose); letter-spacing: 0.05em;">OFFICIAL DISBURSEMENT PAYMENT VOUCHER</div>
+        <div class="receipt-divider">================================</div>
+      </div>
+
+      <div class="receipt-meta" style="font-size: 12px; line-height: 1.6;">
+        <div><strong>Voucher No:</strong> <span id="expSlipVoucherNo" style="font-family: monospace; font-weight: 700;">-</span></div>
+        <div><strong>Date &amp; Time:</strong> <span id="expSlipDate">-</span></div>
+        <div><strong>Disbursed From:</strong> <span id="expSlipPaidFrom" style="font-weight: 700;">-</span></div>
+        <div><strong>Department:</strong> <span id="expSlipDept">-</span></div>
+        <div><strong>Category:</strong> <span id="expSlipCategory">-</span></div>
+      </div>
+      <div class="receipt-divider">--------------------------------</div>
+
+      <div style="font-size: 12px; line-height: 1.6;">
+        <div><strong>Payee / Vendor:</strong> <span id="expSlipPayee" style="font-weight: 700;">-</span></div>
+        <div><strong>Expense Item:</strong> <span id="expSlipTitle">-</span></div>
+        <div><strong>Invoice / Bill Ref:</strong> <span id="expSlipInvoiceRef">-</span></div>
+        <div><strong>Disbursement Purpose:</strong> <span id="expSlipDesc">-</span></div>
+      </div>
+      <div class="receipt-divider">================================</div>
+
+      <div class="receipt-amount-row" style="color: var(--accent-rose); font-size: 14px;">
+        <span>AMOUNT PAID:</span>
+        <span class="r-bold-amt" id="expSlipAmount">UGX 0</span>
+      </div>
+      <div class="receipt-divider">--------------------------------</div>
+
+      <div style="font-size: 11px; margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <div style="border-bottom: 1px solid #cbd5e1; height: 30px;"></div>
+          <div style="margin-top: 4px; color: #64748b;">Authorized by: <strong id="expSlipAuthorizedBy">Bursar</strong></div>
+        </div>
+        <div>
+          <div style="border-bottom: 1px solid #cbd5e1; height: 30px;"></div>
+          <div style="margin-top: 4px; color: #64748b;">Payee Signature / Stamp</div>
+        </div>
+      </div>
+
+      <div class="receipt-actions no-print" style="margin-top: 20px;">
+        <button class="btn btn-primary" onclick="window.print()">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+          <span>Print Voucher Slip</span>
+        </button>
+        <button class="btn btn-outline" id="btnCloseExpenseVoucher">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW STUDENT BILL MODAL -->
+  <div class="receipt-modal-backdrop" id="billModal">
+    <div class="card" style="width: 520px; max-width: 95vw; max-height: 92vh; overflow-y: auto;">
+      <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 14px;">
+        <div>
+          <h2 style="font-size: 16px; margin: 0 0 4px 0;">Issue Student Fee Bill &amp; Invoice</h2>
+          <p class="text-muted" style="font-size: 11px; margin: 0;">Post tuition bill, record student arrears, and capture initial deposit or discounts</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="btnCloseBillModal" type="button">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <form id="newBillForm" class="form-stack">
+        <!-- MODE SELECTOR: SEARCH ROSTER vs. MANUAL TYPE -->
+        <div class="form-group">
+          <label style="font-weight: 700; font-size: 11.5px; display: flex; justify-content: space-between; align-items: center;">
+            <span>Student Selection Mode *</span>
+            <span class="text-muted" style="font-size: 10.5px; font-weight: normal;">Choose how to specify the student</span>
+          </label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px;">
+            <button type="button" id="billModeSearchBtn" class="btn btn-sm" style="background: var(--primary); color: #fff; font-weight: 700; border-radius: 6px; border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <span>Search Student</span>
+            </button>
+            <button type="button" id="billModeManualBtn" class="btn btn-sm btn-outline" style="border-radius: 6px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <span>Type Name Manually</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- OPTION A: SEARCH STUDENT -->
+        <div id="billSearchSection" style="display: block;">
+          <div class="form-group" style="position: relative;">
+            <label style="font-weight: 600; font-size: 11.5px;">Search Student Roster *</label>
+            <input type="text" id="billStudentSearchInput" class="lock-input" placeholder="Type name, class or registration #..." autocomplete="off">
+            <input type="hidden" id="billSelectedStudentId" value="">
+            
+            <!-- Floating Autocomplete Dropdown List -->
+            <div id="billStudentResultsList" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 1050; max-height: 180px; overflow-y: auto; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.18); margin-top: 4px;">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+          <!-- Quick dropdown fallback selector -->
+          <div class="form-group" style="margin-top: -6px;">
+            <select id="billStudentSelect" class="lock-input" style="font-size: 12px;">
+              <option value="">-- Or select from roster list --</option>
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+        </div>
+
+        <!-- OPTION B: MANUALLY TYPE NAME -->
+        <div id="billManualSection" style="display: none;">
+          <div class="form-row">
+            <div class="form-group" style="flex: 1.5;">
+              <label style="font-weight: 600; font-size: 11.5px;">Student Full Name *</label>
+              <input type="text" id="billManualName" class="lock-input" placeholder="e.g. Martha Nabirye">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 600; font-size: 11.5px;">Class / Stream *</label>
+              <input type="text" id="billManualClass" class="lock-input" placeholder="e.g. Senior 2 Red" value="Senior 1 Gold">
+            </div>
+          </div>
+        </div>
+
+        <!-- STUDENT OUTSTANDING BALANCE CARD -->
+        <div id="billOutstandingBalanceCard" style="background: rgba(245, 158, 11, 0.08); border: 1px dashed rgba(245, 158, 11, 0.4); border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-amber);">Current Outstanding Balance</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;" id="billStudentMetaHint">No student selected yet</div>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 800; color: var(--accent-amber);" id="billOutstandingBalanceDisplay">
+            UGX 0
+          </div>
+        </div>
+
+        <!-- TERM & TUITION FEE -->
+        <div class="form-row">
+          <div class="form-group" style="flex: 1;">
+            <label style="font-weight: 600; font-size: 11.5px;">Billing Term *</label>
+            <input type="text" id="billTerm" value="Term 1 2026" class="lock-input">
+          </div>
+          <div class="form-group" style="flex: 1.2;">
+            <label style="font-weight: 600; font-size: 11.5px;">New Bill / Tuition Added (<span class="currencyPrefixLabel">UGX</span>)</label>
+            <div class="input-with-prefix">
+              <span class="input-curr-prefix currencyPrefixLabel">UGX</span>
+              <input type="number" id="billAmount" value="0" min="0" step="1000" placeholder="0 if paying existing balance" class="lock-input">
+            </div>
+          </div>
+        </div>
+
+        <!-- AMOUNT PAID & SCHOLARSHIP/DISCOUNT -->
+        <div class="form-row">
+          <div class="form-group" style="flex: 1;">
+            <label style="font-weight: 600; font-size: 11.5px; color: var(--accent-emerald);">Amount Paid Now (<span class="currencyPrefixLabel">UGX</span>)</label>
+            <div class="input-with-prefix">
+              <span class="input-curr-prefix currencyPrefixLabel">UGX</span>
+              <input type="number" id="billAmountPaid" value="0" min="0" step="1000" placeholder="0" class="lock-input">
+            </div>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label style="font-weight: 600; font-size: 11.5px; color: var(--accent-rose);">Discount / Scholarship (<span class="currencyPrefixLabel">UGX</span>)</label>
+            <div class="input-with-prefix">
+              <span class="input-curr-prefix currencyPrefixLabel">UGX</span>
+              <input type="number" id="billDiscount" value="0" min="0" step="1000" placeholder="0" class="lock-input">
+            </div>
+          </div>
+        </div>
+
+        <!-- PAYMENT METHOD IF PAID > 0 -->
+        <div id="billPaymentMethodRow" style="display: none; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 6px; padding: 10px 12px;">
+          <div class="form-row" style="margin: 0;">
+            <div class="form-group" style="margin: 0; flex: 1.2;">
+              <label style="font-size: 11px; font-weight: 600;">Payment Method *</label>
+              <select id="billPaymentMethod" class="lock-input" style="font-size: 12px; height: 34px;">
+                <option value="CASH">Cash (Desk Drawer Float)</option>
+                <option value="BANK_DEPOSIT">Bank Deposit Slip</option>
+                <option value="MOBILE_MONEY">Mobile Money (MTN / Airtel)</option>
+                <option value="POS_CARD">Debit / Credit Card (POS)</option>
+                <option value="CHEQUE">Bank Cheque</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin: 0; flex: 1;">
+              <label style="font-size: 11px; font-weight: 600;">Reference # (Slip / MoMo)</label>
+              <input type="text" id="billPayRef" placeholder="Optional" style="font-size: 12px; height: 34px;" class="lock-input">
+            </div>
+          </div>
+        </div>
+
+        <!-- DYNAMIC SUMMARY BAR -->
+        <div style="background: var(--bg-hover); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 14px; font-size: 11.5px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span class="text-muted">Net Bill (Tuition − Discount):</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700;" id="billNetDuePreview">UGX 450,000</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span class="text-muted">Paid at Issuance:</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent-emerald);" id="billPaidPreview">UGX 0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 6px; font-size: 12.5px; font-weight: 800;">
+            <span>Projected New Balance:</span>
+            <span style="font-family: 'JetBrains Mono', monospace; color: var(--accent-amber);" id="billProjectedBalancePreview">UGX 450,000</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="margin-top: 6px;">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <span>Issue Fee Bill &amp; Update System Roster</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ISSUE STUDENT MEAL CARD MODAL -->
+  <div class="receipt-modal-backdrop" id="issueMealModal" style="display: none;">
+    <div class="card" style="width: 520px; max-width: 94vw;">
+      <div class="card-header">
+        <h2>Issue Official Student Meal Card</h2>
+        <button class="btn btn-ghost btn-sm" id="btnCloseIssueMealModal">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="issueMealForm" class="form-stack">
+        <div class="form-group">
+          <label>Select Student *</label>
+          <select id="mealStudentSelect" required class="lock-input">
+            <!-- Populated dynamically with fee status -->
+          </select>
+        </div>
+
+        <div id="mealStudentFeeAlert" style="font-size: 11px; padding: 10px 14px; border-radius: 8px; margin-bottom: 6px; display: none;"></div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Card Number *</label>
+            <input type="text" id="mealCardNumber" required class="lock-input" style="font-family: var(--font-mono); font-weight: 700;">
+          </div>
+          <div class="form-group">
+            <label>Card Validity Duration *</label>
+            <select id="mealDurationSelect" required class="lock-input" style="font-weight: 700; color: #2563eb;">
+              <option value="1_MONTH" selected>1 Month (Standard • 30 Days)</option>
+              <option value="1_WEEK">1 Week (Short-Term • 7 Days)</option>
+              <option value="2_WEEKS">2 Weeks (Fortnightly • 14 Days)</option>
+              <option value="FULL_TERM">Full Academic Term (90 Days)</option>
+              <option value="CUSTOM">Custom Expiry Date</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Issue Date *</label>
+            <input type="date" id="mealStartDateInput" required class="lock-input">
+          </div>
+          <div class="form-group">
+            <label>Expiry Date *</label>
+            <input type="date" id="mealExpiryDateInput" required class="lock-input" style="font-weight: 700;">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Meal Plan Type *</label>
+            <select id="mealPlanSelect" required class="lock-input">
+              <option value="BOARDING_FULL">Boarding Full (Breakfast, Lunch, Dinner)</option>
+              <option value="DAY_LUNCH" selected>Day Scholar (Lunch Only)</option>
+              <option value="MILK_NUTRITION_AWARD">Milk Nutrition Award Scheme</option>
+              <option value="BURSARY_SUBSIDIZED">Bursary Subsidized Dining</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Daily Milk Quota (Cans) *</label>
+            <select id="mealMilkQuotaSelect" required class="lock-input">
+              <option value="0">0 - No Milk Ration</option>
+              <option value="1" selected>1 Can Daily (Standard Ration)</option>
+              <option value="2">2 Cans Daily (Award Scheme)</option>
+              <option value="3">3 Cans Daily (Special Nutrition)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Initial Card Status *</label>
+          <select id="mealInitialStatus" class="lock-input">
+            <option value="ACTIVE">Active &amp; Authorized</option>
+            <option value="SUSPENDED_ARREARS">Suspended (Fee Arrears Lockout)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Accounts &amp; Dietary Remarks</label>
+          <input type="text" id="mealCardNotes" placeholder="e.g. Paid 1-month installment; standard boarding rations" class="lock-input">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <span>Issue &amp; Save Meal Card</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- RENEW MEAL CARD MODAL -->
+  <div class="receipt-modal-backdrop" id="renewMealModal" style="display: none;">
+    <div class="card" style="width: 440px; max-width: 90vw;">
+      <div class="card-header">
+        <h2>Renew Student Meal Card</h2>
+        <button class="btn btn-ghost btn-sm" id="btnCloseRenewMealModal">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="renewMealForm" class="form-stack">
+        <div style="background: var(--bg-surface); padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 12px;">
+          <div style="font-weight: 800; font-size: 14px; color: var(--text-primary);" id="renewStudentName">Student Name</div>
+          <div style="color: var(--text-muted); margin-top: 2px;" id="renewStudentMeta">Class • Card #</div>
+          <div style="margin-top: 6px; font-weight: 700; color: #f59e0b;" id="renewCurrentExpiry">Current Expiry: -</div>
+        </div>
+
+        <div class="form-group" style="margin-top: 12px;">
+          <label>Extension Period *</label>
+          <select id="renewDurationSelect" class="lock-input" style="font-weight: 700;">
+            <option value="1_MONTH" selected>Extend by 1 Month (+30 Days)</option>
+            <option value="1_WEEK">Extend by 1 Week (+7 Days)</option>
+            <option value="2_WEEKS">Extend by 2 Weeks (+14 Days)</option>
+            <option value="FULL_TERM">Extend for Full Term (+90 Days)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>New Expiry Date *</label>
+          <input type="date" id="renewNewExpiryDate" required class="lock-input" style="font-weight: 800; color: #10b981;">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 8px;">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Renew &amp; Reactivate Meal Card</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- PRINTABLE OFFICIAL STUDENT MEAL CARD WITH WEEKLY TICK GRID MODAL -->
+  <div class="receipt-modal-backdrop" id="mealBadgeModal" style="display: none;">
+    <div class="meal-badge-container" style="width: 480px;">
+      <div class="meal-badge-header">
+        <div class="meal-badge-school-info">
+          <img src="logo.png" alt="Crest" class="meal-badge-logo" id="badgeLogo">
+          <div>
+            <div class="meal-badge-school-title" id="badgeSchoolName">WELLSTAR BRIGHT SECONDARY SCHOOL</div>
+            <div class="meal-badge-subhead">OFFICIAL STUDENT DINING MEAL CARD</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="meal-badge-body" style="padding: 16px 20px;">
+        <div class="meal-badge-student-row" style="margin-bottom: 12px;">
+          <div class="meal-badge-avatar">
+            <svg class="svg-icon" style="width: 32px; height: 32px; margin-bottom: 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>STUDENT</span>
+          </div>
+          <div class="meal-badge-student-meta">
+            <div class="meal-badge-name" id="badgeStudentName">Student Name</div>
+            <div class="meal-badge-class" id="badgeStudentClass">Class - Senior 4 Red</div>
+            <div class="meal-badge-card-no" id="badgeCardNo">MC-2026-1049</div>
+          </div>
+        </div>
+
+        <!-- PROMINENT VALIDITY & EXPIRY BADGE -->
+        <div style="background: #eef2ff; border: 1.5px solid #6366f1; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 9px; font-weight: 700; color: #4338ca; text-transform: uppercase;">CARD VALIDITY PERIOD</div>
+            <div style="font-size: 13px; font-weight: 800; color: #1e1b4b;" id="badgeDurationLabel">1 MONTH (30 DAYS)</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 9px; font-weight: 700; color: #4338ca; text-transform: uppercase;">EXPIRES ON</div>
+            <div style="font-size: 13px; font-weight: 800; color: #dc2626;" id="badgeExpiryDate">22 NOV 2026</div>
+          </div>
+        </div>
+
+        <div class="meal-badge-entitlements" style="margin-bottom: 10px;">
+          <div class="meal-entitlement-box">
+            <span class="entitlement-label">Meal Entitlement</span>
+            <span class="entitlement-val" id="badgePlanType">BOARDING (3 MEALS)</span>
+          </div>
+          <div class="meal-entitlement-box">
+            <span class="entitlement-label">Daily Milk Quota</span>
+            <span class="entitlement-val milk" id="badgeMilkQuota">1 CAN DAILY</span>
+          </div>
+        </div>
+
+        <!-- WEEKLY DAYS OF THE WEEK TICKING SHEET (MON - SUN) -->
+        <div style="margin-bottom: 10px;">
+          <div style="font-size: 10px; font-weight: 800; color: #0f172a; text-transform: uppercase; margin-bottom: 4px; display: flex; justify-content: space-between;">
+            <span>Weekly Dining Tick Sheet (Kitchen Verification)</span>
+            <span style="color: #64748b; font-weight: 600;">Tick per meal session</span>
+          </div>
+          <table class="meal-card-weekly-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Day of Week</th>
+                <th style="width: 20%;">Breakfast</th>
+                <th style="width: 20%;">Lunch</th>
+                <th style="width: 20%;">Dinner</th>
+                <th style="width: 15%;">Sign</th>
+              </tr>
+            </thead>
+            <tbody id="badgeWeeklyTicksBody">
+              <tr>
+                <td><strong>Monday</strong></td>
+                <td><span class="meal-tick-box checked"></span></td>
+                <td><span class="meal-tick-box checked"></span></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td>_______</td>
+              </tr>
+              <tr>
+                <td><strong>Tuesday</strong></td>
+                <td><span class="meal-tick-box checked"></span></td>
+                <td><span class="meal-tick-box checked"></span></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td>_______</td>
+              </tr>
+              <tr>
+                <td><strong>Wednesday</strong></td>
+                <td><span class="meal-tick-box checked"></span></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td>_______</td>
+              </tr>
+              <tr>
+                <td><strong>Thursday</strong></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td>_______</td>
+              </tr>
+              <tr>
+                <td><strong>Friday</strong></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td>_______</td>
+              </tr>
+              <tr>
+                <td><strong>Saturday</strong></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td>_______</td>
+              </tr>
+              <tr>
+                <td><strong>Sunday</strong></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td><span class="meal-tick-box"></span></td>
+                <td>_______</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="meal-badge-barcode" style="padding: 6px;">
+          <div class="barcode-lines" style="height: 24px;">
+            <div class="barcode-bar" style="width: 2px;"></div>
+            <div class="barcode-bar" style="width: 4px;"></div>
+            <div class="barcode-bar" style="width: 1px;"></div>
+            <div class="barcode-bar" style="width: 3px;"></div>
+            <div class="barcode-bar" style="width: 2px;"></div>
+            <div class="barcode-bar" style="width: 5px;"></div>
+            <div class="barcode-bar" style="width: 2px;"></div>
+            <div class="barcode-bar" style="width: 1px;"></div>
+            <div class="barcode-bar" style="width: 4px;"></div>
+            <div class="barcode-bar" style="width: 2px;"></div>
+            <div class="barcode-bar" style="width: 3px;"></div>
+            <div class="barcode-bar" style="width: 1px;"></div>
+            <div class="barcode-bar" style="width: 4px;"></div>
+            <div class="barcode-bar" style="width: 2px;"></div>
+            <div class="barcode-bar" style="width: 3px;"></div>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 9px; font-weight: 700; color: #475569;" id="badgeBarcodeText">MC-2026-1049</div>
+        </div>
+      </div>
+
+      <div class="meal-badge-footer">
+        <div>Issued By: <strong id="badgeIssuedBy">Accounts &amp; Finance Office</strong></div>
+        <div>Official Seal / Stamp: <strong>AUTHORIZED</strong></div>
+      </div>
+
+      <div class="receipt-actions no-print" style="padding: 12px 20px; background: #f1f5f9; border-top: 1px solid #cbd5e1; display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn btn-primary" onclick="window.print()">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+          <span>Print Official Meal Card</span>
+        </button>
+        <button class="btn btn-outline" id="btnCloseMealBadgeModal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER PROFILE MODAL -->
+  <div class="receipt-modal-backdrop" id="userProfileModal" style="display: none;">
+    <div class="card profile-modal-card" style="max-width: 520px; width: 92%; margin: 40px auto; padding: 0; overflow: hidden; border-radius: var(--radius-lg); box-shadow: 0 24px 60px rgba(0,0,0,0.35);">
+      <div class="modal-header-banner" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 24px; color: #fff; position: relative; border-bottom: 1px solid var(--border-color);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div class="user-avatar-large" id="profileModalAvatar">JK</div>
+          <div>
+            <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #fff;" id="profileModalName">Joseph Kato</h3>
+            <div style="font-size: 13px; color: #94a3b8; margin-top: 2px;" id="profileModalRole">Senior Counter Cashier</div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" id="btnCloseProfileModal" style="position: absolute; top: 16px; right: 16px; color: #94a3b8; padding: 6px;">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div style="padding: 24px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px;">
+          <div class="profile-stat-box">
+            <div class="stat-label">Campus Station</div>
+            <div class="stat-value" id="profileModalCampus">Mukono Main Campus</div>
+          </div>
+          <div class="profile-stat-box">
+            <div class="stat-label">Shift Status</div>
+            <div class="stat-value" style="color: var(--accent-emerald, #10b981); display: flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
+              <span>Active Session</span>
+            </div>
+          </div>
+          <div class="profile-stat-box">
+            <div class="stat-label">Shift Started</div>
+            <div class="stat-value" id="profileModalShiftStart">--:--</div>
+          </div>
+          <div class="profile-stat-box">
+            <div class="stat-label">Starting Float</div>
+            <div class="stat-value font-mono" id="profileModalFloat">UGX 150,000</div>
+          </div>
+          <div class="profile-stat-box">
+            <div class="stat-label">Receipts Issued</div>
+            <div class="stat-value font-mono" id="profileModalReceipts">0</div>
+          </div>
+          <div class="profile-stat-box">
+            <div class="stat-label">Shift Collections</div>
+            <div class="stat-value font-mono" style="color: var(--primary);" id="profileModalCollections">UGX 0</div>
+          </div>
+        </div>
+
+        <div style="background: var(--bg-hover); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; margin-bottom: 20px; font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+          <strong style="color: var(--text-primary); display: block; margin-bottom: 4px;">Security &amp; Audit Protocol</strong>
+          All financial entries, fee receipts, and cash drawer vouchers created during this shift are cryptographically stamped with your staff identifier and timestamped for internal audit reconciliation.
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+          <button type="button" class="btn btn-outline" id="btnModalCloseProfile">Close</button>
+          <button type="button" class="btn btn-danger" id="btnModalSignOut" style="display: flex; align-items: center; gap: 8px;">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATION TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

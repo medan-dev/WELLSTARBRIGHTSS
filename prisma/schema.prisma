@@ -1,0 +1,581 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Application {
+  id             String   @id @default(uuid())
+  studentName    String
+  grade          String
+  previousSchool String
+  status         String   @default("Pending")
+  points         String?
+  date           String
+  createdAt      DateTime @default(now())
+}
+
+model SiteStat {
+  id        String   @id @default(uuid())
+  label     String
+  value     Int
+  suffix    String?
+  createdAt DateTime @default(now())
+}
+
+model Testimonial {
+  id        String   @id @default(uuid())
+  name      String
+  role      String
+  quote     String
+  rating    Int      @default(5)
+  createdAt DateTime @default(now())
+}
+
+model MediaItem {
+  id        String   @id @default(uuid())
+  title     String
+  artist    String?
+  duration  String
+  size      String?
+  quality   String?
+  cover     String
+  category  String
+  format    String    // "song" or "video"
+  audioUrl  String?   // URL to MP3/WAV/audio file
+  videoUrl  String?   // URL to MP4/MPEG/video file
+  createdAt DateTime @default(now())
+}
+
+model Event {
+  id        String   @id @default(uuid())
+  title     String
+  date      String
+  cover     String
+  desc      String
+  createdAt DateTime @default(now())
+}
+
+model GalleryItem {
+  id        String   @id @default(uuid())
+  src       String
+  alt       String
+  caption   String
+  category  String
+  createdAt DateTime @default(now())
+}
+
+model Subject {
+  id         String             @id @default(uuid())
+  name       String             @unique
+  teachers   Teacher[]
+  classes    Class[]
+  createdAt  DateTime           @default(now())
+  attendance AttendanceRecord[]
+  marks      Mark[]
+  homeworks  Homework[]
+  timetable  Timetable[]
+}
+
+model Teacher {
+  id        String    @id @default(uuid())
+  name      String
+  email     String?   @unique
+  password  String?   @default("password123") // simple mock auth
+  role      String    @default("TEACHER")
+  subjects  Subject[]
+  classes   Class[]
+  marks     Mark[]
+  homeworks Homework[]
+  timetable Timetable[]
+  payrolls  StaffPayrollRecord[]
+  loans     StaffLoanAdvance[]
+  createdAt DateTime  @default(now())
+}
+
+model Class {
+  id            String         @id @default(uuid())
+  name          String         @unique
+  grade         String
+  students      Student[]
+  teachers      Teacher[]
+  subjects      Subject[]
+  homeworks     Homework[]
+  timetable     Timetable[]
+  feeStructures FeeStructure[]
+  createdAt     DateTime       @default(now())
+}
+
+model Student {
+  id         String              @id @default(uuid())
+  name       String
+  classId    String
+  class      Class               @relation(fields: [classId], references: [id])
+  attendance AttendanceRecord[]
+  marks      Mark[]
+  email      String?             @unique
+  password   String?             @default("student123")
+  invoices   StudentFeeInvoice[]
+  receipts   PaymentReceipt[]
+  mealCard   MealCard?
+  createdAt  DateTime            @default(now())
+}
+
+model AttendanceRecord {
+  id        String   @id @default(uuid())
+  date      String
+  status    String
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([date, studentId, subjectId])
+}
+
+model Exam {
+  id        String   @id @default(uuid())
+  title     String   // e.g. "Mid-Term 1 2026"
+  date      String
+  marks     Mark[]
+  createdAt DateTime @default(now())
+}
+
+model Mark {
+  id        String   @id @default(uuid())
+  score     Int
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  examId    String
+  exam      Exam     @relation(fields: [examId], references: [id])
+  teacherId String
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, subjectId, examId])
+}
+
+model Homework {
+  id             String   @id @default(uuid())
+  title          String
+  desc           String
+  dueDate        String
+  attachmentUrl  String?
+  attachmentName String?
+  attachmentSize String?
+  attachmentType String?
+  classId        String
+  class          Class    @relation(fields: [classId], references: [id])
+  subjectId      String
+  subject        Subject  @relation(fields: [subjectId], references: [id])
+  teacherId      String
+  teacher        Teacher  @relation(fields: [teacherId], references: [id])
+  createdAt      DateTime @default(now())
+}
+
+model Timetable {
+  id        String   @id @default(uuid())
+  day       String   // e.g. "Monday"
+  time      String   // e.g. "08:00 AM - 09:30 AM"
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id])
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  teacherId String
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Notice {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  target    String   @default("ALL") // "ALL" | "STUDENTS" | "TEACHERS" | "PUBLIC" | specific classId
+  date      String
+  type      String   @default("ANNOUNCEMENT") // "ANNOUNCEMENT" | "EVENT" | "PERFORMANCE" | "MEDIA"
+  category  String?  @default("General")
+  mediaUrl  String?
+  mediaType String?  // "image" | "video"
+  eventDate String?
+  location  String?
+  metadata  String?  // JSON string for student performance lists, photos, grades, badges
+  pinned    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// ============================================================================
+// 1. CHART OF ACCOUNTS & GENERAL LEDGER (DOUBLE-ENTRY CORE)
+// ============================================================================
+
+enum AccountClass {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+}
+
+model Account {
+  id           String        @id @default(uuid())
+  code         String        @unique // e.g. "1010", "4010"
+  name         String        // e.g. "Main Cash Drawer", "Stanbic Bank Operating A/C"
+  accountClass AccountClass
+  balance      Float         @default(0.0)
+  isBankOrCash Boolean       @default(false)
+  journalLines JournalLine[]
+  budgetLines  BudgetLine[]
+  createdAt    DateTime      @default(now())
+}
+
+model JournalEntry {
+  id          String        @id @default(uuid())
+  entryNumber String        @unique // e.g. "JRN-2026-0001"
+  date        DateTime
+  reference   String?
+  description String
+  isPosted    Boolean       @default(true)
+  lines       JournalLine[]
+  createdAt   DateTime      @default(now())
+}
+
+model JournalLine {
+  id             String       @id @default(uuid())
+  journalEntryId String
+  journalEntry   JournalEntry @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  accountId      String
+  account        Account      @relation(fields: [accountId], references: [id])
+  debit          Float        @default(0.0)
+  credit         Float        @default(0.0)
+  description    String?
+}
+
+// ============================================================================
+// 2. STUDENT FEES, BILLING & INSTALLMENTS
+// ============================================================================
+
+model FeeStructure {
+  id           String    @id @default(uuid())
+  name         String    // e.g. "Tuition Fee", "Boarding Fee"
+  code         String    @unique
+  amount       Float
+  term         String    // "Term 1", "Term 2", "Term 3"
+  academicYear String    // "2026"
+  isOptional   Boolean   @default(false)
+  classId      String?
+  class        Class?    @relation(fields: [classId], references: [id])
+  createdAt    DateTime  @default(now())
+}
+
+model StudentFeeInvoice {
+  id             String            @id @default(uuid())
+  invoiceNumber  String            @unique // e.g. "INV-2026-T1-0001"
+  studentId      String
+  student        Student           @relation(fields: [studentId], references: [id])
+  academicYear   String
+  term           String
+  subtotal       Float
+  discountAmount Float             @default(0.0)
+  discountType   String?           // "SCHOLARSHIP", "BURSARY", "SIBLING_DISCOUNT"
+  totalDue       Float
+  paidAmount     Float             @default(0.0)
+  balance        Float
+  status         String            @default("UNPAID") // UNPAID, PARTIAL, PAID, OVERDUE
+  dueDate        DateTime
+  items          FeeInvoiceItem[]
+  installments   InstallmentPlan[]
+  payments       PaymentReceipt[]
+  refunds        FeeRefund[]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
+
+model FeeInvoiceItem {
+  id          String            @id @default(uuid())
+  invoiceId   String
+  invoice     StudentFeeInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String
+  amount      Float
+}
+
+model InstallmentPlan {
+  id             String            @id @default(uuid())
+  invoiceId      String
+  invoice        StudentFeeInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  installmentNo  Int
+  dueDate        DateTime
+  amountExpected Float
+  amountPaid     Float             @default(0.0)
+  status         String            @default("PENDING") // PENDING, PAID, OVERDUE
+}
+
+// ============================================================================
+// 3. PAYMENTS, RECEIPTING & REFUNDS (OFFLINE-READY)
+// ============================================================================
+
+model PaymentReceipt {
+  id             String            @id @default(uuid())
+  receiptNumber  String            @unique // e.g. "RCP-2026-WS1-00001"
+  invoiceId      String
+  invoice        StudentFeeInvoice @relation(fields: [invoiceId], references: [id])
+  studentId      String
+  student        Student           @relation(fields: [studentId], references: [id])
+  amount         Float
+  paymentMethod  String            // CASH, BANK_DEPOSIT, MOBILE_MONEY, CARD, CHEQUE
+  referenceNo    String?
+  cashierName    String
+  workstationId  String
+  isOfflineSync  Boolean           @default(false)
+  issuedAt       DateTime
+  syncedAt       DateTime?         @default(now())
+  journalEntryId String?
+  notes          String?
+  createdAt      DateTime          @default(now())
+}
+
+model FeeRefund {
+  id           String            @id @default(uuid())
+  refundNumber String            @unique
+  invoiceId    String
+  invoice      StudentFeeInvoice @relation(fields: [invoiceId], references: [id])
+  amount       Float
+  reason       String
+  approvedBy   String
+  paidAt       DateTime          @default(now())
+}
+
+// ============================================================================
+// 4. ACCOUNTS PAYABLE & SUPPLIERS
+// ============================================================================
+
+model Supplier {
+  id            String            @id @default(uuid())
+  name          String
+  contactPerson String?
+  phone         String?
+  email         String?
+  taxPin        String?
+  category      String
+  invoices      SupplierInvoice[]
+  createdAt     DateTime          @default(now())
+}
+
+model SupplierInvoice {
+  id            String          @id @default(uuid())
+  invoiceNumber String
+  systemRef     String          @unique // e.g. "PINV-2026-0001"
+  supplierId    String
+  supplier      Supplier        @relation(fields: [supplierId], references: [id])
+  totalAmount   Float
+  taxAmount     Float           @default(0.0)
+  paidAmount    Float           @default(0.0)
+  balance       Float
+  dueDate       DateTime
+  status        String          @default("PENDING") // PENDING, APPROVED, PAID
+  expenses      ExpenseRecord[]
+  createdAt     DateTime        @default(now())
+}
+
+model ExpenseRecord {
+  id                String           @id @default(uuid())
+  voucherNumber     String           @unique // e.g. "PV-2026-0001"
+  supplierInvoiceId String?
+  supplierInvoice   SupplierInvoice? @relation(fields: [supplierInvoiceId], references: [id])
+  department        String
+  category          String
+  amount            Float
+  paymentMethod     String
+  paidTo            String
+  description       String
+  recordedBy        String
+  approvedBy        String?
+  approvalStatus    String           @default("APPROVED")
+  workstationId     String
+  expenseDate       DateTime
+  receiptDocUrl     String?
+  createdAt         DateTime         @default(now())
+}
+
+// ============================================================================
+// 5. PAYROLL, STATUTORY COMPLIANCE (PAYE/NSSF) & ADVANCES
+// ============================================================================
+
+model StaffPayrollRecord {
+  id                 String    @id @default(uuid())
+  teacherId          String
+  teacher            Teacher   @relation(fields: [teacherId], references: [id])
+  month              String
+  year               String
+  baseSalary         Float
+  housingAllowance   Float     @default(0.0)
+  transportAllowance Float     @default(0.0)
+  otherAllowances    Float     @default(0.0)
+  grossSalary        Float
+  payeTax            Float     @default(0.0)
+  nssfEmployee       Float     @default(0.0)
+  nssfEmployer       Float     @default(0.0)
+  loanRecovery       Float     @default(0.0)
+  advanceDeduction   Float     @default(0.0)
+  totalDeductions    Float
+  netSalary          Float
+  status             String    @default("PENDING") // PENDING, APPROVED, PAID
+  paymentDate        DateTime?
+  payslipRef         String    @unique
+  createdAt          DateTime  @default(now())
+}
+
+model StaffLoanAdvance {
+  id               String   @id @default(uuid())
+  teacherId        String
+  teacher          Teacher  @relation(fields: [teacherId], references: [id])
+  type             String   // "SALARY_ADVANCE" or "STAFF_LOAN"
+  amount           Float
+  balanceRemaining Float
+  monthlyDeduction Float
+  reason           String
+  status           String   @default("ACTIVE")
+  approvedBy       String
+  disbursedAt      DateTime @default(now())
+}
+
+// ============================================================================
+// 6. BUDGETING & DEPARTMENTAL VARIANCE
+// ============================================================================
+
+model Budget {
+  id           String       @id @default(uuid())
+  name         String
+  academicYear String
+  department   String
+  totalBudget  Float
+  lines        BudgetLine[]
+  createdAt    DateTime     @default(now())
+}
+
+model BudgetLine {
+  id              String  @id @default(uuid())
+  budgetId        String
+  budget          Budget  @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  accountId       String
+  account         Account @relation(fields: [accountId], references: [id])
+  allocatedAmount Float
+  spentAmount     Float   @default(0.0)
+  variance        Float
+}
+
+// ============================================================================
+// 7. FIXED ASSETS & DEPRECIATION
+// ============================================================================
+
+model FixedAsset {
+  id                      String   @id @default(uuid())
+  assetTag                String   @unique
+  name                    String
+  category                String
+  purchaseDate            DateTime
+  purchaseCost            Float
+  salvageValue            Float    @default(0.0)
+  usefulLifeYears         Int
+  depreciationMethod      String   @default("STRAIGHT_LINE")
+  accumulatedDepreciation Float    @default(0.0)
+  netBookValue            Float
+  location                String?
+  status                  String   @default("ACTIVE")
+  createdAt               DateTime @default(now())
+}
+
+// ============================================================================
+// 8. WORKSTATIONS, SECURITY & AUDIT TRAIL
+// ============================================================================
+
+model Workstation {
+  id              String    @id @default(uuid())
+  machineId       String    @unique
+  machineName     String
+  assignedCashier String
+  apiKeyHash      String
+  isBlocked       Boolean   @default(false)
+  lastSyncAt      DateTime?
+  lastIpAddress   String?
+  pendingRecords  Int       @default(0)
+  clientVersion   String    @default("1.0.0")
+  createdAt       DateTime  @default(now())
+}
+
+model FinanceAuditLog {
+  id            String   @id @default(uuid())
+  action        String
+  actorName     String
+  actorRole     String
+  workstationId String
+  ipAddress     String?
+  details       String
+  createdAt     DateTime @default(now())
+}
+
+// ============================================================================
+// 9. SCHOOL MEAL CARDS & CAFETERIA DINING PASSES
+// ============================================================================
+
+enum MealPlanType {
+  BOARDING_FULL          // Breakfast + Milk, Lunch, Dinner
+  DAY_LUNCH              // Day Scholar Lunch only
+  MILK_NUTRITION_AWARD   // Special morning milk / dairy award package
+  BURSARY_SUBSIDIZED     // Subsidized / academic award meal pass
+  CUSTOM
+}
+
+enum MealCardStatus {
+  ACTIVE
+  SUSPENDED
+  EXPIRED
+}
+
+enum MealSession {
+  BREAKFAST_MILK
+  LUNCH
+  DINNER
+  SPECIAL_BREAK
+}
+
+model MealCard {
+  id           String         @id @default(uuid())
+  cardNumber   String         @unique // e.g. "MC-2026-0042"
+  studentId    String         @unique
+  student      Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  planType     MealPlanType   @default(DAY_LUNCH)
+  status       MealCardStatus @default(ACTIVE)
+  points       Int            @default(100) // points or meal credits
+  milkQuota    Int            @default(1)   // daily milk cans / portions quota
+  dailyQuota   Int            @default(3)   // daily meal allowance
+  allergies    String?        // dietary notes or allergies
+  validUntil   DateTime?
+  logs         MealLog[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model MealLog {
+  id          String      @id @default(uuid())
+  cardId      String
+  mealCard    MealCard    @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  studentId   String
+  mealSession MealSession // BREAKFAST_MILK, LUNCH, DINNER, SPECIAL_BREAK
+  date        String      // "YYYY-MM-DD" for instant session deduplication
+  servedAt    DateTime    @default(now())
+  servedBy    String?     @default("Dining Hall Staff")
+  portionQty  Int         @default(1)
+  notes       String?
+  createdAt   DateTime    @default(now())
+
+  @@index([studentId, date, mealSession])
+  @@index([date])
+}
+
+
+
