@@ -919,6 +919,111 @@ export async function getPublicNotices() {
   return await fetchCached();
 }
 
+export async function getPortalNotifications(role: 'ADMIN' | 'TEACHER' | 'STUDENT', classId?: string) {
+  try {
+    const notifications: Array<{
+      id: string;
+      title: string;
+      message: string;
+      time: string;
+      type: 'notice' | 'alert' | 'event' | 'academic' | 'finance';
+      priority?: 'normal' | 'urgent' | 'high';
+      url?: string;
+    }> = [];
+
+    // 1. Fetch relevant notices
+    let noticeWhere: any = { target: "ALL" };
+    if (role === 'ADMIN') {
+      noticeWhere = {}; // Admin sees all notices
+    } else if (role === 'TEACHER') {
+      noticeWhere = { OR: [{ target: "ALL" }, { target: "TEACHERS" }, { target: "PUBLIC" }] };
+    } else if (role === 'STUDENT') {
+      const orList: any[] = [{ target: "ALL" }, { target: "STUDENTS" }, { target: "PUBLIC" }];
+      if (classId) orList.push({ target: classId });
+      noticeWhere = { OR: orList };
+    }
+
+    const notices = await prisma.notice.findMany({
+      where: noticeWhere,
+      take: 8,
+      orderBy: [{ pinned: 'desc' }, { createdAt: 'desc' }]
+    });
+
+    for (const n of notices) {
+      notifications.push({
+        id: `notice-${n.id}`,
+        title: n.title,
+        message: n.content ? (n.content.slice(0, 110) + (n.content.length > 110 ? '...' : '')) : 'School notice update',
+        time: n.date || 'Recent',
+        type: n.type === 'EVENT' ? 'event' : 'notice',
+        priority: n.pinned ? 'urgent' : 'normal',
+        url: role === 'ADMIN' ? '/admin/dashboard/notices' : role === 'TEACHER' ? '/teacher/dashboard' : '/student/dashboard',
+      });
+    }
+
+    // 2. Fetch role-specific actionable alerts
+    if (role === 'ADMIN') {
+      const pendingApps = await prisma.application.count({ where: { status: 'Pending' } });
+      if (pendingApps > 0) {
+        notifications.unshift({
+          id: 'alert-pending-apps',
+          title: `${pendingApps} Pending Student Applications`,
+          message: 'Admissions applications require administrative review and verification.',
+          time: 'Action Required',
+          type: 'alert',
+          priority: 'urgent',
+          url: '/admin/dashboard/applications',
+        });
+      }
+
+      const receiptCount = await prisma.paymentReceipt.count();
+      if (receiptCount > 0) {
+        notifications.push({
+          id: 'alert-finance-status',
+          title: 'Finance & POS Reconciled',
+          message: `${receiptCount} receipts synchronized with General Ledger.`,
+          time: 'Financial Audit',
+          type: 'finance',
+          priority: 'normal',
+          url: '/admin/dashboard/finance',
+        });
+      }
+    } else if (role === 'STUDENT') {
+      const homeworks = await prisma.homework.findMany({
+        take: 3,
+        orderBy: { createdAt: 'desc' },
+      });
+      for (const hw of homeworks) {
+        notifications.unshift({
+          id: `hw-${hw.id}`,
+          title: `Homework: ${hw.title}`,
+          message: `Due date: ${hw.dueDate || 'Check portal'}. Class assignment pending.`,
+          time: hw.dueDate || 'Recent',
+          type: 'academic',
+          priority: 'high',
+          url: '/student/dashboard/homework',
+        });
+      }
+    } else if (role === 'TEACHER') {
+      const hwCount = await prisma.homework.count();
+      notifications.unshift({
+        id: 'teacher-hw-overview',
+        title: 'Active Homework Tasks',
+        message: `${hwCount} class assignments currently active across classrooms.`,
+        time: 'Classroom',
+        type: 'academic',
+        priority: 'normal',
+        url: '/teacher/dashboard/homework',
+      });
+    }
+
+    return JSON.parse(JSON.stringify(notifications));
+  } catch (error) {
+    console.error('Error fetching portal notifications:', error);
+    return [];
+  }
+}
+
 export async function getStudentDashboardStats(studentId: string, classId: string) {
   const fetchCached = unstable_cache(
     async () => {

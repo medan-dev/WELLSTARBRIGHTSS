@@ -1,5 +1,7 @@
 "use client";
 
+import { NotificationCenter } from "@/components/notifications/NotificationCenter";
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -162,10 +164,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Button variant="ghost" size="icon" onClick={toggleDark} aria-label="Toggle theme" className="rounded-full">
                 {dark ? <Sun className="size-5" /> : <Moon className="size-5" />}
               </Button>
-              <Button variant="ghost" size="icon" aria-label="Notifications" className="relative rounded-full">
-                <Bell className="size-5" />
-                <span className="absolute top-2 right-2 size-2 rounded-full bg-accent border-2 border-background" />
-              </Button>
+              <NotificationCenter role="ADMIN" />
               <div className="size-9 rounded-full bg-primary grid place-items-center text-primary-foreground text-sm font-bold shadow-md cursor-pointer hover:ring-2 ring-primary/30 transition-all">
                 NM
               </div>

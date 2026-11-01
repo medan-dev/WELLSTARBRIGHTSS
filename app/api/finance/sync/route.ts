@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let body = {};
+    let body: any = {};
     try {
       const text = await req.text();
       body = text ? JSON.parse(text) : {};

@@ -1,5 +1,7 @@
 "use client";
 
+import { NotificationCenter } from "@/components/notifications/NotificationCenter";
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -181,10 +183,7 @@ export default function TeacherDashboardLayout({ children }: { children: React.R
           </div>
 
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="relative text-gray-500">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-orange-500 rounded-full border-2 border-white" />
-            </Button>
+            <NotificationCenter role="TEACHER" iconClassName="w-5 h-5" />
             
             <div className="h-8 w-px bg-gray-200 hidden sm:block" />
             
