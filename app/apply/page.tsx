@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { submitApplication } from "../actions";
+import { trackMetaEvent } from "@/components/analytics/MetaPixel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,6 +53,11 @@ export default function ApplyPage() {
     await submitApplication(data);
     setSubmitting(false);
     setSubmitted(true);
+    trackMetaEvent("Lead", {
+      form: "online_admission",
+      grade: data.grade,
+      studentName: data.studentName,
+    });
     toast.success("Application submitted successfully!");
   };
 

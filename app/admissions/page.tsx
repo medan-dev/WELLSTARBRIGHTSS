@@ -10,10 +10,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CheckCircle2, FileText, MessageSquare, UserCheck, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
-import type { Metadata } from "next";
 import { PageHero } from "@/components/site/PageHero";
 import admissionsHero from "@/assets/gallery-2.jpg";
 import { SectionDivider } from "@/components/ui/SectionDivider";
+import { trackMetaEvent } from "@/components/analytics/MetaPixel";
 
 const steps = [
   { icon: FileText, title: "Apply online", desc: "Complete our short enquiry form in under 5 minutes." },
@@ -85,6 +85,11 @@ export default function AdmissionsPage() {
     await new Promise((r) => setTimeout(r, 900));
     setSubmitting(false);
     setSubmitted(true);
+    trackMetaEvent("Lead", {
+      form: "admissions_enquiry",
+      parentName: data.parentName,
+      grade: data.grade,
+    });
     toast.success("Application received! We'll be in touch within 2 working days.");
   };
 

@@ -8,7 +8,7 @@ import {
   Microscope, Palette, Globe2, Code2, Music, Dumbbell, Quote, 
   Star, ChevronLeft, ChevronRight, GraduationCap, ShieldCheck, 
   CheckCircle2, Compass, Award, Building, HeartHandshake,
-  Play, Pause, Volume2, VolumeX
+  Play, Pause, Volume2, VolumeX, HelpCircle, Sparkles, ChevronDown, MessageSquare
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -224,11 +224,52 @@ function HeroTextAnimation() {
   );
 }
 
+const relatableAnswers = [
+  {
+    category: "Top Mukono Schools",
+    badge: "Academics & UNEB",
+    question: "Why is Wellstar Bright ranked among the top secondary schools in Mukono?",
+    answer: "Wellstar Bright Secondary School in Kabembe, Mukono has earned its place among top performing schools in the district through rigorous UNEB preparation, dedicated subject specialists, modern science and ICT laboratories, and individual student progress tracking. Our students consistently attain Division 1 in both O-Level (UCE) and A-Level (UACE), qualifying for top public and private university courses across Uganda."
+  },
+  {
+    category: "SDA & Values",
+    badge: "SDA Christian Ethos",
+    question: "How does Seventh-day Adventist (SDA) education shape student character and discipline?",
+    answer: "As an SDA-founded institution, Wellstar Bright practices holistic education—developing the Mind, Body, and Spirit together. We promote morning and evening devotions, Sabbath spiritual rejuvenation, wholesome lifestyle principles, zero tolerance for substance abuse or bullying, and positive peer mentorship that prepares students to lead with integrity."
+  },
+  {
+    category: "SDA & Values",
+    badge: "All Faiths Welcome",
+    question: "Are non-Adventist students accepted at Wellstar Bright?",
+    answer: "Yes, warmly! We welcome students from all Christian denominations (Anglican, Catholic, Pentecostal) and backgrounds. Every student who values a quiet, respectful, morally upright, and high-achieving environment is embraced as an equal member of our school family."
+  },
+  {
+    category: "Boarding & Campus",
+    badge: "Boarding & Safety",
+    question: "What are the boarding facilities, safety measures, and meals like at Kabembe?",
+    answer: "Located in a serene and secure setting in Kabembe (off the Kampala-Jinja/Kayunga highway), our boarding section features clean, spacious separate dormitories for boys and girls, 24/7 security personnel and perimeter fencing, clean borehole water, a resident nurse, and healthy, well-balanced hot meals every day."
+  },
+  {
+    category: "Admissions & Fees",
+    badge: "Admissions & S.1 / S.5",
+    question: "How do I apply for S.1 or S.5, and what are the admission requirements?",
+    answer: "Applications can be completed online on our website in just 3 minutes, or by connecting with Admissions on WhatsApp at 0701116781. S.1 applicants present their PLE result slip, while S.5 applicants present their UCE result slip. We schedule a friendly family interview and campus tour before issuing an admission letter."
+  },
+  {
+    category: "Admissions & Fees",
+    badge: "School Fees & Bursaries",
+    question: "How affordable are the school fees, and do you offer bursaries or scholarships?",
+    answer: "Wellstar Bright offers moderate, transparent fees that provide unmatched value for private secondary education in Mukono District. We support flexible installment plans for parents and provide merit-based bursaries for exceptional performers in national PLE and UCE examinations."
+  }
+];
+
 export default function HomePage() {
   const [content, setContent] = useState(defaultSiteContent);
   const [activeReviewIdx, setActiveReviewIdx] = useState(0);
   const [cardsToShow, setCardsToShow] = useState(3);
   const [paused, setPaused] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [faqFilter, setFaqFilter] = useState<string>("All");
 
   // Cinematic Video Hero state
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -852,6 +893,113 @@ export default function HomePage() {
           </div>
         </AnimatedSection>
         <SectionDivider position="bottom" fillColor="fill-background" />
+      </section>
+
+      {/* RELATABLE SEO & PARENT QUESTIONS SECTION (Answer Engine Optimization) */}
+      <section className="py-20 md:py-28 bg-muted/30 border-t border-border/60 relative overflow-hidden">
+        <AnimatedSection className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 max-w-5xl mx-auto">
+          {/* Header */}
+          <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 text-xs font-bold tracking-wide uppercase">
+              <Sparkles className="size-3.5 text-amber-500" />
+              <span>Parent Guide • Mukono & Adventist Education</span>
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
+              Relatable Answers to What Parents Ask Most
+            </h2>
+            <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
+              Real questions parents and guardians ask when searching for the best secondary school in Mukono, Adventist values, UNEB excellence, and boarding security.
+            </p>
+
+            {/* Filter Pills */}
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+              {["All", "Top Mukono Schools", "SDA & Values", "Boarding & Campus", "Admissions & Fees"].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setFaqFilter(cat)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                    faqFilter === cat
+                      ? "bg-amber-500 text-slate-950 font-bold shadow-xs scale-105"
+                      : "bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-secondary"
+                  }`}
+                >
+                  {cat === "All" ? "All Questions" : cat}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Accordion List */}
+          <div className="space-y-4">
+            {relatableAnswers
+              .filter((item) => faqFilter === "All" || item.category === faqFilter)
+              .map((item, idx) => {
+                const isOpen = openFaq === idx;
+                return (
+                  <div
+                    key={idx}
+                    className="border border-border/80 bg-card rounded-2xl overflow-hidden shadow-xs hover:border-amber-500/40 transition-all duration-200"
+                  >
+                    <button
+                      onClick={() => setOpenFaq(isOpen ? null : idx)}
+                      className="w-full flex items-center justify-between p-5 sm:p-6 text-left gap-4 font-display font-bold text-foreground text-base sm:text-lg hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
+                      aria-expanded={isOpen}
+                    >
+                      <div className="flex items-start sm:items-center gap-3">
+                        <span className="shrink-0 size-7 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold text-xs flex items-center justify-center mt-0.5 sm:mt-0">
+                          Q{idx + 1}
+                        </span>
+                        <span>{item.question}</span>
+                      </div>
+                      <ChevronDown
+                        className={`size-5 shrink-0 text-muted-foreground transition-transform duration-300 ${
+                          isOpen ? "rotate-180 text-amber-500" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {isOpen && (
+                      <div className="px-5 sm:px-6 pb-6 pt-0 animate-in fade-in-50 duration-200">
+                        <div className="pt-2 border-t border-border/50 text-muted-foreground text-sm sm:text-base leading-relaxed space-y-3">
+                          <p>{item.answer}</p>
+                          <div className="flex items-center gap-2 pt-2 text-xs font-semibold text-amber-600 dark:text-amber-400">
+                            <CheckCircle2 className="size-4 shrink-0" />
+                            <span>Verified information for Wellstar Bright Secondary School, Kabembe, Mukono.</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+          </div>
+
+          {/* Direct Help Callout Banner */}
+          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+            <div className="space-y-1">
+              <h3 className="font-display font-extrabold text-lg sm:text-xl text-foreground">
+                Still have a specific question about your child?
+              </h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                Our Admissions Office is online right now to guide you on vacancies, fees, and requirements.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
+              <a
+                href="https://wa.me/256701116781?text=Hello%20Wellstar%20Bright%2C%20I%20have%20a%20question%20about%20admissions"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-smooth"
+              >
+                <MessageSquare className="size-4" />
+                <span>Chat on WhatsApp</span>
+              </a>
+              <Button asChild variant="outline" size="sm" className="rounded-xl font-bold text-xs">
+                <Link href="/apply">Apply Online</Link>
+              </Button>
+            </div>
+          </div>
+        </AnimatedSection>
       </section>
 
       {/* CTA BANNER */}

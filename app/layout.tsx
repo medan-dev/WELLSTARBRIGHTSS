@@ -1,8 +1,11 @@
+import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import { Inter, Sora } from "next/font/google";
 import "@/styles.css";
 import { Toaster } from "@/components/ui/sonner";
 import { LoaderProvider } from "@/components/site/PageLoader";
+import { MetaPixel } from "@/components/analytics/MetaPixel";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,20 +20,87 @@ const sora = Sora({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#f59e0b",
 };
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://wellstarbrightss.vercel.app";
+
 export const metadata: Metadata = {
-  title: "Wellstar Bright Secondary School — Kabembe, Mukono",
-  description: "Wellstar Bright Secondary School is a Seventh-day Adventist private mixed secondary school at Kabembe, Mukono District, Uganda, offering O-Level and A-Level education.",
-  authors: [{ name: "Wellstar Bright Secondary School" }],
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Wellstar Bright Secondary School | Top SDA Mixed Secondary School in Mukono, Uganda",
+    template: "%s | Wellstar Bright Secondary School Kabembe Mukono",
+  },
+  description:
+    "Looking for a top secondary school in Mukono? Wellstar Bright Secondary School (Kabembe, Mukono) is a premier Seventh-day Adventist (SDA) mixed day and boarding school offering outstanding O-Level and A-Level UNEB education, Christian moral values, modern science & computer labs, and holistic student mentorship in Uganda.",
+  keywords: [
+    "top schools in Mukono",
+    "best secondary schools in Mukono",
+    "top secondary schools in Mukono Uganda",
+    "best Adventist secondary schools in Uganda",
+    "top SDA secondary schools in Mukono",
+    "SDA secondary schools in Mukono",
+    "Seventh-day Adventist schools Uganda",
+    "SDA boarding schools Uganda",
+    "Adventist schools in Mukono",
+    "mixed secondary schools in Mukono",
+    "best boarding secondary schools in Mukono",
+    "Christian secondary schools in Mukono",
+    "UNEB O-Level and A-Level schools in Mukono",
+    "Wellstar Bright Secondary School Kabembe",
+    "Wellstar Bright Mukono",
+    "affordable private secondary schools in Mukono",
+    "secondary schools along Kampala Jinja road",
+    "Kabembe secondary schools",
+    "top performing schools in Mukono district",
+    "holistic Christian education Uganda",
+    "S.1 and S.5 admissions Mukono",
+  ],
+  authors: [{ name: "Wellstar Bright Secondary School", url: siteUrl }],
+  creator: "Wellstar Bright Secondary School",
+  publisher: "Wellstar Bright Secondary School",
+  category: "Education",
   icons: {
     icon: "/logo.png",
+    apple: "/logo.png",
+  },
+  alternates: {
+    canonical: siteUrl,
   },
   openGraph: {
     type: "website",
+    locale: "en_UG",
+    url: siteUrl,
+    siteName: "Wellstar Bright Secondary School",
+    title: "Wellstar Bright Secondary School | Top SDA Secondary School in Mukono, Uganda",
+    description:
+      "Premier Seventh-day Adventist mixed boarding & day secondary school at Kabembe, Mukono. UNEB O-Level & A-Level excellence, Christian discipline, modern science labs & vibrant student life.",
+    images: [
+      {
+        url: "/hero-campus.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Wellstar Bright Secondary School Campus at Kabembe, Mukono",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    title: "Wellstar Bright Secondary School | Top School in Mukono, Uganda",
+    description:
+      "Top Seventh-day Adventist mixed secondary school in Mukono, Uganda. O-Level, A-Level, modern labs & Christian values.",
+    images: ["/hero-campus.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
@@ -190,8 +260,14 @@ export default function RootLayout({
             `,
           }}
         />
+        {/* Canonical SEO JSON-LD Structured Data for Google Answer Engine Optimization */}
+        <JsonLd />
       </head>
       <body className={`${inter.variable} ${sora.variable} antialiased`} suppressHydrationWarning>
+        {/* Meta Pixel Tracker */}
+        <Suspense fallback={null}>
+          <MetaPixel />
+        </Suspense>
         <script
           id="theme-initializer"
           suppressHydrationWarning

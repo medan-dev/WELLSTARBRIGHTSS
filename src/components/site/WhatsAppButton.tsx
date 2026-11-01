@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { MessageCircle, X } from "lucide-react";
+import { trackMetaEvent } from "@/components/analytics/MetaPixel";
 
 export function WhatsAppButton() {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -61,6 +62,7 @@ export function WhatsAppButton() {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackMetaEvent("Contact", { method: "WhatsApp", phone: "0701116781", context: "Tooltip" })}
             className="mt-2 inline-flex items-center gap-1 font-bold text-emerald-600 dark:text-emerald-400 hover:underline text-[11px]"
           >
             Start WhatsApp Chat →
@@ -73,6 +75,7 @@ export function WhatsAppButton() {
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => trackMetaEvent("Contact", { method: "WhatsApp", phone: "0701116781", context: "FloatingButton" })}
         aria-label="Chat with Wellstar Bright on WhatsApp (0701116781)"
         className="relative flex items-center justify-center size-13 sm:size-14 rounded-full bg-gradient-to-tr from-[#25D366] to-[#128C7E] text-white shadow-lg shadow-emerald-600/30 hover:shadow-xl hover:shadow-emerald-600/40 hover:scale-108 active:scale-95 transition-all duration-300 group focus:outline-none focus:ring-4 focus:ring-emerald-400/40"
       >
