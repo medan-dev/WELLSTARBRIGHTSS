@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowRight, BookOpen, Trophy, Users, Calendar,
   Microscope, Palette, Globe2, Code2, Music, Dumbbell, Quote, 
   Star, ChevronLeft, ChevronRight, GraduationCap, ShieldCheck, 
-  CheckCircle2, Compass, Award, Building, HeartHandshake
+  CheckCircle2, Compass, Award, Building, HeartHandshake,
+  Play, Pause, Volume2, VolumeX
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -229,6 +230,30 @@ export default function HomePage() {
   const [cardsToShow, setCardsToShow] = useState(3);
   const [paused, setPaused] = useState(false);
 
+  // Cinematic Video Hero state
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoPlaying, setVideoPlaying] = useState(true);
+  const [videoMuted, setVideoMuted] = useState(true);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
+  const toggleVideoPlayback = () => {
+    if (!videoRef.current) return;
+    if (videoPlaying) {
+      videoRef.current.pause();
+      setVideoPlaying(false);
+    } else {
+      videoRef.current.play();
+      setVideoPlaying(true);
+    }
+  };
+
+  const toggleVideoAudio = () => {
+    if (!videoRef.current) return;
+    const nextMuted = !videoMuted;
+    videoRef.current.muted = nextMuted;
+    setVideoMuted(nextMuted);
+  };
+
   useEffect(() => {
     getSiteContent().then((data) => {
       if (data) setContent(data);
@@ -274,48 +299,163 @@ export default function HomePage() {
 
   return (
     <SiteLayout>
-      {/* CINEMATIC HERO WITH INCREASED HEIGHT & BALANCED SPACING */}
-      <section className="relative overflow-hidden bg-slate-950 min-h-[560px] md:min-h-[640px] flex items-center pt-36 pb-24 md:pt-42 md:pb-28">
-        {/* Background Image & Blocker Overlays */}
+      {/* CINEMATIC MOVIE-EXPERIENCE HERO SECTION */}
+      <section className="relative overflow-hidden bg-slate-950 min-h-[620px] md:min-h-[720px] lg:min-h-[780px] flex items-center pt-36 pb-24 md:pt-44 md:pb-28">
+        {/* Background Video & Blocker Overlays */}
         <div className="absolute inset-0 z-0 overflow-hidden">
+          {/* Base Fallback High-Res Poster Image */}
           <Image 
             src={heroImg} 
             alt="Wellstar Bright Campus" 
-            className="size-full object-cover scale-105" 
+            className={`size-full object-cover scale-105 transition-opacity duration-1000 ${videoLoaded ? 'opacity-35' : 'opacity-100'}`} 
             placeholder="blur" 
             priority 
           />
-          {/* Side-fading scrim: dark on the left for text contrast, fading to transparent on the right for image visibility */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/65 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+
+          {/* HTML5 Cinematic Video Stream */}
+          <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted={videoMuted}
+            playsInline
+            onCanPlay={() => setVideoLoaded(true)}
+            poster="/hero-campus.jpg"
+            className="absolute inset-0 size-full object-cover scale-105 transition-opacity duration-1000"
+          >
+            <source src="/videos/hero-campus.mp4" type="video/mp4" />
+          </video>
+
+          {/* Cinematic Scrims: Dark gradient on left for text contrast, fading on right */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-950/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-transparent to-slate-950/70" />
           
-          {/* Enhanced Ambient Glowing Mesh & Warm Sunlight Flare */}
-          <div className="absolute -top-32 -left-32 size-[600px] bg-blue-500/35 rounded-full blur-[130px] pointer-events-none" />
-          <div className="absolute top-0 right-1/4 size-[400px] bg-amber-200/20 rounded-full blur-[100px] pointer-events-none mix-blend-screen" />
-          <div className="absolute top-1/3 -right-32 size-[500px] bg-amber-400/25 rounded-full blur-[120px] pointer-events-none" />
+          {/* Subtle Cinematic Film Texture */}
+          <div className="absolute inset-0 opacity-[0.06] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+
+          {/* Anamorphic Golden Light Flare & Deep Sky Atmospheric Glows */}
+          <div className="absolute -top-32 -left-32 size-[650px] bg-blue-600/30 rounded-full blur-[140px] pointer-events-none" />
+          <div className="absolute top-1/4 right-0 size-[550px] bg-amber-400/20 rounded-full blur-[130px] pointer-events-none mix-blend-screen" />
+          <div className="absolute -bottom-24 right-1/4 size-[400px] bg-orange-600/15 rounded-full blur-[120px] pointer-events-none" />
         </div>
 
+        {/* Hero Main Content */}
         <div className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 relative z-10">
-          <div className="max-w-3xl space-y-6">
-            <HeroTextAnimation />
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Column: Headlines & CTA Buttons */}
+            <div className="lg:col-span-7 xl:col-span-8 space-y-6 max-w-3xl">
+              {/* Live Reel Pill Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-white text-xs font-semibold shadow-inner">
+                <span className="relative flex size-2">
+                  <span className="animate-ping absolute inline-flex size-full rounded-full bg-rose-400 opacity-75" />
+                  <span className="relative inline-flex size-2 rounded-full bg-rose-500" />
+                </span>
+                <span className="tracking-wider uppercase font-bold text-[10px] text-amber-300">
+                  4K Campus Cinema Reel
+                </span>
+                <span className="text-white/40">·</span>
+                <span className="text-[11px] text-slate-300 font-medium">
+                  Mukono, Uganda
+                </span>
+              </div>
 
-            <div className="pt-2 w-full max-w-sm sm:max-w-none flex flex-row items-center justify-between sm:justify-start sm:gap-4 animate-fade-up delay-200">
-              <Button asChild size="lg" className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-extrabold border-0 shadow-md hover-lift-sm h-12 px-6 sm:px-8 rounded-xl text-sm md:text-base justify-center text-center">
-                <Link href="/apply" className="flex items-center justify-center">
-                  <span className="inline sm:hidden">Apply</span>
-                  <span className="hidden sm:inline">Apply for Admission</span>
-                  <ArrowRight className="ml-1.5 sm:ml-2 size-4" />
-                </Link>
-              </Button>
-              
-              <Button asChild size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 h-12 px-6 sm:px-7 rounded-xl text-sm md:text-base backdrop-blur-md justify-center text-center">
-                <Link href="/about" className="flex items-center justify-center">
-                  <span className="inline sm:hidden">Discover</span>
-                  <span className="hidden sm:inline">Discover Wellstar Bright</span>
-                </Link>
-              </Button>
+              <HeroTextAnimation />
+
+              <div className="pt-2 w-full max-w-sm sm:max-w-none flex flex-row items-center justify-between sm:justify-start sm:gap-4 animate-fade-up delay-200">
+                <Button asChild size="lg" className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-extrabold border-0 shadow-md hover-lift-sm h-12 px-6 sm:px-8 rounded-xl text-sm md:text-base justify-center text-center">
+                  <Link href="/apply" className="flex items-center justify-center">
+                    <span className="inline sm:hidden">Apply</span>
+                    <span className="hidden sm:inline">Apply for Admission</span>
+                    <ArrowRight className="ml-1.5 sm:ml-2 size-4" />
+                  </Link>
+                </Button>
+                
+                <Button asChild size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 h-12 px-6 sm:px-7 rounded-xl text-sm md:text-base backdrop-blur-md justify-center text-center">
+                  <Link href="/about" className="flex items-center justify-center">
+                    <span className="inline sm:hidden">Discover</span>
+                    <span className="hidden sm:inline">Discover Wellstar Bright</span>
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Right Column: Cinematic Floating Highlight Cards (Desktop Only) */}
+            <div className="hidden lg:flex lg:col-span-5 xl:col-span-4 flex-col gap-3.5 animate-fade-up delay-300">
+              {/* Card 1 */}
+              <div className="p-4.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-xl shadow-xl transition-all duration-300 hover:translate-x-1 group">
+                <div className="flex items-start gap-3.5">
+                  <div className="p-2.5 rounded-xl bg-amber-400/20 text-amber-300 border border-amber-400/30 shrink-0 group-hover:scale-105 transition-transform">
+                    <Award className="size-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white tracking-tight">
+                      UNEB Centre U3421
+                    </h4>
+                    <p className="text-xs text-slate-300/85 mt-0.5 leading-relaxed">
+                      100% Division 1 & 2 pass rates in UCE & UACE national examinations.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2 */}
+              <div className="p-4.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-xl shadow-xl transition-all duration-300 hover:translate-x-1 group">
+                <div className="flex items-start gap-3.5">
+                  <div className="p-2.5 rounded-xl bg-blue-400/20 text-blue-300 border border-blue-400/30 shrink-0 group-hover:scale-105 transition-transform">
+                    <Microscope className="size-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white tracking-tight">
+                      Cutting-Edge STEM Labs
+                    </h4>
+                    <p className="text-xs text-slate-300/85 mt-0.5 leading-relaxed">
+                      Modern Physics, Chemistry, Biology & ICT computer hubs for practical discovery.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 3 */}
+              <div className="p-4.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-xl shadow-xl transition-all duration-300 hover:translate-x-1 group">
+                <div className="flex items-start gap-3.5">
+                  <div className="p-2.5 rounded-xl bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 shrink-0 group-hover:scale-105 transition-transform">
+                    <ShieldCheck className="size-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white tracking-tight">
+                      Holistic Mentorship & Values
+                    </h4>
+                    <p className="text-xs text-slate-300/85 mt-0.5 leading-relaxed">
+                      Grounded in Seventh-day Adventist discipline, sports excellence & life skills.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* Floating Movie Controls Chip (Bottom Right of Hero) */}
+        <div className="absolute bottom-6 right-6 z-20 hidden sm:flex items-center gap-2 p-1.5 px-3 rounded-full bg-slate-950/75 border border-white/15 backdrop-blur-md shadow-2xl text-xs text-white">
+          <button
+            onClick={toggleVideoPlayback}
+            className="p-1.5 rounded-full hover:bg-white/15 text-white/90 hover:text-white transition-colors"
+            title={videoPlaying ? "Pause Video Reel" : "Play Video Reel"}
+            aria-label={videoPlaying ? "Pause Video Reel" : "Play Video Reel"}
+          >
+            {videoPlaying ? <Pause className="size-3.5" /> : <Play className="size-3.5" />}
+          </button>
+          <span className="h-3 w-px bg-white/20" />
+          <button
+            onClick={toggleVideoAudio}
+            className="flex items-center gap-1.5 p-1.5 px-2 rounded-full hover:bg-white/15 text-white/90 hover:text-white transition-colors text-[11px] font-medium"
+            title={videoMuted ? "Unmute Audio" : "Mute Audio"}
+            aria-label={videoMuted ? "Unmute Audio" : "Mute Audio"}
+          >
+            {videoMuted ? <VolumeX className="size-3.5" /> : <Volume2 className="size-3.5 text-amber-300" />}
+            <span>{videoMuted ? "Muted" : "Sound On"}</span>
+          </button>
         </div>
 
         <SectionDivider position="bottom" fillColor="fill-background" />
