@@ -681,7 +681,16 @@ export async function getMarks(examId: string, classId: string, subjectId: strin
 // AUTHENTICATION & PORTAL MANAGEMENT
 // ==========================================
 export async function loginTeacher(email: string) {
-  const data = await prisma.teacher.findUnique({ where: { email }, include: { subjects: true } });
+  const cleanEmail = email.trim();
+  const data = await prisma.teacher.findFirst({
+    where: {
+      email: {
+        equals: cleanEmail,
+        mode: 'insensitive'
+      }
+    },
+    include: { subjects: true }
+  });
   if(!data) throw new Error('Teacher not found');
   return JSON.parse(JSON.stringify(data));
 }
@@ -694,7 +703,15 @@ export async function addStudent(name: string, email: string, passwordHash: stri
 }
 
 export async function loginStudent(email: string) {
-  const data = await prisma.student.findUnique({ where: { email } });
+  const cleanEmail = email.trim();
+  const data = await prisma.student.findFirst({
+    where: {
+      email: {
+        equals: cleanEmail,
+        mode: 'insensitive'
+      }
+    }
+  });
   if(!data) throw new Error('Student not found');
   return JSON.parse(JSON.stringify(data));
 }
