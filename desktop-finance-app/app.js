@@ -524,7 +524,7 @@ function seedSampleOfflineDataIfEmpty() {
         studentName: "Okello Denis",
         studentClass: "S.5 Sci",
         planType: "BOARDING_FULL",
-        
+        dailyQuota: 3,
         duration: "1_MONTH",
         startDate: dStr(-5),
         validUntil: dStr(25), // 25 days remaining
@@ -542,7 +542,7 @@ function seedSampleOfflineDataIfEmpty() {
         studentName: "Babirye Sarah",
         studentClass: "S.4 West",
         planType: "DAY_LUNCH",
-        
+        dailyQuota: 1,
         duration: "1_WEEK",
         startDate: dStr(-4),
         validUntil: dStr(3), // 3 days remaining (Expiring soon!)
@@ -560,7 +560,7 @@ function seedSampleOfflineDataIfEmpty() {
         studentName: "Kato Joseph",
         studentClass: "S.1A",
         planType: "BOARDING_FULL",
-        
+        dailyQuota: 3,
         duration: "1_MONTH",
         startDate: dStr(-35),
         validUntil: dStr(-5), // Expired 5 days ago
@@ -578,7 +578,7 @@ function seedSampleOfflineDataIfEmpty() {
         studentName: "Namagembe Grace",
         studentClass: "S.6 Arts",
         planType: "SPECIAL_DIET",
-        
+        dailyQuota: 3,
         duration: "1_MONTH",
         startDate: dStr(-10),
         validUntil: dStr(20),

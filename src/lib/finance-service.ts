@@ -43,7 +43,7 @@ export async function initializeStandardChartOfAccounts() {
     { code: "5010", name: "Academic Staff Salaries & Allowances", accountClass: AccountClass.EXPENSE, isBankOrCash: false, balance: 0 },
     { code: "5020", name: "Support Staff Salaries & Wages", accountClass: AccountClass.EXPENSE, isBankOrCash: false, balance: 0 },
     { code: "5030", name: "Employer NSSF Contributions (10%)", accountClass: AccountClass.EXPENSE, isBankOrCash: false, balance: 0 },
-    { code: "5110", name: "Kitchen & Student Food Rations", accountClass: AccountClass.EXPENSE, isBankOrCash: false, balance: 0 },
+    { code: "5110", name: "Kitchen & Student Food Provisions", accountClass: AccountClass.EXPENSE, isBankOrCash: false, balance: 0 },
     { code: "5120", name: "Water, Electricity & Generator Fuel", accountClass: AccountClass.EXPENSE, isBankOrCash: false, balance: 0 },
     { code: "5130", name: "Classroom, Books & Laboratory Consumables", accountClass: AccountClass.EXPENSE, isBankOrCash: false, balance: 0 },
     { code: "5140", name: "Vehicle Fuel, Repairs & Bus Servicing", accountClass: AccountClass.EXPENSE, isBankOrCash: false, balance: 0 },
