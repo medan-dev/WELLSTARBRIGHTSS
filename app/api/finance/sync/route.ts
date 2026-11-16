@@ -86,7 +86,6 @@ export async function POST(req: NextRequest) {
               where: { cardNumber: card.cardNumber },
               update: {
                 planType: card.planType || "DAY_LUNCH",
-                milkQuota: Number(card.milkQuota || card.dailyMilkQuota || 0),
                 dailyQuota: Number(card.dailyQuota || 3),
                 status: card.status || "ACTIVE",
                 validUntil: card.validUntil ? new Date(card.validUntil) : null,
@@ -96,7 +95,6 @@ export async function POST(req: NextRequest) {
                 cardNumber: card.cardNumber,
                 studentId: card.studentId,
                 planType: card.planType || "DAY_LUNCH",
-                milkQuota: Number(card.milkQuota || card.dailyMilkQuota || 0),
                 dailyQuota: Number(card.dailyQuota || 3),
                 status: card.status || "ACTIVE",
                 validUntil: card.validUntil ? new Date(card.validUntil) : null,

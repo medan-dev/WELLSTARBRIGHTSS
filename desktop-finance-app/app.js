@@ -524,7 +524,7 @@ function seedSampleOfflineDataIfEmpty() {
         studentName: "Okello Denis",
         studentClass: "S.5 Sci",
         planType: "BOARDING_FULL",
-        dailyMilkQuota: 1,
+        
         duration: "1_MONTH",
         startDate: dStr(-5),
         validUntil: dStr(25), // 25 days remaining
@@ -542,7 +542,7 @@ function seedSampleOfflineDataIfEmpty() {
         studentName: "Babirye Sarah",
         studentClass: "S.4 West",
         planType: "DAY_LUNCH",
-        dailyMilkQuota: 1,
+        
         duration: "1_WEEK",
         startDate: dStr(-4),
         validUntil: dStr(3), // 3 days remaining (Expiring soon!)
@@ -560,7 +560,7 @@ function seedSampleOfflineDataIfEmpty() {
         studentName: "Kato Joseph",
         studentClass: "S.1A",
         planType: "BOARDING_FULL",
-        dailyMilkQuota: 1,
+        
         duration: "1_MONTH",
         startDate: dStr(-35),
         validUntil: dStr(-5), // Expired 5 days ago
@@ -577,8 +577,8 @@ function seedSampleOfflineDataIfEmpty() {
         studentId: "S-1047",
         studentName: "Namagembe Grace",
         studentClass: "S.6 Arts",
-        planType: "MILK_NUTRITION_AWARD",
-        dailyMilkQuota: 2,
+        planType: "SPECIAL_DIET",
+        
         duration: "1_MONTH",
         startDate: dStr(-10),
         validUntil: dStr(20),
@@ -587,7 +587,7 @@ function seedSampleOfflineDataIfEmpty() {
         term: "Term 1 2026",
         issuedBy: "CPA Sarah Namubiru",
         issuedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
-        notes: "1-Month Nutrition Award Card with 2 milk cans daily.",
+        notes: "1-Month Special Dietary Meal Pass.",
       },
     ];
   }
@@ -3943,7 +3943,7 @@ function setupMealsModule() {
       const startDate = startDateInput.value || new Date().toISOString().slice(0, 10);
       const expiryDate = expiryDateInput.value || computeExpiryDate(startDate, duration);
       const plan = document.getElementById("mealPlanSelect").value;
-      const milk = Number(document.getElementById("mealMilkQuotaSelect").value || 0);
+      const dailyMeals = Number(document.getElementById("mealDailyQuotaSelect")?.value || 3);
       const status = document.getElementById("mealInitialStatus").value;
       const notes = document.getElementById("mealCardNotes").value.trim();
 
@@ -3959,7 +3959,7 @@ function setupMealsModule() {
         startDate: startDate,
         validUntil: expiryDate,
         planType: plan,
-        dailyMilkQuota: milk,
+        dailyQuota: dailyMeals,
         status: status,
         ticks: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
         term: student.term || "Term 1 2026",
@@ -4006,7 +4006,7 @@ function setupMealsModule() {
             startDate: today,
             validUntil: expDate,
             planType: isSenior ? "BOARDING_FULL" : "DAY_LUNCH",
-            dailyMilkQuota: 1,
+            
             status: isCleared ? "ACTIVE" : "SUSPENDED_ARREARS",
             ticks: { mon: true, tue: true, wed: false, thu: false, fri: false, sat: false, sun: false },
             term: s.term || "Term 1 2026",
@@ -4215,7 +4215,7 @@ function renderMealCardsTable() {
     const planLabels = {
       BOARDING_FULL: "Boarding (3 Meals)",
       DAY_LUNCH: "Day Lunch Only",
-      MILK_NUTRITION_AWARD: "Milk Nutrition Award",
+      SPECIAL_DIET: "Special Diet Meal Pass",
       BURSARY_SUBSIDIZED: "Bursary Subsidized",
     };
     const planText = planLabels[card.planType] || card.planType;
@@ -4243,7 +4243,7 @@ function renderMealCardsTable() {
       <td>${feeBadge}</td>
       <td>
         <div style="font-size: 12px; font-weight: 600;">${planText}</div>
-        ${card.dailyMilkQuota > 0 ? `<span class="milk-pill-chip" style="margin-top: 3px;"><svg class="svg-icon" style="width: 10px; height: 10px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg> ${card.dailyMilkQuota} Milk Can${card.dailyMilkQuota > 1 ? 's' : ''}/Day</span>` : ''}
+        ${(card.dailyQuota || 3) > 0 ? `<span class="meal-pill-chip" style="margin-top: 3px;"><svg class="svg-icon" style="width: 10px; height: 10px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg> ${card.dailyQuota || 3} Meals/Day</span>` : ''}
       </td>
       <td>${ticksHtml}</td>
       <td>
@@ -4360,7 +4360,7 @@ window.printMealBadge = function (cardId) {
   const planLabels = {
     BOARDING_FULL: "BOARDING FULL (3 MEALS)",
     DAY_LUNCH: "DAY SCHOLAR (LUNCH ONLY)",
-    MILK_NUTRITION_AWARD: "MILK NUTRITION SCHEME",
+    SPECIAL_DIET: "SPECIAL DIET SCHEME",
     BURSARY_SUBSIDIZED: "BURSARY SUBSIDIZED DINING",
   };
 
@@ -4368,7 +4368,7 @@ window.printMealBadge = function (cardId) {
   const elClass = document.getElementById("badgeStudentClass");
   const elCardNo = document.getElementById("badgeCardNo");
   const elPlan = document.getElementById("badgePlanType");
-  const elMilk = document.getElementById("badgeMilkQuota");
+  const elQuota = document.getElementById("badgeMealQuota");
   const elBarcode = document.getElementById("badgeBarcodeText");
   const elIssuedBy = document.getElementById("badgeIssuedBy");
   const elSchoolName = document.getElementById("badgeSchoolName");
@@ -4379,7 +4379,7 @@ window.printMealBadge = function (cardId) {
   if (elClass) elClass.textContent = `Class: ${card.studentClass}`;
   if (elCardNo) elCardNo.textContent = card.cardNumber;
   if (elPlan) elPlan.textContent = planLabels[card.planType] || card.planType;
-  if (elMilk) elMilk.textContent = card.dailyMilkQuota > 0 ? `${card.dailyMilkQuota} CAN${card.dailyMilkQuota > 1 ? "S" : ""} DAILY` : "NO MILK RATION";
+  if (elQuota) elQuota.textContent = (card.dailyQuota || 3) > 0 ? `${card.dailyQuota || 3} MEALS DAILY` : "CUSTOM DIET";
   if (elBarcode) elBarcode.textContent = card.cardNumber;
   if (elIssuedBy) elIssuedBy.textContent = `${card.issuedBy || "Accounts & Bursar"} • Authorized`;
   if (elSchoolName) elSchoolName.textContent = systemSettings.schoolName;
@@ -4818,7 +4818,7 @@ async function attemptSync(isManual = false) {
         studentName: c.student?.name || "Student",
         studentClass: c.student?.class?.name || "General",
         planType: c.planType || "DAY_LUNCH",
-        dailyMilkQuota: c.milkQuota || 0,
+        dailyQuota: c.dailyQuota || 3,
         duration: "1_MONTH",
         startDate: c.createdAt ? new Date(c.createdAt).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
         validUntil: c.validUntil ? new Date(c.validUntil).toISOString().slice(0, 10) : "",

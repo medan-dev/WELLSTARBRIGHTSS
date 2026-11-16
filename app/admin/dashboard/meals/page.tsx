@@ -24,7 +24,6 @@ import {
   Check,
   ArrowRight,
   Flame,
-  Milk,
   Eye,
   SlidersHorizontal,
   ChevronDown,
@@ -62,7 +61,7 @@ export default function MealCardsManagementPage() {
   const [classes, setClasses] = useState<any[]>([]);
 
   // Terminal Scanner state
-  const [selectedSession, setSelectedSession] = useState<MealSession>("BREAKFAST_MILK");
+  const [selectedSession, setSelectedSession] = useState<MealSession>("BREAKFAST");
   const [scanInput, setScanInput] = useState("");
   const [verifiedResult, setVerifiedResult] = useState<any>(null);
   const [servingStudent, setServingStudent] = useState<any>(null);
@@ -77,7 +76,7 @@ export default function MealCardsManagementPage() {
   const [showIssueModal, setShowIssueModal] = useState(false);
   const [modalStudentId, setModalStudentId] = useState("");
   const [modalPlanType, setModalPlanType] = useState<MealPlanType>("BOARDING_FULL");
-  const [modalMilkQuota, setModalMilkQuota] = useState(1);
+  const [modalDailyQuota, setModalDailyQuota] = useState(3);
   const [modalAllergies, setModalAllergies] = useState("");
   const [modalPoints, setModalPoints] = useState(120);
 
@@ -226,7 +225,7 @@ export default function MealCardsManagementPage() {
       await issueOrUpdateMealCard({
         studentId: modalStudentId,
         planType: modalPlanType,
-        milkQuota: Number(modalMilkQuota),
+        dailyQuota: Number(modalDailyQuota),
         allergies: modalAllergies,
         points: Number(modalPoints),
       });
@@ -267,7 +266,7 @@ export default function MealCardsManagementPage() {
                 Dining Hall & Meal Cards Command
               </h1>
               <p className="text-sm text-muted-foreground mt-0.5">
-                School cafeteria check-in, anti-double-serving protection, and daily milk rations.
+                School cafeteria check-in, anti-double-serving protection, and daily meal allowances.
               </p>
             </div>
           </div>
@@ -377,12 +376,12 @@ export default function MealCardsManagementPage() {
 
         <div className="p-4 rounded-2xl bg-card border border-border shadow-sm flex items-center gap-3.5">
           <div className="p-3 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
-            <Milk className="w-5 h-5" />
+            <Coffee className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs text-muted-foreground font-medium">Breakfast & Milk Cans</div>
+            <div className="text-xs text-muted-foreground font-medium">Breakfast Servings</div>
             <div className="text-xl md:text-2xl font-bold font-display mt-0.5">
-              {stats?.breakfastAndMilkCount || 0}
+              {stats?.breakfastCount || 0}
             </div>
           </div>
         </div>
@@ -434,15 +433,15 @@ export default function MealCardsManagementPage() {
                 {/* Session Picker */}
                 <div className="flex items-center gap-1.5 bg-muted/60 p-1 rounded-xl">
                   <button
-                    onClick={() => setSelectedSession("BREAKFAST_MILK")}
+                    onClick={() => setSelectedSession("BREAKFAST")}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                      selectedSession === "BREAKFAST_MILK"
+                      selectedSession === "BREAKFAST"
                         ? "bg-amber-600 text-white shadow-sm"
                         : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    <Milk className="w-3.5 h-3.5" />
-                    Breakfast & Milk
+                    <Coffee className="w-3.5 h-3.5" />
+                    Breakfast
                   </button>
 
                   <button
@@ -626,8 +625,8 @@ export default function MealCardsManagementPage() {
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
                           <div className="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-600 flex items-center justify-center shrink-0">
-                            {log.mealSession === "BREAKFAST_MILK" ? (
-                              <Milk className="w-3.5 h-3.5" />
+                            {log.mealSession === "BREAKFAST" ? (
+                              <Coffee className="w-3.5 h-3.5" />
                             ) : log.mealSession === "LUNCH" ? (
                               <Soup className="w-3.5 h-3.5" />
                             ) : (
@@ -685,9 +684,9 @@ export default function MealCardsManagementPage() {
                 className="h-10 px-3 rounded-xl border border-border bg-background text-sm"
               >
                 <option value="ALL">All Meal Plans</option>
-                <option value="BOARDING_FULL">Full Boarding + Milk</option>
+                <option value="BOARDING_FULL">Full Boarding (3 Meals)</option>
                 <option value="DAY_LUNCH">Day Scholar Lunch</option>
-                <option value="MILK_NUTRITION_AWARD">Milk & Nutrition Award</option>
+                <option value="SPECIAL_DIET">Special Diet</option>
                 <option value="BURSARY_SUBSIDIZED">Bursary Subsidized</option>
               </select>
 
@@ -730,7 +729,7 @@ export default function MealCardsManagementPage() {
                     <th className="p-4">Student Name</th>
                     <th className="p-4">Class</th>
                     <th className="p-4">Meal Plan</th>
-                    <th className="p-4">Daily Milk Quota</th>
+                    <th className="p-4">Daily Meal Quota</th>
                     <th className="p-4">Status</th>
                     <th className="p-4 text-right pr-6">Action</th>
                   </tr>
@@ -760,7 +759,7 @@ export default function MealCardsManagementPage() {
                         <td className="p-4">
                           <span
                             className={`px-2.5 py-1 rounded-full text-xs font-bold ${
-                              card.planType === "MILK_NUTRITION_AWARD"
+                              card.planType === "SPECIAL_DIET"
                                 ? "bg-blue-500/10 text-blue-600 border border-blue-500/20"
                                 : card.planType === "BOARDING_FULL"
                                 ? "bg-amber-500/10 text-amber-600 border border-amber-500/20"
@@ -772,8 +771,8 @@ export default function MealCardsManagementPage() {
                         </td>
                         <td className="p-4">
                           <div className="flex items-center gap-1.5 font-semibold text-xs">
-                            <Milk className="w-3.5 h-3.5 text-blue-500" />
-                            <span>{card.milkQuota || 1} Can / Day</span>
+                            <Utensils className="w-3.5 h-3.5 text-amber-500" />
+                            <span>{card.dailyQuota || 3} Meals / Day</span>
                           </div>
                         </td>
                         <td className="p-4">
@@ -869,15 +868,15 @@ export default function MealCardsManagementPage() {
                   </div>
                 </div>
 
-                {/* Plan Badge & Milk Quota */}
+                {/* Plan Badge & Daily Quota */}
                 <div className="p-2.5 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-[11px]">Meal Package:</span>
                     <span className="font-bold text-foreground text-[11px]">{card.planType}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-[11px]">Daily Milk Ration:</span>
-                    <span className="font-bold text-blue-600 text-[11px]">{card.milkQuota || 1} Can / Day</span>
+                    <span className="text-muted-foreground text-[11px]">Daily Meal Quota:</span>
+                    <span className="font-bold text-amber-600 text-[11px]">{card.dailyQuota || 3} Meals / Day</span>
                   </div>
                 </div>
 
@@ -905,14 +904,14 @@ export default function MealCardsManagementPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="p-5 rounded-2xl bg-muted/40 border border-border/80 space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="font-bold text-sm">Breakfast & Milk Session</div>
-                  <Milk className="w-5 h-5 text-blue-500" />
+                  <div className="font-bold text-sm">Breakfast Session</div>
+                  <Coffee className="w-5 h-5 text-amber-500" />
                 </div>
                 <div className="text-3xl font-display font-bold text-blue-600">
-                  {stats?.breakfastAndMilkCount || 0}
+                  {stats?.breakfastCount || 0}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Morning milk rations distributed across senior and junior streams.
+                  Morning breakfast servings distributed across senior and junior streams.
                 </p>
               </div>
 
@@ -994,9 +993,9 @@ export default function MealCardsManagementPage() {
                   onChange={(e) => setModalPlanType(e.target.value as MealPlanType)}
                   className="w-full h-11 px-3 rounded-xl border border-border bg-background text-sm"
                 >
-                  <option value="BOARDING_FULL">Boarding Full (Breakfast + Milk, Lunch, Supper)</option>
+                  <option value="BOARDING_FULL">Boarding Full (Breakfast, Lunch, Supper)</option>
                   <option value="DAY_LUNCH">Day Scholar Lunch Only</option>
-                  <option value="MILK_NUTRITION_AWARD">Milk & Nutrition Award Pass</option>
+                  <option value="SPECIAL_DIET">Special Dietary Meal Pass</option>
                   <option value="BURSARY_SUBSIDIZED">Bursary Subsidized Meal Pass</option>
                 </select>
               </div>
@@ -1004,14 +1003,14 @@ export default function MealCardsManagementPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-semibold text-muted-foreground block mb-1.5">
-                    Daily Milk Cans Quota
+                    Daily Meal Quota (Meals / Day)
                   </label>
                   <Input
                     type="number"
                     min="1"
                     max="5"
-                    value={modalMilkQuota}
-                    onChange={(e) => setModalMilkQuota(Number(e.target.value))}
+                    value={modalDailyQuota}
+                    onChange={(e) => setModalDailyQuota(Number(e.target.value))}
                     className="rounded-xl h-11"
                   />
                 </div>

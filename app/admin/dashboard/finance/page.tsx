@@ -43,7 +43,6 @@ import {
   Sparkles,
   Zap,
   Utensils,
-  Milk,
   Ban,
   Check,
 } from "lucide-react";
@@ -170,13 +169,13 @@ export default function SuperAdminFinancePage() {
   const [taxData, setTaxData] = useState<any>(null);
   const [bankCashData, setBankCashData] = useState<any>(null);
 
-  // Meal & Milk Passes Module state (Finance-governed)
+  // Student Meal Passes Module state (Finance-governed)
   const [mealCards, setMealCards] = useState<any[]>([]);
   const [mealStats, setMealStats] = useState<any>(null);
   const [showIssueMealModal, setShowIssueMealModal] = useState(false);
   const [mealModalStudentId, setMealModalStudentId] = useState("");
   const [mealModalPlanType, setMealModalPlanType] = useState<any>("BOARDING_FULL");
-  const [mealModalMilkQuota, setMealModalMilkQuota] = useState(1);
+  const [mealModalDailyQuota, setMealModalDailyQuota] = useState(3);
   const [mealModalAllergies, setMealModalAllergies] = useState("");
   const [mealSearchQuery, setMealSearchQuery] = useState("");
   const [mealFilterPlan, setMealFilterPlan] = useState("ALL");
@@ -537,7 +536,7 @@ export default function SuperAdminFinancePage() {
       await issueOrUpdateMealCard({
         studentId: mealModalStudentId,
         planType: mealModalPlanType,
-        milkQuota: Number(mealModalMilkQuota),
+        dailyQuota: Number(mealModalDailyQuota),
         allergies: mealModalAllergies,
       });
       toast.success("Meal Pass Issued & Authorized in School Dining Registry!");
@@ -894,7 +893,7 @@ export default function SuperAdminFinancePage() {
               : "text-muted-foreground hover:bg-muted/80"
           }`}
         >
-          <Utensils className="w-4 h-4 text-amber-400" /> 3. Meal & Milk Passes
+          <Utensils className="w-4 h-4 text-amber-400" /> 3. Meal Cards & Dining Passes
         </button>
 
         <button
@@ -2191,7 +2190,7 @@ export default function SuperAdminFinancePage() {
       )}
 
       {/* ========================================================================= */}
-      {/* TAB: MEAL & MILK PASSES MODULE (FINANCE-GOVERNED)                         */}
+      {/* TAB: STUDENT MEAL CARDS MODULE (FINANCE-GOVERNED)                         */}
       {/* ========================================================================= */}
       {activeTab === "meals" && (
         <div className="space-y-6 animate-in fade-in duration-200">
@@ -2204,10 +2203,10 @@ export default function SuperAdminFinancePage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold font-display text-foreground">
-                    Student Meal & Milk Passes Registry
+                    Student Meal Cards Registry
                   </h3>
                   <p className="text-xs text-muted-foreground">
-                    Bursar-authorized dining passes, catering fee clearance checks, milk quotas, and arrears suspension.
+                    Bursar-authorized dining passes, catering fee clearance checks, daily meal quotas, and arrears suspension.
                   </p>
                 </div>
               </div>
@@ -2261,10 +2260,10 @@ export default function SuperAdminFinancePage() {
             </div>
 
             <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-sm">
-              <div className="text-xs text-muted-foreground font-semibold">Daily Milk Rations</div>
-              <div className="text-2xl font-bold font-display text-blue-600 mt-1 flex items-center gap-1.5">
-                <Milk className="w-5 h-5 text-blue-500" />
-                {mealCards.reduce((acc, c) => acc + (c.milkQuota || 1), 0)} Cans
+              <div className="text-xs text-muted-foreground font-semibold">Total Daily Meal Allowance</div>
+              <div className="text-2xl font-bold font-display text-amber-600 mt-1 flex items-center gap-1.5">
+                <Utensils className="w-5 h-5 text-amber-500" />
+                {mealCards.reduce((acc, c) => acc + (c.dailyQuota || 3), 0)} Meals
               </div>
               <div className="text-[11px] text-blue-600/80 font-medium mt-0.5">Daily quota approved</div>
             </div>
@@ -2289,9 +2288,9 @@ export default function SuperAdminFinancePage() {
                 className="h-10 px-3 rounded-xl border border-border bg-background text-xs font-medium"
               >
                 <option value="ALL">All Meal Plans</option>
-                <option value="BOARDING_FULL">Boarding Full (Breakfast + Milk)</option>
+                <option value="BOARDING_FULL">Boarding Full (Breakfast, Lunch, Supper)</option>
                 <option value="DAY_LUNCH">Day Scholar Lunch</option>
-                <option value="MILK_NUTRITION_AWARD">Milk & Nutrition Award</option>
+                <option value="SPECIAL_DIET">Special Diet</option>
                 <option value="BURSARY_SUBSIDIZED">Bursary Subsidized</option>
               </select>
 
@@ -2316,7 +2315,7 @@ export default function SuperAdminFinancePage() {
                     <th className="p-4 pl-6">Card Identifier</th>
                     <th className="p-4">Student & Class</th>
                     <th className="p-4">Meal Plan Package</th>
-                    <th className="p-4">Milk Ration Quota</th>
+                    <th className="p-4">Daily Meal Quota</th>
                     <th className="p-4">Bursar Fee Clearance</th>
                     <th className="p-4">Dining Status</th>
                     <th className="p-4 text-right pr-6">Finance Control</th>
@@ -2365,7 +2364,7 @@ export default function SuperAdminFinancePage() {
                             <td className="p-4">
                               <span
                                 className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
-                                  card.planType === "MILK_NUTRITION_AWARD"
+                                  card.planType === "SPECIAL_DIET"
                                     ? "bg-blue-500/10 text-blue-600 border border-blue-500/20"
                                     : card.planType === "BOARDING_FULL"
                                     ? "bg-amber-500/10 text-amber-600 border border-amber-500/20"
@@ -2376,9 +2375,9 @@ export default function SuperAdminFinancePage() {
                               </span>
                             </td>
                             <td className="p-4 font-semibold">
-                              <div className="flex items-center gap-1.5 text-blue-600">
-                                <Milk className="w-3.5 h-3.5" />
-                                <span>{card.milkQuota || 1} Can / Day</span>
+                              <div className="flex items-center gap-1.5 text-amber-600">
+                                <Utensils className="w-3.5 h-3.5" />
+                                <span>{card.dailyQuota || 3} Meals / Day</span>
                               </div>
                             </td>
                             <td className="p-4">
@@ -3085,7 +3084,7 @@ export default function SuperAdminFinancePage() {
               </button>
             </div>
             <p className="text-xs text-muted-foreground">
-              Authorize dining hall access, catering package, and daily morning milk rations.
+              Authorize dining hall access, catering package, and daily meal allowances.
             </p>
 
             <form onSubmit={handleIssueMealPass} className="space-y-3">
@@ -3118,23 +3117,23 @@ export default function SuperAdminFinancePage() {
                   value={mealModalPlanType}
                   onChange={(e) => setMealModalPlanType(e.target.value)}
                 >
-                  <option value="BOARDING_FULL">Boarding Full (Breakfast + Milk, Lunch, Supper)</option>
+                  <option value="BOARDING_FULL">Boarding Full (Breakfast, Lunch, Supper)</option>
                   <option value="DAY_LUNCH">Day Scholar Lunch Only</option>
-                  <option value="MILK_NUTRITION_AWARD">Milk & Nutrition Award Pass</option>
+                  <option value="SPECIAL_DIET">Special Dietary Meal Pass</option>
                   <option value="BURSARY_SUBSIDIZED">Bursary Subsidized Meal Pass</option>
                 </select>
               </div>
 
               <div>
                 <label className="text-xs font-semibold text-muted-foreground block mb-1">
-                  Daily Morning Milk Quota (Cans / Portions)
+                  Daily Meal Quota (Meals / Day)
                 </label>
                 <Input
                   type="number"
                   min="1"
                   max="5"
-                  value={mealModalMilkQuota}
-                  onChange={(e) => setMealModalMilkQuota(Number(e.target.value))}
+                  value={mealModalDailyQuota}
+                  onChange={(e) => setMealModalDailyQuota(Number(e.target.value))}
                   className="rounded-xl h-11"
                 />
               </div>

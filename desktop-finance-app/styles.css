@@ -2946,7 +2946,7 @@ body.dark-theme .data-stat-chip {
 }
 
 /* ============================================================================
-   MEAL & MILK PASSES MODULE STYLES
+   STUDENT MEAL CARDS MODULE STYLES
    ============================================================================ */
 .meal-summary-grid {
   display: grid;
@@ -3103,7 +3103,7 @@ body.dark-theme .data-stat-chip {
   margin-top: 2px;
 }
 
-.entitlement-val.milk {
+.entitlement-val.meal {
   color: #d97706;
 }
 
@@ -3143,7 +3143,7 @@ body.dark-theme .data-stat-chip {
   color: #64748b;
 }
 
-.milk-pill-chip {
+.meal-pill-chip {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -3156,7 +3156,7 @@ body.dark-theme .data-stat-chip {
   font-size: 11px;
 }
 
-body.dark-theme .milk-pill-chip {
+body.dark-theme .meal-pill-chip {
   color: #fbbf24;
 }
 

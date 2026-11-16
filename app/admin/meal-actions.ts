@@ -6,13 +6,13 @@ import { unstable_cache, revalidateTag } from "next/cache";
 export type MealPlanType = 
   | "BOARDING_FULL" 
   | "DAY_LUNCH" 
-  | "MILK_NUTRITION_AWARD" 
+  | "SPECIAL_DIET" 
   | "BURSARY_SUBSIDIZED" 
   | "CUSTOM";
 
 export type MealCardStatus = "ACTIVE" | "SUSPENDED" | "EXPIRED";
 
-export type MealSession = "BREAKFAST_MILK" | "LUNCH" | "DINNER" | "SPECIAL_BREAK";
+export type MealSession = "BREAKFAST" | "LUNCH" | "DINNER" | "SPECIAL_BREAK";
 
 // ============================================================================
 // 1. READ ACTIONS (CACHED)
@@ -52,7 +52,7 @@ export async function getAllMealCards() {
               ? "BOARDING_FULL"
               : i % 3 === 1
               ? "DAY_LUNCH"
-              : "MILK_NUTRITION_AWARD";
+              : "BURSARY_SUBSIDIZED";
 
           await prisma.mealCard.create({
             data: {
@@ -60,7 +60,6 @@ export async function getAllMealCards() {
               studentId: s.id,
               planType: plan,
               status: "ACTIVE",
-              milkQuota: plan === "MILK_NUTRITION_AWARD" ? 2 : 1,
               dailyQuota: plan === "BOARDING_FULL" ? 3 : 1,
               points: 120,
             },
@@ -190,8 +189,8 @@ export async function getDailyMealStats(targetDate?: string) {
       const totalMealsServed = todayLogs.reduce((acc, l) => acc + l.portionQty, 0);
       const uniqueStudentsServed = new Set(todayLogs.map((l) => l.studentId)).size;
 
-      const breakfastAndMilkCount = todayLogs
-        .filter((l) => l.mealSession === "BREAKFAST_MILK")
+      const breakfastCount = todayLogs
+        .filter((l) => l.mealSession === "BREAKFAST")
         .reduce((acc, l) => acc + l.portionQty, 0);
 
       const lunchCount = todayLogs
@@ -212,7 +211,7 @@ export async function getDailyMealStats(targetDate?: string) {
         uniqueStudentsServed,
         totalCards,
         activeCards,
-        breakfastAndMilkCount,
+        breakfastCount,
         lunchCount,
         dinnerCount,
         specialBreakCount,
@@ -302,12 +301,12 @@ export async function serveMealCheckIn(params: {
     };
   }
 
-  if (card.planType === "MILK_NUTRITION_AWARD" && mealSession !== "BREAKFAST_MILK" && mealSession !== "SPECIAL_BREAK") {
+  if (card.planType === "SPECIAL_DIET" && mealSession === "DINNER" && card.dailyQuota < 3) {
     return {
       success: false,
       error: "PLAN_INELIGIBLE",
       student: card.student,
-      message: "This card is a designated Milk & Nutrition Award pass (valid for Morning Milk & Break).",
+      message: "Special Diet plan has restricted dinner access. Please check dining plan clearance.",
     };
   }
 
@@ -321,12 +320,12 @@ export async function serveMealCheckIn(params: {
     orderBy: { servedAt: "desc" },
   });
 
-  const sessionName = {
-    BREAKFAST_MILK: "Breakfast & Milk Rations",
+  const sessionName = ({
+    BREAKFAST: "Breakfast Service",
     LUNCH: "Lunch Service",
     DINNER: "Dinner / Supper",
     SPECIAL_BREAK: "Special Nutrition Break",
-  }[mealSession];
+  } as Record<string, string>)[mealSession as string] || "Meal Service";
 
   if (existingLog) {
     const servedTime = new Date(existingLog.servedAt).toLocaleTimeString("en-US", {
@@ -392,7 +391,6 @@ export async function issueOrUpdateMealCard(data: {
   planType: MealPlanType;
   status?: MealCardStatus;
   allergies?: string;
-  milkQuota?: number;
   dailyQuota?: number;
   points?: number;
 }) {
@@ -410,7 +408,6 @@ export async function issueOrUpdateMealCard(data: {
         planType: data.planType,
         status: data.status || existingByStudent.status,
         allergies: data.allergies !== undefined ? data.allergies : existingByStudent.allergies,
-        milkQuota: data.milkQuota !== undefined ? data.milkQuota : existingByStudent.milkQuota,
         dailyQuota: data.dailyQuota !== undefined ? data.dailyQuota : existingByStudent.dailyQuota,
         points: data.points !== undefined ? data.points : existingByStudent.points,
       },
@@ -424,7 +421,6 @@ export async function issueOrUpdateMealCard(data: {
         planType: data.planType,
         status: data.status || "ACTIVE",
         allergies: data.allergies || null,
-        milkQuota: data.milkQuota || 1,
         dailyQuota: data.dailyQuota || 3,
         points: data.points !== undefined ? data.points : 100,
       },
@@ -459,7 +455,6 @@ export async function batchGenerateMealCards() {
         studentId: student.id,
         planType: "BOARDING_FULL",
         status: "ACTIVE",
-        milkQuota: 1,
         dailyQuota: 3,
         points: 120,
       },

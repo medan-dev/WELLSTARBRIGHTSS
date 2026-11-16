@@ -523,9 +523,9 @@ model FinanceAuditLog {
 // ============================================================================
 
 enum MealPlanType {
-  BOARDING_FULL          // Breakfast + Milk, Lunch, Dinner
+  BOARDING_FULL          // Breakfast, Lunch, Dinner
   DAY_LUNCH              // Day Scholar Lunch only
-  MILK_NUTRITION_AWARD   // Special morning milk / dairy award package
+  SPECIAL_DIET           // Special dietary or health meal plan
   BURSARY_SUBSIDIZED     // Subsidized / academic award meal pass
   CUSTOM
 }
@@ -537,7 +537,7 @@ enum MealCardStatus {
 }
 
 enum MealSession {
-  BREAKFAST_MILK
+  BREAKFAST
   LUNCH
   DINNER
   SPECIAL_BREAK
@@ -551,7 +551,6 @@ model MealCard {
   planType     MealPlanType   @default(DAY_LUNCH)
   status       MealCardStatus @default(ACTIVE)
   points       Int            @default(100) // points or meal credits
-  milkQuota    Int            @default(1)   // daily milk cans / portions quota
   dailyQuota   Int            @default(3)   // daily meal allowance
   allergies    String?        // dietary notes or allergies
   validUntil   DateTime?
@@ -565,7 +564,7 @@ model MealLog {
   cardId      String
   mealCard    MealCard    @relation(fields: [cardId], references: [id], onDelete: Cascade)
   studentId   String
-  mealSession MealSession // BREAKFAST_MILK, LUNCH, DINNER, SPECIAL_BREAK
+  mealSession MealSession // BREAKFAST, LUNCH, DINNER, SPECIAL_BREAK
   date        String      // "YYYY-MM-DD" for instant session deduplication
   servedAt    DateTime    @default(now())
   servedBy    String?     @default("Dining Hall Staff")

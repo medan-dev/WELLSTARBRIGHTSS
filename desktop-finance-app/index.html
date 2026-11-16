@@ -1971,17 +1971,15 @@
             <select id="mealPlanSelect" required class="lock-input">
               <option value="BOARDING_FULL">Boarding Full (Breakfast, Lunch, Dinner)</option>
               <option value="DAY_LUNCH" selected>Day Scholar (Lunch Only)</option>
-              <option value="MILK_NUTRITION_AWARD">Milk Nutrition Award Scheme</option>
+              <option value="SPECIAL_DIET">Special Diet Scheme</option>
               <option value="BURSARY_SUBSIDIZED">Bursary Subsidized Dining</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Daily Milk Quota (Cans) *</label>
-            <select id="mealMilkQuotaSelect" required class="lock-input">
-              <option value="0">0 - No Milk Ration</option>
-              <option value="1" selected>1 Can Daily (Standard Ration)</option>
-              <option value="2">2 Cans Daily (Award Scheme)</option>
-              <option value="3">3 Cans Daily (Special Nutrition)</option>
+            <label>Daily Meal Quota *</label>
+            <select id="mealDailyQuotaSelect" required class="lock-input">
+              <option value="3">3 Meals / Day (Full Boarding)</option>
+              <option value="1">1 Meal / Day (Lunch Only)</option>
             </select>
           </div>
         </div>
@@ -2090,8 +2088,8 @@
             <span class="entitlement-val" id="badgePlanType">BOARDING (3 MEALS)</span>
           </div>
           <div class="meal-entitlement-box">
-            <span class="entitlement-label">Daily Milk Quota</span>
-            <span class="entitlement-val milk" id="badgeMilkQuota">1 CAN DAILY</span>
+            <span class="entitlement-label">Daily Meal Quota</span>
+            <span class="entitlement-val meal" id="badgeMealQuota">3 MEALS DAILY</span>
           </div>
         </div>
 

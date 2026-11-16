@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import {
   Utensils,
-  Milk,
   Soup,
   Coffee,
   QrCode,
@@ -63,7 +62,7 @@ export default function StudentMealCardPage() {
     <div className="space-y-8 max-w-5xl mx-auto">
       <PageHeader
         title="My Digital Meal Pass"
-        subtitle="Present your digital pass or barcode at the school dining hall and milk ration counters."
+        subtitle="Present your digital pass or barcode at the school dining hall service counters."
       />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -107,9 +106,9 @@ export default function StudentMealCardPage() {
                   <span className="font-bold text-white">{card.planType.replace("_", " ")}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-amber-200">Daily Milk Quota:</span>
+                  <span className="text-amber-200">Daily Meal Quota:</span>
                   <span className="font-bold text-amber-200 flex items-center gap-1">
-                    <Milk className="w-3.5 h-3.5" /> {card.milkQuota || 1} Can / Day
+                    <Utensils className="w-3.5 h-3.5" /> {card.dailyQuota || 3} Meals / Day
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
@@ -160,11 +159,11 @@ export default function StudentMealCardPage() {
               <div className="p-4 rounded-2xl bg-muted/40 border border-border/80 space-y-2">
                 <div className="flex items-center justify-between text-blue-600">
                   <div className="font-bold text-xs">Morning Session</div>
-                  <Milk className="w-4 h-4" />
+                  <Coffee className="w-4 h-4" />
                 </div>
-                <div className="font-bold text-sm">Breakfast & Milk</div>
+                <div className="font-bold text-sm">Morning Breakfast</div>
                 <p className="text-xs text-muted-foreground">
-                  Includes warm milk ration/tea & wholesome baked breakfast.
+                  Includes warm tea/porridge & wholesome balanced breakfast.
                 </p>
               </div>
 
@@ -226,8 +225,8 @@ export default function StudentMealCardPage() {
                     >
                       <div className="flex items-center gap-3">
                         <div className="p-2 rounded-xl bg-amber-500/10 text-amber-600">
-                          {log.mealSession === "BREAKFAST_MILK" ? (
-                            <Milk className="w-4 h-4" />
+                          {log.mealSession === "BREAKFAST" ? (
+                            <Coffee className="w-4 h-4" />
                           ) : log.mealSession === "LUNCH" ? (
                             <Soup className="w-4 h-4" />
                           ) : (
@@ -236,8 +235,8 @@ export default function StudentMealCardPage() {
                         </div>
                         <div>
                           <div className="font-bold text-sm">
-                            {log.mealSession === "BREAKFAST_MILK"
-                              ? "Breakfast & Milk Rations"
+                            {log.mealSession === "BREAKFAST"
+                              ? "Morning Breakfast"
                               : log.mealSession === "LUNCH"
                               ? "Lunch Service"
                               : "Supper / Dinner"}
