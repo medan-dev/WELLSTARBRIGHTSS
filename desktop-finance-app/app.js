@@ -592,6 +592,19 @@ function seedSampleOfflineDataIfEmpty() {
     ];
   }
 
+  // Always sanitize existing stored meal cards to ensure zero legacy references
+  if (Array.isArray(localData.mealCards) && localData.mealCards.length > 0) {
+    localData.mealCards = localData.mealCards.map((c) => {
+      let plan = c.planType;
+      if (plan === "MILK_NUTRITION_AWARD" || plan === "MILK_NUTRITION_SCHEME") plan = "SPECIAL_DIET";
+      let notes = (c.notes || "").replace(/milk cans? daily\.?/gi, "meals daily.").replace(/milk/gi, "meal");
+      const cleaned = { ...c, planType: plan, dailyQuota: c.dailyQuota || (plan === "DAY_LUNCH" ? 1 : 3), notes };
+      delete cleaned.dailyMilkQuota;
+      delete cleaned.milkQuota;
+      return cleaned;
+    });
+  }
+
   saveState();
 }
 
@@ -4217,6 +4230,8 @@ function renderMealCardsTable() {
       DAY_LUNCH: "Day Lunch Only",
       SPECIAL_DIET: "Special Diet Meal Pass",
       BURSARY_SUBSIDIZED: "Bursary Subsidized",
+      MILK_NUTRITION_AWARD: "Special Diet Meal Pass",
+      MILK_NUTRITION_SCHEME: "Special Diet Meal Pass",
     };
     const planText = planLabels[card.planType] || card.planType;
 
@@ -4362,6 +4377,8 @@ window.printMealBadge = function (cardId) {
     DAY_LUNCH: "DAY SCHOLAR (LUNCH ONLY)",
     SPECIAL_DIET: "SPECIAL DIET SCHEME",
     BURSARY_SUBSIDIZED: "BURSARY SUBSIDIZED DINING",
+    MILK_NUTRITION_AWARD: "SPECIAL DIET SCHEME",
+    MILK_NUTRITION_SCHEME: "SPECIAL DIET SCHEME",
   };
 
   const elName = document.getElementById("badgeStudentName");

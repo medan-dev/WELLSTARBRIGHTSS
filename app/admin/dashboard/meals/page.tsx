@@ -539,7 +539,11 @@ export default function MealCardsManagementPage() {
                           </div>
                           {verifiedResult.card?.planType && (
                             <div>
-                              Plan: <span className="font-bold">{verifiedResult.card.planType}</span>
+                              Plan: <span className="font-bold">
+                                {verifiedResult.card.planType.includes("MILK")
+                                  ? "BURSARY SUBSIDIZED"
+                                  : verifiedResult.card.planType.replace(/_/g, " ")}
+                              </span>
                             </div>
                           )}
                         </div>
@@ -766,7 +770,9 @@ export default function MealCardsManagementPage() {
                                 : "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
                             }`}
                           >
-                            {card.planType.replace("_", " ")}
+                            {card.planType?.includes("MILK")
+                              ? "BURSARY SUBSIDIZED"
+                              : card.planType?.replace(/_/g, " ") || "BOARDING FULL"}
                           </span>
                         </td>
                         <td className="p-4">
@@ -872,7 +878,11 @@ export default function MealCardsManagementPage() {
                 <div className="p-2.5 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-[11px]">Meal Package:</span>
-                    <span className="font-bold text-foreground text-[11px]">{card.planType}</span>
+                    <span className="font-bold text-foreground text-[11px]">
+                      {card.planType?.includes("MILK")
+                        ? "BURSARY SUBSIDIZED"
+                        : card.planType?.replace(/_/g, " ") || "BOARDING FULL"}
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-[11px]">Daily Meal Quota:</span>

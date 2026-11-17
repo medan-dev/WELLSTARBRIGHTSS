@@ -14,6 +14,21 @@ export type MealCardStatus = "ACTIVE" | "SUSPENDED" | "EXPIRED";
 
 export type MealSession = "BREAKFAST" | "LUNCH" | "DINNER" | "SPECIAL_BREAK";
 
+// Helper to guarantee clean runtime objects without legacy references
+function sanitizeMealCard<T extends Record<string, any>>(card: T | null | undefined): T | null {
+  if (!card) return null;
+  const cleaned: Record<string, any> = { ...card };
+  if (cleaned.planType === "MILK_NUTRITION_AWARD" || (cleaned.planType as string) === "MILK_NUTRITION_SCHEME") {
+    cleaned.planType = "BURSARY_SUBSIDIZED";
+  }
+  if (cleaned.notes && typeof cleaned.notes === "string") {
+    cleaned.notes = cleaned.notes.replace(/milk cans? daily\.?/gi, "meals daily.").replace(/milk/gi, "meal");
+  }
+  delete cleaned.milkQuota;
+  delete cleaned.dailyMilkQuota;
+  return cleaned as T;
+}
+
 // ============================================================================
 // 1. READ ACTIONS (CACHED)
 // ============================================================================
@@ -85,7 +100,8 @@ export async function getAllMealCards() {
         });
       }
 
-      return JSON.parse(JSON.stringify(cards));
+      const parsed = JSON.parse(JSON.stringify(cards));
+      return Array.isArray(parsed) ? parsed.map(sanitizeMealCard) : [];
     },
     ["all-meal-cards"],
     { tags: ["meal-cards"] }
@@ -114,7 +130,7 @@ export async function getMealCardByStudent(studentId: string) {
           },
         },
       });
-      return card ? JSON.parse(JSON.stringify(card)) : null;
+      return card ? sanitizeMealCard(JSON.parse(JSON.stringify(card))) : null;
     },
     [`meal-card-student-${studentId}`],
     { tags: ["meal-cards", `meal-card-${studentId}`] }
@@ -142,7 +158,7 @@ export async function getMealCardByNumber(cardNumber: string) {
     },
   });
 
-  return card ? JSON.parse(JSON.stringify(card)) : null;
+  return card ? sanitizeMealCard(JSON.parse(JSON.stringify(card))) : null;
 }
 
 export async function getRecentMealLogs(limit: number = 30) {
@@ -431,7 +447,7 @@ export async function issueOrUpdateMealCard(data: {
   revalidateTag("meal-cards");
   revalidateTag("meal-stats");
 
-  return JSON.parse(JSON.stringify(card));
+  return sanitizeMealCard(JSON.parse(JSON.stringify(card)));
 }
 
 export async function batchGenerateMealCards() {
@@ -475,5 +491,5 @@ export async function toggleMealCardStatus(cardId: string, status: MealCardStatu
   });
 
   revalidateTag("meal-cards");
-  return JSON.parse(JSON.stringify(card));
+  return sanitizeMealCard(JSON.parse(JSON.stringify(card)));
 }

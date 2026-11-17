@@ -2371,7 +2371,9 @@ export default function SuperAdminFinancePage() {
                                     : "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
                                 }`}
                               >
-                                {card.planType.replace("_", " ")}
+                                {card.planType?.includes("MILK")
+                                  ? "BURSARY SUBSIDIZED"
+                                  : card.planType?.replace(/_/g, " ") || "BOARDING FULL"}
                               </span>
                             </td>
                             <td className="p-4 font-semibold">

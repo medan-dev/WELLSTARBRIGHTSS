@@ -103,7 +103,11 @@ export default function StudentMealCardPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-amber-200">Meal Plan:</span>
-                  <span className="font-bold text-white">{card.planType.replace("_", " ")}</span>
+                  <span className="font-bold text-white">
+                    {card.planType?.includes("MILK")
+                      ? "BURSARY SUBSIDIZED"
+                      : card.planType?.replace(/_/g, " ") || "BOARDING FULL"}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-amber-200">Daily Meal Quota:</span>
