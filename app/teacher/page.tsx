@@ -8,7 +8,7 @@ import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { loginTeacher } from "../actions";
+import { loginTeacherAction } from "@/lib/auth-actions";
 import { 
   BookOpen, Users, ClipboardCheck, FileSpreadsheet, 
   Eye, EyeOff, ShieldCheck, PlusCircle, CheckCircle2 
@@ -26,28 +26,19 @@ export default function TeacherLogin() {
     setLoading(true);
 
     try {
-      const cleanEmail = email.trim();
-      const cleanPassword = password.trim();
-      const teacher = await loginTeacher(cleanEmail);
+      const res = await loginTeacherAction(email, password);
 
-      const dbPass = (teacher.password || "").trim();
-      // Allow flexible match for password123 or password123!
-      const isMatch =
-        dbPass === cleanPassword ||
-        (dbPass === "password123!" && cleanPassword === "password123") ||
-        (dbPass === "password123" && cleanPassword === "password123!");
-
-      if (!isMatch) {
-        throw new Error("Invalid password");
+      if (!res.success || !res.user) {
+        throw new Error(res.error || "Invalid password or email.");
       }
-      
-      sessionStorage.setItem("ns_teacher_id", teacher.id);
-      sessionStorage.setItem("ns_teacher_name", teacher.name);
-      
-      toast.success(`Welcome back, ${teacher.name}!`);
+
+      sessionStorage.setItem("ns_teacher_id", res.user.id);
+      sessionStorage.setItem("ns_teacher_name", res.user.name);
+
+      toast.success(`Welcome back, ${res.user.name}!`);
       router.push("/teacher/dashboard");
     } catch (err: any) {
-      toast.error(err?.message === "Teacher not found" ? "Teacher email not found in school directory." : "Invalid password. Please check your credentials.");
+      toast.error(err?.message || "Invalid credentials. Please check your credentials.");
     } finally {
       setLoading(false);
     }

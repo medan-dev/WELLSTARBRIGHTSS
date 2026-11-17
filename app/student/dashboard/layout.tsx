@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { logoutAction } from "@/lib/auth-actions";
 
 const nav = [
   { href: "/student/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -63,10 +64,11 @@ export default function StudentDashboardLayout({ children }: { children: React.R
     );
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     sessionStorage.removeItem("ns_student_id");
     sessionStorage.removeItem("ns_student_name");
     sessionStorage.removeItem("ns_student_class");
+    await logoutAction();
     router.push("/student");
   };
 

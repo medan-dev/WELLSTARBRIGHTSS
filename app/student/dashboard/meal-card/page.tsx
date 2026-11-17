@@ -118,11 +118,10 @@ export default function StudentMealCardPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-amber-200">Status:</span>
                   <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                      card.status === "ACTIVE"
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${card.status === "ACTIVE"
                         ? "bg-emerald-400 text-emerald-950"
                         : "bg-rose-400 text-rose-950"
-                    }`}
+                      }`}
                   >
                     {card.status}
                   </span>
@@ -242,8 +241,8 @@ export default function StudentMealCardPage() {
                             {log.mealSession === "BREAKFAST"
                               ? "Morning Breakfast"
                               : log.mealSession === "LUNCH"
-                              ? "Lunch Service"
-                              : "Supper / Dinner"}
+                                ? "Lunch Service"
+                                : "Supper / Dinner"}
                           </div>
                           <div className="text-muted-foreground">
                             {date} • Served by {log.servedBy}

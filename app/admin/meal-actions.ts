@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { unstable_cache, revalidateTag } from "next/cache";
+import { requireAuth } from "@/lib/auth-service";
 
 export type MealPlanType = 
   | "BOARDING_FULL" 
@@ -256,7 +257,8 @@ export async function serveMealCheckIn(params: {
   servedBy?: string;
   notes?: string;
 }) {
-  const { cardNumber, studentId, mealSession, portionQty = 1, servedBy, notes } = params;
+  const session = await requireAuth(["SUPER_ADMIN", "BURSAR", "CASHIER", "AUDITOR"]);
+  const { cardNumber, studentId, mealSession, portionQty = 1, servedBy = session.name, notes } = params;
   const todayStr = new Date().toISOString().split("T")[0];
 
   let card = null;
@@ -410,6 +412,7 @@ export async function issueOrUpdateMealCard(data: {
   dailyQuota?: number;
   points?: number;
 }) {
+  await requireAuth(["SUPER_ADMIN", "BURSAR", "CASHIER", "AUDITOR"]);
   const existingByStudent = await prisma.mealCard.findUnique({
     where: { studentId: data.studentId },
   });
@@ -451,6 +454,7 @@ export async function issueOrUpdateMealCard(data: {
 }
 
 export async function batchGenerateMealCards() {
+  await requireAuth(["SUPER_ADMIN", "BURSAR"]);
   const studentsWithoutCard = await prisma.student.findMany({
     where: { mealCard: null },
     select: { id: true, name: true },
@@ -485,6 +489,7 @@ export async function batchGenerateMealCards() {
 }
 
 export async function toggleMealCardStatus(cardId: string, status: MealCardStatus) {
+  await requireAuth(["SUPER_ADMIN", "BURSAR", "CASHIER"]);
   const card = await prisma.mealCard.update({
     where: { id: cardId },
     data: { status },

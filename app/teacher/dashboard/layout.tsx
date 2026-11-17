@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { logoutAction } from "@/lib/auth-actions";
 
 const nav = [
   { href: "/teacher/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -65,9 +66,10 @@ export default function TeacherDashboardLayout({ children }: { children: React.R
     );
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     sessionStorage.removeItem("ns_teacher_id");
     sessionStorage.removeItem("ns_teacher_name");
+    await logoutAction();
     router.push("/teacher");
   };
 

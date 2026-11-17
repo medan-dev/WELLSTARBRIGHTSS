@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { logoutAction } from "@/lib/auth-actions";
 
 const nav = [
   { href: "/admin/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -61,8 +62,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     try { localStorage.setItem("ns_theme", nextDark ? "dark" : "light"); } catch(_) {}
   };
 
-  const logout = () => {
+  const logout = async () => {
     sessionStorage.removeItem("ns_admin_demo");
+    localStorage.removeItem("wf_web_user");
+    await logoutAction();
     router.push("/admin");
   };
 

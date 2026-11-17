@@ -8,7 +8,7 @@ import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { loginStudent } from "../actions";
+import { loginStudentAction } from "@/lib/auth-actions";
 import { 
   GraduationCap, BookOpen, Calendar, Award, 
   Eye, EyeOff, ShieldCheck, CheckCircle2 
@@ -26,19 +26,21 @@ export default function StudentLogin() {
     setLoading(true);
 
     try {
-      const student = await loginStudent(email);
-      if (student.password !== password) {
-        throw new Error("Invalid password");
+      const res = await loginStudentAction(email, password);
+      if (!res.success || !res.user) {
+        throw new Error(res.error || "Invalid student credentials.");
       }
-      
-      sessionStorage.setItem("ns_student_id", student.id);
-      sessionStorage.setItem("ns_student_name", student.name);
-      sessionStorage.setItem("ns_student_class", student.classId);
-      
-      toast.success(`Welcome back, ${student.name}!`);
+
+      sessionStorage.setItem("ns_student_id", res.user.id);
+      sessionStorage.setItem("ns_student_name", res.user.name);
+      if (res.user.classId) {
+        sessionStorage.setItem("ns_student_class", res.user.classId);
+      }
+
+      toast.success(`Welcome back, ${res.user.name}!`);
       router.push("/student/dashboard");
-    } catch (err) {
-      toast.error("Invalid email or password. Please verify your credentials.");
+    } catch (err: any) {
+      toast.error(err?.message || "Invalid email or password. Please verify your credentials.");
     } finally {
       setLoading(false);
     }

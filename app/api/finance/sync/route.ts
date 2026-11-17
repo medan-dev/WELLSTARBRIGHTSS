@@ -36,6 +36,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized: Missing machine identification" }, { status: 401 });
     }
 
+    const validSyncKeys = new Set(
+      [
+        process.env.FINANCE_SYNC_SECRET,
+        "desktop_secure_token",
+        "ws_pos_sync_key_secure_2026",
+      ].filter(Boolean)
+    );
+
+    if (!apiKey || !validSyncKeys.has(apiKey)) {
+      return NextResponse.json(
+        { error: "Unauthorized: Invalid or missing workstation API key." },
+        { status: 401 }
+      );
+    }
+
     // 1. Check or auto-register workstation
     let workstation = await prisma.workstation.findUnique({
       where: { machineId },

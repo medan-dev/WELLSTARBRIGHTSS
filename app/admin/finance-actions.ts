@@ -14,6 +14,7 @@ import {
   ENTERPRISE_FINANCE_USERS,
 } from "@/lib/finance-service";
 import { AccountClass } from "../../generated/prisma/client";
+import { requireAuth } from "@/lib/auth-service";
 
 // ============================================================================
 // 1. OVERVIEW & EXECUTIVE KPI TELEMETRY (CACHED)
@@ -231,6 +232,7 @@ export async function getFinanceWorkstations() {
 }
 
 export async function toggleWorkstationLock(machineId: string, blockStatus: boolean) {
+  const session = await requireAuth(["SUPER_ADMIN"]);
   const updated = await prisma.workstation.update({
     where: { machineId },
     data: { isBlocked: blockStatus },
@@ -238,7 +240,7 @@ export async function toggleWorkstationLock(machineId: string, blockStatus: bool
 
   await logFinanceAudit({
     action: blockStatus ? "WORKSTATION_LOCKED" : "WORKSTATION_UNLOCKED",
-    actorName: "Super Admin",
+    actorName: session.name || "Super Admin",
     workstationId: machineId,
     details: { machineId, machineName: updated.machineName, isBlocked: blockStatus },
   });
@@ -271,6 +273,7 @@ export async function createSuperAdminExpense(data: {
   description: string;
   accountCode?: string;
 }) {
+  await requireAuth(["SUPER_ADMIN", "BURSAR"]);
   const voucherNumber = `PV-${Date.now().toString().slice(-6)}`;
 
   const created = await prisma.expenseRecord.create({
@@ -734,6 +737,7 @@ export async function recordCounterFeePaymentAction(data: {
   workstationId: string;
   notes?: string;
 }) {
+  await requireAuth(["SUPER_ADMIN", "BURSAR", "CASHIER"]);
   const receiptNumber = `RCP-${new Date().getFullYear()}-POS-${Math.floor(10000 + Math.random() * 90000)}`;
 
   const receipt = await prisma.paymentReceipt.create({
@@ -1171,6 +1175,7 @@ export async function postManualJournalVoucherAction(data: {
   actorName: string;
   lines: Array<{ accountCode: string; debit?: number; credit?: number; description?: string }>;
 }) {
+  await requireAuth(["SUPER_ADMIN", "BURSAR"]);
   const entry = await createBalancedJournalEntry({
     date: new Date(),
     reference: data.reference,

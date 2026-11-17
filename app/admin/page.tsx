@@ -13,6 +13,7 @@ import {
   Eye, EyeOff, CheckCircle2, Award, Wallet, Lock
 } from "lucide-react";
 import { ENTERPRISE_FINANCE_USERS } from "@/lib/finance-users";
+import { loginAdminAction } from "@/lib/auth-actions";
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -26,69 +27,27 @@ export default function AdminLogin() {
     e.preventDefault();
     setLoading(true);
 
-    const cleanEmail = email.trim().toLowerCase();
-    const cleanPass = password.trim();
+    try {
+      const res = await loginAdminAction(email, password);
+      setLoading(false);
 
-    await new Promise((r) => setTimeout(r, 450));
-    setLoading(false);
+      if (res.success && res.user) {
+        sessionStorage.setItem("ns_admin_demo", "1");
+        localStorage.setItem("wf_web_user", JSON.stringify(res.user));
 
-    // 1. Super Admin Authentication
-    if (
-      (cleanEmail === "admin@wellstarbright.sc.ug" && (cleanPass === "demo1234" || cleanPass === "admin1234" || cleanPass === "9900")) ||
-      (cleanEmail === "admin" && cleanPass === "9900")
-    ) {
-      sessionStorage.setItem("ns_admin_demo", "1");
-      const adminUser = ENTERPRISE_FINANCE_USERS.find((u) => u.role === "SUPER_ADMIN");
-      if (adminUser) localStorage.setItem("wf_web_user", JSON.stringify(adminUser));
-
-      toast.success("Welcome, Super Administrator (Dr. Arthur Ssentongo)!");
-      router.push("/admin/dashboard");
-      return;
+        toast.success(`Welcome, ${res.user.title || res.user.name}!`);
+        if (res.user.role === "SUPER_ADMIN") {
+          router.push("/admin/dashboard");
+        } else {
+          router.push("/admin/dashboard/finance");
+        }
+      } else {
+        toast.error(res.error || "Invalid credentials. Please verify your administrative email/password or PIN.");
+      }
+    } catch (err: any) {
+      setLoading(false);
+      toast.error("Authentication server error. Please try again.");
     }
-
-    // 2. Chief Bursar Authentication
-    if (
-      (cleanEmail === "bursar@wellstarbright.sc.ug" && (cleanPass === "bursar1234" || cleanPass === "1234")) ||
-      (cleanEmail === "bursar" && cleanPass === "1234")
-    ) {
-      sessionStorage.setItem("ns_admin_demo", "1");
-      const bursarUser = ENTERPRISE_FINANCE_USERS.find((u) => u.role === "BURSAR");
-      if (bursarUser) localStorage.setItem("wf_web_user", JSON.stringify(bursarUser));
-
-      toast.success("Welcome, Chief Bursar (CPA Sarah Namubiru)!");
-      router.push("/admin/dashboard/finance");
-      return;
-    }
-
-    // 3. Cashier Authentication
-    if (
-      (cleanEmail === "cashier@wellstarbright.sc.ug" && (cleanPass === "cashier1234" || cleanPass === "5566")) ||
-      (cleanEmail === "cashier" && cleanPass === "5566")
-    ) {
-      sessionStorage.setItem("ns_admin_demo", "1");
-      const cashierUser = ENTERPRISE_FINANCE_USERS.find((u) => u.role === "CASHIER");
-      if (cashierUser) localStorage.setItem("wf_web_user", JSON.stringify(cashierUser));
-
-      toast.success("Welcome, Counter Cashier (Joseph Kato)!");
-      router.push("/admin/dashboard/finance");
-      return;
-    }
-
-    // 4. Senior Auditor Authentication
-    if (
-      (cleanEmail === "auditor@wellstarbright.sc.ug" && (cleanPass === "auditor1234" || cleanPass === "7788")) ||
-      (cleanEmail === "auditor" && cleanPass === "7788")
-    ) {
-      sessionStorage.setItem("ns_admin_demo", "1");
-      const auditorUser = ENTERPRISE_FINANCE_USERS.find((u) => u.role === "AUDITOR");
-      if (auditorUser) localStorage.setItem("wf_web_user", JSON.stringify(auditorUser));
-
-      toast.success("Welcome, Senior Auditor (CPA Robert Mugisha)!");
-      router.push("/admin/dashboard/finance");
-      return;
-    }
-
-    toast.error("Invalid credentials. Please verify your administrative email/password or PIN.");
   };
 
   const handleFillAccount = (type: "admin" | "bursar" | "cashier") => {
