@@ -8,8 +8,8 @@ import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { 
-  ShieldCheck, LayoutDashboard, Bell, Users, BookOpen, 
+import {
+  ShieldCheck, LayoutDashboard, Bell, Users, BookOpen,
   Eye, EyeOff, CheckCircle2, Award, Wallet, Lock
 } from "lucide-react";
 import { ENTERPRISE_FINANCE_USERS } from "@/lib/finance-users";
@@ -204,7 +204,7 @@ export default function AdminLogin() {
                 className="h-11 rounded-xl text-sm font-medium border-border focus-visible:ring-primary"
               />
             </div>
-            
+
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <label className="block text-xs font-bold text-foreground uppercase tracking-wider">
