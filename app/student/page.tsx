@@ -9,9 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { loginStudentAction } from "@/lib/auth-actions";
-import { 
-  GraduationCap, BookOpen, Calendar, Award, 
-  Eye, EyeOff, ShieldCheck, CheckCircle2 
+import {
+  GraduationCap, BookOpen, Calendar, Award,
+  Eye, EyeOff, ShieldCheck, CheckCircle2
 } from "lucide-react";
 
 export default function StudentLogin() {
@@ -188,7 +188,7 @@ export default function StudentLogin() {
                 className="h-11 rounded-xl text-sm font-medium border-border focus-visible:ring-primary"
               />
             </div>
-            
+
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <label className="block text-xs font-bold text-foreground uppercase tracking-wider">
