@@ -9,9 +9,9 @@ export function WhatsAppButton() {
   const [hasInteracted, setHasInteracted] = useState(false);
 
   // Phone number: 0701116781 -> International format +256701116781
-  const phoneNumber = "256701116781";
+  const phoneNumber = "256758611414";
   const defaultMessage = encodeURIComponent(
-    "Hello Wellstar Bright Secondary School! I am reaching out from your website and would like to learn more about admissions, academics, and school programmes."
+    "Hello EDUREXA! I am reaching out from your website and would like to learn more about the school management system."
   );
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${defaultMessage}`;
 

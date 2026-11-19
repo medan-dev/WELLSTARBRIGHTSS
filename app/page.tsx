@@ -301,18 +301,18 @@ export default function EdurexaMarketingHome() {
 
             <div className="flex flex-wrap items-center gap-3">
               <a href="#demo-form">
-                <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold h-10 px-4 gap-1.5 shadow-sm">
+                <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold h-10 px-5 gap-1.5 shadow-sm">
                   <span>Claim Free 4-Hour Demo Access</span>
                   <ArrowRight className="size-3.5" />
                 </Button>
               </a>
 
-              <Link href="/admin/dashboard" target="_blank">
+              <a href="https://wa.me/256758611414" target="_blank" rel="noreferrer">
                 <Button variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-50 rounded-lg text-xs font-semibold h-10 px-4 gap-1.5">
-                  <span>Launch Admin Sandbox</span>
-                  <ExternalLink className="size-3.5 text-[#0b2256]" />
+                  <span>Talk to Solutions Engineer</span>
+                  <Phone className="size-3.5 text-[#f26522]" />
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -348,7 +348,7 @@ export default function EdurexaMarketingHome() {
               <div className="space-y-2.5 text-xs text-slate-700">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
-                  <span>Full hands-on access to Student, Teacher, Headteacher, and Admin portals.</span>
+                  <span>Comprehensive access across academic, administrative, and bursary workflows.</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
@@ -361,54 +361,53 @@ export default function EdurexaMarketingHome() {
               </div>
             </div>
 
-            <div className="lg:w-[380px] bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs shrink-0 flex flex-col justify-between">
-              <div className="space-y-2">
+            <div className="lg:w-[380px] bg-white border border-slate-200 rounded-xl p-6 space-y-5 shadow-2xs shrink-0 flex flex-col justify-between">
+              <div className="space-y-3">
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                  TRY THE LIVE DEMO PORTALS
+                  REQUEST PRIVATE DEMO SANDBOX
                 </div>
 
-                <div className="space-y-2">
-                  <Link
-                    href="/admin/dashboard"
-                    target="_blank"
-                    className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
-                  >
-                    <span className="font-semibold text-slate-900">1. Headteacher & Admin Management</span>
-                    <ChevronRight className="size-4 text-slate-400" />
-                  </Link>
+                <h4 className="text-base font-bold text-slate-900 leading-snug">
+                  Experience Your Institution on EDUREXA
+                </h4>
 
-                  <Link
-                    href="/teacher"
-                    target="_blank"
-                    className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
-                  >
-                    <span className="font-semibold text-slate-900">2. Teacher Marks & Academic Entry</span>
-                    <ChevronRight className="size-4 text-slate-400" />
-                  </Link>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Our systems engineering team deploys an isolated demo sandbox customized with your curriculum, campus count, and student brackets for an uninterrupted 4-hour evaluation.
+                </p>
 
-                  <Link
-                    href="/student"
-                    target="_blank"
-                    className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
-                  >
-                    <span className="font-semibold text-slate-900">3. Student & Parent Clearance Portal</span>
-                    <ChevronRight className="size-4 text-slate-400" />
-                  </Link>
-
-                  <Link
-                    href="/super-admin"
-                    target="_blank"
-                    className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
-                  >
-                    <span className="font-semibold text-[#0b2256]">4. Super Admin Platform Fleet</span>
-                    <ChevronRight className="size-4 text-slate-400" />
-                  </Link>
+                <div className="space-y-2 pt-2 text-xs text-slate-700">
+                  <div className="flex items-center gap-2 font-medium">
+                    <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
+                    <span>Free 4-Hour Dedicated Sandbox</span>
+                  </div>
+                  <div className="flex items-center gap-2 font-medium">
+                    <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
+                    <span>Zero Setup Fee & Bull; No Obligation</span>
+                  </div>
+                  <div className="flex items-center gap-2 font-medium">
+                    <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
+                    <span>Direct WhatsApp Technical Engineer</span>
+                  </div>
                 </div>
               </div>
 
-              <p className="text-[11px] text-slate-500 leading-normal pt-2 border-t border-slate-100">
-                Want your school or group onboarded with your official logo, curriculum, and student data? Request an executive demo below.
-              </p>
+              <div className="space-y-2 pt-2 border-t border-slate-100">
+                <a href="#demo-form" className="w-full block">
+                  <Button className="w-full bg-[#f26522] hover:bg-[#d95314] text-white text-xs font-bold rounded-lg h-10 shadow-sm">
+                    Book Boardroom Demonstration
+                  </Button>
+                </a>
+                <a
+                  href="https://wa.me/256758611414"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full block"
+                >
+                  <Button variant="outline" className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-semibold rounded-lg h-10">
+                    Chat on WhatsApp (+256 758 611 414)
+                  </Button>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -675,7 +674,7 @@ export default function EdurexaMarketingHome() {
               </div>
               <div className="border-t border-slate-200 pt-3">
                 <div className="font-bold text-xs text-slate-900">Dr. Ronald Mukasa</div>
-                <div className="text-[11px] text-slate-500">Director, Wellstar Bright Educational Group</div>
+                <div className="text-[11px] text-slate-500">Director, Victoria Nile Educational Complex</div>
               </div>
             </div>
           </div>
@@ -1044,11 +1043,23 @@ export default function EdurexaMarketingHome() {
           </div>
 
           <div className="flex flex-wrap items-center gap-6 font-medium">
-            <Link href="/super-admin" className="hover:text-[#0b2256] transition-colors">
-              Super Admin Console
+            <Link href="/" className="hover:text-[#0b2256] transition-colors">
+              Home
             </Link>
+            <a href="#features" className="hover:text-[#0b2256] transition-colors">
+              Features
+            </a>
+            <a href="#pricing" className="hover:text-[#0b2256] transition-colors">
+              Pricing
+            </a>
             <a href="#demo" className="hover:text-[#0b2256] transition-colors">
-              Free 4-Hour Demo
+              Demo
+            </a>
+            <a href="#documentation" className="hover:text-[#0b2256] transition-colors">
+              Documentation
+            </a>
+            <a href="#support" className="hover:text-[#0b2256] transition-colors">
+              Help & Support
             </a>
             <a
               href="https://wa.me/256758611414"
@@ -1056,7 +1067,7 @@ export default function EdurexaMarketingHome() {
               rel="noreferrer"
               className="text-[#f26522] font-semibold hover:underline"
             >
-              WhatsApp Sales: +256 758 611 414
+              WhatsApp: +256 758 611 414
             </a>
           </div>
         </div>

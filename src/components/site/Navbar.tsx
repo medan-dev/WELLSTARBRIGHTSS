@@ -37,32 +37,11 @@ interface NavLink {
 export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [solutionsDropdownOpen, setSolutionsDropdownOpen] = useState(false);
-  const [portalsDropdownOpen, setPortalsDropdownOpen] = useState(false);
 
-  const solutionsRef = useRef<HTMLDivElement>(null);
-  const portalsRef = useRef<HTMLDivElement>(null);
-
-  // Close menus on route change
+  // Close menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
-    setSolutionsDropdownOpen(false);
-    setPortalsDropdownOpen(false);
   }, [pathname]);
-
-  // Click outside listener for dropdowns
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (solutionsRef.current && !solutionsRef.current.contains(e.target as Node)) {
-        setSolutionsDropdownOpen(false);
-      }
-      if (portalsRef.current && !portalsRef.current.contains(e.target as Node)) {
-        setPortalsDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   // Prevent scroll when mobile menu is open
   useEffect(() => {
@@ -83,37 +62,6 @@ export function Navbar() {
     { href: "/#demo", label: "Demo" },
     { href: "/#documentation", label: "Documentation" },
     { href: "/#support", label: "Help & Support" },
-  ];
-
-  const solutionModules = [
-    {
-      title: "Academic & UNEB Engine",
-      desc: "Automatic division calculation, report card generation & grading",
-      href: "/#modules",
-      icon: BookOpen,
-      iconColor: "text-blue-600 bg-blue-50 border-blue-200",
-    },
-    {
-      title: "Fee Collection & Anti-Leakage",
-      desc: "Automated student ledgers, cashier reconciliations & receipting",
-      href: "/#modules",
-      icon: Receipt,
-      iconColor: "text-emerald-600 bg-emerald-50 border-emerald-200",
-    },
-    {
-      title: "Multi-Campus Fleet Ops",
-      desc: "Centralized super-admin dashboard for school groups & chains",
-      href: "/#modules",
-      icon: Layers,
-      iconColor: "text-indigo-600 bg-indigo-50 border-indigo-200",
-    },
-    {
-      title: "Parent & Student Portals",
-      desc: "Live homework submission, exam results, and digital meal cards",
-      href: "/#modules",
-      icon: Users,
-      iconColor: "text-orange-600 bg-orange-50 border-orange-200",
-    },
   ];
 
   return (
@@ -145,16 +93,17 @@ export function Navbar() {
             </span>
           </div>
 
-          {/* Right: Super Admin */}
+          {/* Right: Direct Sales WhatsApp */}
           <div className="flex items-center gap-3 text-[11px]">
-            <Link
-              href="/super-admin"
+            <a
+              href="https://wa.me/256758611414"
               target="_blank"
-              className="inline-flex items-center gap-1 text-slate-200 hover:text-white font-semibold transition-colors"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 text-slate-200 hover:text-white font-semibold transition-colors"
             >
-              <Lock className="size-3 text-amber-400" />
-              <span>Super Admin</span>
-            </Link>
+              <span className="size-1.5 rounded-full bg-emerald-400" />
+              <span>WhatsApp: +256 758 611 414</span>
+            </a>
           </div>
         </div>
       </div>
@@ -207,104 +156,8 @@ export function Navbar() {
             </a>
           </nav>
 
-          {/* Desktop Right CTAs: Portals & Schedule Demo */}
+          {/* Desktop Right CTA: Try Out Demo */}
           <div className="hidden lg:flex items-center gap-3">
-            {/* Portals Access Menu */}
-            <div className="relative" ref={portalsRef}>
-              <Button
-                variant="outline"
-                size="sm"
-                type="button"
-                onClick={() => setPortalsDropdownOpen(!portalsDropdownOpen)}
-                className="text-xs font-semibold rounded-lg border-slate-200 bg-white hover:bg-slate-50 text-slate-700 h-9.5 px-3.5 gap-1.5 shadow-xs"
-              >
-                <GraduationCap className="size-4 text-[#0b2256]" />
-                <span>Portals Login</span>
-                <ChevronDown
-                  className={cn(
-                    "size-3 text-slate-400 transition-transform duration-200",
-                    portalsDropdownOpen && "rotate-180"
-                  )}
-                />
-              </Button>
-
-              {portalsDropdownOpen && (
-                <div className="absolute right-0 mt-2.5 w-64 p-2 rounded-2xl bg-white border border-slate-200 shadow-xl shadow-slate-200/50 z-50 animate-in fade-in-0 zoom-in-95 duration-150 space-y-1">
-                  <div className="px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
-                    Direct Portal Access
-                  </div>
-                  <Link
-                    href="/student"
-                    onClick={() => setPortalsDropdownOpen(false)}
-                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group"
-                  >
-                    <div className="p-2 rounded-lg bg-blue-50 text-blue-600 border border-blue-200">
-                      <GraduationCap className="size-4" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-xs text-slate-900 group-hover:text-[#0b2256]">
-                        Student Portal
-                      </div>
-                      <div className="text-[10px] text-slate-500">Results, cards & timetable</div>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/teacher"
-                    onClick={() => setPortalsDropdownOpen(false)}
-                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group"
-                  >
-                    <div className="p-2 rounded-lg bg-orange-50 text-[#f26522] border border-orange-200">
-                      <BookOpen className="size-4" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-xs text-slate-900 group-hover:text-[#0b2256]">
-                        Teacher Portal
-                      </div>
-                      <div className="text-[10px] text-slate-500">Marks grading & attendance</div>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/admin"
-                    onClick={() => setPortalsDropdownOpen(false)}
-                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group"
-                  >
-                    <div className="p-2 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-200">
-                      <ShieldCheck className="size-4" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-xs text-slate-900 group-hover:text-[#0b2256]">
-                        School Admin
-                      </div>
-                      <div className="text-[10px] text-slate-500">Fees, students & finance</div>
-                    </div>
-                  </Link>
-
-                  <div className="pt-1 border-t border-slate-100">
-                    <Link
-                      href="/super-admin"
-                      target="_blank"
-                      onClick={() => setPortalsDropdownOpen(false)}
-                      className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group"
-                    >
-                      <div className="p-2 rounded-lg bg-[#0b2256]/10 text-[#0b2256] border border-[#0b2256]/20">
-                        <Lock className="size-4" />
-                      </div>
-                      <div>
-                        <div className="font-bold text-xs text-[#0b2256] flex items-center gap-1">
-                          <span>Super Admin</span>
-                          <ExternalLink className="size-3 opacity-60" />
-                        </div>
-                        <div className="text-[10px] text-slate-500">Multi-tenant headquarters</div>
-                      </div>
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Try Out Demo Button */}
             <a href="https://wa.me/256758611414" target="_blank" rel="noreferrer">
               <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold px-4 h-9.5 shadow-sm transition-colors gap-1.5">
                 <span>Try Out Demo</span>
@@ -386,54 +239,7 @@ export function Navbar() {
                 ))}
               </div>
 
-              {/* Portals Section */}
-              <div className="space-y-2 pt-2 border-t border-slate-100">
-                <div className="px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
-                  School Portals
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <Link
-                    href="/student"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-[calc(50%-0.25rem)] p-3 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 transition-colors flex flex-col gap-1.5"
-                  >
-                    <GraduationCap className="size-4 text-blue-600" />
-                    <span className="text-xs font-bold text-slate-900">Student</span>
-                    <span className="text-[10px] text-slate-500">Results & timetable</span>
-                  </Link>
 
-                  <Link
-                    href="/teacher"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-[calc(50%-0.25rem)] p-3 rounded-xl border border-slate-200 hover:border-orange-300 hover:bg-orange-50/50 transition-colors flex flex-col gap-1.5"
-                  >
-                    <BookOpen className="size-4 text-[#f26522]" />
-                    <span className="text-xs font-bold text-slate-900">Teacher</span>
-                    <span className="text-[10px] text-slate-500">Marks & grading</span>
-                  </Link>
-
-                  <Link
-                    href="/admin"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-[calc(50%-0.25rem)] p-3 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition-colors flex flex-col gap-1.5"
-                  >
-                    <ShieldCheck className="size-4 text-emerald-600" />
-                    <span className="text-xs font-bold text-slate-900">Admin</span>
-                    <span className="text-[10px] text-slate-500">Fees & records</span>
-                  </Link>
-
-                  <Link
-                    href="/super-admin"
-                    target="_blank"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-[calc(50%-0.25rem)] p-3 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 transition-colors flex flex-col gap-1.5"
-                  >
-                    <Lock className="size-4 text-[#0b2256]" />
-                    <span className="text-xs font-bold text-[#0b2256]">Super Admin</span>
-                    <span className="text-[10px] text-slate-500">Platform fleet</span>
-                  </Link>
-                </div>
-              </div>
 
               {/* Contact Information */}
               <div className="space-y-2.5 pt-2 border-t border-slate-100 text-xs text-slate-600">
