@@ -317,7 +317,7 @@ export default function HomePage() {
   return (
     <SiteLayout>
       {/* CINEMATIC HERO WITH INCREASED HEIGHT & BALANCED SPACING */}
-      <section className="relative overflow-hidden bg-slate-950 min-h-[560px] md:min-h-[640px] flex items-center pt-36 pb-24 md:pt-42 md:pb-28">
+      <section className="relative overflow-hidden bg-slate-950 min-h-[500px] md:min-h-[580px] flex items-center pt-16 pb-20 md:pt-24 md:pb-24">
         {/* Background Image & Blocker Overlays */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <Image 

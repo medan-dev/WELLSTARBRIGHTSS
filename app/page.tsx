@@ -6,6 +6,7 @@ import Image from "next/image";
 import edurexaHorizontal from "@/assets/edurexa-horizontal.png";
 import edurexaLogo from "@/assets/edurexa-logo.png";
 import edurexaMark from "@/assets/edurexa-mark.png";
+import { Navbar } from "@/components/site/Navbar";
 import {
   Building2,
   ShieldCheck,
@@ -88,87 +89,9 @@ export default function EdurexaMarketingHome() {
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-[#f26522] selection:text-white antialiased">
       {/* ========================================================================= */}
-      {/* 1. TOP ANNOUNCEMENT BANNER                                                */}
+      {/* 1. EDUREXA SCHOOLHIVE-STYLE HEADER (Top Bar + Main Nav + Mobile Drawer)   */}
       {/* ========================================================================= */}
-      <div className="bg-[#0b2256] text-white py-2.5 px-4 text-center text-xs font-medium border-b border-[#081a42]">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-2 sm:gap-4">
-          <span className="flex items-center gap-1.5 font-bold text-amber-300">
-            <Sparkles className="size-3.5" />
-            Live Production Proof of Concept:
-          </span>
-          <span className="text-slate-200">
-            See how <strong>Wellstar Bright Educational Group</strong> manages 4,950+ students across 2 campuses on EDUREXA.
-          </span>
-          <Link
-            href="/wellstar"
-            className="inline-flex items-center gap-1 text-white underline hover:text-amber-300 font-bold ml-1 transition-colors"
-          >
-            Explore Wellstar Portal <ArrowRight className="size-3" />
-          </Link>
-        </div>
-      </div>
-
-      {/* ========================================================================= */}
-      {/* 2. NAVIGATION BAR (Clean White Header, Logo with NO Background Container) */}
-      {/* ========================================================================= */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          {/* Logo with NO box, transparent background */}
-          <Link href="/" className="flex items-center gap-2">
-            <Image
-              src={edurexaHorizontal}
-              alt="EDUREXA Logo"
-              className="h-10 sm:h-11 w-auto object-contain"
-              priority
-            />
-          </Link>
-
-          {/* Desktop Nav Links (SchoolHive Pattern) */}
-          <nav className="hidden lg:flex items-center gap-7 text-xs font-semibold text-slate-600">
-            <a href="#about" className="hover:text-[#0b2256] transition-colors">
-              About
-            </a>
-            <a href="#modules" className="hover:text-[#0b2256] transition-colors">
-              Features & Modules
-            </a>
-            <a href="#wellstar-showcase" className="hover:text-[#0b2256] transition-colors flex items-center gap-1.5">
-              <span>Onboarded School</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
-                Wellstar #1
-              </span>
-            </a>
-            <a href="#pricing" className="hover:text-[#0b2256] transition-colors">
-              Pricing
-            </a>
-            <a href="#testimonials" className="hover:text-[#0b2256] transition-colors">
-              Testimonials
-            </a>
-            <a href="#roi-calculator" className="hover:text-[#0b2256] transition-colors">
-              Fee Calculator
-            </a>
-          </nav>
-
-          {/* Header Action Buttons */}
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            <Link href="/super-admin" target="_blank">
-              <Button
-                variant="outline"
-                size="sm"
-                className="hidden sm:flex text-xs font-semibold rounded-lg border-slate-200 bg-white hover:bg-slate-50 text-slate-700 h-9"
-              >
-                <Lock className="size-3.5 mr-1.5 text-slate-500" />
-                Super Admin
-              </Button>
-            </Link>
-
-            <a href="https://wa.me/256701116781" target="_blank" rel="noreferrer">
-              <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold px-4 h-9 shadow-sm transition-colors">
-                Try Out Demo
-              </Button>
-            </a>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       {/* ========================================================================= */}
       {/* 3. HERO SECTION (SchoolHive 2-Column Structure: Copy Left, Mockup Right)  */}
