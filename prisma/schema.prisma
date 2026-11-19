@@ -7,6 +7,50 @@ datasource db {
   provider = "postgresql"
 }
 
+// ============================================================================
+// 0. ENTERPRISE MULTI-TENANT HIERARCHY (UP TO 200 SCHOOLS, 20 CAMPUSES EACH)
+// ============================================================================
+
+model SchoolOrganization {
+  id            String    @id @default(uuid())
+  name          String    // e.g. "Wellstar Bright Educational Group"
+  code          String    @unique // e.g. "WEG-2026"
+  motto         String?
+  logoUrl       String?
+  contactEmail  String?
+  contactPhone  String?
+  website       String?
+  status        String    @default("ACTIVE") // ACTIVE, SUSPENDED
+  maxCampuses   Int       @default(20)       // Hard enterprise guardrail: max 20 campuses
+  campuses      Campus[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Campus {
+  id            String              @id @default(uuid())
+  schoolId      String
+  school        SchoolOrganization  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  name          String              // e.g. "Mukono Main Campus"
+  code          String              @unique // e.g. "MUK-01"
+  location      String?
+  headteacher   String?
+  contactEmail  String?
+  contactPhone  String?
+  status        String              @default("ACTIVE")
+  students      Student[]
+  teachers      Teacher[]
+  classes       Class[]
+  invoices      StudentFeeInvoice[]
+  receipts      PaymentReceipt[]
+  mealCards     MealCard[]
+  workstations  Workstation[]
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@index([schoolId])
+}
+
 model Application {
   id             String   @id @default(uuid())
   studentName    String
@@ -86,6 +130,8 @@ model Teacher {
   email     String?   @unique
   password  String?   @default("password123") // simple mock auth
   role      String    @default("TEACHER")
+  campusId  String?
+  campus    Campus?   @relation(fields: [campusId], references: [id])
   subjects  Subject[]
   classes   Class[]
   marks     Mark[]
@@ -100,6 +146,8 @@ model Class {
   id            String         @id @default(uuid())
   name          String         @unique
   grade         String
+  campusId      String?
+  campus        Campus?        @relation(fields: [campusId], references: [id])
   students      Student[]
   teachers      Teacher[]
   subjects      Subject[]
@@ -114,6 +162,8 @@ model Student {
   name       String
   classId    String
   class      Class               @relation(fields: [classId], references: [id])
+  campusId   String?
+  campus     Campus?             @relation(fields: [campusId], references: [id])
   attendance AttendanceRecord[]
   marks      Mark[]
   email      String?             @unique
@@ -275,6 +325,8 @@ model FeeStructure {
 model StudentFeeInvoice {
   id             String            @id @default(uuid())
   invoiceNumber  String            @unique // e.g. "INV-2026-T1-0001"
+  campusId       String?
+  campus         Campus?           @relation(fields: [campusId], references: [id])
   studentId      String
   student        Student           @relation(fields: [studentId], references: [id])
   academicYear   String
@@ -321,6 +373,8 @@ model InstallmentPlan {
 model PaymentReceipt {
   id             String            @id @default(uuid())
   receiptNumber  String            @unique // e.g. "RCP-2026-WS1-00001"
+  campusId       String?
+  campus         Campus?           @relation(fields: [campusId], references: [id])
   invoiceId      String
   invoice        StudentFeeInvoice @relation(fields: [invoiceId], references: [id])
   studentId      String
@@ -496,6 +550,8 @@ model FixedAsset {
 model Workstation {
   id              String    @id @default(uuid())
   machineId       String    @unique
+  campusId        String?
+  campus          Campus?   @relation(fields: [campusId], references: [id])
   machineName     String
   assignedCashier String
   apiKeyHash      String
@@ -528,6 +584,7 @@ enum MealPlanType {
   SPECIAL_DIET           // Special dietary or health meal plan
   BURSARY_SUBSIDIZED     // Subsidized / academic award meal pass
   CUSTOM
+  MILK_NUTRITION_AWARD   // Deprecated legacy variant kept for non-destructive DB schema compatibility
 }
 
 enum MealCardStatus {
@@ -541,11 +598,14 @@ enum MealSession {
   LUNCH
   DINNER
   SPECIAL_BREAK
+  BREAKFAST_MILK         // Deprecated legacy variant kept for non-destructive DB schema compatibility
 }
 
 model MealCard {
   id           String         @id @default(uuid())
   cardNumber   String         @unique // e.g. "MC-2026-0042"
+  campusId     String?
+  campus       Campus?        @relation(fields: [campusId], references: [id])
   studentId    String         @unique
   student      Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
   planType     MealPlanType   @default(DAY_LUNCH)

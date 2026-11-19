@@ -1,0 +1,213 @@
+import prisma from "@/lib/prisma";
+import { revalidateTag } from "next/cache";
+
+export const MAX_CAMPUSES_PER_SCHOOL = 20;
+export const MAX_TOTAL_SCHOOLS_LIMIT = 200;
+
+export interface CampusTelemetry {
+  id: string;
+  name: string;
+  code: string;
+  location?: string | null;
+  headteacher?: string | null;
+  status: string;
+  studentCount: number;
+  teacherCount: number;
+  activeMealCards: number;
+  unpaidArrears: number;
+}
+
+/**
+ * Ensures default School Organization and Primary Campus exist,
+ * and safely links any unassociated historical records to Campus #1.
+ */
+export async function initializeDefaultSchoolAndCampus() {
+  // 1. Ensure Default School Organization exists
+  let org = await prisma.schoolOrganization.findFirst({
+    where: { code: "WEG-2026" },
+  });
+
+  if (!org) {
+    org = await prisma.schoolOrganization.create({
+      data: {
+        id: "sch_wellstar_hq",
+        name: "Wellstar Bright Educational Group",
+        code: "WEG-2026",
+        motto: "Excellence, Discipline & Academic Distinction",
+        contactEmail: "admin@wellstarbright.sc.ug",
+        contactPhone: "+256 701 116 781",
+        website: "https://wellstarbrightss.vercel.app",
+        status: "ACTIVE",
+        maxCampuses: MAX_CAMPUSES_PER_SCHOOL, // 🛡️ 20 Campus Hard Limit
+      },
+    });
+  }
+
+  // 2. Ensure Primary Campus exists
+  let campus = await prisma.campus.findFirst({
+    where: { code: "MUK-01" },
+  });
+
+  if (!campus) {
+    campus = await prisma.campus.create({
+      data: {
+        id: "camp_mukono_main",
+        schoolId: org.id,
+        name: "Mukono Main Campus (Senior & Boarding)",
+        code: "MUK-01",
+        location: "Mukono High Street, Mukono District",
+        headteacher: "Dr. Arthur Ssentongo",
+        contactEmail: "mukono@wellstarbright.sc.ug",
+        contactPhone: "+256 701 116 781",
+        status: "ACTIVE",
+      },
+    });
+  }
+
+  // 3. Optional Mock Campus #2 for live Multi-Campus demonstration
+  let campusJinja = await prisma.campus.findFirst({
+    where: { code: "JIN-02" },
+  });
+
+  if (!campusJinja) {
+    campusJinja = await prisma.campus.create({
+      data: {
+        id: "camp_jinja_branch",
+        schoolId: org.id,
+        name: "Jinja Nile Valley Branch Campus",
+        code: "JIN-02",
+        location: "Nile Crescent, Jinja City",
+        headteacher: "Mr. Patrick Ochieng",
+        contactEmail: "jinja@wellstarbright.sc.ug",
+        contactPhone: "+256 702 334 890",
+        status: "ACTIVE",
+      },
+    });
+  }
+
+  // 4. Zero-Loss Historical Data Linker:
+  // Associate any existing students, teachers, classes, invoices, and meal cards to Campus #1
+  await Promise.all([
+    prisma.student.updateMany({
+      where: { campusId: null },
+      data: { campusId: campus.id },
+    }),
+    prisma.teacher.updateMany({
+      where: { campusId: null },
+      data: { campusId: campus.id },
+    }),
+    prisma.class.updateMany({
+      where: { campusId: null },
+      data: { campusId: campus.id },
+    }),
+    prisma.studentFeeInvoice.updateMany({
+      where: { campusId: null },
+      data: { campusId: campus.id },
+    }),
+    prisma.paymentReceipt.updateMany({
+      where: { campusId: null },
+      data: { campusId: campus.id },
+    }),
+    prisma.mealCard.updateMany({
+      where: { campusId: null },
+      data: { campusId: campus.id },
+    }),
+    prisma.workstation.updateMany({
+      where: { campusId: null },
+      data: { campusId: campus.id },
+    }),
+  ]);
+
+  return { org, campus, campusJinja };
+}
+
+/**
+ * Retrieves all registered campuses for a school organization with live telemetry.
+ */
+export async function getCampusesWithTelemetry(schoolId?: string): Promise<CampusTelemetry[]> {
+  await initializeDefaultSchoolAndCampus();
+
+  const campuses = await prisma.campus.findMany({
+    where: schoolId ? { schoolId } : undefined,
+    include: {
+      _count: {
+        select: {
+          students: true,
+          teachers: true,
+          mealCards: true,
+        },
+      },
+      invoices: {
+        where: { balance: { gt: 0 } },
+        select: { balance: true },
+      },
+    },
+    orderBy: { createdAt: "asc" },
+  });
+
+  return campuses.map((c) => ({
+    id: c.id,
+    name: c.name,
+    code: c.code,
+    location: c.location,
+    headteacher: c.headteacher,
+    status: c.status,
+    studentCount: c._count.students,
+    teacherCount: c._count.teachers,
+    activeMealCards: c._count.mealCards,
+    unpaidArrears: c.invoices.reduce((acc, inv) => acc + inv.balance, 0),
+  }));
+}
+
+/**
+ * Creates a new campus with strict enterprise guardrail check (Max 20 campuses per school).
+ */
+export async function createCampusWithGuardrails(data: {
+  schoolId: string;
+  name: string;
+  code: string;
+  location?: string;
+  headteacher?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+}) {
+  const org = await prisma.schoolOrganization.findUnique({
+    where: { id: data.schoolId },
+    include: { _count: { select: { campuses: true } } },
+  });
+
+  if (!org) {
+    throw new Error("School Organization not found.");
+  }
+
+  // 🛡️ Enterprise Hard Limit Check
+  if (org._count.campuses >= org.maxCampuses) {
+    throw new Error(
+      `Enterprise Guardrail Triggered: This school group has reached its maximum contract limit of ${org.maxCampuses} campuses.`
+    );
+  }
+
+  const existingCode = await prisma.campus.findUnique({
+    where: { code: data.code.trim().toUpperCase() },
+  });
+
+  if (existingCode) {
+    throw new Error(`Campus code '${data.code}' is already registered in the system.`);
+  }
+
+  const newCampus = await prisma.campus.create({
+    data: {
+      schoolId: data.schoolId,
+      name: data.name.trim(),
+      code: data.code.trim().toUpperCase(),
+      location: data.location?.trim() || null,
+      headteacher: data.headteacher?.trim() || null,
+      contactEmail: data.contactEmail?.trim() || null,
+      contactPhone: data.contactPhone?.trim() || null,
+      status: "ACTIVE",
+    },
+  });
+
+  revalidateTag("campuses");
+  return newCampus;
+}

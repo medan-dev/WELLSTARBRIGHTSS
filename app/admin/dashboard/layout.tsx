@@ -1,6 +1,7 @@
 "use client";
 
 import { NotificationCenter } from "@/components/notifications/NotificationCenter";
+import { CampusSwitcher } from "@/components/navigation/CampusSwitcher";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -159,6 +160,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <button className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-secondary transition-colors" onClick={() => setOpen(true)}>
               <Menu className="size-5" />
             </button>
+            <CampusSwitcher />
             <div className="hidden md:flex relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
               <Input placeholder="Search students, teachers, classes…" className="pl-9 bg-secondary/50 border-none focus-visible:ring-1" />
