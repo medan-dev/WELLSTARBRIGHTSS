@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Super Admin Console | Enterprise Multi-Tenant Governance",
-  description: "Enterprise SaaS administration, multi-school tenant management, and campus quota governance.",
+  title: "EDUREXA | Smart School Management Ecosystem",
+  description: "Empowering Schools. Simplifying Education. The Complete Digital Ecosystem for Modern Schools.",
 };
 
 export default function SuperAdminLayout({

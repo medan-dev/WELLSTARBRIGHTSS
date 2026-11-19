@@ -166,14 +166,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Input placeholder="Search students, teachers, classes…" className="pl-9 bg-secondary/50 border-none focus-visible:ring-1" />
             </div>
             <div className="ml-auto flex items-center gap-3">
-              <Link href="/super-admin" target="_blank" title="Super Admin SaaS HQ (Multi-Tenant Onboarding)">
+              <Link href="/super-admin" target="_blank" title="EDUREXA Cloud Console (Multi-Tenant Onboarding)">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="hidden sm:flex text-xs h-9 rounded-xl font-bold gap-1.5 border-indigo-500/30 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20"
+                  className="hidden sm:flex text-xs h-9 rounded-xl font-bold gap-1.5 border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20"
                 >
                   <ShieldCheck className="size-3.5" />
-                  <span>SaaS HQ</span>
+                  <span>EDUREXA HQ</span>
                 </Button>
               </Link>
               <Button variant="ghost" size="icon" onClick={toggleDark} aria-label="Toggle theme" className="rounded-full">

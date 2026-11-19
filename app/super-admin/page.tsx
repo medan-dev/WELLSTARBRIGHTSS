@@ -252,7 +252,7 @@ function SuperAdminDashboardContent() {
     const next = !darkMode;
     setDarkMode(next);
     document.documentElement.classList.toggle("dark", next);
-    try { localStorage.setItem("ns_theme", next ? "dark" : "light"); } catch(_) {}
+    try { localStorage.setItem("ns_theme", next ? "dark" : "light"); } catch (_) { }
   };
 
   const loadData = async () => {
@@ -362,7 +362,7 @@ function SuperAdminDashboardContent() {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `Wellstar_Database_Snapshot_${new Date().toISOString().slice(0, 10)}.json`;
+        link.download = `EDUREXA_Database_Snapshot_${new Date().toISOString().slice(0, 10)}.json`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -436,10 +436,10 @@ function SuperAdminDashboardContent() {
         },
         adminUser: formData.adminEmail
           ? {
-              name: formData.adminName || "Chief Administrator",
-              email: formData.adminEmail,
-              password: formData.adminPassword,
-            }
+            name: formData.adminName || "Chief Administrator",
+            email: formData.adminEmail,
+            password: formData.adminPassword,
+          }
           : undefined,
       });
 
@@ -477,15 +477,15 @@ function SuperAdminDashboardContent() {
           <div className="flex items-center gap-4 justify-center">
             <Image src={logo} alt="Logo" className="w-12 h-12 sm:w-14 sm:h-14 object-contain" />
             <div>
-              <div className="font-extrabold text-2xl sm:text-3xl text-slate-900 dark:text-white leading-tight">Wellstar ERP</div>
-              <div className="text-sm font-semibold text-blue-600 dark:text-blue-400">Master Operations Center</div>
+              <div className="font-extrabold text-2xl sm:text-3xl text-slate-900 dark:text-white leading-tight tracking-tight">EDUREXA</div>
+              <div className="text-sm font-semibold text-blue-600 dark:text-blue-400">Smart School Management Ecosystem</div>
             </div>
           </div>
 
           <div className="text-center space-y-2">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Super Administrator Access</h1>
             <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
-              Enter your master executive PIN to access multi-tenant cluster diagnostics.
+              Empowering Schools. Simplifying Education. Enter your master executive PIN to access multi-tenant cluster diagnostics.
             </p>
           </div>
 
@@ -554,8 +554,8 @@ function SuperAdminDashboardContent() {
           <Image src={logo} alt="Logo" className="w-10 h-10 object-contain shrink-0" />
           {!sidebarCollapsed && (
             <div className="overflow-hidden whitespace-nowrap leading-tight">
-              <div className="font-extrabold text-base text-slate-900 dark:text-white">Wellstar ERP</div>
-              <div className="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">Super Admin HQ</div>
+              <div className="font-extrabold text-lg text-slate-900 dark:text-white tracking-tight">EDUREXA</div>
+              <div className="text-[11px] text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">Smart School Ecosystem</div>
             </div>
           )}
         </div>
@@ -778,7 +778,7 @@ function SuperAdminDashboardContent() {
                           1,
                           ((telemetry?.totalCampuses ?? 2) /
                             (telemetry?.maxCampusesClusterLimit ?? 4000)) *
-                            100
+                          100
                         )}%`,
                       }}
                     />
@@ -1065,8 +1065,8 @@ function SuperAdminDashboardContent() {
                             isHealthy
                               ? "bg-emerald-50 text-emerald-700 border-emerald-300"
                               : isCritical
-                              ? "bg-red-50 text-red-700 border-red-300 animate-pulse"
-                              : "bg-amber-50 text-amber-700 border-amber-300"
+                                ? "bg-red-50 text-red-700 border-red-300 animate-pulse"
+                                : "bg-amber-50 text-amber-700 border-amber-300"
                           )}
                         >
                           {campus.healthStatus}
