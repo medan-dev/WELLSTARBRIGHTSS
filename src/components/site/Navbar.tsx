@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "/", label: "Home" },
+  { href: "/wellstar", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/academics", label: "Academics" },
   { href: "/admissions", label: "Admissions" },
@@ -81,7 +81,7 @@ export function Navbar() {
         <div className="w-full px-6 sm:px-8 lg:px-12 xl:px-16">
           <nav className="flex items-center justify-between bg-transparent border-0 shadow-none">
             {/* Prominent Stylish Logo */}
-            <Link href="/" className="flex items-center gap-3.5 group">
+            <Link href="/wellstar" className="flex items-center gap-3.5 group">
               <div className="relative size-11 sm:size-12 group-hover:scale-105 transition-transform duration-300">
                 <Image src={logo} alt="Wellstar Bright Logo" className="object-contain w-full h-full" priority />
               </div>
@@ -176,6 +176,19 @@ export function Navbar() {
                         <div>
                           <div className="font-bold text-sm">Admin Console</div>
                           <div className="text-[11px] text-white/70 font-normal">Full control & notice studio</div>
+                        </div>
+                      </Link>
+
+                      <Link
+                        href="/"
+                        className="flex items-center gap-3 p-3 rounded-xl text-xs font-semibold text-white hover:bg-blue-600/30 transition-colors group border-t border-white/10 mt-1 pt-2.5"
+                      >
+                        <div className="p-2 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-400/30">
+                          <Sparkles className="size-4" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-sm">EDUREXA Ecosystem</div>
+                          <div className="text-[11px] text-blue-300/80 font-normal">SaaS Platform & School Onboarding</div>
                         </div>
                       </Link>
                     </div>

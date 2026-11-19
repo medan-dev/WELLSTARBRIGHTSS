@@ -1,4 +1,4 @@
-import EdurexaMarketingPage from "../edurexa/page";
+import EdurexaMarketingHome from "../page";
 
 export const metadata = {
   title: "EDUREXA | Multi-Tenant School Management Ecosystem",
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function EnterprisePage() {
-  return <EdurexaMarketingPage />;
+  return <EdurexaMarketingHome />;
 }

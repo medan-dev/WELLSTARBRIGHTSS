@@ -47,4 +47,16 @@ describe("EDUREXA Brand, Product Architecture & Ecosystem Integrity", () => {
     expect(flagshipTenant.campuses[0].code).toBe("MUK-01");
     expect(flagshipTenant.campuses[1].code).toBe("JIN-02");
   });
+
+  it("should verify that public marketing routes and flagship school routes exist", async () => {
+    const fs = await import("fs");
+    // Verify wellstar dedicated route file exists
+    expect(fs.existsSync("app/wellstar/page.tsx")).toBe(true);
+    // Verify root marketing platform exists
+    expect(fs.existsSync("app/page.tsx")).toBe(true);
+    // Verify high-resolution brand assets exist
+    expect(fs.existsSync("public/edurexa-horizontal.png")).toBe(true);
+    expect(fs.existsSync("public/edurexa-mark.png")).toBe(true);
+    expect(fs.existsSync("public/edurexa-logo.png")).toBe(true);
+  });
 });
