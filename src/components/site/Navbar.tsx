@@ -78,12 +78,11 @@ export function Navbar() {
 
   const mainNavLinks: NavLink[] = [
     { href: "/", label: "Home" },
-    { href: "/wellstar", label: "Onboarded School" },
+    { href: "/#features", label: "Features" },
     { href: "/#pricing", label: "Pricing" },
-    { href: "/#roi-calculator", label: "Fee Calculator" },
-    { href: "/#testimonials", label: "Testimonials" },
-    { href: "/#about", label: "About" },
-    { href: "/#demo-form", label: "Contact" },
+    { href: "/#demo", label: "Demo" },
+    { href: "/#documentation", label: "Documentation" },
+    { href: "/#support", label: "Help & Support" },
   ];
 
   const solutionModules = [
@@ -127,11 +126,11 @@ export function Navbar() {
           {/* Left: Contact Info */}
           <div className="flex items-center gap-4 sm:gap-6 flex-wrap">
             <a
-              href="tel:+256701116781"
+              href="tel:+256758611414"
               className="flex items-center gap-1.5 text-slate-200 hover:text-white transition-colors"
             >
               <Phone className="size-3 text-[#f26522]" />
-              <span className="font-semibold">+256 701 116 781</span>
+              <span className="font-semibold">+256 758 611 414</span>
             </a>
             <a
               href="mailto:sales@edurexa.com"
@@ -146,18 +145,8 @@ export function Navbar() {
             </span>
           </div>
 
-          {/* Right: Flagship School & Super Admin */}
+          {/* Right: Super Admin */}
           <div className="flex items-center gap-3 text-[11px]">
-            <Link
-              href="/wellstar"
-              className="inline-flex items-center gap-1.5 text-slate-200 hover:text-white font-medium transition-colors"
-            >
-              <span className="hidden xs:inline text-slate-300">Flagship Client:</span>
-              <strong className="text-white hover:underline">Wellstar Bright SS</strong>
-            </Link>
-
-            <span className="text-white/20">|</span>
-
             <Link
               href="/super-admin"
               target="_blank"
@@ -185,7 +174,7 @@ export function Navbar() {
             />
           </Link>
 
-          {/* Desktop Navigation Links */}
+          {/* Desktop Navigation Links (Exact 6 Links Requested) */}
           <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs font-bold text-slate-700">
             <Link
               href="/"
@@ -197,102 +186,24 @@ export function Navbar() {
               Home
             </Link>
 
-            {/* Solutions / Features Mega Dropdown */}
-            <div className="relative" ref={solutionsRef}>
-              <button
-                type="button"
-                onClick={() => setSolutionsDropdownOpen(!solutionsDropdownOpen)}
-                onMouseEnter={() => setSolutionsDropdownOpen(true)}
-                className="flex items-center gap-1 transition-colors hover:text-[#f26522] text-slate-700"
-              >
-                <span>Solutions</span>
-                <ChevronDown
-                  className={cn(
-                    "size-3.5 transition-transform duration-200",
-                    solutionsDropdownOpen && "rotate-180 text-[#f26522]"
-                  )}
-                />
-              </button>
-
-              {solutionsDropdownOpen && (
-                <div
-                  onMouseLeave={() => setSolutionsDropdownOpen(false)}
-                  className="absolute left-0 mt-3 w-80 p-3 rounded-2xl bg-white border border-slate-200 shadow-xl shadow-slate-200/50 z-50 animate-in fade-in-0 zoom-in-95 duration-150 space-y-1"
-                >
-                  <div className="px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
-                    EDUREXA Core Modules
-                  </div>
-                  {solutionModules.map((mod, i) => {
-                    const Icon = mod.icon;
-                    return (
-                      <Link
-                        key={i}
-                        href={mod.href}
-                        onClick={() => setSolutionsDropdownOpen(false)}
-                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group"
-                      >
-                        <div
-                          className={cn(
-                            "p-2 rounded-lg border shrink-0 transition-transform group-hover:scale-105",
-                            mod.iconColor
-                          )}
-                        >
-                          <Icon className="size-4" />
-                        </div>
-                        <div>
-                          <div className="font-bold text-slate-900 group-hover:text-[#0b2256] transition-colors">
-                            {mod.title}
-                          </div>
-                          <div className="text-[11px] text-slate-500 font-normal leading-snug">
-                            {mod.desc}
-                          </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                  <div className="pt-2 border-t border-slate-100 px-3 py-1 flex items-center justify-between text-[11px]">
-                    <span className="text-slate-500">Need custom modules?</span>
-                    <a
-                      href="#demo-form"
-                      onClick={() => setSolutionsDropdownOpen(false)}
-                      className="text-[#f26522] font-bold hover:underline"
-                    >
-                      Talk to Engineers &rarr;
-                    </a>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Flagship Onboarded School */}
-            <Link
-              href="/wellstar"
-              className={cn(
-                "transition-colors hover:text-[#f26522]",
-                pathname === "/wellstar" ? "text-[#f26522]" : "text-slate-700"
-              )}
-            >
-              Onboarded School
-            </Link>
+            <a href="/#features" className="transition-colors hover:text-[#f26522]">
+              Features
+            </a>
 
             <a href="/#pricing" className="transition-colors hover:text-[#f26522]">
               Pricing
             </a>
 
-            <a href="/#roi-calculator" className="transition-colors hover:text-[#f26522]">
-              Fee Calculator
+            <a href="/#demo" className="transition-colors hover:text-[#f26522]">
+              Demo
             </a>
 
-            <a href="/#testimonials" className="transition-colors hover:text-[#f26522]">
-              Testimonials
+            <a href="/#documentation" className="transition-colors hover:text-[#f26522]">
+              Documentation
             </a>
 
-            <a href="/#about" className="transition-colors hover:text-[#f26522]">
-              About
-            </a>
-
-            <a href="/#demo-form" className="transition-colors hover:text-[#f26522]">
-              Contact
+            <a href="/#support" className="transition-colors hover:text-[#f26522]">
+              Help & Support
             </a>
           </nav>
 
@@ -394,7 +305,7 @@ export function Navbar() {
             </div>
 
             {/* Try Out Demo Button */}
-            <a href="https://wa.me/256701116781" target="_blank" rel="noreferrer">
+            <a href="https://wa.me/256758611414" target="_blank" rel="noreferrer">
               <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold px-4 h-9.5 shadow-sm transition-colors gap-1.5">
                 <span>Try Out Demo</span>
                 <ArrowRight className="size-3.5" />
@@ -404,7 +315,7 @@ export function Navbar() {
 
           {/* Mobile Right Action + Hamburger Toggle */}
           <div className="flex items-center gap-2 lg:hidden">
-            <a href="https://wa.me/256701116781" target="_blank" rel="noreferrer">
+            <a href="https://wa.me/256758611414" target="_blank" rel="noreferrer">
               <Button
                 size="sm"
                 className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold px-3 h-8.5 shadow-sm"
@@ -480,11 +391,11 @@ export function Navbar() {
                 <div className="px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
                   School Portals
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="flex flex-wrap gap-2">
                   <Link
                     href="/student"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="p-3 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 transition-colors flex flex-col gap-1.5"
+                    className="w-[calc(50%-0.25rem)] p-3 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 transition-colors flex flex-col gap-1.5"
                   >
                     <GraduationCap className="size-4 text-blue-600" />
                     <span className="text-xs font-bold text-slate-900">Student</span>
@@ -494,7 +405,7 @@ export function Navbar() {
                   <Link
                     href="/teacher"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="p-3 rounded-xl border border-slate-200 hover:border-orange-300 hover:bg-orange-50/50 transition-colors flex flex-col gap-1.5"
+                    className="w-[calc(50%-0.25rem)] p-3 rounded-xl border border-slate-200 hover:border-orange-300 hover:bg-orange-50/50 transition-colors flex flex-col gap-1.5"
                   >
                     <BookOpen className="size-4 text-[#f26522]" />
                     <span className="text-xs font-bold text-slate-900">Teacher</span>
@@ -504,7 +415,7 @@ export function Navbar() {
                   <Link
                     href="/admin"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="p-3 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition-colors flex flex-col gap-1.5"
+                    className="w-[calc(50%-0.25rem)] p-3 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition-colors flex flex-col gap-1.5"
                   >
                     <ShieldCheck className="size-4 text-emerald-600" />
                     <span className="text-xs font-bold text-slate-900">Admin</span>
@@ -515,7 +426,7 @@ export function Navbar() {
                     href="/super-admin"
                     target="_blank"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="p-3 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 transition-colors flex flex-col gap-1.5"
+                    className="w-[calc(50%-0.25rem)] p-3 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 transition-colors flex flex-col gap-1.5"
                   >
                     <Lock className="size-4 text-[#0b2256]" />
                     <span className="text-xs font-bold text-[#0b2256]">Super Admin</span>
@@ -530,9 +441,9 @@ export function Navbar() {
                   Headquarters
                 </div>
                 <div className="px-3 space-y-2">
-                  <a href="tel:+256701116781" className="flex items-center gap-2 hover:text-[#f26522]">
+                  <a href="tel:+256758611414" className="flex items-center gap-2 hover:text-[#f26522]">
                     <Phone className="size-3.5 text-[#f26522]" />
-                    <span>+256 701 116 781</span>
+                    <span>+256 758 611 414</span>
                   </a>
                   <a href="mailto:sales@edurexa.com" className="flex items-center gap-2 hover:text-[#f26522]">
                     <Mail className="size-3.5 text-[#f26522]" />
@@ -549,7 +460,7 @@ export function Navbar() {
             {/* Drawer Bottom CTA */}
             <div className="p-4 border-t border-slate-200 space-y-2">
               <a
-                href="https://wa.me/256701116781"
+                href="https://wa.me/256758611414"
                 target="_blank"
                 rel="noreferrer"
                 className="w-full block"

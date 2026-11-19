@@ -93,131 +93,69 @@ export default function EdurexaMarketingHome() {
       <Navbar />
 
       {/* ========================================================================= */}
-      {/* 3. HERO SECTION (SchoolHive 2-Column Structure: Copy Left, Mockup Right)  */}
+      {/* 3. HERO SECTION (Executive High-Impact Enterprise Presentation)            */}
       {/* ========================================================================= */}
-      <section className="relative pt-12 pb-20 lg:pt-16 lg:pb-28 overflow-hidden bg-gradient-to-b from-blue-50/40 via-white to-slate-50 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Column: Heading, Value Proposition & CTAs */}
-            <div className="lg:col-span-6 space-y-6 text-left">
-              <h1 className="text-3xl sm:text-5xl lg:text-5xl font-extrabold text-[#0b2256] tracking-tight leading-[1.15]">
-                <span className="text-[#f26522]">EDUREXA</span> a Powerful Tool To Represent Your School
-              </h1>
+      <section className="relative pt-16 pb-20 lg:pt-24 lg:pb-28 overflow-hidden bg-gradient-to-b from-blue-50/30 via-white to-slate-50 border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+          <div className="space-y-4">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#0b2256] tracking-tight leading-[1.12]">
+              <span className="text-[#f26522]">EDUREXA</span> a Powerful Tool To Represent Your School
+            </h1>
 
-              <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
-                EDUREXA is a modern, powerful platform designed to help schools manage their operations efficiently. Streamline administration, eliminate cashier fee leakage, enhance parent communication, and empower your staff and students with our easy-to-use tools.
-              </p>
+            <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-3xl mx-auto">
+              EDUREXA is a modern, enterprise-grade platform engineered to streamline administrative workflows, eliminate cashier fee leakage, automate competency assessments, and unify multi-campus operations across your entire institution.
+            </p>
+          </div>
 
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <a href="#demo-form">
-                  <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs sm:text-sm font-bold px-6 h-11 shadow-sm gap-2">
-                    <span>Schedule Executive Demo</span>
-                    <ArrowRight className="size-4" />
-                  </Button>
-                </a>
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+            <a href="#demo-form">
+              <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-sm font-bold px-7 h-12 shadow-sm gap-2">
+                <span>Schedule Executive Demo</span>
+                <ArrowRight className="size-4" />
+              </Button>
+            </a>
 
-                <Link href="/admin/dashboard" target="_blank">
-                  <Button
-                    variant="outline"
-                    className="border-slate-300 bg-white hover:bg-slate-50 text-[#0b2256] rounded-lg text-xs sm:text-sm font-semibold px-5 h-11 gap-2 shadow-2xs"
-                  >
-                    <span>Try Live School Portal</span>
-                    <ExternalLink className="size-3.5 text-slate-500" />
-                  </Button>
-                </Link>
-              </div>
+            <a href="#features">
+              <Button
+                variant="outline"
+                className="border-slate-300 bg-white hover:bg-slate-50 text-[#0b2256] rounded-lg text-sm font-semibold px-6 h-12 gap-2 shadow-2xs"
+              >
+                <span>Explore Features</span>
+                <ChevronRight className="size-4 text-[#0b2256]" />
+              </Button>
+            </a>
+          </div>
 
-              <div className="pt-4 border-t border-slate-200/80 flex items-center gap-6 text-xs text-slate-500">
-                <div className="flex items-center gap-1.5 font-medium">
-                  <CheckCircle2 className="size-4 text-emerald-600" />
-                  <span>200 School Fleet</span>
-                </div>
-                <div className="flex items-center gap-1.5 font-medium">
-                  <CheckCircle2 className="size-4 text-emerald-600" />
-                  <span>20 Campuses per Group</span>
-                </div>
-                <div className="flex items-center gap-1.5 font-medium">
-                  <CheckCircle2 className="size-4 text-emerald-600" />
-                  <span>Offline POS Ready</span>
-                </div>
-              </div>
+          <div className="pt-8 border-t border-slate-200/80 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs sm:text-sm text-slate-600 font-medium">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="size-4 text-emerald-600" />
+              <span>200+ Institution Capacity</span>
             </div>
-
-            {/* Right Column: High-End Interactive Software Mockup */}
-            <div className="lg:col-span-6">
-              <div className="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden">
-                {/* Browser Topbar Frame */}
-                <div className="bg-slate-100 border-b border-slate-200 px-4 py-2.5 flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <span className="size-2.5 rounded-full bg-red-400" />
-                    <span className="size-2.5 rounded-full bg-amber-400" />
-                    <span className="size-2.5 rounded-full bg-emerald-400" />
-                  </div>
-                  <div className="bg-white border border-slate-200 rounded-md px-3 py-0.5 text-[10px] font-mono text-slate-500 flex items-center gap-1">
-                    <Lock className="size-2.5 text-emerald-600" />
-                    <span>app.edurexa.com/console/overview</span>
-                  </div>
-                  <div className="text-[10px] font-semibold text-slate-400">PROD CLUSTER</div>
-                </div>
-
-                {/* Internal Dashboard View */}
-                <div className="p-5 bg-slate-50 space-y-4">
-                  <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-                    <div>
-                      <span className="text-[10px] uppercase font-semibold text-slate-500 tracking-wider">Live Tenant</span>
-                      <h4 className="text-sm font-bold text-slate-900">Wellstar Bright Educational Group</h4>
-                    </div>
-                    <span className="text-xs font-medium text-slate-600">
-                      Mukono Main Campus
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-2.5">
-                    <div className="p-3 bg-white border border-slate-200 rounded-lg space-y-0.5 shadow-2xs">
-                      <div className="text-[10px] text-slate-500">Term Fee Collection</div>
-                      <div className="text-base font-bold text-slate-900 font-mono">UGX 1.84B</div>
-                      <div className="text-[9px] text-emerald-600 font-semibold">99.4% Rate</div>
-                    </div>
-                    <div className="p-3 bg-white border border-slate-200 rounded-lg space-y-0.5 shadow-2xs">
-                      <div className="text-[10px] text-slate-500">Enrolled Students</div>
-                      <div className="text-base font-bold text-slate-900 font-mono">4,950</div>
-                      <div className="text-[9px] text-slate-400">Across 2 Campuses</div>
-                    </div>
-                    <div className="p-3 bg-white border border-slate-200 rounded-lg space-y-0.5 shadow-2xs">
-                      <div className="text-[10px] text-slate-500">Campus Capacity</div>
-                      <div className="text-base font-bold text-[#0b2256] font-mono">2 of 20</div>
-                      <div className="text-[9px] text-[#f26522] font-semibold">18 Slots Open</div>
-                    </div>
-                  </div>
-
-                  <div className="p-3 bg-white border border-slate-200 rounded-lg space-y-2 shadow-2xs">
-                    <div className="flex items-center justify-between text-xs font-semibold text-slate-800">
-                      <span>Real-Time Cashier POS Desk</span>
-                      <span className="text-[10px] text-emerald-600 flex items-center gap-1">
-                        <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" /> Thermal Slip Verified
-                      </span>
-                    </div>
-                    <div className="p-2 bg-slate-50 rounded text-[11px] font-mono text-slate-600 flex justify-between">
-                      <span>Receipt #WBS-REC-8924: Ronald Mutebi (S.4)</span>
-                      <span className="font-bold text-slate-900">UGX 1,200,000 [Centenary Bank]</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="size-4 text-emerald-600" />
+              <span>Up to 20 Campuses per Group</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="size-4 text-emerald-600" />
+              <span>Offline POS Cashier Desks</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="size-4 text-emerald-600" />
+              <span>Free 4-Hour Live Demo</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* 4. SECTION 1: CORE ADVANCED CAPABILITIES (SCHOOLHIVE 3-CARD HIGHLIGHT)    */}
+      {/* 4. SECTION 1: CORE ADVANCED CAPABILITIES / FEATURES (SCHOOLHIVE 3-CARD)   */}
       {/* ========================================================================= */}
-      <section className="py-16 bg-white border-b border-slate-200">
+      <section id="features" className="py-16 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex flex-col md:flex-row gap-6">
             {/* Card 1 */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs hover:border-slate-300 transition-colors">
-              <div className="size-12 rounded-lg bg-blue-50 text-[#0b2256] grid place-items-center font-bold">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs hover:border-slate-300 transition-colors">
+              <div className="size-12 rounded-lg bg-blue-50 text-[#0b2256] flex items-center justify-center font-bold">
                 <BarChart3 className="size-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900">Advanced Statistics & Analytics</h3>
@@ -227,8 +165,8 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* Card 2 */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs hover:border-slate-300 transition-colors">
-              <div className="size-12 rounded-lg bg-orange-50 text-[#f26522] grid place-items-center font-bold">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs hover:border-slate-300 transition-colors">
+              <div className="size-12 rounded-lg bg-orange-50 text-[#f26522] flex items-center justify-center font-bold">
                 <ShieldCheck className="size-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900">Powerful Multi-Campus Admin</h3>
@@ -238,8 +176,8 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* Card 3 */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs hover:border-slate-300 transition-colors">
-              <div className="size-12 rounded-lg bg-emerald-50 text-emerald-700 grid place-items-center font-bold">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs hover:border-slate-300 transition-colors">
+              <div className="size-12 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
                 <HardDrive className="size-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900">Security Updates & Continuous WAL</h3>
@@ -265,10 +203,10 @@ export default function EdurexaMarketingHome() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="flex flex-wrap gap-5">
             {/* 1. School Admin Dashboard */}
-            <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs">
-              <div className="size-10 rounded-lg bg-blue-50 text-[#0b2256] grid place-items-center">
+            <div className="flex-1 min-w-[220px] bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs">
+              <div className="size-10 rounded-lg bg-blue-50 text-[#0b2256] flex items-center justify-center">
                 <MonitorCheck className="size-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900">School Admin Dashboard</h4>
@@ -278,8 +216,8 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* 2. Teacher Portal */}
-            <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs">
-              <div className="size-10 rounded-lg bg-orange-50 text-[#f26522] grid place-items-center">
+            <div className="flex-1 min-w-[220px] bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs">
+              <div className="size-10 rounded-lg bg-orange-50 text-[#f26522] flex items-center justify-center">
                 <BookOpen className="size-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900">Teacher & Gradebook Portal</h4>
@@ -289,8 +227,8 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* 3. Digital Library & Logistics */}
-            <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs">
-              <div className="size-10 rounded-lg bg-purple-50 text-purple-700 grid place-items-center">
+            <div className="flex-1 min-w-[220px] bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs">
+              <div className="size-10 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center">
                 <Library className="size-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900">Digital Library & Logistics</h4>
@@ -300,8 +238,8 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* 4. Accounts & Bursary Dashboard */}
-            <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs">
-              <div className="size-10 rounded-lg bg-emerald-50 text-emerald-700 grid place-items-center">
+            <div className="flex-1 min-w-[220px] bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs">
+              <div className="size-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
                 <Receipt className="size-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900">Accounts & Fee Dashboard</h4>
@@ -325,20 +263,20 @@ export default function EdurexaMarketingHome() {
             </h3>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="p-4 bg-white/10 rounded-xl border border-white/10 backdrop-blur-sm">
+          <div className="flex flex-wrap gap-6 justify-center">
+            <div className="flex-1 min-w-[200px] p-4 bg-white/10 rounded-xl border border-white/10 backdrop-blur-sm">
               <div className="text-3xl sm:text-4xl font-extrabold text-white font-mono">200+</div>
               <div className="text-xs text-slate-300 mt-1">Schools Architecture Capacity</div>
             </div>
-            <div className="p-4 bg-white/10 rounded-xl border border-white/10 backdrop-blur-sm">
+            <div className="flex-1 min-w-[200px] p-4 bg-white/10 rounded-xl border border-white/10 backdrop-blur-sm">
               <div className="text-3xl sm:text-4xl font-extrabold text-white font-mono">25,000+</div>
               <div className="text-xs text-slate-300 mt-1">Students Capacity Supported</div>
             </div>
-            <div className="p-4 bg-white/10 rounded-xl border border-white/10 backdrop-blur-sm">
+            <div className="flex-1 min-w-[200px] p-4 bg-white/10 rounded-xl border border-white/10 backdrop-blur-sm">
               <div className="text-3xl sm:text-4xl font-extrabold text-white font-mono">1,200+</div>
               <div className="text-xs text-slate-300 mt-1">Teachers & Staff Active</div>
             </div>
-            <div className="p-4 bg-white/10 rounded-xl border border-white/10 backdrop-blur-sm">
+            <div className="flex-1 min-w-[200px] p-4 bg-white/10 rounded-xl border border-white/10 backdrop-blur-sm">
               <div className="text-3xl sm:text-4xl font-extrabold text-amber-300 font-mono">20 Max</div>
               <div className="text-xs text-slate-300 mt-1">Campuses per School Group</div>
             </div>
@@ -347,123 +285,129 @@ export default function EdurexaMarketingHome() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 7. SPOTLIGHT ONBOARDED SCHOOL #1: WELLSTAR BRIGHT EDUCATIONAL GROUP        */}
+      {/* 7. LIVE 4-HOUR FREE DEMO SANDBOX (COMPLETE EDUREXA ECOSYSTEM TEST-DRIVE)   */}
       {/* ========================================================================= */}
-      <section id="wellstar-showcase" className="py-20 bg-white border-b border-slate-200">
+      <section id="demo" className="py-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
               <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0b2256] tracking-tight">
-                See How Wellstar Bright Educational Group Runs on EDUREXA
+                Experience EDUREXA With a Free 4-Hour Live Interactive Demo
               </h2>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Wellstar Bright Senior School is our live flagship tenant, proving that EDUREXA unifies multi-campus administration, eliminates cash leakage, and delivers instant reports to thousands of parents.
+                Test-drive every capability of our system for a full 4 hours before onboarding. Explore multi-campus governance, cashier desks, report cards, and parent channels with zero commitment.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
-              <Link href="/wellstar" target="_blank">
-                <Button className="bg-[#0b2256] hover:bg-[#071638] text-white rounded-lg text-xs font-bold h-10 px-4 gap-1.5 shadow-sm">
-                  <span>Visit Wellstar Public Portal</span>
-                  <ExternalLink className="size-3.5 text-slate-300" />
+              <a href="#demo-form">
+                <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold h-10 px-4 gap-1.5 shadow-sm">
+                  <span>Claim Free 4-Hour Demo Access</span>
+                  <ArrowRight className="size-3.5" />
                 </Button>
-              </Link>
+              </a>
 
               <Link href="/admin/dashboard" target="_blank">
                 <Button variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-50 rounded-lg text-xs font-semibold h-10 px-4 gap-1.5">
-                  <span>Explore School Admin Portal</span>
-                  <ArrowRight className="size-3.5 text-[#0b2256]" />
+                  <span>Launch Admin Sandbox</span>
+                  <ExternalLink className="size-3.5 text-[#0b2256]" />
                 </Button>
               </Link>
             </div>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-6">
+          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row gap-8 items-stretch">
+            <div className="flex-1 space-y-6">
               <div className="space-y-1.5">
                 <div className="text-xs uppercase font-mono tracking-wider text-[#f26522] font-bold">
-                  TENANT ID: WEG-2026 &bull; MUKONO & JINJA, UGANDA
+                  100% FREE HANDS-ON DEMO &bull; 4 HOURS UNRESTRICTED ACCESS &bull; NO SETUP REQUIRED
                 </div>
                 <h3 className="text-2xl font-bold text-slate-900">
-                  Wellstar Bright Educational Group
+                  Full Institutional Simulation Before Onboarding
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Headquartered in Mukono with secondary campuses serving O-Level & A-Level day and boarding students.
+                  Every onboarded school receives its own custom branded instance, verified workflows, and personalized student databases.
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <div className="p-3.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
-                  <div className="text-xl font-bold text-slate-900 font-mono">4,950+</div>
-                  <div className="text-[11px] text-slate-500 mt-0.5 font-medium">Enrolled Students</div>
+              <div className="flex flex-wrap gap-3">
+                <div className="flex-1 min-w-[130px] p-3.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+                  <div className="text-xl font-bold text-[#0b2256] font-mono">4 Hours</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5 font-medium">Free Live Sandbox</div>
                 </div>
-                <div className="p-3.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
-                  <div className="text-xl font-bold text-slate-900 font-mono">2 Campuses</div>
-                  <div className="text-[11px] text-slate-500 mt-0.5 font-medium">Mukono & Jinja</div>
+                <div className="flex-1 min-w-[130px] p-3.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+                  <div className="text-xl font-bold text-slate-900 font-mono">100%</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5 font-medium">All Modules Unlocked</div>
                 </div>
-                <div className="p-3.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
-                  <div className="text-xl font-bold text-emerald-700 font-mono">99.4%</div>
-                  <div className="text-[11px] text-slate-500 mt-0.5 font-medium">Fee Collection Rate</div>
+                <div className="flex-1 min-w-[130px] p-3.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+                  <div className="text-xl font-bold text-emerald-700 font-mono">UGX 0</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5 font-medium">Zero Commitment</div>
                 </div>
               </div>
 
               <div className="space-y-2.5 text-xs text-slate-700">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
-                  <span>Integrated double-entry chart of accounts reconciling banking slips with cash receipts.</span>
+                  <span>Full hands-on access to Student, Teacher, Headteacher, and Admin portals.</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
-                  <span>Biometric meal entitlement tokens preventing unauthorized dining hall consumption.</span>
+                  <span>Test offline POS cashier desks with thermal receipt printing and bank reconciliations.</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
-                  <span>Direct parent WhatsApp billing alerts keeping guardians updated on fees instantly.</span>
+                  <span>Simulate UNEB competency division calculations and automated WhatsApp fee reminders.</span>
                 </div>
               </div>
             </div>
 
-            <div className="lg:col-span-5 bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs">
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                TRY THE LIVE WELLSTAR SANDBOX
-              </div>
-
+            <div className="lg:w-[380px] bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs shrink-0 flex flex-col justify-between">
               <div className="space-y-2">
-                <Link
-                  href="/wellstar"
-                  className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
-                >
-                  <span className="font-semibold text-slate-900">1. Public School Website & Admissions</span>
-                  <ChevronRight className="size-4 text-slate-400" />
-                </Link>
+                <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  TRY THE LIVE DEMO PORTALS
+                </div>
 
-                <Link
-                  href="/student"
-                  className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
-                >
-                  <span className="font-semibold text-slate-900">2. Student & Parent Clearance Portal</span>
-                  <ChevronRight className="size-4 text-slate-400" />
-                </Link>
+                <div className="space-y-2">
+                  <Link
+                    href="/admin/dashboard"
+                    target="_blank"
+                    className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
+                  >
+                    <span className="font-semibold text-slate-900">1. Headteacher & Admin Management</span>
+                    <ChevronRight className="size-4 text-slate-400" />
+                  </Link>
 
-                <Link
-                  href="/admin/dashboard"
-                  className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
-                >
-                  <span className="font-semibold text-slate-900">3. Headteacher & Admin Management</span>
-                  <ChevronRight className="size-4 text-slate-400" />
-                </Link>
+                  <Link
+                    href="/teacher"
+                    target="_blank"
+                    className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
+                  >
+                    <span className="font-semibold text-slate-900">2. Teacher Marks & Academic Entry</span>
+                    <ChevronRight className="size-4 text-slate-400" />
+                  </Link>
 
-                <Link
-                  href="/teacher"
-                  className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
-                >
-                  <span className="font-semibold text-slate-900">4. Teacher Marks & Academic Entry</span>
-                  <ChevronRight className="size-4 text-slate-400" />
-                </Link>
+                  <Link
+                    href="/student"
+                    target="_blank"
+                    className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
+                  >
+                    <span className="font-semibold text-slate-900">3. Student & Parent Clearance Portal</span>
+                    <ChevronRight className="size-4 text-slate-400" />
+                  </Link>
+
+                  <Link
+                    href="/super-admin"
+                    target="_blank"
+                    className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
+                  >
+                    <span className="font-semibold text-[#0b2256]">4. Super Admin Platform Fleet</span>
+                    <ChevronRight className="size-4 text-slate-400" />
+                  </Link>
+                </div>
               </div>
 
-              <p className="text-[11px] text-slate-500 leading-normal pt-1">
-                Want to onboard your school group with the same technology? Request an executive demo below.
+              <p className="text-[11px] text-slate-500 leading-normal pt-2 border-t border-slate-100">
+                Want your school or group onboarded with your official logo, curriculum, and student data? Request an executive demo below.
               </p>
             </div>
           </div>
@@ -506,149 +450,161 @@ export default function EdurexaMarketingHome() {
           </div>
 
           {/* 3 Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+          <div className="flex flex-col md:flex-row gap-6 text-left">
             {/* Tier 1: 1–500 Students */}
-            <div className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 space-y-6 shadow-2xs">
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
-                  1–500 STUDENTS
-                </span>
-                <h3 className="text-lg font-bold text-slate-900 pt-1">Standard Plan</h3>
-                <p className="text-xs text-slate-500">Core essentials for growing primary & secondary schools.</p>
-              </div>
-
-              <div className="space-y-1">
-                <div className="text-3xl font-extrabold text-[#0b2256]">
-                  {billingPeriod === "term" ? "$4" : "$10"}
-                  <span className="text-xs text-slate-500 font-normal ml-1">/ student</span>
+            <div className="flex-1 flex flex-col justify-between bg-white border border-slate-200 rounded-xl p-6 sm:p-8 space-y-6 shadow-2xs">
+              <div>
+                <div className="space-y-1">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                    1–500 STUDENTS
+                  </span>
+                  <h3 className="text-lg font-bold text-slate-900 pt-1">Standard Plan</h3>
+                  <p className="text-xs text-slate-500">Core essentials for growing primary & secondary schools.</p>
                 </div>
-                <div className="text-[11px] text-slate-400">Unlimited teachers & admin accounts</div>
+
+                <div className="space-y-1 pt-4">
+                  <div className="text-3xl font-extrabold text-[#0b2256]">
+                    {billingPeriod === "term" ? "$4" : "$10"}
+                    <span className="text-xs text-slate-500 font-normal ml-1">/ student</span>
+                  </div>
+                  <div className="text-[11px] text-slate-400">Unlimited teachers & admin accounts</div>
+                </div>
+
+                <ul className="space-y-2.5 text-xs text-slate-700 border-t border-slate-100 pt-4 mt-4">
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>Student Information System (SIS) & Reports</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>Class & Timetable Management Tools</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>UNEB & Competency Gradebook</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>Email & WhatsApp Support</span>
+                  </li>
+                </ul>
               </div>
 
-              <ul className="space-y-2.5 text-xs text-slate-700 border-t border-slate-100 pt-4">
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>Student Information System (SIS) & Reports</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>Class & Timetable Management Tools</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>UNEB & Competency Gradebook</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>Email & WhatsApp Support</span>
-                </li>
-              </ul>
-
-              <a href="#demo-form">
-                <Button variant="outline" className="w-full text-xs font-bold rounded-lg border-slate-300 h-10 hover:bg-slate-50">
-                  Get Started
-                </Button>
-              </a>
+              <div className="pt-6">
+                <a href="#demo-form">
+                  <Button variant="outline" className="w-full text-xs font-bold rounded-lg border-slate-300 h-10 hover:bg-slate-50">
+                    Get Started
+                  </Button>
+                </a>
+              </div>
             </div>
 
             {/* Tier 2: 501–1,500 Students (Popular) */}
-            <div className="bg-white border-2 border-[#f26522] rounded-xl p-6 sm:p-8 space-y-6 shadow-md relative">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#f26522] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-xs">
-                MOST POPULAR
-              </span>
-
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#f26522] bg-orange-50 px-2 py-0.5 rounded">
-                  501–1,500 STUDENTS
+            <div className="flex-1 flex flex-col justify-between bg-white border-2 border-[#f26522] rounded-xl p-6 sm:p-8 space-y-6 shadow-md relative">
+              <div>
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#f26522] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-xs">
+                  MOST POPULAR
                 </span>
-                <h3 className="text-lg font-bold text-slate-900 pt-1">Professional Plan</h3>
-                <p className="text-xs text-slate-500">Complete suite with offline POS and parent engagement.</p>
-              </div>
 
-              <div className="space-y-1">
-                <div className="text-3xl font-extrabold text-[#0b2256]">
-                  {billingPeriod === "term" ? "$3.20" : "$8.20"}
-                  <span className="text-xs text-slate-500 font-normal ml-1">/ student</span>
+                <div className="space-y-1">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#f26522] bg-orange-50 px-2 py-0.5 rounded">
+                    501–1,500 STUDENTS
+                  </span>
+                  <h3 className="text-lg font-bold text-slate-900 pt-1">Professional Plan</h3>
+                  <p className="text-xs text-slate-500">Complete suite with offline POS and parent engagement.</p>
                 </div>
-                <div className="text-[11px] text-slate-400">All features from smaller tier included</div>
+
+                <div className="space-y-1 pt-4">
+                  <div className="text-3xl font-extrabold text-[#0b2256]">
+                    {billingPeriod === "term" ? "$3.20" : "$8.20"}
+                    <span className="text-xs text-slate-500 font-normal ml-1">/ student</span>
+                  </div>
+                  <div className="text-[11px] text-slate-400">All features from smaller tier included</div>
+                </div>
+
+                <ul className="space-y-2.5 text-xs text-slate-700 border-t border-slate-100 pt-4 mt-4">
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>Offline POS Cashier Desks & Thermal Receipts</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>Dedicated Parent Portal & WhatsApp Alerts</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>Sibling Family Account Consolidation</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>Hostel & School Bus Transport Logistics</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>24/7 Priority Phone & WhatsApp Support</span>
+                  </li>
+                </ul>
               </div>
 
-              <ul className="space-y-2.5 text-xs text-slate-700 border-t border-slate-100 pt-4">
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>Offline POS Cashier Desks & Thermal Receipts</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>Dedicated Parent Portal & WhatsApp Alerts</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>Sibling Family Account Consolidation</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>Hostel & School Bus Transport Logistics</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>24/7 Priority Phone & WhatsApp Support</span>
-                </li>
-              </ul>
-
-              <a href="#demo-form">
-                <Button className="w-full text-xs font-bold rounded-lg bg-[#f26522] hover:bg-[#d95314] text-white h-10 shadow-sm">
-                  Choose Professional
-                </Button>
-              </a>
+              <div className="pt-6">
+                <a href="#demo-form">
+                  <Button className="w-full text-xs font-bold rounded-lg bg-[#f26522] hover:bg-[#d95314] text-white h-10 shadow-sm">
+                    Choose Professional
+                  </Button>
+                </a>
+              </div>
             </div>
 
             {/* Tier 3: 1,500+ Students or Multi-Campus Enterprise */}
-            <div className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 space-y-6 shadow-2xs">
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
-                  MULTI-CAMPUS CONGLOMERATE
-                </span>
-                <h3 className="text-lg font-bold text-slate-900 pt-1">Enterprise Plan</h3>
-                <p className="text-xs text-slate-500">For multi-campus school groups, dioceses, and universities.</p>
-              </div>
-
-              <div className="space-y-1">
-                <div className="text-3xl font-extrabold text-[#0b2256]">
-                  {billingPeriod === "term" ? "$2.40" : "$7.00"}
-                  <span className="text-xs text-slate-500 font-normal ml-1">/ student</span>
+            <div className="flex-1 flex flex-col justify-between bg-white border border-slate-200 rounded-xl p-6 sm:p-8 space-y-6 shadow-2xs">
+              <div>
+                <div className="space-y-1">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                    MULTI-CAMPUS CONGLOMERATE
+                  </span>
+                  <h3 className="text-lg font-bold text-slate-900 pt-1">Enterprise Plan</h3>
+                  <p className="text-xs text-slate-500">For multi-campus school groups, dioceses, and universities.</p>
                 </div>
-                <div className="text-[11px] text-slate-400">Maximum cost efficiency at scale</div>
+
+                <div className="space-y-1 pt-4">
+                  <div className="text-3xl font-extrabold text-[#0b2256]">
+                    {billingPeriod === "term" ? "$2.40" : "$7.00"}
+                    <span className="text-xs text-slate-500 font-normal ml-1">/ student</span>
+                  </div>
+                  <div className="text-[11px] text-slate-400">Maximum cost efficiency at scale</div>
+                </div>
+
+                <ul className="space-y-2.5 text-xs text-slate-700 border-t border-slate-100 pt-4 mt-4">
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>Hard Limit: Up to 20 Campuses per Organization</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>Consolidated Executive Multi-Campus Hierarchy</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>Automated URA PAYE, NSSF 15%, WHT 6% Tables</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>Continuous WAL PITR (&lt; 1s RPO) + SHA-256 Backups</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="size-4 text-emerald-600 shrink-0" />
+                    <span>Dedicated Account Manager & Engineering SLA</span>
+                  </li>
+                </ul>
               </div>
 
-              <ul className="space-y-2.5 text-xs text-slate-700 border-t border-slate-100 pt-4">
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>Hard Limit: Up to 20 Campuses per Organization</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>Consolidated Executive Multi-Campus Hierarchy</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>Automated URA PAYE, NSSF 15%, WHT 6% Tables</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>Continuous WAL PITR (&lt; 1s RPO) + SHA-256 Backups</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>Dedicated Account Manager & Engineering SLA</span>
-                </li>
-              </ul>
-
-              <a href="#demo-form">
-                <Button variant="outline" className="w-full text-xs font-bold rounded-lg border-slate-300 h-10 hover:bg-slate-50">
-                  Choose Enterprise
-                </Button>
-              </a>
+              <div className="pt-6">
+                <a href="#demo-form">
+                  <Button variant="outline" className="w-full text-xs font-bold rounded-lg border-slate-300 h-10 hover:bg-slate-50">
+                    Choose Enterprise
+                  </Button>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -668,17 +624,19 @@ export default function EdurexaMarketingHome() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex flex-col md:flex-row gap-6">
             {/* Review 1 */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs">
-              <div className="flex text-amber-400">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="size-4 fill-amber-400" />
-                ))}
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex text-amber-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="size-4 fill-amber-400" />
+                  ))}
+                </div>
+                <p className="text-xs text-slate-600 italic leading-relaxed">
+                  "Using this system has completely transformed the way we run our school. From managing multi-campus attendance to generating end-of-term report cards, everything is now organized and efficient."
+                </p>
               </div>
-              <p className="text-xs text-slate-600 italic leading-relaxed">
-                "Using this system has completely transformed the way we run our school. From managing multi-campus attendance to generating end-of-term report cards, everything is now organized and efficient."
-              </p>
               <div className="border-t border-slate-200 pt-3">
                 <div className="font-bold text-xs text-slate-900">Mr. Michael Afonso</div>
                 <div className="text-[11px] text-slate-500">Headteacher, Green Valley High School</div>
@@ -686,15 +644,17 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* Review 2 */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs">
-              <div className="flex text-amber-400">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="size-4 fill-amber-400" />
-                ))}
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex text-amber-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="size-4 fill-amber-400" />
+                  ))}
+                </div>
+                <p className="text-xs text-slate-600 italic leading-relaxed">
+                  "The support team is fantastic and the interface is very easy for both teachers and parents. We've saved hours of manual work thanks to the automated fee receipts and WhatsApp notifications."
+                </p>
               </div>
-              <p className="text-xs text-slate-600 italic leading-relaxed">
-                "The support team is fantastic and the interface is very easy for both teachers and parents. We've saved hours of manual work thanks to the automated fee receipts and WhatsApp notifications."
-              </p>
               <div className="border-t border-slate-200 pt-3">
                 <div className="font-bold text-xs text-slate-900">Ms. Sarah Mishin</div>
                 <div className="text-[11px] text-slate-500">ICT Coordinator, Sunrise Primary School</div>
@@ -702,15 +662,17 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* Review 3 */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs">
-              <div className="flex text-amber-400">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="size-4 fill-amber-400" />
-                ))}
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex text-amber-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="size-4 fill-amber-400" />
+                  ))}
+                </div>
+                <p className="text-xs text-slate-600 italic leading-relaxed">
+                  "EDUREXA has revolutionized our administrative processes. The comprehensive fee reporting and real-time multi-campus analytics have given our board unprecedented visibility into financial operations."
+                </p>
               </div>
-              <p className="text-xs text-slate-600 italic leading-relaxed">
-                "EDUREXA has revolutionized our administrative processes. The comprehensive fee reporting and real-time multi-campus analytics have given our board unprecedented visibility into financial operations."
-              </p>
               <div className="border-t border-slate-200 pt-3">
                 <div className="font-bold text-xs text-slate-900">Dr. Ronald Mukasa</div>
                 <div className="text-[11px] text-slate-500">Director, Wellstar Bright Educational Group</div>
@@ -758,8 +720,8 @@ export default function EdurexaMarketingHome() {
           </div>
 
           <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 text-left shadow-2xs">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="space-y-2">
+            <div className="flex flex-col sm:flex-row gap-6">
+              <div className="flex-1 space-y-2">
                 <div className="flex justify-between text-xs font-bold text-slate-700">
                   <span>Number of Campuses:</span>
                   <span className="text-[#f26522] font-mono">{campusesCount} Campuses</span>
@@ -774,7 +736,7 @@ export default function EdurexaMarketingHome() {
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="flex-1 space-y-2">
                 <div className="flex justify-between text-xs font-bold text-slate-700">
                   <span>Total Students (All Campuses):</span>
                   <span className="text-[#f26522] font-mono">{studentsCount.toLocaleString()} Students</span>
@@ -814,30 +776,173 @@ export default function EdurexaMarketingHome() {
       </section>
 
       {/* ========================================================================= */}
+      {/* 11B. DOCUMENTATION SECTION                                                */}
+      {/* ========================================================================= */}
+      <section id="documentation" className="py-20 bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0b2256] tracking-tight">
+              Documentation & Guides
+            </h2>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Step-by-step manuals, system architectures, and operational procedures designed for headteachers, teachers, and bursary staff.
+            </p>
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="size-11 rounded-lg bg-blue-50 text-[#0b2256] flex items-center justify-center font-bold">
+                  <BookOpen className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-slate-900">Administrator & Setup Manual</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Learn how to configure multi-campus hierarchies, assign teacher roles, import legacy student records, and set up academic terms.
+                </p>
+              </div>
+              <a href="#demo" className="text-xs font-bold text-[#f26522] hover:underline flex items-center gap-1 pt-2">
+                <span>View Setup Guide</span>
+                <ChevronRight className="size-3.5" />
+              </a>
+            </div>
+
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="size-11 rounded-lg bg-orange-50 text-[#f26522] flex items-center justify-center font-bold">
+                  <FileSpreadsheet className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-slate-900">UNEB & Academic Assessment</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Comprehensive documentation on competency rubric scoring, automatic aggregate computations, and bulk PDF report card printing.
+                </p>
+              </div>
+              <a href="#demo" className="text-xs font-bold text-[#f26522] hover:underline flex items-center gap-1 pt-2">
+                <span>View Grading Specs</span>
+                <ChevronRight className="size-3.5" />
+              </a>
+            </div>
+
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="size-11 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+                  <Receipt className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-slate-900">Bursary & POS Cashier Desk</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Guide to running thermal slip cashier desks, reconciling bank deposits with SchoolPay/Centenary slips, and WhatsApp notifications.
+                </p>
+              </div>
+              <a href="#demo" className="text-xs font-bold text-[#f26522] hover:underline flex items-center gap-1 pt-2">
+                <span>View Bursary Specs</span>
+                <ChevronRight className="size-3.5" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 11C. HELP & SUPPORT SECTION                                               */}
+      {/* ========================================================================= */}
+      <section id="support" className="py-16 bg-slate-50 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0b2256] tracking-tight">
+              Help & Support
+            </h2>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              We are dedicated to supporting your school with responsive, round-the-clock enterprise assistance across Uganda and East Africa.
+            </p>
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1 bg-white border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="size-11 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                  <MessageSquare className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-slate-900">Direct WhatsApp Help Desk</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Instant live chat assistance for school administrators, bursars, and ICT coordinators during business and exam hours.
+                </p>
+              </div>
+              <a
+                href="https://wa.me/256758611414"
+                target="_blank"
+                rel="noreferrer"
+                className="pt-2 text-xs font-bold text-emerald-700 hover:underline flex items-center gap-1.5"
+              >
+                <span>Chat +256 758 611 414</span>
+                <ArrowRight className="size-3.5" />
+              </a>
+            </div>
+
+            <div className="flex-1 bg-white border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="size-11 rounded-lg bg-blue-50 text-[#0b2256] flex items-center justify-center">
+                  <Phone className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-slate-900">Telephone Technical Hotline</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Call our systems engineer directly for immediate emergency recovery, database backups, or server queries.
+                </p>
+              </div>
+              <a
+                href="tel:+256758611414"
+                className="pt-2 text-xs font-bold text-[#0b2256] hover:underline flex items-center gap-1.5"
+              >
+                <span>Call +256 758 611 414</span>
+                <ArrowRight className="size-3.5" />
+              </a>
+            </div>
+
+            <div className="flex-1 bg-white border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="size-11 rounded-lg bg-orange-50 text-[#f26522] flex items-center justify-center">
+                  <Mail className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-slate-900">Official Email Support</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Send requests for feature enhancements, institutional quotations, or custom software integration directly to our engineers.
+                </p>
+              </div>
+              <a
+                href="mailto:sales@edurexa.com"
+                className="pt-2 text-xs font-bold text-[#f26522] hover:underline flex items-center gap-1.5"
+              >
+                <span>sales@edurexa.com</span>
+                <ArrowRight className="size-3.5" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
       {/* 12. EXECUTIVE DEMO BOOKING FORM                                           */}
       {/* ========================================================================= */}
       <section id="demo-form" className="py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="text-center space-y-3">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0b2256] tracking-tight">
-            Schedule an Executive Boardroom Demonstration
+            Schedule Your Free 4-Hour Executive Demonstration
           </h2>
           <p className="text-sm text-slate-600 max-w-xl mx-auto">
-            Experience the multi-campus hierarchy, offline cashier POS registers, and instant financial reports live.
+            Experience the multi-campus hierarchy, offline cashier POS registers, and instant financial reports live with our enterprise team.
           </p>
         </div>
 
         <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-10 shadow-sm">
           {bookingSubmitted ? (
             <div className="text-center py-10 space-y-4">
-              <div className="size-14 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 grid place-items-center mx-auto">
+              <div className="size-14 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mx-auto">
                 <Check className="size-7" />
               </div>
               <h3 className="text-2xl font-bold text-slate-900">Demo Request Received!</h3>
               <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
-                Thank you, <strong>{bookingData.contactPerson}</strong>. Our enterprise team will contact you on WhatsApp ({bookingData.phone}) within 2 hours to confirm your demonstration.
+                Thank you, <strong>{bookingData.contactPerson}</strong>. Our enterprise team will contact you on WhatsApp ({bookingData.phone}) within 2 hours to activate your free 4-hour demonstration.
               </p>
               <a
-                href={`https://wa.me/256701116781?text=Hello%20EDUREXA,%20I%20just%20submitted%20a%20demo%20request%20for%20${encodeURIComponent(
+                href={`https://wa.me/256758611414?text=Hello%20EDUREXA,%20I%20just%20submitted%20a%20demo%20request%20for%20${encodeURIComponent(
                   bookingData.schoolName
                 )}`}
                 target="_blank"
@@ -850,8 +955,8 @@ export default function EdurexaMarketingHome() {
             </div>
           ) : (
             <form onSubmit={handleBookingSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex-1 space-y-1.5">
                   <Label className="text-xs font-semibold text-slate-700">School / Group Name *</Label>
                   <Input
                     placeholder="e.g. St. Lawrence Educational Group"
@@ -862,7 +967,7 @@ export default function EdurexaMarketingHome() {
                   />
                 </div>
 
-                <div className="space-y-1.5">
+                <div className="flex-1 space-y-1.5">
                   <Label className="text-xs font-semibold text-slate-700">Your Full Name & Title *</Label>
                   <Input
                     placeholder="e.g. Dr. Ronald Mukasa (Director)"
@@ -874,11 +979,11 @@ export default function EdurexaMarketingHome() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex-1 space-y-1.5">
                   <Label className="text-xs font-semibold text-slate-700">WhatsApp / Direct Phone *</Label>
                   <Input
-                    placeholder="+256 701 116 781"
+                    placeholder="+256 758 611 414"
                     value={bookingData.phone}
                     onChange={(e) => setBookingData({ ...bookingData, phone: e.target.value })}
                     required
@@ -886,7 +991,7 @@ export default function EdurexaMarketingHome() {
                   />
                 </div>
 
-                <div className="space-y-1.5">
+                <div className="flex-1 space-y-1.5">
                   <Label className="text-xs font-semibold text-slate-700">Official Email *</Label>
                   <Input
                     type="email"
@@ -917,7 +1022,7 @@ export default function EdurexaMarketingHome() {
                 type="submit"
                 className="w-full bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg h-11 text-xs font-bold shadow-2xs transition-colors"
               >
-                Confirm Executive Demo Request
+                Confirm Free 4-Hour Demo Request
               </Button>
             </form>
           )}
@@ -942,16 +1047,16 @@ export default function EdurexaMarketingHome() {
             <Link href="/super-admin" className="hover:text-[#0b2256] transition-colors">
               Super Admin Console
             </Link>
-            <Link href="/wellstar" className="hover:text-[#0b2256] transition-colors">
-              Wellstar Flagship School
-            </Link>
+            <a href="#demo" className="hover:text-[#0b2256] transition-colors">
+              Free 4-Hour Demo
+            </a>
             <a
-              href="https://wa.me/256701116781"
+              href="https://wa.me/256758611414"
               target="_blank"
               rel="noreferrer"
               className="text-[#f26522] font-semibold hover:underline"
             >
-              WhatsApp Sales: +256 701 116 781
+              WhatsApp Sales: +256 758 611 414
             </a>
           </div>
         </div>
