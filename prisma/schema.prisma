@@ -38,6 +38,9 @@ model Campus {
   contactEmail  String?
   contactPhone  String?
   status        String              @default("ACTIVE")
+  healthStatus  String              @default("HEALTHY") // HEALTHY, DEGRADED, CRITICAL, OFFLINE
+  latencyMs     Int                 @default(42)
+  lastHeartbeat DateTime            @default(now())
   students      Student[]
   teachers      Teacher[]
   classes       Class[]
@@ -49,6 +52,40 @@ model Campus {
   updatedAt     DateTime            @updatedAt
 
   @@index([schoolId])
+}
+
+model PlatformErrorLog {
+  id          String    @id @default(uuid())
+  schoolId    String?
+  campusId    String?
+  severity    String    @default("ERROR") // CRITICAL, ERROR, WARNING, INFO
+  source      String    // e.g. "AUTH_GUARD", "API_SYNC", "DATABASE", "POS_WORKSTATION", "MIGRATION_JOB"
+  message     String
+  stackTrace  String?
+  ipAddress   String?
+  isResolved  Boolean   @default(false)
+  resolvedAt  DateTime?
+  resolvedBy  String?
+  createdAt   DateTime  @default(now())
+
+  @@index([severity, isResolved])
+  @@index([createdAt])
+}
+
+model DatabaseBackupRecord {
+  id            String   @id @default(uuid())
+  backupType    String   @default("AUTOMATED_SNAPSHOT") // MANUAL_TRIGGER, CONTINUOUS_WAL, SCHEDULED_OFFSITE
+  fileSizeBytes Int      @default(0)
+  recordCount   Int      @default(0)
+  checksum      String?  // SHA-256 integrity hash
+  storageTarget String   @default("IMMUTABLE_WORM_S3") // IMMUTABLE_WORM_S3, GCS_COLDLINE, LOCAL_ARCHIVE
+  status        String   @default("COMPLETED") // COMPLETED, IN_PROGRESS, FAILED
+  downloadUrl   String?
+  triggeredBy   String   @default("SYSTEM_SCHEDULER")
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  @@index([createdAt])
 }
 
 model Application {
