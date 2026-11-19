@@ -43,6 +43,15 @@ import {
   ChevronDown,
   MonitorCheck,
   ArrowUpRight,
+  Bed,
+  Bus,
+  Library,
+  UserPlus,
+  Clock,
+  Printer,
+  Smartphone,
+  ShieldAlert,
+  FolderSync,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,9 +60,11 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 type DemoRole = "director" | "finance" | "academic" | "student" | "observability";
+type ModuleCategory = "academic" | "finance" | "logistics" | "communication";
 
 export default function EdurexaMarketingHome() {
   const [activeTab, setActiveTab] = useState<DemoRole>("director");
+  const [activeModuleCat, setActiveModuleCat] = useState<ModuleCategory>("academic");
   const [campusesCount, setCampusesCount] = useState<number>(3);
   const [studentsCount, setStudentsCount] = useState<number>(2500);
   const [bookingSubmitted, setBookingSubmitted] = useState<boolean>(false);
@@ -82,10 +93,10 @@ export default function EdurexaMarketingHome() {
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-2 sm:gap-4">
           <span className="flex items-center gap-1.5 font-bold text-white">
             <Sparkles className="size-3.5 text-amber-400" />
-            Live Client Proof of Concept:
+            Live Production Proof of Concept:
           </span>
           <span>
-            See how <strong>Wellstar Bright Educational Group</strong> operates 4,950+ students across 2 campuses on EDUREXA.
+            See how <strong>Wellstar Bright Educational Group</strong> runs 4,950+ students across 2 campuses on EDUREXA.
           </span>
           <Link
             href="/wellstar"
@@ -114,9 +125,12 @@ export default function EdurexaMarketingHome() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-7 text-xs font-semibold text-slate-300">
+          <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-300">
+            <a href="#modules-suite" className="hover:text-white transition-colors">
+              Modules & Capabilities
+            </a>
             <a href="#visual-demo" className="hover:text-white transition-colors">
-              Visual Product Demo
+              Visual Tour
             </a>
             <a href="#wellstar-showcase" className="hover:text-white transition-colors flex items-center gap-1">
               <span>Onboarded School</span>
@@ -124,11 +138,11 @@ export default function EdurexaMarketingHome() {
                 Live #1
               </span>
             </a>
-            <a href="#six-pillars" className="hover:text-white transition-colors">
-              Ecosystem Pillars
+            <a href="#comparison" className="hover:text-white transition-colors">
+              Why EDUREXA
             </a>
             <a href="#roi-calculator" className="hover:text-white transition-colors">
-              Fee Recovery Calculator
+              Fee Calculator
             </a>
           </nav>
 
@@ -167,7 +181,7 @@ export default function EdurexaMarketingHome() {
           </Badge>
 
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight max-w-4xl mx-auto leading-[1.12]">
-            The Complete Digital Ecosystem for Modern Schools.
+            The Complete Digital Operating System for Modern Schools.
           </h1>
 
           <p className="text-base sm:text-lg text-slate-400 max-w-3xl mx-auto font-normal leading-relaxed">
@@ -231,7 +245,251 @@ export default function EdurexaMarketingHome() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 4. THE VISUAL PRODUCT DEMO STUDIO (INTERACTIVE UI SHOWCASE)               */}
+      {/* 4. COMPREHENSIVE SCHOOL MODULES SUITE (INSPIRED BY SCHOOLHIVE & UPGRADED)   */}
+      {/* ========================================================================= */}
+      <section id="modules-suite" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="text-center space-y-3">
+          <Badge className="bg-blue-500/10 text-blue-400 border border-blue-500/30 text-xs font-semibold px-3 py-1">
+            EVERYTHING MODERN SCHOOLS NEED
+          </Badge>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Complete Institutional Operations Suite
+          </h2>
+          <p className="text-sm text-slate-400 max-w-2xl mx-auto">
+            From student registration and sibling billing to UNEB exams, dormitories, buses, and financial ledgers.
+          </p>
+        </div>
+
+        {/* Module Category Switcher */}
+        <div className="flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto">
+          {[
+            { id: "academic", label: "Academics & SIS", icon: BookOpen },
+            { id: "finance", label: "Fees & Cashier POS", icon: Receipt },
+            { id: "logistics", label: "Hostels, Buses & Meals", icon: Bed },
+            { id: "communication", label: "WhatsApp, SMS & Portals", icon: Smartphone },
+          ].map((cat) => {
+            const Icon = cat.icon;
+            const active = activeModuleCat === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveModuleCat(cat.id as ModuleCategory)}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all",
+                  active
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
+                    : "bg-slate-800/80 text-slate-400 hover:text-white hover:bg-slate-800"
+                )}
+              >
+                <Icon className="size-4" />
+                <span>{cat.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Dynamic Module Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {activeModuleCat === "academic" && (
+            <>
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-blue-500/10 text-blue-400 grid place-items-center">
+                  <UserPlus className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Student Information System (SIS)</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Comprehensive student profiles tracking Learner Identification Numbers (LIN), UNEB index numbers, health/medical notes, and emergency guardian contacts.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-indigo-500/10 text-indigo-400 grid place-items-center">
+                  <Users className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Sibling Linkage & Family Accounts</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Link multiple brothers and sisters under one single parent/guardian account for consolidated fee statements and unified attendance monitoring.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-purple-500/10 text-purple-400 grid place-items-center">
+                  <GraduationCap className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">UNEB & New Lower Secondary Curriculum</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Native grading for both Competence-Based activities of integration (Score 1-3) and traditional O-Level/A-Level UNEB schedules with auto-generated report cards.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-emerald-500/10 text-emerald-400 grid place-items-center">
+                  <Clock className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Class Timetabling & Teacher Routines</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Automatic conflict-free scheduling for subject periods, lab sessions, and teacher workload allocations across multiple campus streams.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-cyan-500/10 text-cyan-400 grid place-items-center">
+                  <UserCheck className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Digital Daily & Period Attendance</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  One-tap morning roll-call, period attendance, and boarding evening check-ins. Absentee alerts are automatically queued for parents.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-teal-500/10 text-teal-400 grid place-items-center">
+                  <Library className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Library Catalog & Book Tracking</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Barcode/ISBN cataloging, book checkout logs, overdue book fines, and reading curriculum tracking for secondary school libraries.
+                </p>
+              </div>
+            </>
+          )}
+
+          {activeModuleCat === "finance" && (
+            <>
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-emerald-500/10 text-emerald-400 grid place-items-center">
+                  <Printer className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Offline-First Cashier POS Registers</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Receipt cash, cheque, and bank deposits instantly at the school bursary even during internet blackouts. Automatic thermal slip printing with tamper-proof serials.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-blue-500/10 text-blue-400 grid place-items-center">
+                  <Building2 className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Bank Statement Reconciliations</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Auto-match bank deposits from Centenary Bank, Stanbic, DFCU, and Equity Bank against student fee accounts to eliminate unverified payment claims.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-purple-500/10 text-purple-400 grid place-items-center">
+                  <DollarSign className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Automated Uganda Tax & Statutory Filing</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Automatic deduction of URA PAYE monthly tax tables, NSSF 15% (10% employer + 5% employee), and Withholding Tax (6% WHT) on school supply vouchers.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-amber-500/10 text-amber-400 grid place-items-center">
+                  <BarChart3 className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Multi-Tier Fee Structure Management</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Configure custom fee packages for day vs boarding students, science functional fees, development levies, uniform sets, and remedial clinics.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-cyan-500/10 text-cyan-400 grid place-items-center">
+                  <ShieldAlert className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Fee Arrears & Deficit Protection</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Visual aging reports showing 30, 60, and 90-day outstanding arrears per class. Generate automated fee reminder letters with single-click batch printing.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-indigo-500/10 text-indigo-400 grid place-items-center">
+                  <Receipt className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Double-Entry Financial Ledgers</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Audited chart of accounts tracking school operational expenditures, teacher salary advances, supplier invoices, and capital campus development projects.
+                </p>
+              </div>
+            </>
+          )}
+
+          {activeModuleCat === "logistics" && (
+            <>
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-blue-500/10 text-blue-400 grid place-items-center">
+                  <Bed className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Hostel & Dormitory Bed Allocations</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Track dormitory house occupancy, bed and cubicle allocations, matron and boarding master logs, and sickbay medical permissions.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-amber-500/10 text-amber-400 grid place-items-center">
+                  <Bus className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Transport Logistics & Bus Routes</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Manage school vans and buses, assign pickup stages and routes, track driver credentials, and record vehicle maintenance inspections.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-emerald-500/10 text-emerald-400 grid place-items-center">
+                  <CheckCircle2 className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Dining Hall Biometric Meal Tracking</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Verify student meal entitlement tokens during breakfast, lunch, and supper to prevent unauthorized food consumption and cut kitchen waste.
+                </p>
+              </div>
+            </>
+          )}
+
+          {activeModuleCat === "communication" && (
+            <>
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-emerald-500/10 text-emerald-400 grid place-items-center">
+                  <Smartphone className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">WhatsApp & SMS Notification Gateway</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Instant mobile notifications sent directly to parents for fee payment confirmations, emergency announcements, and end-of-term marks releases.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-cyan-500/10 text-cyan-400 grid place-items-center">
+                  <Laptop className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Dedicated Parent & Guardian Portal</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Parents can log in from any phone or computer to review their child's real-time attendance, fee balance, and download stamped digital report cards.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                <div className="size-10 rounded-xl bg-blue-500/10 text-blue-400 grid place-items-center">
+                  <ShieldCheck className="size-5" />
+                </div>
+                <h4 className="text-base font-bold text-white">Digital Exam Clearance Gate Passes</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Automated generation of QR-coded exam permits once fee thresholds are satisfied, eliminating manual paperwork queues on opening day.
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 5. THE VISUAL PRODUCT DEMO STUDIO (INTERACTIVE UI SHOWCASE)               */}
       {/* ========================================================================= */}
       <section id="visual-demo" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="text-center space-y-3">
@@ -564,7 +822,7 @@ export default function EdurexaMarketingHome() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 5. SPOTLIGHT ONBOARDED SCHOOL #1: WELLSTAR BRIGHT EDUCATIONAL GROUP        */}
+      {/* 6. SPOTLIGHT ONBOARDED SCHOOL #1: WELLSTAR BRIGHT EDUCATIONAL GROUP        */}
       {/* ========================================================================= */}
       <section id="wellstar-showcase" className="py-20 bg-slate-900/60 border-y border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -694,92 +952,75 @@ export default function EdurexaMarketingHome() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 6. SIX CORE BRAND VALUES (PILLARS)                                        */}
+      {/* 7. COMPARISON MATRIX: WHY EDUREXA VS TRADITIONAL STANDALONE SIS            */}
       {/* ========================================================================= */}
-      <section id="six-pillars" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <section id="comparison" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="text-center space-y-3">
           <Badge className="bg-blue-500/10 text-blue-400 border border-blue-500/30 text-xs font-semibold px-3 py-1">
-            CORE FOUNDATION
+            STRATEGIC ADVANTAGE
           </Badge>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            The Six Pillars of the EDUREXA Ecosystem
+            Why Modern Institutions Choose EDUREXA
           </h2>
           <p className="text-sm text-slate-400 max-w-2xl mx-auto">
-            Engineered specifically for leading schools, colleges, and multi-campus conglomerates.
+            Compare how traditional single-school desktop packages stack up against EDUREXA's enterprise cloud ecosystem.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {/* 1. Innovation */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3 hover:border-slate-700 transition-colors">
-            <div className="size-11 rounded-xl bg-blue-500/10 text-blue-400 grid place-items-center font-bold">
-              <Sparkles className="size-5" />
-            </div>
-            <h3 className="text-base font-bold text-white">Innovation</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Cloud-native architecture supporting automated fee schedules, smart biometric meal cards, and automated term billing without manual spreadsheet chaos.
-            </p>
-          </div>
-
-          {/* 2. Excellence */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3 hover:border-slate-700 transition-colors">
-            <div className="size-11 rounded-xl bg-indigo-500/10 text-indigo-400 grid place-items-center font-bold">
-              <Award className="size-5" />
-            </div>
-            <h3 className="text-base font-bold text-white">Excellence</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Double-entry chart of accounts, automated statutory tax filing (URA PAYE, NSSF 15%, WHT 6%), and audited income statements ready for school board reviews.
-            </p>
-          </div>
-
-          {/* 3. Efficiency */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3 hover:border-slate-700 transition-colors">
-            <div className="size-11 rounded-xl bg-emerald-500/10 text-emerald-400 grid place-items-center font-bold">
-              <Layers className="size-5" />
-            </div>
-            <h3 className="text-base font-bold text-white">Efficiency</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Multi-campus management supporting up to 20 branch campuses per school group with one-click executive switching and consolidated financial rollups.
-            </p>
-          </div>
-
-          {/* 4. Connectivity */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3 hover:border-slate-700 transition-colors">
-            <div className="size-11 rounded-xl bg-cyan-500/10 text-cyan-400 grid place-items-center font-bold">
-              <Globe className="size-5" />
-            </div>
-            <h3 className="text-base font-bold text-white">Connectivity</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Connect directors, bursars, headteachers, students, and parents seamlessly with automated WhatsApp alerts and instant payment receipting.
-            </p>
-          </div>
-
-          {/* 5. Intelligence */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3 hover:border-slate-700 transition-colors">
-            <div className="size-11 rounded-xl bg-purple-500/10 text-purple-400 grid place-items-center font-bold">
-              <BarChart3 className="size-5" />
-            </div>
-            <h3 className="text-base font-bold text-white">Intelligence</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Predictive fee arrears analytics, automated deficit alerts, and enrollment trends to protect institutional cash flow before term start.
-            </p>
-          </div>
-
-          {/* 6. Reliability */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3 hover:border-slate-700 transition-colors">
-            <div className="size-11 rounded-xl bg-teal-500/10 text-teal-400 grid place-items-center font-bold">
-              <HardDrive className="size-5" />
-            </div>
-            <h3 className="text-base font-bold text-white">Reliability</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Bank-grade continuous WAL Point-in-Time Recovery (RPO &lt; 1s), zero-loss offline POS cash registers, and immutable SHA-256 backup snapshots.
-            </p>
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="border-b border-slate-800 bg-slate-950/80 text-slate-400 uppercase text-[10px] tracking-wider font-semibold">
+                  <th className="py-4 px-6">Capability & Architecture</th>
+                  <th className="py-4 px-6 text-slate-400">Traditional Desktop / Single SIS</th>
+                  <th className="py-4 px-6 text-blue-400 font-bold bg-blue-950/30">EDUREXA Smart SaaS Ecosystem</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                <tr className="hover:bg-slate-800/30">
+                  <td className="py-4 px-6 font-semibold text-white">Multi-Campus Hierarchy</td>
+                  <td className="py-4 px-6 text-slate-400">Single school only; isolated databases per site</td>
+                  <td className="py-4 px-6 text-emerald-400 font-semibold bg-blue-950/20">
+                    Up to 20 branches per school group with 1-click executive switching
+                  </td>
+                </tr>
+                <tr className="hover:bg-slate-800/30">
+                  <td className="py-4 px-6 font-semibold text-white">Cashier Leakage Protection</td>
+                  <td className="py-4 px-6 text-slate-400">Manual carbon-copy receipts vulnerable to fraud</td>
+                  <td className="py-4 px-6 text-emerald-400 font-semibold bg-blue-950/20">
+                    Offline POS registers with cryptographic receipt serials and thermal printing
+                  </td>
+                </tr>
+                <tr className="hover:bg-slate-800/30">
+                  <td className="py-4 px-6 font-semibold text-white">Uganda Statutory Taxes</td>
+                  <td className="py-4 px-6 text-slate-400">Manual monthly Excel calculations</td>
+                  <td className="py-4 px-6 text-emerald-400 font-semibold bg-blue-950/20">
+                    Built-in URA PAYE tables, NSSF 15%, and WHT 6% statutory deductions
+                  </td>
+                </tr>
+                <tr className="hover:bg-slate-800/30">
+                  <td className="py-4 px-6 font-semibold text-white">Disaster Recovery & Uptime</td>
+                  <td className="py-4 px-6 text-slate-400">Occasional manual flash drive backups</td>
+                  <td className="py-4 px-6 text-emerald-400 font-semibold bg-blue-950/20">
+                    Continuous WAL Point-in-Time Recovery (RPO &lt; 1s) + SHA-256 snapshots
+                  </td>
+                </tr>
+                <tr className="hover:bg-slate-800/30">
+                  <td className="py-4 px-6 font-semibold text-white">Parent Engagement</td>
+                  <td className="py-4 px-6 text-slate-400">Paper report cards sent via students</td>
+                  <td className="py-4 px-6 text-emerald-400 font-semibold bg-blue-950/20">
+                    Instant WhatsApp payment receipts, attendance alerts, and digital student portal
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* 7. INSTITUTIONAL REVENUE LEAKAGE CALCULATOR                               */}
+      {/* 8. INSTITUTIONAL REVENUE LEAKAGE CALCULATOR                               */}
       {/* ========================================================================= */}
       <section id="roi-calculator" className="py-16 bg-slate-900/40 border-y border-slate-800">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 text-center">
@@ -849,7 +1090,7 @@ export default function EdurexaMarketingHome() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 8. EXECUTIVE DEMO BOOKING FORM                                            */}
+      {/* 9. EXECUTIVE DEMO BOOKING FORM                                            */}
       {/* ========================================================================= */}
       <section id="demo-form" className="py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="text-center space-y-3">
@@ -963,7 +1204,7 @@ export default function EdurexaMarketingHome() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 9. FOOTER                                                                 */}
+      {/* 10. FOOTER                                                                */}
       {/* ========================================================================= */}
       <footer className="border-t border-slate-800 py-12 bg-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-slate-400">
