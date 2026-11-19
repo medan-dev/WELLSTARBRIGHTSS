@@ -11,7 +11,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Users, GraduationCap, BookOpen, ClipboardCheck,
   Wallet, Bell, LogOut, Menu, Search, Moon, Sun, FileText, LayoutTemplate, Video, ImageIcon, ChevronLeft, ChevronRight,
-  Utensils
+  Utensils, ShieldCheck
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -166,6 +166,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Input placeholder="Search students, teachers, classes…" className="pl-9 bg-secondary/50 border-none focus-visible:ring-1" />
             </div>
             <div className="ml-auto flex items-center gap-3">
+              <Link href="/super-admin" target="_blank" title="Super Admin SaaS HQ (Multi-Tenant Onboarding)">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="hidden sm:flex text-xs h-9 rounded-xl font-bold gap-1.5 border-indigo-500/30 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20"
+                >
+                  <ShieldCheck className="size-3.5" />
+                  <span>SaaS HQ</span>
+                </Button>
+              </Link>
               <Button variant="ghost" size="icon" onClick={toggleDark} aria-label="Toggle theme" className="rounded-full">
                 {dark ? <Sun className="size-5" /> : <Moon className="size-5" />}
               </Button>
