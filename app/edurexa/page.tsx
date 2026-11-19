@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "@/assets/logo.png";
+import edurexaLogo from "@/assets/edurexa-logo.png";
 import {
   Building2,
   ShieldCheck,
@@ -58,16 +58,17 @@ export default function EdurexaMarketingPage() {
       <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Image src={logo} alt="EDUREXA Logo" className="w-10 h-10 object-contain" />
-            <div>
-              <div className="font-black text-2xl tracking-tight text-white flex items-center gap-2">
-                <span>EDUREXA</span>
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded-full">
-                  Ecosystem
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 font-medium">Smart School Management Platform</p>
+            <div className="bg-white rounded-2xl p-1.5 shadow-sm border border-slate-200/20">
+              <Image
+                src={edurexaLogo}
+                alt="EDUREXA - Empowering Schools. Simplifying Education."
+                className="h-12 sm:h-14 w-auto object-contain"
+                priority
+              />
             </div>
+            <span className="hidden sm:inline-block text-[11px] font-bold uppercase tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/30 px-2.5 py-1 rounded-full">
+              Smart Ecosystem
+            </span>
           </div>
 
           <div className="flex items-center gap-3 sm:gap-4">
@@ -417,11 +418,13 @@ export default function EdurexaMarketingPage() {
       {/* Footer */}
       <footer className="border-t border-slate-800 py-12 bg-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-slate-400">
-          <div className="flex items-center gap-3">
-            <Image src={logo} alt="EDUREXA Logo" className="w-8 h-8 object-contain" />
+          <div className="flex items-center gap-4">
+            <div className="bg-white rounded-xl p-1.5 shadow-sm">
+              <Image src={edurexaLogo} alt="EDUREXA Logo" className="h-10 w-auto object-contain" />
+            </div>
             <div>
-              <span className="font-bold text-white text-base">EDUREXA</span>
-              <p className="text-xs text-slate-500">The Complete Digital Ecosystem for Modern Schools.</p>
+              <span className="font-extrabold text-white text-base">EDUREXA</span>
+              <p className="text-xs text-slate-400">The Complete Digital Ecosystem for Modern Schools.</p>
             </div>
           </div>
 

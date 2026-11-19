@@ -3,6 +3,7 @@
 import { useEffect, useState, useTransition, Component, ErrorInfo, ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import edurexaLogo from "@/assets/edurexa-logo.png";
 import logo from "@/assets/logo.png";
 import {
   LayoutDashboard,
@@ -474,12 +475,16 @@ function SuperAdminDashboardContent() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-100/70 dark:bg-slate-950 p-6 sm:p-10">
         <div className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 sm:p-10 shadow-2xl space-y-8">
-          <div className="flex items-center gap-4 justify-center">
-            <Image src={logo} alt="Logo" className="w-12 h-12 sm:w-14 sm:h-14 object-contain" />
-            <div>
-              <div className="font-extrabold text-2xl sm:text-3xl text-slate-900 dark:text-white leading-tight tracking-tight">EDUREXA</div>
-              <div className="text-sm font-semibold text-blue-600 dark:text-blue-400">Smart School Management Ecosystem</div>
+          <div className="flex flex-col items-center gap-3 justify-center text-center">
+            <div className="bg-white rounded-3xl p-3 shadow-md border border-slate-200">
+              <Image
+                src={edurexaLogo}
+                alt="EDUREXA Logo"
+                className="w-56 sm:w-64 h-auto object-contain"
+                priority
+              />
             </div>
+            <div className="text-sm font-bold text-blue-600 dark:text-blue-400 mt-1">Smart School Management Ecosystem</div>
           </div>
 
           <div className="text-center space-y-2">
@@ -550,14 +555,15 @@ function SuperAdminDashboardContent() {
         )}
       >
         {/* Brand Header */}
-        <div className={cn("p-5 flex items-center gap-3 border-b border-slate-200 dark:border-slate-800", sidebarCollapsed ? "justify-center px-2" : "")}>
-          <Image src={logo} alt="Logo" className="w-10 h-10 object-contain shrink-0" />
-          {!sidebarCollapsed && (
-            <div className="overflow-hidden whitespace-nowrap leading-tight">
-              <div className="font-extrabold text-lg text-slate-900 dark:text-white tracking-tight">EDUREXA</div>
-              <div className="text-[11px] text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">Smart School Ecosystem</div>
-            </div>
-          )}
+        <div className={cn("p-4 flex items-center justify-center border-b border-slate-200 dark:border-slate-800", sidebarCollapsed ? "px-2" : "px-4")}>
+          <div className="bg-white rounded-2xl p-1.5 shadow-xs border border-slate-200 flex items-center justify-center w-full">
+            <Image
+              src={edurexaLogo}
+              alt="EDUREXA Logo"
+              className={cn("object-contain", sidebarCollapsed ? "w-10 h-10" : "h-11 w-auto max-w-[210px]")}
+              priority
+            />
+          </div>
         </div>
 
         {/* Sidebar Nav Items (Larger fonts and icons) */}
