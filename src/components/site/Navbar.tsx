@@ -31,7 +31,6 @@ import { cn } from "@/lib/utils";
 interface NavLink {
   href: string;
   label: string;
-  badge?: string;
   isExternal?: boolean;
 }
 
@@ -79,7 +78,7 @@ export function Navbar() {
 
   const mainNavLinks: NavLink[] = [
     { href: "/", label: "Home" },
-    { href: "/wellstar", label: "Onboarded School", badge: "Wellstar #1" },
+    { href: "/wellstar", label: "Onboarded School" },
     { href: "/#pricing", label: "Pricing" },
     { href: "/#roi-calculator", label: "Fee Calculator" },
     { href: "/#testimonials", label: "Testimonials" },
@@ -151,14 +150,10 @@ export function Navbar() {
           <div className="flex items-center gap-3 text-[11px]">
             <Link
               href="/wellstar"
-              className="inline-flex items-center gap-1.5 text-slate-200 hover:text-amber-300 font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 text-slate-200 hover:text-white font-medium transition-colors"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span className="hidden xs:inline">Flagship Client:</span>
-              <strong className="text-white">Wellstar Bright SS</strong>
+              <span className="hidden xs:inline text-slate-300">Flagship Client:</span>
+              <strong className="text-white hover:underline">Wellstar Bright SS</strong>
             </Link>
 
             <span className="text-white/20">|</span>
@@ -273,14 +268,11 @@ export function Navbar() {
             <Link
               href="/wellstar"
               className={cn(
-                "inline-flex items-center gap-1.5 transition-colors hover:text-[#f26522]",
+                "transition-colors hover:text-[#f26522]",
                 pathname === "/wellstar" ? "text-[#f26522]" : "text-slate-700"
               )}
             >
-              <span>Onboarded School</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
-                Wellstar #1
-              </span>
+              Onboarded School
             </Link>
 
             <a href="/#pricing" className="transition-colors hover:text-[#f26522]">
@@ -479,11 +471,6 @@ export function Navbar() {
                     className="flex items-center justify-between p-3 rounded-xl text-sm font-semibold text-slate-800 hover:bg-slate-50 hover:text-[#0b2256] transition-colors"
                   >
                     <span>{link.label}</span>
-                    {link.badge && (
-                      <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
-                        {link.badge}
-                      </span>
-                    )}
                   </Link>
                 ))}
               </div>

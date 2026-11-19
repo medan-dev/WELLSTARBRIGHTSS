@@ -58,7 +58,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 type BillingPeriod = "term" | "year";
@@ -101,11 +100,6 @@ export default function EdurexaMarketingHome() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Column: Heading, Value Proposition & CTAs */}
             <div className="lg:col-span-6 space-y-6 text-left">
-              <div className="inline-flex items-center gap-2 bg-orange-50 border border-orange-200 text-[#f26522] px-3.5 py-1 rounded-full text-xs font-semibold">
-                <span className="bg-[#f26522] text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full uppercase">NEW</span>
-                <span>Smart Multi-Tenant Cloud Operating System</span>
-              </div>
-
               <h1 className="text-3xl sm:text-5xl lg:text-5xl font-extrabold text-[#0b2256] tracking-tight leading-[1.15]">
                 <span className="text-[#f26522]">EDUREXA</span> a Powerful Tool To Represent Your School
               </h1>
@@ -170,11 +164,11 @@ export default function EdurexaMarketingHome() {
                 <div className="p-5 bg-slate-50 space-y-4">
                   <div className="flex items-center justify-between border-b border-slate-200 pb-3">
                     <div>
-                      <span className="text-[10px] uppercase font-bold text-[#f26522]">FLAGSHIP TENANT #1</span>
+                      <span className="text-[10px] uppercase font-semibold text-slate-500 tracking-wider">Live Tenant</span>
                       <h4 className="text-sm font-bold text-slate-900">Wellstar Bright Educational Group</h4>
                     </div>
-                    <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                      Mukono Main Campus (Branch 01)
+                    <span className="text-xs font-medium text-slate-600">
+                      Mukono Main Campus
                     </span>
                   </div>
 
@@ -263,9 +257,6 @@ export default function EdurexaMarketingHome() {
       <section id="about" className="py-20 bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center space-y-3 max-w-3xl mx-auto">
-            <Badge className="bg-blue-50 text-[#0b2256] border border-blue-200 text-xs font-semibold px-3 py-1">
-              THE COMPLETE PLATFORM
-            </Badge>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0b2256] tracking-tight">
               About EDUREXA
             </h2>
@@ -362,9 +353,6 @@ export default function EdurexaMarketingHome() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
-              <Badge className="bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold px-3 py-1">
-                LIVE PRODUCTION ONBOARDED SCHOOL #1
-              </Badge>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0b2256] tracking-tight">
                 See How Wellstar Bright Educational Group Runs on EDUREXA
               </h2>
@@ -830,9 +818,6 @@ export default function EdurexaMarketingHome() {
       {/* ========================================================================= */}
       <section id="demo-form" className="py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="text-center space-y-3">
-          <Badge className="bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold px-3 py-1">
-            ONBOARDING & DEMOS
-          </Badge>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0b2256] tracking-tight">
             Schedule an Executive Boardroom Demonstration
           </h2>
