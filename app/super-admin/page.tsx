@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition, Component, ErrorInfo, ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
@@ -48,7 +48,9 @@ import {
   HardDrive,
   Play,
   CheckCircle,
-  LogOut,
+  Maximize2,
+  Minimize2,
+  Tv,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -97,6 +99,50 @@ import {
   CampusHealthTelemetry,
 } from "@/lib/super-admin-observability";
 
+// Defensive Zero-Crash Error Boundary
+class SuperAdminErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: Error | null }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error("Super Admin Dashboard Error Captured:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-6">
+          <div className="max-w-md w-full bg-white dark:bg-slate-900 border border-red-200 dark:border-red-900 rounded-3xl p-8 shadow-xl text-center space-y-4">
+            <div className="size-14 rounded-2xl bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 grid place-items-center mx-auto">
+              <AlertTriangle className="size-7" />
+            </div>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Dashboard Recovered</h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              An unexpected display glitch occurred. The fail-safe caught it to prevent system crash.
+            </p>
+            <Button
+              onClick={() => {
+                this.setState({ hasError: false, error: null });
+                window.location.reload();
+              }}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-11 text-sm font-semibold"
+            >
+              Reload Dashboard
+            </Button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 type NavSection =
   | "overview"
   | "schools"
@@ -107,21 +153,38 @@ type NavSection =
   | "security"
   | "audit";
 
+interface NavItem {
+  id: NavSection;
+  label: string;
+  icon: any;
+  badge?: string;
+  badgeColor?: string;
+}
+
 export default function SuperAdminPage() {
+  return (
+    <SuperAdminErrorBoundary>
+      <SuperAdminDashboardContent />
+    </SuperAdminErrorBoundary>
+  );
+}
+
+function SuperAdminDashboardContent() {
   const [isPending, startTransition] = useTransition();
 
-  // Authentication State (Master PIN: 9900)
+  // Master Authentication State (PIN: 9900)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [pinInput, setPinInput] = useState<string>("");
   const [pinError, setPinError] = useState<string | null>(null);
 
-  // Layout State
+  // Layout & Responsive Mode
   const [activeNav, setActiveNav] = useState<NavSection>("overview");
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [tvMode, setTvMode] = useState<boolean>(false); // High-visibility TV / Boardroom wallboard view
 
-  // Core Data States
+  // Core Data States with Safe Fallbacks
   const [telemetry, setTelemetry] = useState<GlobalSaaSTelemetry | null>(null);
   const [vitals, setVitals] = useState<ClusterPerformanceVitals | null>(null);
   const [campusesHealth, setCampusesHealth] = useState<CampusHealthTelemetry[]>([]);
@@ -130,12 +193,12 @@ export default function SuperAdminPage() {
   const [backupHistory, setBackupHistory] = useState<any[]>([]);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
 
-  // Filtering
+  // Filtering & Search
   const [healthFilter, setHealthFilter] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Modals & Actions
+  // Modals & Action States
   const [isProvisionOpen, setIsProvisionOpen] = useState<boolean>(false);
   const [isQuotaModalOpen, setIsQuotaModalOpen] = useState<boolean>(false);
   const [selectedSchoolForQuota, setSelectedSchoolForQuota] = useState<DetailedSchoolGroup | null>(null);
@@ -245,7 +308,7 @@ export default function SuperAdminPage() {
       sessionStorage.setItem("ws_super_admin_unlocked", "true");
       setPinError(null);
     } else {
-      setPinError("Invalid Master Super-Admin Key. Access Denied.");
+      setPinError("Invalid Master Security Key. Access Denied.");
     }
   };
 
@@ -409,66 +472,58 @@ export default function SuperAdminPage() {
   // Sign-In Screen
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 p-4">
-        <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-xl space-y-6">
-          <div className="flex items-center gap-3 justify-center">
-            <Image src={logo} alt="Logo" className="w-10 h-10 object-contain" />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-100/70 dark:bg-slate-950 p-6 sm:p-10">
+        <div className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 sm:p-10 shadow-2xl space-y-8">
+          <div className="flex items-center gap-4 justify-center">
+            <Image src={logo} alt="Logo" className="w-12 h-12 sm:w-14 sm:h-14 object-contain" />
             <div>
-              <div className="font-bold text-lg text-slate-900 dark:text-white leading-tight">Wellstar Cloud ERP</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">SaaS Platform Console</div>
+              <div className="font-extrabold text-2xl sm:text-3xl text-slate-900 dark:text-white leading-tight">Wellstar ERP</div>
+              <div className="text-sm font-semibold text-blue-600 dark:text-blue-400">Master Operations Center</div>
             </div>
           </div>
 
-          <div className="text-center space-y-1">
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white">Super Administrator Access</h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Enter your master executive PIN to access multi-tenant diagnostics & observability.
+          <div className="text-center space-y-2">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Super Administrator Access</h1>
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+              Enter your master executive PIN to access multi-tenant cluster diagnostics.
             </p>
           </div>
 
-          <form onSubmit={handlePinSubmit} className="space-y-4">
+          <form onSubmit={handlePinSubmit} className="space-y-6">
             {pinError && (
-              <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/40 rounded-xl text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
-                <AlertCircle className="size-4 shrink-0" />
+              <div className="p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/40 rounded-2xl text-red-600 dark:text-red-400 text-sm font-medium flex items-center gap-2.5">
+                <AlertCircle className="size-5 shrink-0" />
                 <span>{pinError}</span>
               </div>
             )}
 
-            <div className="space-y-1.5">
-              <Label className="text-xs text-slate-700 dark:text-slate-300 font-medium">Master Security PIN</Label>
+            <div className="space-y-2">
+              <Label className="text-sm sm:text-base text-slate-700 dark:text-slate-300 font-bold">Master Security PIN</Label>
               <Input
                 type="password"
                 placeholder="Enter 4-digit PIN (9900)"
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
                 autoFocus
-                className="text-center tracking-widest text-lg h-11 rounded-xl bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                className="text-center tracking-widest text-2xl h-14 rounded-2xl bg-slate-50 dark:bg-slate-950 border-slate-300 dark:border-slate-700 font-bold"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white text-white dark:text-slate-900 rounded-xl h-10 font-semibold text-xs transition-all shadow-sm"
+              className="w-full bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white text-white dark:text-slate-900 rounded-2xl h-13 font-bold text-base transition-all shadow-md"
             >
-              Access Dashboard
+              Sign In to Command Center
             </Button>
           </form>
 
-          <div className="text-[11px] text-slate-400 text-center border-t border-slate-100 dark:border-slate-800 pt-4 flex items-center justify-center gap-1.5">
-            <ShieldCheck className="size-3.5 text-emerald-600" />
-            <span>200-School Cluster Observability &bull; Continuous WAL PITR</span>
+          <div className="text-xs sm:text-sm text-slate-500 text-center border-t border-slate-200 dark:border-slate-800 pt-5 flex items-center justify-center gap-2">
+            <ShieldCheck className="size-4 text-emerald-600" />
+            <span>200-School Multi-Tenant Cluster &bull; Continuous WAL PITR</span>
           </div>
         </div>
       </div>
     );
-  }
-
-  interface NavItem {
-    id: NavSection;
-    label: string;
-    icon: any;
-    badge?: string;
-    badgeColor?: string;
   }
 
   const navItems: NavItem[] = [
@@ -483,30 +538,30 @@ export default function SuperAdminPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50/70 dark:bg-slate-950 flex font-sans">
+    <div className={cn("min-h-screen bg-slate-100/60 dark:bg-slate-950 flex font-sans", tvMode && "text-lg")}>
       {/* ========================================================================= */}
-      {/* 1. PROFESSIONAL ADMIN SIDEBAR (Responsive, Collapsible)                    */}
+      {/* 1. ULTRA-RESPONSIVE SIDEBAR                                               */}
       {/* ========================================================================= */}
       <aside
         className={cn(
           "fixed lg:sticky top-0 inset-y-0 left-0 z-40 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col transition-all duration-300 lg:translate-x-0 shadow-lg lg:shadow-none",
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full",
-          sidebarCollapsed ? "w-20" : "w-64"
+          sidebarCollapsed ? "w-20" : "w-72"
         )}
       >
         {/* Brand Header */}
-        <div className={cn("p-5 flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 transition-all", sidebarCollapsed ? "justify-center px-2" : "")}>
-          <Image src={logo} alt="Logo" className="w-9 h-9 object-contain shrink-0" />
+        <div className={cn("p-5 flex items-center gap-3 border-b border-slate-200 dark:border-slate-800", sidebarCollapsed ? "justify-center px-2" : "")}>
+          <Image src={logo} alt="Logo" className="w-10 h-10 object-contain shrink-0" />
           {!sidebarCollapsed && (
             <div className="overflow-hidden whitespace-nowrap leading-tight">
-              <div className="font-bold text-sm text-slate-900 dark:text-white">Wellstar ERP</div>
-              <div className="text-[11px] text-blue-600 dark:text-blue-400 font-semibold">Super Admin HQ</div>
+              <div className="font-extrabold text-base text-slate-900 dark:text-white">Wellstar ERP</div>
+              <div className="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">Super Admin HQ</div>
             </div>
           )}
         </div>
 
-        {/* Sidebar Nav Items */}
-        <nav className="flex-1 p-3 space-y-1.5 overflow-y-auto">
+        {/* Sidebar Nav Items (Larger fonts and icons) */}
+        <nav className="flex-1 p-3.5 space-y-2 overflow-y-auto">
           {navItems.map((item) => {
             const active = activeNav === item.id;
             const Icon = item.icon;
@@ -514,27 +569,27 @@ export default function SuperAdminPage() {
               <button
                 key={item.id}
                 onClick={() => {
-                  setActiveNav(item.id as NavSection);
+                  setActiveNav(item.id);
                   setMobileMenuOpen(false);
                 }}
                 title={sidebarCollapsed ? item.label : undefined}
                 className={cn(
-                  "w-full flex items-center rounded-xl font-medium transition-all duration-200 group relative",
-                  sidebarCollapsed ? "justify-center p-3" : "gap-3 px-3 py-2.5 text-xs",
+                  "w-full flex items-center rounded-2xl font-bold transition-all duration-200 group relative",
+                  sidebarCollapsed ? "justify-center p-3.5" : "gap-3.5 px-4 py-3 text-sm sm:text-base",
                   active
-                    ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow-sm"
+                    ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow-md"
                     : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
                 )}
               >
-                <Icon className={cn("shrink-0", sidebarCollapsed ? "size-5" : "size-4")} />
+                <Icon className={cn("shrink-0", sidebarCollapsed ? "size-6" : "size-5")} />
                 {!sidebarCollapsed && (
                   <span className="truncate flex-1 text-left">{item.label}</span>
                 )}
                 {!sidebarCollapsed && item.badge && (
                   <span
                     className={cn(
-                      "px-1.5 py-0.2 rounded-md text-[10px] font-mono font-bold",
-                      item.badgeColor || "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+                      "px-2 py-0.5 rounded-lg text-xs font-mono font-extrabold",
+                      item.badgeColor || "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
                     )}
                   >
                     {item.badge}
@@ -546,35 +601,33 @@ export default function SuperAdminPage() {
         </nav>
 
         {/* Sidebar Footer */}
-        <div className="p-3 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-2">
-          {/* Link back to live school portal */}
+        <div className="p-3.5 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-2.5">
           <Link
             href="/admin/dashboard"
             target="_blank"
             title={sidebarCollapsed ? "Live School Portal" : undefined}
             className={cn(
-              "flex items-center rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors",
-              sidebarCollapsed ? "justify-center p-3" : "gap-2.5 px-3 py-2 text-xs font-semibold"
+              "flex items-center rounded-2xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-bold",
+              sidebarCollapsed ? "justify-center p-3.5" : "gap-3 px-4 py-2.5 text-sm"
             )}
           >
-            <ArrowUpRight className="size-4 shrink-0 text-blue-600" />
+            <ArrowUpRight className="size-5 shrink-0 text-blue-600" />
             {!sidebarCollapsed && <span>Live School Portal</span>}
           </Link>
 
-          {/* Toggle Sidebar Size */}
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="hidden lg:flex w-full items-center justify-center p-2 rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="hidden lg:flex w-full items-center justify-center p-2.5 rounded-2xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
-            {sidebarCollapsed ? <ChevronRight className="size-4" /> : <ChevronLeft className="size-4" />}
+            {sidebarCollapsed ? <ChevronRight className="size-5" /> : <ChevronLeft className="size-5" />}
           </button>
         </div>
       </aside>
 
-      {/* Mobile Backdrop */}
+      {/* Mobile Drawer Overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-30 bg-black/40 lg:hidden" onClick={() => setMobileMenuOpen(false)} />
+        <div className="fixed inset-0 z-30 bg-black/50 backdrop-blur-xs lg:hidden" onClick={() => setMobileMenuOpen(false)} />
       )}
 
       {/* ========================================================================= */}
@@ -583,51 +636,64 @@ export default function SuperAdminPage() {
       <div className="flex-1 min-w-0 flex flex-col transition-all duration-300">
         {/* Top Header */}
         <header className="sticky top-0 z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-xs">
-          <div className="flex items-center gap-4 px-4 lg:px-8 h-16">
+          <div className="flex items-center gap-4 px-4 lg:px-8 h-18">
             <button
-              className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="lg:hidden p-2.5 -ml-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open mobile navigation"
             >
-              <Menu className="size-5" />
+              <Menu className="size-6 text-slate-700 dark:text-slate-300" />
             </button>
 
-            {/* Breadcrumb / Title */}
+            {/* Breadcrumb Title */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-slate-400">Super Admin</span>
-              <span className="text-slate-300">/</span>
-              <span className="text-xs font-bold text-slate-900 dark:text-white capitalize">
+              <span className="text-sm font-semibold text-slate-500">Super Admin</span>
+              <span className="text-slate-300 text-sm">/</span>
+              <span className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white capitalize">
                 {activeNav.replace("-", " ")}
               </span>
             </div>
 
-            {/* Topbar Cluster Status Badge */}
-            <div className="hidden md:flex items-center gap-3 ml-6 text-xs text-slate-500 border-l border-slate-200 dark:border-slate-800 pl-4">
-              <span className="flex items-center gap-1.5">
-                <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="font-semibold text-slate-700 dark:text-slate-300">DB: {vitals?.databaseLatencyMs ?? 42}ms</span>
+            {/* Cluster Status Pills (Visible on Tablet, Desktop, TV) */}
+            <div className="hidden sm:flex items-center gap-3 ml-6 text-xs sm:text-sm text-slate-600 dark:text-slate-300 border-l border-slate-200 dark:border-slate-800 pl-4">
+              <span className="flex items-center gap-2 font-bold">
+                <span className="size-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>DB Latency: <strong className="text-slate-900 dark:text-white font-mono">{vitals?.databaseLatencyMs ?? 42}ms</strong></span>
               </span>
               <span>&bull;</span>
-              <span>Uptime: <strong className="text-slate-700 dark:text-slate-300">{vitals?.clusterUptimePercent ?? 99.98}%</strong></span>
+              <span className="font-medium">Uptime: <strong className="text-slate-900 dark:text-white">{vitals?.clusterUptimePercent ?? 99.98}%</strong></span>
             </div>
 
-            {/* Actions on right */}
-            <div className="ml-auto flex items-center gap-2.5">
+            {/* Action Bar */}
+            <div className="ml-auto flex items-center gap-3">
+              {/* TV Wallboard / Fullscreen Toggle */}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setTvMode(!tvMode)}
+                title={tvMode ? "Exit Wallboard Mode" : "Enter Wallboard / TV Presentation Mode"}
+                className="hidden md:flex h-10 px-3 rounded-xl text-xs sm:text-sm font-semibold gap-1.5"
+              >
+                <Tv className="size-4" />
+                <span>{tvMode ? "Standard" : "TV Mode"}</span>
+              </Button>
+
               <Button
                 variant="outline"
                 size="sm"
                 onClick={loadData}
                 disabled={loading}
-                className="h-9 px-3 rounded-xl text-xs gap-1.5"
+                className="h-10 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-semibold gap-2"
               >
-                <RefreshCw className={cn("size-3.5", loading ? "animate-spin" : "")} />
-                <span className="hidden sm:inline">Refresh</span>
+                <RefreshCw className={cn("size-4", loading ? "animate-spin" : "")} />
+                <span className="hidden sm:inline">Refresh NOC</span>
               </Button>
 
               <Button
                 onClick={() => setIsProvisionOpen(true)}
-                className="h-9 px-3.5 rounded-xl text-xs font-semibold gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
+                className="h-10 px-4 rounded-xl text-xs sm:text-sm font-bold gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
               >
-                <Plus className="size-3.5" />
+                <Plus className="size-4" />
                 <span className="hidden sm:inline">Onboard School</span>
               </Button>
 
@@ -636,42 +702,42 @@ export default function SuperAdminPage() {
                 size="icon"
                 onClick={toggleDark}
                 aria-label="Toggle theme"
-                className="rounded-full h-9 w-9"
+                className="rounded-full h-10 w-10"
               >
-                {darkMode ? <Sun className="size-4" /> : <Moon className="size-4" />}
+                {darkMode ? <Sun className="size-5" /> : <Moon className="size-5" />}
               </Button>
 
-              <div className="size-9 rounded-full bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 grid place-items-center text-xs font-bold shadow-xs">
+              <div className="size-10 rounded-2xl bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 grid place-items-center text-sm font-black shadow-sm">
                 HQ
               </div>
             </div>
           </div>
         </header>
 
-        {/* Dashboard Main Canvas */}
-        <main className="flex-1 p-4 lg:p-8 space-y-6 animate-fade-in">
+        {/* Dashboard Canvas (Optimized for Mobile, Tablets & Boardroom Displays) */}
+        <main className={cn("flex-1 p-4 sm:p-6 lg:p-8 space-y-8 animate-fade-in", tvMode && "max-w-none p-8 space-y-10")}>
           {/* ========================================================================= */}
-          {/* SECTION 1: EXECUTIVE OVERVIEW                                             */}
+          {/* 1. EXECUTIVE OVERVIEW SECTION                                             */}
           {/* ========================================================================= */}
           {activeNav === "overview" && (
-            <div className="space-y-6">
-              {/* Executive Metrics Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {/* Metric 1 */}
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-2">
-                  <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
+            <div className="space-y-8">
+              {/* Giant KPI Tiles (High visibility) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {/* Tile 1 */}
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-3">
+                  <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-sm font-bold">
                     <span>Onboarded Schools</span>
-                    <Building2 className="size-4 text-blue-600" />
+                    <Building2 className="size-6 text-blue-600" />
                   </div>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                    <span className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
                       {telemetry?.totalSchools ?? 1}
                     </span>
-                    <span className="text-xs text-slate-400 font-mono">
+                    <span className="text-sm text-slate-500 font-mono font-bold">
                       / {telemetry?.maxSchoolsLimit ?? 200} Max Limit
                     </span>
                   </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                     <div
                       className="bg-blue-600 h-full rounded-full transition-all"
                       style={{
@@ -682,29 +748,29 @@ export default function SuperAdminPage() {
                       }}
                     />
                   </div>
-                  <div className="text-[11px] text-slate-500 flex justify-between pt-0.5">
-                    <span>Remaining Slots:</span>
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">
-                      {(telemetry?.maxSchoolsLimit ?? 200) - (telemetry?.totalSchools ?? 1)}
+                  <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 flex justify-between font-semibold pt-1">
+                    <span>Available Capacity:</span>
+                    <span className="text-blue-600 dark:text-blue-400 font-bold">
+                      {(telemetry?.maxSchoolsLimit ?? 200) - (telemetry?.totalSchools ?? 1)} Slots Free
                     </span>
                   </div>
                 </div>
 
-                {/* Metric 2 */}
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-2">
-                  <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
-                    <span>Active Branch Campuses</span>
-                    <Layers className="size-4 text-indigo-600" />
+                {/* Tile 2 */}
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-3">
+                  <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-sm font-bold">
+                    <span>Active Campuses</span>
+                    <Layers className="size-6 text-indigo-600" />
                   </div>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                    <span className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
                       {telemetry?.totalCampuses ?? 2}
                     </span>
-                    <span className="text-xs text-slate-400 font-mono">
+                    <span className="text-sm text-slate-500 font-mono font-bold">
                       / {telemetry?.maxCampusesClusterLimit ?? 4000} Max
                     </span>
                   </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                     <div
                       className="bg-indigo-600 h-full rounded-full transition-all"
                       style={{
@@ -717,113 +783,113 @@ export default function SuperAdminPage() {
                       }}
                     />
                   </div>
-                  <div className="text-[11px] text-slate-500 flex justify-between pt-0.5">
+                  <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 flex justify-between font-semibold pt-1">
                     <span>Campus Quota:</span>
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">Max 20 per School</span>
+                    <span className="text-indigo-600 dark:text-indigo-400 font-bold">Max 20 per School</span>
                   </div>
                 </div>
 
-                {/* Metric 3 */}
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-2">
-                  <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
+                {/* Tile 3 */}
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-3">
+                  <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-sm font-bold">
                     <span>Total Students Enrolled</span>
-                    <Users className="size-4 text-emerald-600" />
+                    <Users className="size-6 text-emerald-600" />
                   </div>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                    <span className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
                       {(telemetry?.totalStudents ?? 0).toLocaleString()}
                     </span>
-                    <Badge variant="outline" className="text-[10px] text-emerald-600 font-semibold">
-                      Uncapped
+                    <Badge variant="outline" className="text-xs text-emerald-600 font-bold px-2 py-0.5">
+                      Unthrottled
                     </Badge>
                   </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                     <div className="bg-emerald-600 h-full w-full rounded-full" />
                   </div>
-                  <div className="text-[11px] text-slate-500 flex justify-between pt-0.5">
+                  <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 flex justify-between font-semibold pt-1">
                     <span>Active Meal Cards:</span>
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">
-                      {telemetry?.totalActiveMealCards ?? 0}
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold">
+                      {telemetry?.totalActiveMealCards ?? 0} Cards
                     </span>
                   </div>
                 </div>
 
-                {/* Metric 4 */}
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-2">
-                  <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
-                    <span>Data Durability & Backups</span>
-                    <HardDrive className="size-4 text-teal-600" />
+                {/* Tile 4 */}
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-3">
+                  <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-sm font-bold">
+                    <span>Data Durability & SRE</span>
+                    <HardDrive className="size-6 text-teal-600" />
                   </div>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                      <span className="size-2 rounded-full bg-emerald-500" />
+                    <span className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                      <span className="size-3 rounded-full bg-emerald-500 animate-pulse" />
                       Continuous WAL PITR
                     </span>
-                    <span className="text-xs text-slate-400 font-mono">RPO &lt; 1s</span>
+                    <span className="text-xs text-slate-500 font-mono font-bold">RPO &lt; 1s</span>
                   </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                     <div className="bg-teal-600 h-full w-full rounded-full" />
                   </div>
-                  <div className="text-[11px] text-slate-500 flex justify-between pt-0.5">
-                    <span>Active Cashier Terminals:</span>
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">
+                  <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 flex justify-between font-semibold pt-1">
+                    <span>Active Cashier Desks:</span>
+                    <span className="text-teal-600 dark:text-teal-400 font-bold">
                       {vitals?.activeDbConnections ?? 3} Online
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Quick Jump Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* High-Impact Visual Navigation Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div
                   onClick={() => setActiveNav("campuses")}
-                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs hover:border-blue-300 cursor-pointer transition-all space-y-2"
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm hover:border-blue-400 cursor-pointer transition-all space-y-3"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                      <Activity className="size-4 text-blue-600" />
-                      Campus Health & Latency Monitor
+                    <span className="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                      <Activity className="size-6 text-blue-600" />
+                      Campus Health & Speed Monitor
                     </span>
-                    <ChevronRight className="size-4 text-slate-400" />
+                    <ChevronRight className="size-5 text-slate-400" />
                   </div>
-                  <p className="text-xs text-slate-500">
-                    Inspect query speed, active users, and crash diagnostics for all {campusesHealth.length} campuses.
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Real-time latency (ms), student enrollments, and emergency lockdown controls for all {campusesHealth.length} campuses.
                   </p>
                 </div>
 
                 <div
                   onClick={() => setActiveNav("errors")}
-                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs hover:border-red-300 cursor-pointer transition-all space-y-2"
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm hover:border-red-400 cursor-pointer transition-all space-y-3"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                      <AlertTriangle className="size-4 text-red-500" />
+                    <span className="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                      <AlertTriangle className="size-6 text-red-500" />
                       Platform Error Tracer
                     </span>
                     {unresolvedErrorCount > 0 ? (
-                      <Badge className="bg-red-500 text-white text-[10px]">{unresolvedErrorCount} Issues</Badge>
+                      <Badge className="bg-red-500 text-white text-xs px-2.5 py-1 font-bold">{unresolvedErrorCount} Issues</Badge>
                     ) : (
-                      <ChevronRight className="size-4 text-slate-400" />
+                      <ChevronRight className="size-5 text-slate-400" />
                     )}
                   </div>
-                  <p className="text-xs text-slate-500">
-                    Live capture of 500 exceptions, cashier sync timeouts, and database anomalies.
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Deep exception tracer capturing 500 errors, database query timeouts, and sync anomalies across all branches.
                   </p>
                 </div>
 
                 <div
                   onClick={() => setActiveNav("backups")}
-                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs hover:border-teal-300 cursor-pointer transition-all space-y-2"
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm hover:border-teal-400 cursor-pointer transition-all space-y-3"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                      <HardDrive className="size-4 text-teal-600" />
+                    <span className="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                      <HardDrive className="size-6 text-teal-600" />
                       Disaster Recovery & Snapshots
                     </span>
-                    <ChevronRight className="size-4 text-slate-400" />
+                    <ChevronRight className="size-5 text-slate-400" />
                   </div>
-                  <p className="text-xs text-slate-500">
-                    Generate instant SHA-256 verifiable JSON dumps and review Point-in-Time logs.
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Generate instant SHA-256 verifiable JSON dumps and review Point-in-Time replication logs.
                   </p>
                 </div>
               </div>
@@ -831,103 +897,125 @@ export default function SuperAdminPage() {
           )}
 
           {/* ========================================================================= */}
-          {/* SECTION 2: SCHOOL ORGANIZATIONS & TENANT QUOTAS                           */}
+          {/* 2. SCHOOL ORGANIZATIONS & TENANT QUOTAS                                   */}
           {/* ========================================================================= */}
           {activeNav === "schools" && (
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
                     School Organizations & Conglomerates ({schools.length} / 200)
                   </h2>
-                  <p className="text-xs text-slate-500">
-                    Configure institutional quotas (up to 20 campuses per school group) and toggle status.
+                  <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+                    Configure institutional quotas (strictly up to 20 campuses per school group) and manage statuses.
                   </p>
                 </div>
                 <Button
                   onClick={() => setIsProvisionOpen(true)}
-                  className="h-9 px-3.5 rounded-xl text-xs font-semibold gap-1.5 bg-blue-600 text-white"
+                  className="h-11 px-5 rounded-2xl text-sm font-bold gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
                 >
-                  <Plus className="size-3.5" />
+                  <Plus className="size-4" />
                   <span>Onboard School</span>
                 </Button>
               </div>
 
-              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
-                <table className="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 text-[11px] font-semibold uppercase text-slate-500">
-                      <th className="py-3 px-4">Organization</th>
-                      <th className="py-3 px-4">Code</th>
-                      <th className="py-3 px-4">Campus Allocation</th>
-                      <th className="py-3 px-4">Total Students</th>
-                      <th className="py-3 px-4">Contact</th>
-                      <th className="py-3 px-4">Status</th>
-                      <th className="py-3 px-4 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
-                    {schools.map((school) => (
-                      <tr key={school.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                        <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-white">
-                          {school.name}
-                        </td>
-                        <td className="py-3.5 px-4 font-mono font-medium">{school.code}</td>
-                        <td className="py-3.5 px-4 font-semibold">
-                          {school.campusCount} of {school.maxCampuses} Campuses
-                        </td>
-                        <td className="py-3.5 px-4">{school.totalStudents.toLocaleString()}</td>
-                        <td className="py-3.5 px-4 text-slate-500">{school.contactEmail || "N/A"}</td>
-                        <td className="py-3.5 px-4">
-                          <span
-                            className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
-                              school.status === "ACTIVE"
-                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                : "bg-red-50 text-red-700 border-red-200"
-                            }`}
-                          >
-                            {school.status}
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-4 text-right">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              setSelectedSchoolForQuota(school);
-                              setNewQuotaValue(school.maxCampuses);
-                              setIsQuotaModalOpen(true);
-                            }}
-                            className="h-7 text-xs rounded-lg"
-                          >
-                            Adjust Quota
-                          </Button>
-                        </td>
+              {/* Responsive Table with High Readability */}
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-sm sm:text-base">
+                    <thead>
+                      <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                        <th className="py-4 px-5">Organization</th>
+                        <th className="py-4 px-5">Unique Code</th>
+                        <th className="py-4 px-5">Campus Allocation</th>
+                        <th className="py-4 px-5">Total Students</th>
+                        <th className="py-4 px-5">Primary Contact</th>
+                        <th className="py-4 px-5">Status</th>
+                        <th className="py-4 px-5 text-right">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+                      {schools.map((school) => (
+                        <tr key={school.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                          <td className="py-4 px-5 font-bold text-slate-900 dark:text-white">
+                            {school.name}
+                          </td>
+                          <td className="py-4 px-5 font-mono font-bold text-sm">
+                            <span className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                              {school.code}
+                            </span>
+                          </td>
+                          <td className="py-4 px-5 font-bold">
+                            <div className="space-y-1">
+                              <div>{school.campusCount} of {school.maxCampuses} Campuses</div>
+                              <div className="w-32 bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div
+                                  className="bg-blue-600 h-full rounded-full"
+                                  style={{
+                                    width: `${Math.min(100, (school.campusCount / school.maxCampuses) * 100)}%`,
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-5 font-bold text-slate-800 dark:text-slate-200">
+                            {school.totalStudents.toLocaleString()}
+                          </td>
+                          <td className="py-4 px-5 text-slate-600 dark:text-slate-400 text-sm">
+                            {school.contactEmail || "N/A"}
+                          </td>
+                          <td className="py-4 px-5">
+                            <span
+                              className={cn(
+                                "px-3 py-1 rounded-full text-xs font-bold border",
+                                school.status === "ACTIVE"
+                                  ? "bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-400"
+                                  : "bg-red-50 text-red-700 border-red-300 dark:bg-red-950/60 dark:text-red-400"
+                              )}
+                            >
+                              {school.status}
+                            </span>
+                          </td>
+                          <td className="py-4 px-5 text-right">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setSelectedSchoolForQuota(school);
+                                setNewQuotaValue(school.maxCampuses);
+                                setIsQuotaModalOpen(true);
+                              }}
+                              className="h-9 px-3 text-xs sm:text-sm font-semibold rounded-xl"
+                            >
+                              Adjust Quota
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}
 
           {/* ========================================================================= */}
-          {/* SECTION 3: CAMPUS DIRECTORY, SPEED & HEALTH                               */}
+          {/* 3. CAMPUS DIRECTORY, SPEED & HEALTH (Touch & Wallboard Friendly)          */}
           {/* ========================================================================= */}
           {activeNav === "campuses" && (
-            <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-800">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">Filter Health:</span>
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-sm font-bold text-slate-700 dark:text-slate-300 mr-1">Filter Health:</span>
                   {(["ALL", "HEALTHY", "DEGRADED", "CRITICAL", "OFFLINE"] as const).map((h) => (
                     <button
                       key={h}
                       onClick={() => setHealthFilter(h)}
                       className={cn(
-                        "px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all",
+                        "px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all",
                         healthFilter === h
                           ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow-xs"
-                          : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                          : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
                       )}
                     >
                       {h}
@@ -935,18 +1023,18 @@ export default function SuperAdminPage() {
                   ))}
                 </div>
 
-                <div className="relative w-full sm:w-64">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-400" />
+                <div className="relative w-full sm:w-72">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
                   <Input
                     placeholder="Search campus or school..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-xs pl-8 h-8 rounded-xl"
+                    className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-sm pl-10 h-10 rounded-2xl"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {filteredCampuses.map((campus) => {
                   const isHealthy = campus.healthStatus === "HEALTHY";
                   const isCritical = campus.healthStatus === "CRITICAL";
@@ -955,59 +1043,65 @@ export default function SuperAdminPage() {
                   return (
                     <div
                       key={campus.campusId}
-                      className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3"
+                      className={cn(
+                        "bg-white dark:bg-slate-900 border rounded-3xl p-6 shadow-sm space-y-4 transition-all",
+                        isCritical
+                          ? "border-red-400 dark:border-red-800 bg-red-50/20"
+                          : "border-slate-200 dark:border-slate-800"
+                      )}
                     >
-                      <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <span className="text-[10px] font-semibold uppercase text-slate-400 truncate block">
+                          <span className="text-xs font-bold uppercase text-slate-400 truncate block">
                             {campus.schoolName}
                           </span>
-                          <h4 className="font-bold text-sm text-slate-900 dark:text-white truncate">
+                          <h4 className="font-extrabold text-lg text-slate-900 dark:text-white truncate">
                             {campus.campusName}
                           </h4>
                         </div>
                         <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
+                          className={cn(
+                            "px-3 py-1 rounded-full text-xs font-bold border shrink-0",
                             isHealthy
-                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-300"
                               : isCritical
-                              ? "bg-red-50 text-red-700 border-red-300"
-                              : "bg-amber-50 text-amber-700 border-amber-200"
-                          }`}
+                              ? "bg-red-50 text-red-700 border-red-300 animate-pulse"
+                              : "bg-amber-50 text-amber-700 border-amber-300"
+                          )}
                         >
                           {campus.healthStatus}
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2 p-2.5 bg-slate-50 dark:bg-slate-950/60 rounded-xl text-center text-xs">
+                      <div className="grid grid-cols-3 gap-3 p-3.5 bg-slate-50 dark:bg-slate-950/60 rounded-2xl text-center">
                         <div>
-                          <div className="text-[10px] text-slate-400">Response</div>
-                          <div className="font-bold text-slate-900 dark:text-white font-mono">
+                          <div className="text-xs text-slate-500 font-semibold">Response</div>
+                          <div className="font-mono font-bold text-base sm:text-lg text-slate-900 dark:text-white">
                             {campus.latencyMs}ms
                           </div>
                         </div>
                         <div>
-                          <div className="text-[10px] text-slate-400">Students</div>
-                          <div className="font-bold text-slate-900 dark:text-white font-mono">
+                          <div className="text-xs text-slate-500 font-semibold">Students</div>
+                          <div className="font-mono font-bold text-base sm:text-lg text-slate-900 dark:text-white">
                             {campus.studentCount}
                           </div>
                         </div>
                         <div>
-                          <div className="text-[10px] text-slate-400">Terminals</div>
-                          <div className="font-bold text-slate-900 dark:text-white font-mono">
+                          <div className="text-xs text-slate-500 font-semibold">Terminals</div>
+                          <div className="font-mono font-bold text-base sm:text-lg text-slate-900 dark:text-white">
                             {campus.workstationsOnline}
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100 dark:border-slate-800">
-                        <span className="font-mono text-slate-400">{campus.campusCode}</span>
+                      <div className="flex items-center justify-between text-xs sm:text-sm pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <span className="font-mono font-bold text-slate-500">{campus.campusCode}</span>
                         {isOffline || isCritical ? (
                           <Button
                             size="sm"
                             variant="outline"
                             onClick={() => handleEmergencyRestore(campus)}
-                            className="h-7 text-[10px] rounded-lg border-emerald-300 text-emerald-700"
+                            className="h-8 px-3 text-xs font-bold rounded-xl border-emerald-400 text-emerald-700 hover:bg-emerald-50"
                           >
                             Restore Branch
                           </Button>
@@ -1016,7 +1110,7 @@ export default function SuperAdminPage() {
                             size="sm"
                             variant="outline"
                             onClick={() => handleEmergencyLockdown(campus)}
-                            className="h-7 text-[10px] rounded-lg border-red-200 text-red-600"
+                            className="h-8 px-3 text-xs font-bold rounded-xl border-red-300 text-red-600 hover:bg-red-50"
                           >
                             Lockdown
                           </Button>
@@ -1030,133 +1124,135 @@ export default function SuperAdminPage() {
           )}
 
           {/* ========================================================================= */}
-          {/* SECTION 4: ERROR & INCIDENT TRACER                                        */}
+          {/* 4. ERROR & INCIDENT TRACER                                                */}
           {/* ========================================================================= */}
           {activeNav === "errors" && (
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
-              <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm overflow-hidden space-y-4 p-6">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
                 <div>
-                  <h4 className="font-bold text-sm text-slate-900 dark:text-white">Live Exception & Error Tracer</h4>
-                  <p className="text-xs text-slate-500">Live error logs from database queries, sync timeouts, and auth guards.</p>
+                  <h4 className="font-extrabold text-lg sm:text-xl text-slate-900 dark:text-white">Live Exception & Error Tracer</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Captures 500 exceptions, cashier sync timeouts, and database anomalies.</p>
                 </div>
-                <Badge variant="outline" className="text-xs font-mono">
+                <Badge variant="outline" className="text-sm font-bold font-mono px-3 py-1">
                   {unresolvedErrorCount} Unresolved
                 </Badge>
               </div>
 
-              <table className="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 text-[11px] uppercase text-slate-500">
-                    <th className="py-2.5 px-4">Severity</th>
-                    <th className="py-2.5 px-4">Component</th>
-                    <th className="py-2.5 px-4">Incident Message</th>
-                    <th className="py-2.5 px-4">Timestamp</th>
-                    <th className="py-2.5 px-4 text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
-                  {errorLogs.map((log) => (
-                    <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30">
-                      <td className="py-3 px-4">
-                        <span
-                          className={cn(
-                            "px-2 py-0.5 rounded-full text-[10px] font-semibold border",
-                            log.severity === "CRITICAL"
-                              ? "bg-red-50 text-red-700 border-red-300"
-                              : "bg-blue-50 text-blue-700 border-blue-300"
-                          )}
-                        >
-                          {log.severity}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 font-mono font-semibold">{log.source}</td>
-                      <td className="py-3 px-4 max-w-md truncate">{log.message}</td>
-                      <td className="py-3 px-4 text-slate-400">{new Date(log.createdAt).toLocaleString()}</td>
-                      <td className="py-3 px-4 text-right">
-                        {log.isResolved ? (
-                          <span className="text-[11px] text-emerald-600 font-medium">Resolved</span>
-                        ) : (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleResolveError(log.id)}
-                            className="h-7 text-xs rounded-lg"
-                          >
-                            Mark Resolved
-                          </Button>
-                        )}
-                      </td>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-sm sm:text-base">
+                  <thead>
+                    <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50 text-xs sm:text-sm font-bold uppercase text-slate-600 dark:text-slate-400">
+                      <th className="py-3 px-4">Severity</th>
+                      <th className="py-3 px-4">Component</th>
+                      <th className="py-3 px-4">Incident Message</th>
+                      <th className="py-3 px-4">Timestamp</th>
+                      <th className="py-3 px-4 text-right">Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+                    {errorLogs.map((log) => (
+                      <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30">
+                        <td className="py-4 px-4">
+                          <span
+                            className={cn(
+                              "px-2.5 py-1 rounded-full text-xs font-bold border",
+                              log.severity === "CRITICAL"
+                                ? "bg-red-50 text-red-700 border-red-300"
+                                : "bg-blue-50 text-blue-700 border-blue-300"
+                            )}
+                          >
+                            {log.severity}
+                          </span>
+                        </td>
+                        <td className="py-4 px-4 font-mono font-bold text-sm">{log.source}</td>
+                        <td className="py-4 px-4 max-w-md font-medium text-slate-800 dark:text-slate-200 truncate">{log.message}</td>
+                        <td className="py-4 px-4 text-slate-500 text-xs sm:text-sm whitespace-nowrap">{new Date(log.createdAt).toLocaleString()}</td>
+                        <td className="py-4 px-4 text-right">
+                          {log.isResolved ? (
+                            <span className="text-xs sm:text-sm text-emerald-600 font-bold">Resolved</span>
+                          ) : (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleResolveError(log.id)}
+                              className="h-8 px-3 text-xs font-bold rounded-xl"
+                            >
+                              Mark Resolved
+                            </Button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
 
           {/* ========================================================================= */}
-          {/* SECTION 5: DISASTER RECOVERY & BACKUPS                                    */}
+          {/* 5. DISASTER RECOVERY & BACKUPS                                            */}
           {/* ========================================================================= */}
           {activeNav === "backups" && (
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs space-y-6">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
                 <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
                     Disaster Recovery & Live Snapshot Backup Engine
                   </h3>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
                     Continuous WAL Point-in-Time Recovery (PITR) with immutable SHA-256 encrypted cold storage.
                   </p>
                 </div>
                 <Button
                   onClick={handleTriggerSnapshot}
                   disabled={isSubmitting}
-                  className="bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs h-9 font-semibold gap-1.5"
+                  className="bg-teal-600 hover:bg-teal-700 text-white rounded-2xl text-sm font-bold h-11 px-5 gap-2 shadow-sm"
                 >
-                  <Download className="size-3.5" />
+                  <Download className="size-4" />
                   <span>{isSubmitting ? "Generating Backup..." : "Trigger Instant Snapshot & Download"}</span>
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 space-y-1">
-                  <div className="text-[11px] text-slate-400 font-medium">Recovery Point Objective (RPO)</div>
-                  <div className="text-xl font-bold text-slate-900 dark:text-white">&lt; 1 Second</div>
-                  <p className="text-[10px] text-slate-500">Continuous streaming write-ahead log (WAL) on Neon Cloud.</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 space-y-2">
+                  <div className="text-xs sm:text-sm text-slate-500 font-bold uppercase tracking-wider">Recovery Point Objective (RPO)</div>
+                  <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">&lt; 1 Second</div>
+                  <p className="text-xs text-slate-500">Continuous streaming write-ahead log (WAL) on Neon Cloud.</p>
                 </div>
-                <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 space-y-1">
-                  <div className="text-[11px] text-slate-400 font-medium">Recovery Time Objective (RTO)</div>
-                  <div className="text-xl font-bold text-slate-900 dark:text-white">&lt; 15 Minutes</div>
-                  <p className="text-[10px] text-slate-500">Instant multi-region database failover without data loss.</p>
+                <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 space-y-2">
+                  <div className="text-xs sm:text-sm text-slate-500 font-bold uppercase tracking-wider">Recovery Time Objective (RTO)</div>
+                  <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">&lt; 15 Minutes</div>
+                  <p className="text-xs text-slate-500">Instant multi-region failover with zero record loss.</p>
                 </div>
-                <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 space-y-1">
-                  <div className="text-[11px] text-slate-400 font-medium">Backup Integrity Hash</div>
-                  <div className="text-sm font-bold text-teal-600 font-mono truncate">SHA-256 Verifiable</div>
-                  <p className="text-[10px] text-slate-500">Cryptographically signed against tampering or silent bit-rot.</p>
+                <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 space-y-2">
+                  <div className="text-xs sm:text-sm text-slate-500 font-bold uppercase tracking-wider">Backup Integrity Hash</div>
+                  <div className="text-base sm:text-lg font-bold text-teal-600 font-mono truncate">SHA-256 Verifiable</div>
+                  <p className="text-xs text-slate-500">Cryptographically signed against silent bit-rot or tampering.</p>
                 </div>
               </div>
 
-              <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
-                <table className="w-full text-left border-collapse text-xs">
+              <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+                <table className="w-full text-left border-collapse text-xs sm:text-sm">
                   <thead>
-                    <tr className="border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-[10px] uppercase text-slate-400">
-                      <th className="py-2 px-3">Type</th>
-                      <th className="py-2 px-3">Checksum (SHA-256)</th>
-                      <th className="py-2 px-3">Records</th>
-                      <th className="py-2 px-3">Target</th>
-                      <th className="py-2 px-3">Timestamp</th>
-                      <th className="py-2 px-3">Status</th>
+                    <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 font-bold uppercase text-slate-600 dark:text-slate-400">
+                      <th className="py-3 px-4">Type</th>
+                      <th className="py-3 px-4">Checksum (SHA-256)</th>
+                      <th className="py-3 px-4">Records</th>
+                      <th className="py-3 px-4">Target Storage</th>
+                      <th className="py-3 px-4">Timestamp</th>
+                      <th className="py-3 px-4">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
                     {backupHistory.map((b) => (
                       <tr key={b.id} className="hover:bg-slate-50/50">
-                        <td className="py-2.5 px-3 font-semibold text-slate-900 dark:text-white">{b.backupType}</td>
-                        <td className="py-2.5 px-3 font-mono text-[10px] text-slate-500 max-w-xs truncate">{b.checksum}</td>
-                        <td className="py-2.5 px-3">{b.recordCount.toLocaleString()}</td>
-                        <td className="py-2.5 px-3 font-mono text-[11px]">{b.storageTarget}</td>
-                        <td className="py-2.5 px-3 text-slate-400">{new Date(b.createdAt).toLocaleString()}</td>
-                        <td className="py-2.5 px-3">
-                          <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                        <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">{b.backupType}</td>
+                        <td className="py-3.5 px-4 font-mono text-xs text-slate-500 max-w-xs truncate">{b.checksum}</td>
+                        <td className="py-3.5 px-4 font-bold">{b.recordCount.toLocaleString()}</td>
+                        <td className="py-3.5 px-4 font-mono text-xs">{b.storageTarget}</td>
+                        <td className="py-3.5 px-4 text-slate-500">{new Date(b.createdAt).toLocaleString()}</td>
+                        <td className="py-3.5 px-4">
+                          <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-300">
                             {b.status}
                           </span>
                         </td>
@@ -1169,17 +1265,17 @@ export default function SuperAdminPage() {
           )}
 
           {/* ========================================================================= */}
-          {/* SECTION 6: CSV INGESTION & DATA MIGRATION                                 */}
+          {/* 6. CSV INGESTION & DATA MIGRATION                                         */}
           {/* ========================================================================= */}
           {activeNav === "migration" && (
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs space-y-6">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
                 <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
                     Live CSV Data Migration Execution Engine
                   </h3>
-                  <p className="text-xs text-slate-500">
-                    Bulk-import 5,000+ students, auto-create missing classes, and provision initial double-entry fee ledgers atomically.
+                  <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+                    Bulk-import 5,000+ students, auto-create missing classes, and provision initial fee ledgers atomically.
                   </p>
                 </div>
                 <Button
@@ -1193,20 +1289,20 @@ export default function SuperAdminPage() {
                     a.download = "Template_Students.csv";
                     a.click();
                   }}
-                  className="rounded-xl text-xs gap-1.5 h-9"
+                  className="rounded-2xl text-xs sm:text-sm font-bold gap-2 h-11 px-4"
                 >
-                  <Download className="size-3.5 text-blue-600" />
+                  <Download className="size-4 text-blue-600" />
                   Download Sample CSV
                 </Button>
               </div>
 
-              <div className="space-y-4">
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold">Destination Campus Branch *</Label>
+              <div className="space-y-5">
+                <div className="space-y-2">
+                  <Label className="text-sm sm:text-base font-bold">Destination Campus Branch *</Label>
                   <select
                     value={migrationCampusId}
                     onChange={(e) => setMigrationCampusId(e.target.value)}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-xs focus:ring-1 focus:ring-blue-500"
+                    className="w-full h-12 px-4 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-sm font-semibold text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                   >
                     {campusesHealth.map((c) => (
                       <option key={c.campusId} value={c.campusId}>
@@ -1216,35 +1312,35 @@ export default function SuperAdminPage() {
                   </select>
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold">Paste CSV Data (or Edit In-Place)</Label>
+                <div className="space-y-2">
+                  <Label className="text-sm sm:text-base font-bold">Paste CSV Data (or Edit In-Place)</Label>
                   <Textarea
-                    rows={6}
+                    rows={8}
                     value={migrationCsvText}
                     onChange={(e) => setMigrationCsvText(e.target.value)}
-                    className="font-mono text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                    className="font-mono text-sm rounded-2xl bg-slate-50 dark:bg-slate-950 border-slate-300 dark:border-slate-700 p-4"
                   />
                 </div>
 
                 <Button
                   onClick={handleRunMigration}
                   disabled={isMigrating}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-10 text-xs font-semibold gap-1.5"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-2xl h-13 text-base font-bold gap-2 shadow-sm"
                 >
-                  <Play className="size-3.5" />
+                  <Play className="size-5" />
                   <span>{isMigrating ? "Executing Batch Ingestion..." : "Execute Atomic Migration to Live Database"}</span>
                 </Button>
 
                 {migrationResult && (
-                  <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 dark:bg-emerald-950/30 text-xs space-y-2">
-                    <div className="flex items-center gap-2 font-bold text-emerald-700 dark:text-emerald-400">
-                      <CheckCircle className="size-4" />
+                  <div className="p-5 rounded-2xl border border-emerald-300 bg-emerald-50/50 dark:bg-emerald-950/30 text-sm space-y-3">
+                    <div className="flex items-center gap-2 font-extrabold text-emerald-700 dark:text-emerald-400 text-base">
+                      <CheckCircle className="size-5" />
                       <span>Migration Completed Successfully!</span>
                     </div>
-                    <div className="grid grid-cols-3 gap-2">
-                      <div>Total Rows: <strong>{migrationResult.totalRows}</strong></div>
-                      <div>Enrolled: <strong className="text-emerald-600">{migrationResult.importedCount}</strong></div>
-                      <div>Failed: <strong>{migrationResult.failedCount}</strong></div>
+                    <div className="grid grid-cols-3 gap-3">
+                      <div>Total Rows: <strong className="font-bold">{migrationResult.totalRows}</strong></div>
+                      <div>Enrolled: <strong className="text-emerald-600 font-bold">{migrationResult.importedCount}</strong></div>
+                      <div>Failed: <strong className="font-bold">{migrationResult.failedCount}</strong></div>
                     </div>
                   </div>
                 )}
@@ -1253,65 +1349,67 @@ export default function SuperAdminPage() {
           )}
 
           {/* ========================================================================= */}
-          {/* SECTION 7: SECURITY & POS WORKSTATIONS                                    */}
+          {/* 7. SECURITY & POS WORKSTATIONS                                            */}
           {/* ========================================================================= */}
           {activeNav === "security" && (
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs space-y-6">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
               <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
                   Security Sentinel & POS Cashier Workstations
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
                   Monitor online cashier workstations and trigger remote lockdown in case of perimeter threats.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40">
-                  <div className="text-xs text-slate-400">Threat Sentinel Level</div>
-                  <div className="text-2xl font-bold text-emerald-600">{vitals?.threatLevel ?? "NORMAL"}</div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 space-y-1">
+                  <div className="text-xs sm:text-sm text-slate-500 font-bold uppercase tracking-wider">Threat Sentinel Level</div>
+                  <div className="text-3xl font-black text-emerald-600">{vitals?.threatLevel ?? "NORMAL"}</div>
                 </div>
-                <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40">
-                  <div className="text-xs text-slate-400">Active Online Workstations</div>
-                  <div className="text-2xl font-bold text-slate-900 dark:text-white">{vitals?.activeDbConnections ?? 3} Online</div>
+                <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 space-y-1">
+                  <div className="text-xs sm:text-sm text-slate-500 font-bold uppercase tracking-wider">Active Cashier Terminals</div>
+                  <div className="text-3xl font-black text-slate-900 dark:text-white">{vitals?.activeDbConnections ?? 3} Online</div>
                 </div>
-                <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40">
-                  <div className="text-xs text-slate-400">Authentication Protocol</div>
-                  <div className="text-2xl font-bold text-blue-600">SHA-256 HMAC</div>
+                <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 space-y-1">
+                  <div className="text-xs sm:text-sm text-slate-500 font-bold uppercase tracking-wider">Data Encryption Protocol</div>
+                  <div className="text-3xl font-black text-blue-600 font-mono">AES-256 GCM</div>
                 </div>
               </div>
             </div>
           )}
 
           {/* ========================================================================= */}
-          {/* SECTION 8: COMPLIANCE AUDIT TRAIL                                         */}
+          {/* 8. COMPLIANCE AUDIT TRAIL                                                 */}
           {/* ========================================================================= */}
           {activeNav === "audit" && (
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
-              <div className="p-4 border-b border-slate-200 dark:border-slate-800">
-                <h4 className="font-bold text-sm text-slate-900 dark:text-white">Immutable Governance Audit Ledger</h4>
-                <p className="text-xs text-slate-500">Cryptographically verifiable sequence of all operations.</p>
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm overflow-hidden p-6 space-y-4">
+              <div className="pb-3 border-b border-slate-200 dark:border-slate-800">
+                <h4 className="font-extrabold text-xl text-slate-900 dark:text-white">Immutable Governance Audit Ledger</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Cryptographically verifiable sequence of all operations across the cluster.</p>
               </div>
-              <table className="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr className="border-b border-slate-100 bg-slate-50 dark:bg-slate-950 text-[10px] uppercase text-slate-400">
-                    <th className="py-2.5 px-4">Action</th>
-                    <th className="py-2.5 px-4">Actor</th>
-                    <th className="py-2.5 px-4">Workstation</th>
-                    <th className="py-2.5 px-4">Timestamp</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {auditLogs.map((log) => (
-                    <tr key={log.id} className="hover:bg-slate-50/50">
-                      <td className="py-3 px-4 font-mono font-medium text-slate-900 dark:text-white text-[11px]">{log.action}</td>
-                      <td className="py-3 px-4 text-slate-600">{log.actorName}</td>
-                      <td className="py-3 px-4 font-mono text-[11px] text-slate-400">{log.workstationId}</td>
-                      <td className="py-3 px-4 text-slate-400">{new Date(log.createdAt).toLocaleString()}</td>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-sm sm:text-base">
+                  <thead>
+                    <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 font-bold uppercase text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+                      <th className="py-3 px-4">Action</th>
+                      <th className="py-3 px-4">Actor</th>
+                      <th className="py-3 px-4">Workstation</th>
+                      <th className="py-3 px-4">Timestamp</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+                    {auditLogs.map((log) => (
+                      <tr key={log.id} className="hover:bg-slate-50/50">
+                        <td className="py-4 px-4 font-mono font-bold text-slate-900 dark:text-white text-xs sm:text-sm">{log.action}</td>
+                        <td className="py-4 px-4 text-slate-700 dark:text-slate-300 font-semibold">{log.actorName}</td>
+                        <td className="py-4 px-4 font-mono text-xs text-slate-500">{log.workstationId}</td>
+                        <td className="py-4 px-4 text-slate-500 text-xs sm:text-sm">{new Date(log.createdAt).toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </main>
@@ -1322,43 +1420,43 @@ export default function SuperAdminPage() {
       {/* ========================================================================= */}
       {/* Onboard School Dialog */}
       <Dialog open={isProvisionOpen} onOpenChange={setIsProvisionOpen}>
-        <DialogContent className="sm:max-w-[560px] rounded-3xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl">
+        <DialogContent className="sm:max-w-[620px] rounded-3xl p-6 sm:p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl">
           <DialogHeader>
-            <DialogTitle className="text-base font-bold text-slate-900 dark:text-white">
+            <DialogTitle className="text-xl font-extrabold text-slate-900 dark:text-white">
               Onboard Educational Group
             </DialogTitle>
-            <DialogDescription className="text-xs text-slate-500">
+            <DialogDescription className="text-sm text-slate-600 dark:text-slate-400">
               Provision new school organization with strict 20-campus enterprise limit.
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleProvisionSubmit} className="space-y-4 pt-2">
+          <form onSubmit={handleProvisionSubmit} className="space-y-4 pt-3">
             {provisionError && (
-              <div className="p-3 bg-red-50 text-red-600 rounded-xl text-xs">{provisionError}</div>
+              <div className="p-4 bg-red-50 text-red-600 rounded-2xl text-sm font-semibold">{provisionError}</div>
             )}
 
-            <div className="space-y-1.5">
-              <Label className="text-xs font-semibold">School Name *</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-bold">School Group Name *</Label>
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
-                className="h-9 rounded-xl text-xs"
+                className="h-11 rounded-2xl text-sm"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label className="text-xs font-semibold">Unique Group Code *</Label>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-bold">Unique Group Code *</Label>
                 <Input
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
                   required
-                  className="h-9 rounded-xl text-xs uppercase font-mono"
+                  className="h-11 rounded-2xl text-sm uppercase font-mono font-bold"
                 />
               </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs font-semibold">Campus Quota (Max 20) *</Label>
+              <div className="space-y-2">
+                <Label className="text-sm font-bold">Campus Quota (Max 20) *</Label>
                 <Input
                   type="number"
                   min={1}
@@ -1366,59 +1464,59 @@ export default function SuperAdminPage() {
                   value={formData.maxCampuses}
                   onChange={(e) => setFormData({ ...formData, maxCampuses: Number(e.target.value) })}
                   required
-                  className="h-9 rounded-xl text-xs font-mono"
+                  className="h-11 rounded-2xl text-sm font-mono font-bold"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label className="text-xs font-semibold">Primary Campus Name *</Label>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-bold">Primary Campus Name *</Label>
                 <Input
                   value={formData.primaryCampusName}
                   onChange={(e) => setFormData({ ...formData, primaryCampusName: e.target.value })}
                   required
-                  className="h-9 rounded-xl text-xs"
+                  className="h-11 rounded-2xl text-sm"
                 />
               </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs font-semibold">Campus Code *</Label>
+              <div className="space-y-2">
+                <Label className="text-sm font-bold">Campus Code *</Label>
                 <Input
                   value={formData.primaryCampusCode}
                   onChange={(e) => setFormData({ ...formData, primaryCampusCode: e.target.value.toUpperCase() })}
                   required
-                  className="h-9 rounded-xl text-xs uppercase font-mono"
+                  className="h-11 rounded-2xl text-sm uppercase font-mono font-bold"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label className="text-xs font-semibold">Official Contact Email *</Label>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-bold">Official Contact Email *</Label>
                 <Input
                   type="email"
                   value={formData.contactEmail}
                   onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
                   required
-                  className="h-9 rounded-xl text-xs"
+                  className="h-11 rounded-2xl text-sm"
                 />
               </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs font-semibold">Official Contact Phone *</Label>
+              <div className="space-y-2">
+                <Label className="text-sm font-bold">Official Contact Phone *</Label>
                 <Input
                   value={formData.contactPhone}
                   onChange={(e) => setFormData({ ...formData, contactPhone: e.target.value })}
                   required
-                  className="h-9 rounded-xl text-xs"
+                  className="h-11 rounded-2xl text-sm"
                 />
               </div>
             </div>
 
-            <DialogFooter className="pt-3">
-              <Button type="button" variant="outline" size="sm" onClick={() => setIsProvisionOpen(false)} className="text-xs rounded-xl">
+            <DialogFooter className="pt-4">
+              <Button type="button" variant="outline" size="sm" onClick={() => setIsProvisionOpen(false)} className="text-sm h-11 px-5 rounded-2xl">
                 Cancel
               </Button>
-              <Button type="submit" size="sm" disabled={isSubmitting} className="text-xs rounded-xl bg-blue-600 text-white">
+              <Button type="submit" size="sm" disabled={isSubmitting} className="text-sm h-11 px-5 rounded-2xl bg-blue-600 text-white font-bold">
                 {isSubmitting ? "Provisioning..." : "Provision School"}
               </Button>
             </DialogFooter>
@@ -1428,30 +1526,30 @@ export default function SuperAdminPage() {
 
       {/* Quota Modal */}
       <Dialog open={isQuotaModalOpen} onOpenChange={setIsQuotaModalOpen}>
-        <DialogContent className="sm:max-w-[420px] rounded-3xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl">
+        <DialogContent className="sm:max-w-[450px] rounded-3xl p-6 sm:p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl">
           <DialogHeader>
-            <DialogTitle className="text-base font-bold">Configure Campus Quota</DialogTitle>
-            <DialogDescription className="text-xs text-slate-500">
-              Update authorized campus ceiling for {selectedSchoolForQuota?.name}. Max limit is 20 campuses.
+            <DialogTitle className="text-lg font-bold">Configure Campus Quota</DialogTitle>
+            <DialogDescription className="text-sm text-slate-500">
+              Update authorized campus ceiling for {selectedSchoolForQuota?.name}. Hard limit is 20 campuses.
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 pt-2">
-            <div className="space-y-1.5">
-              <Label className="text-xs font-semibold">Allowed Campuses (1 - 20)</Label>
+          <div className="space-y-4 pt-3">
+            <div className="space-y-2">
+              <Label className="text-sm font-bold">Allowed Campuses (1 - 20)</Label>
               <Input
                 type="number"
                 min={selectedSchoolForQuota?.campusCount ?? 1}
                 max={20}
                 value={newQuotaValue}
                 onChange={(e) => setNewQuotaValue(Number(e.target.value))}
-                className="h-10 text-center text-lg font-mono font-bold rounded-xl"
+                className="h-12 text-center text-xl font-mono font-bold rounded-2xl"
               />
             </div>
           </div>
 
-          <DialogFooter className="pt-2 gap-2">
-            <Button type="button" variant="outline" size="sm" onClick={() => setIsQuotaModalOpen(false)} className="text-xs rounded-xl">
+          <DialogFooter className="pt-3 gap-2">
+            <Button type="button" variant="outline" size="sm" onClick={() => setIsQuotaModalOpen(false)} className="text-sm h-10 rounded-xl">
               Cancel
             </Button>
             <Button
@@ -1463,7 +1561,7 @@ export default function SuperAdminPage() {
                 setIsQuotaModalOpen(false);
                 await loadData();
               }}
-              className="text-xs rounded-xl bg-blue-600 text-white"
+              className="text-sm h-10 rounded-xl bg-blue-600 text-white font-bold"
             >
               Update Quota
             </Button>
