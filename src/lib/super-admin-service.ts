@@ -324,3 +324,13 @@ export async function updateSchoolCampusQuota(schoolId: string, newQuota: number
   revalidatePath("/super-admin");
   return updated;
 }
+
+/**
+ * Retrieves the recent enterprise compliance audit logs for the Super Admin audit tab.
+ */
+export async function getRecentAuditLogs(limit: number = 25) {
+  return await prisma.financeAuditLog.findMany({
+    take: limit,
+    orderBy: { createdAt: "desc" },
+  });
+}

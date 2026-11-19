@@ -6,6 +6,7 @@ import {
   provisionNewSchoolOrganization,
   toggleSchoolStatus,
   updateSchoolCampusQuota,
+  getRecentAuditLogs,
   GlobalSaaSTelemetry,
   DetailedSchoolGroup,
 } from "./super-admin-service";
@@ -85,5 +86,14 @@ export async function updateCampusQuotaAction(
     return { success: true, data: updated };
   } catch (error: any) {
     return { success: false, error: error.message || "Failed to update campus quota." };
+  }
+}
+
+export async function getAuditLogsAction(limit: number = 25): Promise<SuperAdminResult<any[]>> {
+  try {
+    const logs = await getRecentAuditLogs(limit);
+    return { success: true, data: logs };
+  } catch (error: any) {
+    return { success: false, error: error.message || "Failed to load audit logs." };
   }
 }

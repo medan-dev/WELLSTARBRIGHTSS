@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "@/assets/logo.png";
 import {
   Building2,
   ShieldCheck,
@@ -9,29 +11,44 @@ import {
   Users,
   Search,
   Plus,
-  Server,
-  Lock,
-  CheckCircle2,
-  AlertTriangle,
-  ExternalLink,
-  ChevronRight,
-  Database,
   RefreshCw,
   Sliders,
   FileSpreadsheet,
   Download,
   Upload,
-  GraduationCap,
-  Sparkles,
   ArrowUpRight,
-  Eye,
-  KeyRound,
-  ShieldAlert,
+  MoreHorizontal,
+  CheckCircle2,
+  AlertCircle,
+  ExternalLink,
+  ChevronRight,
+  Filter,
+  Check,
+  X,
+  Lock,
+  ArrowLeft,
+  Calendar,
+  Globe,
+  Mail,
+  Phone,
+  Server,
+  Database,
+  Shield,
+  FileText,
+  UserCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -40,12 +57,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   getGlobalMetricsAction,
   getAllSchoolsAction,
   provisionSchoolAction,
   toggleSchoolStatusAction,
   updateCampusQuotaAction,
+  getAuditLogsAction,
 } from "@/lib/super-admin-actions";
 import { GlobalSaaSTelemetry, DetailedSchoolGroup } from "@/lib/super-admin-service";
 
@@ -60,12 +79,15 @@ export default function SuperAdminPage() {
   // Data State
   const [telemetry, setTelemetry] = useState<GlobalSaaSTelemetry | null>(null);
   const [schools, setSchools] = useState<DetailedSchoolGroup[]>([]);
+  const [auditLogs, setAuditLogs] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<"ALL" | "ACTIVE" | "SUSPENDED">("ALL");
+  const [activeTab, setActiveTab] = useState<string>("tenants");
   const [loading, setLoading] = useState<boolean>(true);
 
   // Modals State
   const [isProvisionOpen, setIsProvisionOpen] = useState<boolean>(false);
+  const [provisionStep, setProvisionStep] = useState<number>(1);
   const [isQuotaModalOpen, setIsQuotaModalOpen] = useState<boolean>(false);
   const [selectedSchoolForQuota, setSelectedSchoolForQuota] = useState<DetailedSchoolGroup | null>(null);
   const [newQuotaValue, setNewQuotaValue] = useState<number>(5);
@@ -103,9 +125,10 @@ export default function SuperAdminPage() {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [metricRes, schoolRes] = await Promise.all([
+      const [metricRes, schoolRes, logsRes] = await Promise.all([
         getGlobalMetricsAction(),
         getAllSchoolsAction(),
+        getAuditLogsAction(20),
       ]);
 
       if (metricRes.success && metricRes.data) {
@@ -113,6 +136,9 @@ export default function SuperAdminPage() {
       }
       if (schoolRes.success && schoolRes.data) {
         setSchools(schoolRes.data);
+      }
+      if (logsRes.success && logsRes.data) {
+        setAuditLogs(logsRes.data);
       }
     } catch (err) {
       console.error("Failed to load super admin data:", err);
@@ -173,6 +199,7 @@ export default function SuperAdminPage() {
       }
 
       setIsProvisionOpen(false);
+      setProvisionStep(1);
       setFormData({
         name: "",
         code: "",
@@ -201,7 +228,7 @@ export default function SuperAdminPage() {
     const nextStatus = school.status === "ACTIVE" ? "SUSPENDED" : "ACTIVE";
     if (
       !confirm(
-        `Are you sure you want to change status of '${school.name}' to ${nextStatus}?`
+        `Are you sure you want to change operational status of '${school.name}' to ${nextStatus}?`
       )
     )
       return;
@@ -262,56 +289,57 @@ export default function SuperAdminPage() {
     return matchesSearch && matchesStatus;
   });
 
-  // PIN Access Guard Modal
+  // Enterprise Clean Sign-In Screen
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4">
-        <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl text-center space-y-6">
-          <div className="size-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 grid place-items-center mx-auto">
-            <Lock className="size-8" />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 p-4">
+        <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-xl space-y-6">
+          <div className="flex items-center gap-3 justify-center">
+            <Image src={logo} alt="Logo" className="w-10 h-10 object-contain" />
+            <div>
+              <div className="font-bold text-lg text-slate-900 dark:text-white leading-tight">Wellstar Cloud ERP</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">SaaS Platform Console</div>
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <Badge variant="outline" className="text-indigo-400 border-indigo-500/30 font-mono text-[11px]">
-              RESTRICTED EXECUTIVE CLEARANCE
-            </Badge>
-            <h1 className="text-2xl font-bold text-white tracking-tight">Super Admin SaaS HQ</h1>
-            <p className="text-xs text-slate-400">
-              Enter your Master Enterprise PIN to manage multi-tenant cluster provisioning (200 Organizations, 20 Campuses Cap).
+          <div className="text-center space-y-1">
+            <h1 className="text-xl font-bold text-slate-900 dark:text-white">Super Administrator Access</h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Please enter your executive security PIN to access multi-tenant cluster governance.
             </p>
           </div>
 
           <form onSubmit={handlePinSubmit} className="space-y-4">
             {pinError && (
-              <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs flex items-center justify-center gap-2">
-                <ShieldAlert className="size-4 shrink-0" />
+              <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/40 rounded-xl text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
+                <AlertCircle className="size-4 shrink-0" />
                 <span>{pinError}</span>
               </div>
             )}
 
-            <div className="space-y-1 text-left">
-              <Label className="text-xs text-slate-300 font-semibold">Master Access Key (PIN)</Label>
+            <div className="space-y-1.5">
+              <Label className="text-xs text-slate-700 dark:text-slate-300 font-medium">Executive Security PIN</Label>
               <Input
                 type="password"
-                placeholder="Enter 4-digit Master PIN (e.g. 9900)"
+                placeholder="Enter 4-digit PIN (9900)"
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
                 autoFocus
-                className="bg-slate-950 border-slate-800 text-white rounded-xl text-center tracking-widest text-lg h-12"
+                className="text-center tracking-widest text-lg h-11 rounded-xl bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl h-11 font-semibold text-sm transition-all shadow-lg shadow-indigo-600/20"
+              className="w-full bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white text-white dark:text-slate-900 rounded-xl h-10 font-semibold text-xs transition-all shadow-sm"
             >
-              Verify Master Credentials
+              Sign In to Management Console
             </Button>
           </form>
 
-          <div className="text-[11px] text-slate-500 border-t border-slate-800/80 pt-4 flex items-center justify-center gap-2">
-            <ShieldCheck className="size-3.5 text-emerald-400" />
-            <span>Bank-Grade Session Guard &bull; Encrypted TLS 1.3</span>
+          <div className="text-[11px] text-slate-400 text-center border-t border-slate-100 dark:border-slate-800 pt-4 flex items-center justify-center gap-1.5">
+            <ShieldCheck className="size-3.5 text-emerald-600" />
+            <span>Multi-Tenant Architecture &bull; 200 School Capacity Limit</span>
           </div>
         </div>
       </div>
@@ -319,44 +347,42 @@ export default function SuperAdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-      {/* Top SaaS Header */}
-      <header className="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md sticky top-0 z-30">
+    <div className="min-h-screen bg-slate-50/60 dark:bg-slate-950 flex flex-col font-sans">
+      {/* Top Professional Executive Navigation */}
+      <header className="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="size-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white grid place-items-center shadow-md shadow-indigo-500/20 font-bold text-sm">
-              HQ
-            </div>
-            <div>
+            <Image src={logo} alt="Logo" className="w-8 h-8 object-contain shrink-0" />
+            <div className="border-l border-slate-200 dark:border-slate-800 pl-3">
               <div className="flex items-center gap-2">
-                <span className="font-bold text-base text-white tracking-tight">Super Admin SaaS HQ</span>
-                <Badge className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono">
-                  LIVE CLUSTER
-                </Badge>
+                <span className="font-bold text-sm text-slate-900 dark:text-white">Wellstar ERP Console</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-400 border border-blue-200 dark:border-blue-900/40">
+                  SaaS Administration
+                </span>
               </div>
-              <p className="text-[11px] text-slate-400 font-normal">
-                Multi-Tenant Governance Engine &bull; Max 200 Schools &bull; 20 Campuses Limit
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                Multi-Tenant Governance &bull; 200 Organization Limit
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <Button
               variant="outline"
               size="sm"
               onClick={loadData}
               disabled={loading}
-              className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl h-9 text-xs gap-1.5"
+              className="h-9 px-3 rounded-xl text-xs gap-1.5 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
             >
               <RefreshCw className={`size-3.5 ${loading ? "animate-spin" : ""}`} />
-              Sync
+              <span className="hidden sm:inline">Refresh</span>
             </Button>
 
             <Link href="/admin/dashboard" target="_blank">
               <Button
                 variant="outline"
                 size="sm"
-                className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl h-9 text-xs gap-1.5"
+                className="h-9 px-3 rounded-xl text-xs gap-1.5 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
               >
                 <span>Live School Portal</span>
                 <ArrowUpRight className="size-3.5 text-slate-400" />
@@ -364,38 +390,40 @@ export default function SuperAdminPage() {
             </Link>
 
             <Button
-              onClick={() => setIsProvisionOpen(true)}
-              className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl h-9 text-xs font-semibold gap-1.5 shadow-md shadow-indigo-600/20"
+              onClick={() => {
+                setProvisionStep(1);
+                setIsProvisionOpen(true);
+              }}
+              className="h-9 px-3.5 rounded-xl text-xs font-semibold gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
             >
               <Plus className="size-3.5" />
-              Onboard School Group
+              <span>Onboard New Tenant</span>
             </Button>
           </div>
         </div>
       </header>
 
-      {/* Main SaaS Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 flex-1 w-full">
-        {/* Executive Telemetry Grid */}
+      {/* Main SaaS Workspace */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 flex-1 w-full">
+        {/* Executive Overview KPI Tiles */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Card 1: School Capacity */}
-          <div className="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 space-y-3 relative overflow-hidden">
-            <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
-              <span>School Organizations</span>
-              <Building2 className="size-4 text-indigo-400" />
+          {/* Tile 1: Organizations */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-4 shadow-xs space-y-2">
+            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-medium">
+              <span>Tenant Organizations</span>
+              <Building2 className="size-4 text-blue-600 dark:text-blue-400" />
             </div>
             <div className="flex items-baseline justify-between">
-              <span className="text-3xl font-extrabold text-white tracking-tight">
+              <span className="text-2xl font-bold text-slate-900 dark:text-white">
                 {telemetry?.totalSchools ?? 1}
               </span>
-              <span className="text-xs text-slate-400 font-mono">
-                / {telemetry?.maxSchoolsLimit ?? 200} Max
+              <span className="text-xs text-slate-500 font-mono">
+                of {telemetry?.maxSchoolsLimit ?? 200} Licensed
               </span>
             </div>
-            {/* Visual Capacity Bar */}
-            <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+            <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
               <div
-                className="bg-indigo-500 h-full rounded-full transition-all"
+                className="bg-blue-600 dark:bg-blue-500 h-full rounded-full transition-all"
                 style={{
                   width: `${Math.max(
                     1,
@@ -404,31 +432,31 @@ export default function SuperAdminPage() {
                 }}
               />
             </div>
-            <div className="text-[11px] text-slate-500 flex items-center justify-between">
-              <span>Cluster Capacity</span>
-              <span className="text-indigo-400 font-mono font-semibold">
-                {(telemetry?.maxSchoolsLimit ?? 200) - (telemetry?.totalSchools ?? 1)} Available Slots
+            <div className="text-[11px] text-slate-500 flex items-center justify-between pt-0.5">
+              <span>Available Capacity:</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">
+                {(telemetry?.maxSchoolsLimit ?? 200) - (telemetry?.totalSchools ?? 1)} Slots Free
               </span>
             </div>
           </div>
 
-          {/* Card 2: Active Campuses */}
-          <div className="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 space-y-3 relative overflow-hidden">
-            <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
-              <span>Active Branch Campuses</span>
-              <Layers className="size-4 text-violet-400" />
+          {/* Tile 2: Active Campuses */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-4 shadow-xs space-y-2">
+            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-medium">
+              <span>Licensed Campuses</span>
+              <Layers className="size-4 text-indigo-600 dark:text-indigo-400" />
             </div>
             <div className="flex items-baseline justify-between">
-              <span className="text-3xl font-extrabold text-white tracking-tight">
+              <span className="text-2xl font-bold text-slate-900 dark:text-white">
                 {telemetry?.totalCampuses ?? 2}
               </span>
-              <span className="text-xs text-slate-400 font-mono">
-                / {telemetry?.maxCampusesClusterLimit ?? 4000} Max
+              <span className="text-xs text-slate-500 font-mono">
+                of {telemetry?.maxCampusesClusterLimit ?? 4000} Max
               </span>
             </div>
-            <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+            <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
               <div
-                className="bg-violet-500 h-full rounded-full transition-all"
+                className="bg-indigo-600 dark:bg-indigo-500 h-full rounded-full transition-all"
                 style={{
                   width: `${Math.max(
                     1,
@@ -439,89 +467,101 @@ export default function SuperAdminPage() {
                 }}
               />
             </div>
-            <div className="text-[11px] text-slate-500 flex items-center justify-between">
-              <span>Limit Per School</span>
-              <span className="text-violet-400 font-mono font-semibold">20 Campuses Cap</span>
+            <div className="text-[11px] text-slate-500 flex items-center justify-between pt-0.5">
+              <span>Contract Limit:</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">Max 20 per Tenant</span>
             </div>
           </div>
 
-          {/* Card 3: Total Enrolled Students */}
-          <div className="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 space-y-3 relative overflow-hidden">
-            <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
+          {/* Tile 3: Total Students */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-4 shadow-xs space-y-2">
+            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-medium">
               <span>Total Enrolled Students</span>
-              <Users className="size-4 text-emerald-400" />
+              <Users className="size-4 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div className="flex items-baseline justify-between">
-              <span className="text-3xl font-extrabold text-white tracking-tight">
+              <span className="text-2xl font-bold text-slate-900 dark:text-white">
                 {(telemetry?.totalStudents ?? 0).toLocaleString()}
               </span>
-              <Badge className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono">
-                UNLIMITED
-              </Badge>
+              <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
+                Unthrottled
+              </span>
             </div>
-            <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-2">
-              <CheckCircle2 className="size-3.5 text-emerald-400 shrink-0" />
-              <span>Zero throttling per campus branch</span>
+            <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+              <div className="bg-emerald-600 dark:bg-emerald-500 h-full w-full rounded-full" />
+            </div>
+            <div className="text-[11px] text-slate-500 flex items-center justify-between pt-0.5">
+              <span>Scale Policy:</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">Unlimited / Campus</span>
             </div>
           </div>
 
-          {/* Card 4: Durability & Security Status */}
-          <div className="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 space-y-3 relative overflow-hidden">
-            <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
-              <span>Bank-Grade Durability</span>
-              <ShieldCheck className="size-4 text-cyan-400" />
+          {/* Tile 4: Infrastructure Health */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-4 shadow-xs space-y-2">
+            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-medium">
+              <span>System & Data Durability</span>
+              <ShieldCheck className="size-4 text-teal-600 dark:text-teal-400" />
             </div>
-            <div className="space-y-1">
-              <div className="text-sm font-bold text-white flex items-center gap-1.5">
-                <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
-                Continuous WAL PITR
+            <div className="flex items-baseline justify-between">
+              <div className="flex items-center gap-1.5">
+                <span className="size-2 rounded-full bg-emerald-500" />
+                <span className="text-sm font-bold text-slate-900 dark:text-white">
+                  Continuous WAL Active
+                </span>
               </div>
-              <div className="text-[11px] text-slate-400 font-mono">
-                PostgreSQL &bull; AES-256 Encrypted
-              </div>
+              <span className="text-xs text-slate-500 font-mono">99.99% Target SLA</span>
             </div>
-            <div className="text-[11px] text-slate-500 flex items-center justify-between border-t border-slate-800 pt-2">
-              <span>Workstation Sync</span>
-              <span className="text-cyan-400 font-mono font-semibold">
+            <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+              <div className="bg-teal-600 dark:bg-teal-500 h-full w-full rounded-full" />
+            </div>
+            <div className="text-[11px] text-slate-500 flex items-center justify-between pt-0.5">
+              <span>Active POS Workstations:</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">
                 {telemetry?.systemHealth.activeWorkstations ?? 3} Online
               </span>
             </div>
           </div>
         </section>
 
-        {/* School Organizations Management Area */}
-        <section className="bg-slate-900/50 border border-slate-800/80 rounded-3xl p-6 space-y-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <h2 className="text-lg font-bold text-white tracking-tight">
-                Educational Groups & Conglomerates ({filteredSchools.length})
-              </h2>
-              <p className="text-xs text-slate-400">
-                Manage tenant organizations, configure campus quotas (up to 20), and oversee multi-campus branch operations.
-              </p>
-            </div>
+        {/* Enterprise Workspace Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-3">
+            <TabsList className="bg-slate-100 dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800">
+              <TabsTrigger value="tenants" className="rounded-lg text-xs font-semibold px-3.5 py-1.5">
+                Tenant Organizations ({filteredSchools.length})
+              </TabsTrigger>
+              <TabsTrigger value="campuses" className="rounded-lg text-xs font-semibold px-3.5 py-1.5">
+                Campus Directory
+              </TabsTrigger>
+              <TabsTrigger value="migration" className="rounded-lg text-xs font-semibold px-3.5 py-1.5">
+                Data Migration & CSV
+              </TabsTrigger>
+              <TabsTrigger value="audit" className="rounded-lg text-xs font-semibold px-3.5 py-1.5">
+                Compliance Audit Trail
+              </TabsTrigger>
+            </TabsList>
 
-            {/* Search & Filters */}
-            <div className="flex items-center gap-3 w-full sm:w-auto">
+            {/* Quick Filter Bar */}
+            <div className="flex items-center gap-2.5 w-full sm:w-auto">
               <div className="relative flex-1 sm:w-64">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-500" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-400" />
                 <Input
-                  placeholder="Search by school name, code..."
+                  placeholder="Filter by name, code, contact..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-slate-950 border-slate-800 text-xs pl-8 h-9 rounded-xl text-white"
+                  className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-xs pl-8 h-9 rounded-xl"
                 />
               </div>
 
-              <div className="flex items-center bg-slate-950 border border-slate-800 p-0.5 rounded-xl">
+              <div className="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-0.5 rounded-xl">
                 {(["ALL", "ACTIVE", "SUSPENDED"] as const).map((filter) => (
                   <button
                     key={filter}
                     onClick={() => setStatusFilter(filter)}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                       statusFilter === filter
-                        ? "bg-indigo-600 text-white shadow-xs"
-                        : "text-slate-400 hover:text-white"
+                        ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow-xs"
+                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
                     {filter}
@@ -531,400 +571,593 @@ export default function SuperAdminPage() {
             </div>
           </div>
 
-          {/* School Cards / Table */}
-          <div className="space-y-4">
-            {filteredSchools.length === 0 ? (
-              <div className="text-center py-12 border border-dashed border-slate-800 rounded-2xl space-y-3">
-                <Building2 className="size-8 text-slate-600 mx-auto" />
-                <p className="text-xs text-slate-400 font-medium">No school organizations match your search.</p>
+          {/* TAB 1: TENANT ORGANIZATIONS (DATA TABLE) */}
+          <TabsContent value="tenants" className="space-y-4">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl shadow-xs overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/40 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                      <th className="py-3 px-4">Organization</th>
+                      <th className="py-3 px-4">Unique Code</th>
+                      <th className="py-3 px-4">Campus Allocation</th>
+                      <th className="py-3 px-4">Total Students</th>
+                      <th className="py-3 px-4">Primary Contact</th>
+                      <th className="py-3 px-4">Status</th>
+                      <th className="py-3 px-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80 text-xs">
+                    {filteredSchools.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="py-12 text-center text-slate-400">
+                          <Building2 className="size-8 mx-auto text-slate-300 dark:text-slate-700 mb-2" />
+                          <p className="font-medium text-xs">No school organizations found matching your search.</p>
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredSchools.map((school) => {
+                        const isAtQuota = school.campusCount >= school.maxCampuses;
+                        return (
+                          <tr key={school.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors">
+                            <td className="py-3.5 px-4">
+                              <div className="flex items-center gap-3">
+                                <div className="size-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 font-bold grid place-items-center shrink-0 border border-blue-200/60 dark:border-blue-900/40">
+                                  {school.code.substring(0, 3)}
+                                </div>
+                                <div className="min-w-0">
+                                  <div className="font-semibold text-slate-900 dark:text-white truncate">
+                                    {school.name}
+                                  </div>
+                                  {school.motto && (
+                                    <div className="text-[11px] text-slate-400 truncate max-w-xs">
+                                      {school.motto}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </td>
+
+                            <td className="py-3.5 px-4 font-mono font-medium text-slate-700 dark:text-slate-300">
+                              <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px]">
+                                {school.code}
+                              </span>
+                            </td>
+
+                            <td className="py-3.5 px-4">
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-1.5 font-semibold text-slate-900 dark:text-white">
+                                  <span>{school.campusCount} of {school.maxCampuses} Campuses</span>
+                                  <span className="text-[10px] text-slate-400 font-normal">
+                                    (Max 20)
+                                  </span>
+                                </div>
+                                <div className="w-28 bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                  <div
+                                    className={`h-full rounded-full ${
+                                      isAtQuota ? "bg-amber-500" : "bg-blue-600"
+                                    }`}
+                                    style={{
+                                      width: `${Math.min(100, (school.campusCount / school.maxCampuses) * 100)}%`,
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            </td>
+
+                            <td className="py-3.5 px-4 font-medium text-slate-800 dark:text-slate-200">
+                              <div className="flex items-center gap-1.5">
+                                <Users className="size-3.5 text-slate-400" />
+                                <span>{school.totalStudents.toLocaleString()}</span>
+                              </div>
+                            </td>
+
+                            <td className="py-3.5 px-4 text-[11px] text-slate-500 space-y-0.5">
+                              {school.contactEmail && <div className="truncate">{school.contactEmail}</div>}
+                              {school.contactPhone && <div className="text-slate-400">{school.contactPhone}</div>}
+                            </td>
+
+                            <td className="py-3.5 px-4">
+                              <span
+                                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${
+                                  school.status === "ACTIVE"
+                                    ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-900/40"
+                                    : "bg-red-50 text-red-700 border-red-200 dark:bg-red-950/60 dark:text-red-400 dark:border-red-900/40"
+                                }`}
+                              >
+                                <span
+                                  className={`size-1.5 rounded-full ${
+                                    school.status === "ACTIVE" ? "bg-emerald-500" : "bg-red-500"
+                                  }`}
+                                />
+                                {school.status}
+                              </span>
+                            </td>
+
+                            <td className="py-3.5 px-4 text-right">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
+                                    <MoreHorizontal className="size-4 text-slate-500" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-48 rounded-xl shadow-lg">
+                                  <DropdownMenuLabel className="text-xs">Manage Tenant</DropdownMenuLabel>
+                                  <DropdownMenuItem
+                                    onClick={() => handleOpenQuotaModal(school)}
+                                    className="text-xs cursor-pointer gap-2"
+                                  >
+                                    <Sliders className="size-3.5" />
+                                    Configure Campus Quota
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() => handleToggleStatus(school)}
+                                    className={`text-xs cursor-pointer gap-2 ${
+                                      school.status === "ACTIVE" ? "text-red-600 dark:text-red-400" : "text-emerald-600"
+                                    }`}
+                                  >
+                                    {school.status === "ACTIVE" ? "Suspend Organization" : "Activate Organization"}
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* TAB 2: CAMPUS DIRECTORY */}
+          <TabsContent value="campuses" className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredSchools.flatMap((school) =>
+                school.campuses.map((camp) => (
+                  <div
+                    key={camp.id}
+                    className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-4 shadow-xs space-y-3"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="space-y-0.5">
+                        <span className="text-[10px] font-semibold uppercase text-slate-400">
+                          {school.name}
+                        </span>
+                        <h4 className="font-bold text-sm text-slate-900 dark:text-white">
+                          {camp.name}
+                        </h4>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-md font-mono text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        {camp.code}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 p-2.5 bg-slate-50 dark:bg-slate-950/60 rounded-xl text-xs">
+                      <div>
+                        <div className="text-[10px] text-slate-400">Enrolled Students</div>
+                        <div className="font-bold text-slate-900 dark:text-white text-sm">
+                          {camp.studentCount.toLocaleString()}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-slate-400">Teaching Staff</div>
+                        <div className="font-bold text-slate-900 dark:text-white text-sm">
+                          {camp.teacherCount}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="text-xs text-slate-500 space-y-1">
+                      {camp.headteacher && (
+                        <div className="flex items-center gap-1.5 truncate">
+                          <UserCheck className="size-3.5 text-slate-400 shrink-0" />
+                          <span className="truncate">Head: {camp.headteacher}</span>
+                        </div>
+                      )}
+                      {camp.location && (
+                        <div className="flex items-center gap-1.5 truncate text-[11px] text-slate-400">
+                          <Globe className="size-3.5 text-slate-400 shrink-0" />
+                          <span className="truncate">{camp.location}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </TabsContent>
+
+          {/* TAB 3: DATA MIGRATION & CSV INGESTION */}
+          <TabsContent value="migration" className="space-y-4">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-6 shadow-xs space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                    Tenant Data Migration & CSV Ingestion Engine
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Import historical student records and link them directly to their designated campus partitions.
+                  </p>
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={downloadCSVTemplate}
+                  className="rounded-xl text-xs gap-1.5 border-slate-200 dark:border-slate-800 h-9"
+                >
+                  <Download className="size-3.5 text-blue-600" />
+                  Download Standard CSV Template
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 space-y-2">
+                  <div className="font-semibold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <span className="size-5 rounded-full bg-blue-100 text-blue-700 text-[10px] grid place-items-center font-bold">1</span>
+                    Campus Partition Tagging
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Include the official campus code (e.g. <code className="font-mono bg-white dark:bg-slate-900 px-1 py-0.5 rounded border">MUK-01</code>) in the CSV to automatically route admissions into the correct branch.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 space-y-2">
+                  <div className="font-semibold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <span className="size-5 rounded-full bg-blue-100 text-blue-700 text-[10px] grid place-items-center font-bold">2</span>
+                    Automated Fee Ledger Sync
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Initial term invoices and bursary grants are provisioned in double-entry ledgers with zero balance discrepancy.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 space-y-2">
+                  <div className="font-semibold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <span className="size-5 rounded-full bg-blue-100 text-blue-700 text-[10px] grid place-items-center font-bold">3</span>
+                    Pre-Flight Validation
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Data is validated against unique phone and student ID constraints before committing to production databases.
+                  </p>
+                </div>
+              </div>
+
+              {/* Upload Dropzone Preview */}
+              <div className="border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl p-8 text-center space-y-3 bg-slate-50/30 dark:bg-slate-950/20">
+                <FileSpreadsheet className="size-10 text-slate-400 mx-auto" />
+                <div className="space-y-1">
+                  <div className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    Select a CSV file to validate and import students
+                  </div>
+                  <div className="text-[11px] text-slate-400">
+                    Supports files up to 50,000 student records per upload batch.
+                  </div>
+                </div>
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => setIsProvisionOpen(true)}
-                  className="border-slate-800 bg-slate-900 text-slate-300 text-xs rounded-xl"
+                  onClick={() => alert("Ready: Select your CSV file exported using the template above.")}
+                  className="rounded-xl text-xs h-9"
                 >
-                  Onboard First School Group
+                  <Upload className="size-3.5 mr-1.5" />
+                  Select File for Ingestion
                 </Button>
               </div>
-            ) : (
-              filteredSchools.map((school) => {
-                const quotaPercent = Math.min(100, (school.campusCount / school.maxCampuses) * 100);
-                return (
-                  <div
-                    key={school.id}
-                    className="bg-slate-900/90 border border-slate-800 hover:border-slate-700/80 rounded-2xl p-5 transition-all space-y-4 shadow-sm"
-                  >
-                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                      {/* Left: School Info */}
-                      <div className="flex items-start gap-3.5">
-                        <div className="size-11 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 grid place-items-center shrink-0 font-bold text-sm">
-                          {school.code.substring(0, 3)}
-                        </div>
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-white text-base">{school.name}</span>
-                            <Badge
-                              variant="outline"
-                              className="font-mono text-[10px] border-slate-700 text-slate-300"
-                            >
-                              {school.code}
-                            </Badge>
-                            <Badge
-                              className={`text-[10px] font-semibold ${
-                                school.status === "ACTIVE"
-                                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                                  : "bg-red-500/10 text-red-400 border border-red-500/20"
-                              }`}
-                            >
-                              {school.status}
-                            </Badge>
-                          </div>
-                          <div className="text-xs text-slate-400 flex flex-wrap items-center gap-x-4 gap-y-1">
-                            {school.contactEmail && <span>Email: {school.contactEmail}</span>}
-                            {school.contactPhone && <span>Phone: {school.contactPhone}</span>}
-                            <span>Registered: {new Date(school.createdAt).toLocaleDateString()}</span>
-                          </div>
-                        </div>
-                      </div>
+            </div>
+          </TabsContent>
 
-                      {/* Right: Metrics & Actions */}
-                      <div className="flex flex-wrap items-center gap-3">
-                        {/* Campus Quota Pill */}
-                        <div className="bg-slate-950 border border-slate-800 px-3.5 py-1.5 rounded-xl flex items-center gap-2 text-xs">
-                          <Layers className="size-3.5 text-violet-400" />
-                          <span className="text-slate-400">Campuses:</span>
-                          <span className="font-mono font-bold text-white">
-                            {school.campusCount} / {school.maxCampuses}
-                          </span>
-                          <span className="text-[10px] text-slate-500 font-mono">
-                            (Max: 20)
-                          </span>
-                        </div>
-
-                        {/* Students Pill */}
-                        <div className="bg-slate-950 border border-slate-800 px-3.5 py-1.5 rounded-xl flex items-center gap-2 text-xs">
-                          <Users className="size-3.5 text-emerald-400" />
-                          <span className="text-slate-400">Total Students:</span>
-                          <span className="font-mono font-bold text-white">
-                            {school.totalStudents.toLocaleString()}
-                          </span>
-                        </div>
-
-                        {/* Modify Quota Button */}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleOpenQuotaModal(school)}
-                          className="border-slate-800 bg-slate-950 hover:bg-slate-800 text-slate-300 rounded-xl h-8 text-xs gap-1"
-                        >
-                          <Sliders className="size-3" />
-                          Quota
-                        </Button>
-
-                        {/* Toggle Status */}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleToggleStatus(school)}
-                          className={`rounded-xl h-8 text-xs font-semibold ${
-                            school.status === "ACTIVE"
-                              ? "border-red-900/40 text-red-400 hover:bg-red-500/10"
-                              : "border-emerald-900/40 text-emerald-400 hover:bg-emerald-500/10"
-                          }`}
-                        >
-                          {school.status === "ACTIVE" ? "Suspend" : "Activate"}
-                        </Button>
-                      </div>
-                    </div>
-
-                    {/* Campuses Sub-List */}
-                    <div className="border-t border-slate-800/80 pt-3">
-                      <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
-                        <Layers className="size-3" />
-                        <span>Provisioned Campuses ({school.campuses.length})</span>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                        {school.campuses.map((camp) => (
-                          <div
-                            key={camp.id}
-                            className="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 space-y-1.5"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="font-semibold text-xs text-white truncate">
-                                {camp.name}
-                              </span>
-                              <Badge
-                                variant="outline"
-                                className="font-mono text-[9px] border-slate-700 text-slate-300"
-                              >
-                                {camp.code}
-                              </Badge>
-                            </div>
-                            <div className="text-[11px] text-slate-400 flex items-center justify-between">
-                              <span>Head: {camp.headteacher || "Not assigned"}</span>
-                              <span className="font-mono text-emerald-400 font-semibold">
-                                {camp.studentCount} students
-                              </span>
-                            </div>
-                            {camp.location && (
-                              <div className="text-[10px] text-slate-500 truncate">
-                                {camp.location}
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </section>
-
-        {/* Fast CSV Bulk Onboarding & Data Migration Tool */}
-        <section className="bg-slate-900/40 border border-slate-800/80 rounded-3xl p-6 space-y-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <FileSpreadsheet className="size-5 text-emerald-400" />
-                <h3 className="text-base font-bold text-white tracking-tight">
-                  High-Speed Data Migration & Ingestion Engine
-                </h3>
+          {/* TAB 4: COMPLIANCE AUDIT TRAIL */}
+          <TabsContent value="audit" className="space-y-4">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl shadow-xs overflow-hidden">
+              <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <div>
+                  <h4 className="font-bold text-sm text-slate-900 dark:text-white">Enterprise Governance Audit Trail</h4>
+                  <p className="text-xs text-slate-500">Immutable ledger of administrative actions, quota adjustments, and status changes.</p>
+                </div>
+                <Badge variant="outline" className="text-xs font-mono">
+                  {auditLogs.length} Records
+                </Badge>
               </div>
-              <p className="text-xs text-slate-400">
-                Onboard 10,000+ students for newly joined institutions in seconds using standardized multi-campus CSV templates.
-              </p>
-            </div>
 
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={downloadCSVTemplate}
-              className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-emerald-400 rounded-xl h-9 text-xs gap-1.5"
-            >
-              <Download className="size-3.5" />
-              Download Standard CSV Template
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-slate-400 pt-2">
-            <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800/80 space-y-1">
-              <span className="font-semibold text-white">1. Automatic Campus Mapping</span>
-              <p className="text-[11px] text-slate-500">
-                Rows tagged with <code className="text-indigo-400">MUK-01</code> or <code className="text-indigo-400">JIN-02</code> route automatically to their isolated campus database partitions.
-              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/40 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                      <th className="py-2.5 px-4">Action</th>
+                      <th className="py-2.5 px-4">Actor</th>
+                      <th className="py-2.5 px-4">Workstation</th>
+                      <th className="py-2.5 px-4">Timestamp</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+                    {auditLogs.length === 0 ? (
+                      <tr>
+                        <td colSpan={4} className="py-8 text-center text-slate-400">
+                          No audit entries recorded yet.
+                        </td>
+                      </tr>
+                    ) : (
+                      auditLogs.map((log) => (
+                        <tr key={log.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/30">
+                          <td className="py-3 px-4 font-medium text-slate-900 dark:text-white font-mono text-[11px]">
+                            {log.action}
+                          </td>
+                          <td className="py-3 px-4 text-slate-600 dark:text-slate-300">
+                            {log.actorName} ({log.actorRole})
+                          </td>
+                          <td className="py-3 px-4 font-mono text-[11px] text-slate-500">
+                            {log.workstationId}
+                          </td>
+                          <td className="py-3 px-4 text-[11px] text-slate-400">
+                            {new Date(log.createdAt).toLocaleString()}
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800/80 space-y-1">
-              <span className="font-semibold text-white">2. Automatic Fee Invoice Sync</span>
-              <p className="text-[11px] text-slate-500">
-                Pre-existing term arrears and bursary meal cards are automatically provisioned without double-entry errors.
-              </p>
-            </div>
-            <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800/80 space-y-1">
-              <span className="font-semibold text-white">3. Zero Data Loss Verification</span>
-              <p className="text-[11px] text-slate-500">
-                Transactions are validated atomically with instant rollback if duplicate registration codes are encountered.
-              </p>
-            </div>
-          </div>
-        </section>
+          </TabsContent>
+        </Tabs>
       </main>
 
-      {/* Onboard New School Modal */}
+      {/* Structured Onboarding Wizard Dialog */}
       <Dialog open={isProvisionOpen} onOpenChange={setIsProvisionOpen}>
-        <DialogContent className="sm:max-w-[620px] max-h-[90vh] overflow-y-auto rounded-3xl p-6 bg-slate-900 border-slate-800 text-white">
+        <DialogContent className="sm:max-w-[560px] rounded-3xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl">
           <DialogHeader>
-            <div className="size-10 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 grid place-items-center mb-2">
-              <Building2 className="size-5" />
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div className="size-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 grid place-items-center font-bold">
+                  <Building2 className="size-4" />
+                </div>
+                <div>
+                  <DialogTitle className="text-base font-bold text-slate-900 dark:text-white">
+                    Onboard New Educational Group
+                  </DialogTitle>
+                  <DialogDescription className="text-xs text-slate-500">
+                    Step {provisionStep} of 2 &bull; Provision tenant organization & primary campus
+                  </DialogDescription>
+                </div>
+              </div>
             </div>
-            <DialogTitle className="text-lg font-bold">Onboard New Educational Conglomerate</DialogTitle>
-            <DialogDescription className="text-xs text-slate-400">
-              Provision a new school group into the cluster with multi-tenant isolation, custom campus quota (up to 20), and lead administrative credentials.
-            </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleProvisionSubmit} className="space-y-4 pt-2">
             {provisionError && (
-              <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs flex items-center gap-2">
-                <AlertTriangle className="size-4 shrink-0" />
+              <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/40 rounded-xl text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
+                <AlertCircle className="size-4 shrink-0" />
                 <span>{provisionError}</span>
               </div>
             )}
 
-            {/* Section 1: Organization Details */}
-            <div className="space-y-3">
-              <div className="text-xs font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-1.5 border-b border-slate-800 pb-1">
-                <span>1. School Group / Conglomerate Profile</span>
-              </div>
-
-              <div className="space-y-1.5">
-                <Label className="text-xs text-slate-300 font-semibold">Official Organization Name *</Label>
-                <Input
-                  placeholder="e.g. St. Lawrence Educational Conglomerate"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                  className="bg-slate-950 border-slate-800 text-xs h-9 rounded-xl text-white"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
+            {provisionStep === 1 && (
+              <div className="space-y-3.5">
                 <div className="space-y-1.5">
-                  <Label className="text-xs text-slate-300 font-semibold">Group Code (Unique) *</Label>
+                  <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    Organization / School Group Name *
+                  </Label>
                   <Input
-                    placeholder="e.g. SLA-2026"
-                    value={formData.code}
-                    onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
+                    placeholder="e.g. St. Lawrence Educational Conglomerate"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
-                    className="bg-slate-950 border-slate-800 text-xs h-9 rounded-xl text-white font-mono uppercase"
-                    maxLength={12}
+                    className="h-9 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
                   />
                 </div>
 
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Organization Code (Unique) *
+                    </Label>
+                    <Input
+                      placeholder="e.g. SLA-2026"
+                      value={formData.code}
+                      onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
+                      required
+                      maxLength={12}
+                      className="h-9 rounded-xl text-xs font-mono uppercase bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Contract Campus Quota (Max 20) *
+                    </Label>
+                    <Input
+                      type="number"
+                      min={1}
+                      max={20}
+                      value={formData.maxCampuses}
+                      onChange={(e) => setFormData({ ...formData, maxCampuses: Number(e.target.value) })}
+                      required
+                      className="h-9 rounded-xl text-xs font-mono bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Official Contact Email *
+                    </Label>
+                    <Input
+                      type="email"
+                      placeholder="director@stlawrence.sc.ug"
+                      value={formData.contactEmail}
+                      onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
+                      required
+                      className="h-9 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Official Contact Phone *
+                    </Label>
+                    <Input
+                      placeholder="+256 701 116 781"
+                      value={formData.contactPhone}
+                      onChange={(e) => setFormData({ ...formData, contactPhone: e.target.value })}
+                      required
+                      className="h-9 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-1.5">
-                  <Label className="text-xs text-slate-300 font-semibold">Contract Campus Quota (Max 20) *</Label>
+                  <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    Official Motto / Tagline (Optional)
+                  </Label>
                   <Input
-                    type="number"
-                    min={1}
-                    max={20}
-                    value={formData.maxCampuses}
-                    onChange={(e) => setFormData({ ...formData, maxCampuses: Number(e.target.value) })}
-                    required
-                    className="bg-slate-950 border-slate-800 text-xs h-9 rounded-xl text-white font-mono"
+                    placeholder="e.g. Excellence, Leadership and Godliness"
+                    value={formData.motto}
+                    onChange={(e) => setFormData({ ...formData, motto: e.target.value })}
+                    className="h-9 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
                   />
                 </div>
               </div>
+            )}
 
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-slate-300 font-semibold">Official Contact Email *</Label>
-                  <Input
-                    type="email"
-                    placeholder="director@stlawrence.sc.ug"
-                    value={formData.contactEmail}
-                    onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
-                    required
-                    className="bg-slate-950 border-slate-800 text-xs h-9 rounded-xl text-white"
-                  />
+            {provisionStep === 2 && (
+              <div className="space-y-3.5">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Primary Campus Name *
+                    </Label>
+                    <Input
+                      placeholder="e.g. Crown City Main Campus"
+                      value={formData.primaryCampusName}
+                      onChange={(e) => setFormData({ ...formData, primaryCampusName: e.target.value })}
+                      required
+                      className="h-9 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Primary Campus Code *
+                    </Label>
+                    <Input
+                      placeholder="e.g. CRO-01"
+                      value={formData.primaryCampusCode}
+                      onChange={(e) => setFormData({ ...formData, primaryCampusCode: e.target.value.toUpperCase() })}
+                      required
+                      maxLength={10}
+                      className="h-9 rounded-xl text-xs font-mono uppercase bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                    />
+                  </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-slate-300 font-semibold">Official Phone *</Label>
-                  <Input
-                    placeholder="+256 701 116 781"
-                    value={formData.contactPhone}
-                    onChange={(e) => setFormData({ ...formData, contactPhone: e.target.value })}
-                    required
-                    className="bg-slate-950 border-slate-800 text-xs h-9 rounded-xl text-white"
-                  />
-                </div>
-              </div>
-            </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Physical Location
+                    </Label>
+                    <Input
+                      placeholder="e.g. Maya, Masaka Road"
+                      value={formData.primaryLocation}
+                      onChange={(e) => setFormData({ ...formData, primaryLocation: e.target.value })}
+                      className="h-9 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                    />
+                  </div>
 
-            {/* Section 2: Primary Campus Provisioning */}
-            <div className="space-y-3 pt-2">
-              <div className="text-xs font-bold uppercase tracking-wider text-violet-400 flex items-center gap-1.5 border-b border-slate-800 pb-1">
-                <span>2. Initial Primary Campus (Branch #1)</span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-slate-300 font-semibold">Campus Name *</Label>
-                  <Input
-                    placeholder="e.g. Crown City Main Campus"
-                    value={formData.primaryCampusName}
-                    onChange={(e) => setFormData({ ...formData, primaryCampusName: e.target.value })}
-                    required
-                    className="bg-slate-950 border-slate-800 text-xs h-9 rounded-xl text-white"
-                  />
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Principal / Headteacher
+                    </Label>
+                    <Input
+                      placeholder="e.g. Dr. Arthur Ssentongo"
+                      value={formData.headteacher}
+                      onChange={(e) => setFormData({ ...formData, headteacher: e.target.value })}
+                      className="h-9 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                    />
+                  </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-slate-300 font-semibold">Campus Code *</Label>
-                  <Input
-                    placeholder="e.g. CRO-01"
-                    value={formData.primaryCampusCode}
-                    onChange={(e) => setFormData({ ...formData, primaryCampusCode: e.target.value.toUpperCase() })}
-                    required
-                    className="bg-slate-950 border-slate-800 text-xs h-9 rounded-xl text-white font-mono uppercase"
-                    maxLength={10}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-slate-300 font-semibold">Physical Location</Label>
-                  <Input
-                    placeholder="e.g. Maya, Masaka Road, Wakiso"
-                    value={formData.primaryLocation}
-                    onChange={(e) => setFormData({ ...formData, primaryLocation: e.target.value })}
-                    className="bg-slate-950 border-slate-800 text-xs h-9 rounded-xl text-white"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-slate-300 font-semibold">Headteacher / Principal</Label>
-                  <Input
-                    placeholder="e.g. Prof. Lawrence Mukiibi"
-                    value={formData.headteacher}
-                    onChange={(e) => setFormData({ ...formData, headteacher: e.target.value })}
-                    className="bg-slate-950 border-slate-800 text-xs h-9 rounded-xl text-white"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Section 3: Master Admin Account */}
-            <div className="space-y-3 pt-2">
-              <div className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5 border-b border-slate-800 pb-1">
-                <span>3. Master Administrative User Credentials</span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-slate-300 font-semibold">Admin Full Name</Label>
-                  <Input
-                    placeholder="e.g. Managing Director"
-                    value={formData.adminName}
-                    onChange={(e) => setFormData({ ...formData, adminName: e.target.value })}
-                    className="bg-slate-950 border-slate-800 text-xs h-9 rounded-xl text-white"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-slate-300 font-semibold">Admin Login Email</Label>
-                  <Input
-                    type="email"
-                    placeholder="admin@stlawrence.sc.ug"
-                    value={formData.adminEmail}
-                    onChange={(e) => setFormData({ ...formData, adminEmail: e.target.value })}
-                    className="bg-slate-950 border-slate-800 text-xs h-9 rounded-xl text-white"
-                  />
+                <div className="border-t border-slate-100 dark:border-slate-800 pt-3 space-y-3">
+                  <div className="text-xs font-semibold text-slate-900 dark:text-white">
+                    Chief Administrator Credentials
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <Label className="text-xs text-slate-500">Administrator Name</Label>
+                      <Input
+                        placeholder="e.g. Managing Director"
+                        value={formData.adminName}
+                        onChange={(e) => setFormData({ ...formData, adminName: e.target.value })}
+                        className="h-9 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-xs text-slate-500">Administrator Login Email</Label>
+                      <Input
+                        type="email"
+                        placeholder="admin@stlawrence.sc.ug"
+                        value={formData.adminEmail}
+                        onChange={(e) => setFormData({ ...formData, adminEmail: e.target.value })}
+                        className="h-9 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            <DialogFooter className="pt-4 gap-2 border-t border-slate-800">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setIsProvisionOpen(false)}
-                disabled={isSubmitting}
-                className="border-slate-800 bg-slate-950 text-slate-300 rounded-xl text-xs h-9"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                size="sm"
-                disabled={isSubmitting}
-                className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs h-9 font-semibold gap-1.5 shadow-md shadow-indigo-600/20"
-              >
-                {isSubmitting ? "Provisioning Organization..." : "Provision & Activate School"}
-              </Button>
+            <DialogFooter className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              {provisionStep === 1 ? (
+                <>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsProvisionOpen(false)}
+                    className="text-xs rounded-xl"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => {
+                      if (!formData.name.trim() || !formData.code.trim() || !formData.contactEmail.trim()) {
+                        setProvisionError("Please complete all required fields (*).");
+                        return;
+                      }
+                      setProvisionError(null);
+                      setProvisionStep(2);
+                    }}
+                    className="text-xs font-semibold rounded-xl bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Continue to Campus Setup &rarr;
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setProvisionStep(1)}
+                    className="text-xs rounded-xl"
+                  >
+                    &larr; Back
+                  </Button>
+                  <Button
+                    type="submit"
+                    size="sm"
+                    disabled={isSubmitting}
+                    className="text-xs font-semibold rounded-xl bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    {isSubmitting ? "Provisioning..." : "Complete Tenant Provisioning"}
+                  </Button>
+                </>
+              )}
             </DialogFooter>
           </form>
         </DialogContent>
@@ -932,37 +1165,39 @@ export default function SuperAdminPage() {
 
       {/* Quota Modal */}
       <Dialog open={isQuotaModalOpen} onOpenChange={setIsQuotaModalOpen}>
-        <DialogContent className="sm:max-w-[420px] rounded-3xl p-6 bg-slate-900 border-slate-800 text-white">
+        <DialogContent className="sm:max-w-[420px] rounded-3xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl">
           <DialogHeader>
-            <div className="size-10 rounded-2xl bg-violet-500/10 border border-violet-500/20 text-violet-400 grid place-items-center mb-2">
-              <Sliders className="size-5" />
-            </div>
-            <DialogTitle className="text-base font-bold">Update Campus Quota</DialogTitle>
-            <DialogDescription className="text-xs text-slate-400">
-              Adjust the contract campus limit for <strong className="text-white">{selectedSchoolForQuota?.name}</strong>. Enterprise platform ceiling is strictly 20 campuses per school.
+            <DialogTitle className="text-base font-bold text-slate-900 dark:text-white">
+              Configure Campus Quota
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-500">
+              Adjust the contract campus license for <strong className="text-slate-900 dark:text-white">{selectedSchoolForQuota?.name}</strong>. Enterprise platform ceiling is strictly 20 campuses per school group.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 pt-2">
             <div className="space-y-1.5">
-              <Label className="text-xs text-slate-300 font-semibold">Allowed Campuses (1 - 20)</Label>
+              <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                Authorized Campuses (1 - 20)
+              </Label>
               <Input
                 type="number"
                 min={selectedSchoolForQuota?.campusCount ?? 1}
                 max={20}
                 value={newQuotaValue}
                 onChange={(e) => setNewQuotaValue(Number(e.target.value))}
-                className="bg-slate-950 border-slate-800 text-xs h-10 rounded-xl text-white font-mono text-center text-lg"
+                className="h-10 text-center text-lg font-mono font-bold rounded-xl bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
               />
             </div>
-            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-400 space-y-1">
-              <div className="flex justify-between">
-                <span>Currently Active:</span>
-                <span className="font-bold text-white font-mono">{selectedSchoolForQuota?.campusCount} campuses</span>
+
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-100 dark:border-slate-800 text-xs space-y-1">
+              <div className="flex justify-between text-slate-600 dark:text-slate-400">
+                <span>Active Branch Campuses:</span>
+                <span className="font-semibold text-slate-900 dark:text-white">{selectedSchoolForQuota?.campusCount}</span>
               </div>
-              <div className="flex justify-between">
-                <span>Maximum Allowed:</span>
-                <span className="font-bold text-violet-400 font-mono">20 campuses</span>
+              <div className="flex justify-between text-slate-600 dark:text-slate-400">
+                <span>Enterprise Max Ceiling:</span>
+                <span className="font-semibold text-blue-600 dark:text-blue-400">20 Campuses</span>
               </div>
             </div>
           </div>
@@ -973,7 +1208,7 @@ export default function SuperAdminPage() {
               variant="outline"
               size="sm"
               onClick={() => setIsQuotaModalOpen(false)}
-              className="border-slate-800 bg-slate-950 text-slate-300 rounded-xl text-xs h-9"
+              className="text-xs rounded-xl"
             >
               Cancel
             </Button>
@@ -982,9 +1217,9 @@ export default function SuperAdminPage() {
               size="sm"
               onClick={handleSaveQuota}
               disabled={isSubmitting}
-              className="bg-violet-600 hover:bg-violet-500 text-white rounded-xl text-xs h-9 font-semibold"
+              className="text-xs font-semibold rounded-xl bg-blue-600 hover:bg-blue-700 text-white"
             >
-              Save New Quota
+              Update Quota
             </Button>
           </DialogFooter>
         </DialogContent>
