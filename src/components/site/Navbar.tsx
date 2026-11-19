@@ -5,9 +5,9 @@ import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-import { 
-  Menu, X, Sun, Moon, ChevronDown, 
-  GraduationCap, BookOpen, ShieldCheck, ArrowRight, Sparkles 
+import {
+  Menu, X, Sun, Moon, ChevronDown,
+  GraduationCap, BookOpen, ShieldCheck, ArrowRight, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -107,8 +107,8 @@ export function Navbar() {
                         href={l.href}
                         className={cn(
                           "relative text-[15px] xl:text-base font-bold tracking-tight transition-all duration-200 py-1.5 inline-block drop-shadow-sm",
-                          active 
-                            ? "text-amber-400 font-extrabold after:content-[''] after:absolute after:-bottom-1 after:inset-x-0 after:h-[2.5px] after:bg-gradient-to-r after:from-amber-400 after:to-orange-500 after:rounded-full after:shadow-sm" 
+                          active
+                            ? "text-amber-400 font-extrabold after:content-[''] after:absolute after:-bottom-1 after:inset-x-0 after:h-[2.5px] after:bg-gradient-to-r after:from-amber-400 after:to-orange-500 after:rounded-full after:shadow-sm"
                             : "text-white/90 hover:text-white after:content-[''] after:absolute after:-bottom-1 after:inset-x-0 after:h-[2px] after:bg-white/60 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200",
                         )}
                       >
