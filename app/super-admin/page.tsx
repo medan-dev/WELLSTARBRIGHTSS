@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition, Component, ErrorInfo, ReactNode } from "react";
+import { useEffect, useState, useCallback, useTransition, Component, ErrorInfo, ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import edurexaHorizontal from "@/assets/edurexa-horizontal.png";
@@ -218,7 +218,7 @@ function SuperAdminContent() {
     }
   }, []);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setLoading(true);
     try {
       const [
@@ -256,13 +256,13 @@ function SuperAdminContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [migrationCampusId]);
 
   useEffect(() => {
     if (isAuthenticated) {
       loadData();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, loadData]);
 
   const handlePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();

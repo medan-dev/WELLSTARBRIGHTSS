@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { PageHeader } from "@/components/admin/Widgets";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,7 +41,7 @@ export default function MarksEntry() {
     init();
   }, []);
 
-  const loadGrid = async () => {
+  const loadGrid = useCallback(async () => {
     setLoading(true);
     try {
       const studs = await getStudentsByClass(selectedClass);
@@ -53,18 +53,18 @@ export default function MarksEntry() {
         markMap[m.studentId] = m.score;
       });
       setMarks(markMap);
-    } catch(e) {
+    } catch {
       toast.error("Failed to load students");
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedClass, selectedSubject, selectedExam]);
 
   useEffect(() => {
     if (selectedClass && selectedSubject && selectedExam) {
       loadGrid();
     }
-  }, [selectedClass, selectedSubject, selectedExam]);
+  }, [selectedClass, selectedSubject, selectedExam, loadGrid]);
 
   const handleMarkChange = (studentId: string, val: string) => {
     const num = parseInt(val);
