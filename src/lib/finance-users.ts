@@ -12,12 +12,12 @@ export interface FinanceAuthUser {
 export const ENTERPRISE_FINANCE_USERS: FinanceAuthUser[] = [
   {
     id: "usr-super-admin",
-    name: "Dr. Arthur Ssentongo",
-    email: "admin@wellstarbright.sc.ug",
+    name: "School Administrator & Head",
+    email: "admin@yourschool.com",
     role: "SUPER_ADMIN",
     pin: "9900",
     workstationId: "SUPER-ADMIN-CONSOLE",
-    title: "Head of School & Executive Administrator",
+    title: "Executive Head & Principal",
     permissions: [
       "ALL_ACCESS",
       "WORKSTATION_LOCK",
@@ -30,12 +30,12 @@ export const ENTERPRISE_FINANCE_USERS: FinanceAuthUser[] = [
   },
   {
     id: "usr-chief-bursar",
-    name: "CPA Sarah Namubiru",
-    email: "bursar@wellstarbright.sc.ug",
+    name: "Chief Bursar",
+    email: "bursar@yourschool.com",
     role: "BURSAR",
     pin: "1234",
     workstationId: "WS-BURSAR-PC01",
-    title: "Chief Bursar & Head of Accounts",
+    title: "Head of Accounts & Financial Control",
     permissions: [
       "POST_JOURNALS",
       "RECONCILE_BANK",
@@ -49,12 +49,12 @@ export const ENTERPRISE_FINANCE_USERS: FinanceAuthUser[] = [
   },
   {
     id: "usr-cashier-1",
-    name: "Joseph Kato",
-    email: "cashier@wellstarbright.sc.ug",
+    name: "Senior Counter Cashier",
+    email: "cashier@yourschool.com",
     role: "CASHIER",
     pin: "5566",
     workstationId: "WS-COUNTER-POS1",
-    title: "Senior Counter Bursar & POS Cashier",
+    title: "Counter Cashier & POS Desk 1",
     permissions: [
       "COLLECT_FEES",
       "ISSUE_RECEIPTS",
@@ -65,12 +65,12 @@ export const ENTERPRISE_FINANCE_USERS: FinanceAuthUser[] = [
   },
   {
     id: "usr-cashier-2",
-    name: "Grace Auma",
-    email: "cashier2@wellstarbright.sc.ug",
+    name: "Assistant Cashier",
+    email: "cashier2@yourschool.com",
     role: "CASHIER",
     pin: "5577",
     workstationId: "WS-COUNTER-POS2",
-    title: "Counter Cashier 2 & POS Assistant",
+    title: "Counter Cashier & POS Desk 2",
     permissions: [
       "COLLECT_FEES",
       "ISSUE_RECEIPTS",
@@ -81,12 +81,12 @@ export const ENTERPRISE_FINANCE_USERS: FinanceAuthUser[] = [
   },
   {
     id: "usr-senior-auditor",
-    name: "Robert Mugisha",
-    email: "auditor@wellstarbright.sc.ug",
+    name: "Internal Auditor",
+    email: "auditor@yourschool.com",
     role: "AUDITOR",
     pin: "7788",
     workstationId: "AUDIT-DESK-01",
-    title: "Senior Financial Auditor",
+    title: "Audit & Compliance Officer",
     permissions: [
       "READ_LEDGERS",
       "READ_TRIAL_BALANCE",

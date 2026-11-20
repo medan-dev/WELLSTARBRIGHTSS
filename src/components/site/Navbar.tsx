@@ -48,7 +48,7 @@ export function Navbar() {
     { href: "/", label: "Home" },
     { href: "/#features", label: "Features" },
     { href: "/#pricing", label: "Pricing" },
-    { href: "/#demo", label: "Demo" },
+    { href: "/demo", label: "Demo" },
     { href: "/documentation", label: "Documentation" },
     { href: "/#support", label: "Help & Support" },
   ];
@@ -132,9 +132,15 @@ export function Navbar() {
               Pricing
             </a>
 
-            <a href="/#demo" className="transition-colors hover:text-[#f26522]">
+            <Link
+              href="/demo"
+              className={cn(
+                "transition-colors hover:text-[#f26522]",
+                pathname?.startsWith("/demo") ? "text-[#f26522]" : "text-slate-700"
+              )}
+            >
               Demo
-            </a>
+            </Link>
 
             <Link
               href="/documentation"
@@ -153,24 +159,24 @@ export function Navbar() {
 
           {/* Desktop Right CTA: Try Out Demo */}
           <div className="hidden lg:flex items-center gap-3">
-            <a href="https://wa.me/256758611414" target="_blank" rel="noreferrer">
+            <Link href="/demo">
               <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold px-4 h-9.5 shadow-sm transition-colors gap-1.5">
                 <span>Try Out Demo</span>
                 <ArrowRight className="size-3.5" />
               </Button>
-            </a>
+            </Link>
           </div>
 
           {/* Mobile Right Action + Hamburger Toggle */}
           <div className="flex items-center gap-2 lg:hidden">
-            <a href="https://wa.me/256758611414" target="_blank" rel="noreferrer">
+            <Link href="/demo">
               <Button
                 size="sm"
                 className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold px-3 h-8.5 shadow-sm"
               >
                 Demo
               </Button>
-            </a>
+            </Link>
 
             <button
               onClick={() => setMobileMenuOpen(true)}

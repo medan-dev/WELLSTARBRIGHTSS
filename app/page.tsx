@@ -108,12 +108,12 @@ export default function EdurexaMarketingHome() {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <a href="#demo-form">
+            <Link href="/demo">
               <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-sm font-bold px-7 h-12 shadow-sm gap-2">
-                <span>Schedule Executive Demo</span>
+                <span>Launch Live System Demo</span>
                 <ArrowRight className="size-4" />
               </Button>
-            </a>
+            </Link>
 
             <a href="#features">
               <Button
@@ -300,12 +300,12 @@ export default function EdurexaMarketingHome() {
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
-              <a href="#demo-form">
+              <Link href="/demo">
                 <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold h-10 px-5 gap-1.5 shadow-sm">
-                  <span>Claim Free 4-Hour Demo Access</span>
+                  <span>Enter Live Demo Gateway</span>
                   <ArrowRight className="size-3.5" />
                 </Button>
-              </a>
+              </Link>
 
               <a href="https://wa.me/256758611414" target="_blank" rel="noreferrer">
                 <Button variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-50 rounded-lg text-xs font-semibold h-10 px-4 gap-1.5">
@@ -1061,9 +1061,9 @@ export default function EdurexaMarketingHome() {
             <a href="#pricing" className="hover:text-[#0b2256] transition-colors">
               Pricing
             </a>
-            <a href="#demo" className="hover:text-[#0b2256] transition-colors">
+            <Link href="/demo" className="hover:text-[#0b2256] transition-colors">
               Demo
-            </a>
+            </Link>
             <Link href="/documentation" className="hover:text-[#0b2256] transition-colors">
               Documentation
             </Link>
