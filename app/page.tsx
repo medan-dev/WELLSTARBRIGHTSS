@@ -434,11 +434,12 @@ export default function EdurexaMarketingHome() {
             </span>
             <button
               onClick={() => setBillingPeriod(billingPeriod === "term" ? "year" : "term")}
-              className="relative w-12 h-6 rounded-none bg-slate-300 p-0.5 transition-colors"
+              className="relative w-12 h-6 rounded-full bg-slate-300 p-0.5 transition-colors focus:outline-none"
+              aria-label="Toggle billing period between term and year"
             >
               <div
                 className={cn(
-                  "size-5 rounded-none bg-white shadow-md transition-transform",
+                  "size-5 rounded-full bg-white shadow-md transition-transform",
                   billingPeriod === "year" ? "translate-x-6 bg-[#f26522]" : "translate-x-0"
                 )}
               />
