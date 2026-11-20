@@ -3,7 +3,6 @@ import {
   BookOpen,
   Receipt,
   GraduationCap,
-  Sparkles,
   ShieldCheck,
   Layers,
   ArrowRight,
@@ -48,7 +47,7 @@ export default function DocumentationPage() {
       title: "Free 4-Hour Sandbox Demo",
       desc: "Experience every module live in a private sandbox environment before onboarding.",
       href: "/documentation/sandbox-demo",
-      icon: Sparkles,
+      icon: Server,
       badge: "100% Free",
       color: "text-orange-600 bg-orange-50 border-orange-200",
     },
@@ -85,7 +84,7 @@ export default function DocumentationPage() {
         {/* Hero Header */}
         <div className="space-y-4 pb-8 border-b border-slate-200">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-[#0b2256] text-white">
+            <span className="px-2.5 py-1 rounded-none text-xs font-mono font-bold bg-[#0b2256] text-white">
               EDUREXA Docs
             </span>
             <span className="flex items-center gap-1.5 text-xs text-slate-500">
@@ -93,10 +92,10 @@ export default function DocumentationPage() {
               <span>4 min read</span>
             </span>
             <span className="text-slate-300">•</span>
-            <span className="text-xs text-slate-500">Updated November 2026</span>
+            <span className="text-xs text-slate-500 font-mono">Updated November 2026</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight">
             EDUREXA Documentation & Knowledge Base
           </h1>
 
@@ -138,14 +137,14 @@ export default function DocumentationPage() {
                 <Link
                   key={idx}
                   href={item.href}
-                  className="flex-1 min-w-[280px] p-5 rounded-2xl border border-slate-200 bg-white hover:border-[#0b2256]/30 hover:shadow-md transition-all group flex flex-col justify-between"
+                  className="flex-1 min-w-[280px] p-5 rounded-none border border-slate-300 bg-white hover:border-[#0b2256] transition-colors group flex flex-col justify-between"
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <div className={`p-2.5 rounded-xl border ${item.color}`}>
+                      <div className={`p-2.5 rounded-none border ${item.color}`}>
                         <Icon className="size-5" />
                       </div>
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">
+                      <span className="px-2 py-0.5 rounded-none text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">
                         {item.badge}
                       </span>
                     </div>
@@ -180,7 +179,7 @@ export default function DocumentationPage() {
           </p>
 
           <div className="flex flex-wrap gap-3 pt-2">
-            <div className="flex-1 min-w-[220px] p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5">
+            <div className="flex-1 min-w-[220px] p-4 rounded-none border border-slate-300 bg-slate-50/60 space-y-1.5">
               <div className="flex items-center gap-2 text-xs font-bold text-[#0b2256]">
                 <ShieldCheck className="size-4 text-emerald-600" />
                 <span>Isolated Tenants</span>
@@ -190,7 +189,7 @@ export default function DocumentationPage() {
               </p>
             </div>
 
-            <div className="flex-1 min-w-[220px] p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5">
+            <div className="flex-1 min-w-[220px] p-4 rounded-none border border-slate-300 bg-slate-50/60 space-y-1.5">
               <div className="flex items-center gap-2 text-xs font-bold text-[#0b2256]">
                 <Lock className="size-4 text-amber-500" />
                 <span>Role-Based Access</span>
@@ -200,7 +199,7 @@ export default function DocumentationPage() {
               </p>
             </div>
 
-            <div className="flex-1 min-w-[220px] p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5">
+            <div className="flex-1 min-w-[220px] p-4 rounded-none border border-slate-300 bg-slate-50/60 space-y-1.5">
               <div className="flex items-center gap-2 text-xs font-bold text-[#0b2256]">
                 <Server className="size-4 text-blue-600" />
                 <span>Offline POS Resiliency</span>
@@ -214,13 +213,12 @@ export default function DocumentationPage() {
 
         {/* Section 4: Sandbox Demo Invitation */}
         <div id="sandbox-invitation" className="pt-10">
-          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#0b2256] to-[#081a42] text-white space-y-4 shadow-md">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-400/20 text-emerald-300 text-xs font-bold border border-emerald-400/30">
-              <Sparkles className="size-3 text-emerald-300" />
+          <div className="p-6 rounded-none border border-slate-300 bg-gradient-to-br from-[#0b2256] to-[#081a42] text-white space-y-4">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-none bg-white/10 text-emerald-300 text-[11px] font-mono font-bold border border-white/20">
               <span>Free 4-Hour Sandbox Evaluation</span>
             </div>
 
-            <h3 className="text-lg sm:text-xl font-black text-white">
+            <h3 className="text-lg sm:text-xl font-bold text-white">
               Test EDUREXA Freely for 4 Hours Before Onboarding
             </h3>
 
@@ -234,14 +232,14 @@ export default function DocumentationPage() {
                 target="_blank"
                 rel="noreferrer"
               >
-                <Button className="bg-[#f26522] hover:bg-[#d95314] text-white font-bold text-xs h-10 px-5 rounded-xl shadow-sm gap-2">
+                <Button className="bg-[#f26522] hover:bg-[#d95314] text-white font-bold text-xs h-10 px-5 rounded-none shadow-none gap-2">
                   <span>Request Instant 4h Sandbox via WhatsApp</span>
                   <ArrowRight className="size-4" />
                 </Button>
               </a>
 
               <Link href="/documentation/sandbox-demo">
-                <Button variant="outline" className="border-white/20 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs h-10 px-4 rounded-xl">
+                <Button variant="outline" className="border-white/20 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs h-10 px-4 rounded-none">
                   <span>Read Sandbox Guide</span>
                 </Button>
               </Link>

@@ -36,14 +36,14 @@ for (const [grade, streams] of Object.entries(streamNames)) {
 }
 
 export const teachers = [
-  { id: "T-201", name: "Nshuti Medan", subject: "Director", classes: 0, email: "m.nshuti@wellstarbright.sc.ug" },
-  { id: "T-202", name: "Sserwadda Ivan", subject: "Mathematics", classes: 5, email: "i.sserwadda@wellstarbright.sc.ug" },
-  { id: "T-203", name: "Nagawa Christine", subject: "Biology", classes: 4, email: "c.nagawa@wellstarbright.sc.ug" },
-  { id: "T-204", name: "Ouma Patrick", subject: "Physical Education", classes: 6, email: "p.ouma@wellstarbright.sc.ug" },
-  { id: "T-205", name: "Kemigisha Fiona", subject: "English Literature", classes: 5, email: "f.kemigisha@wellstarbright.sc.ug" },
-  { id: "T-206", name: "Ssekandi Isaac", subject: "Computer Studies", classes: 4, email: "i.ssekandi@wellstarbright.sc.ug" },
-  { id: "T-207", name: "Namukasa Amina", subject: "Fine Art", classes: 3, email: "a.namukasa@wellstarbright.sc.ug" },
-  { id: "T-208", name: "Opio Daniel", subject: "History & CRE", classes: 4, email: "d.opio@wellstarbright.sc.ug" },
+  { id: "T-201", name: "Nshuti Medan", subject: "Director", classes: 0, email: "m.nshuti@yourschool.com" },
+  { id: "T-202", name: "Sserwadda Ivan", subject: "Mathematics", classes: 5, email: "i.sserwadda@yourschool.com" },
+  { id: "T-203", name: "Nagawa Christine", subject: "Biology", classes: 4, email: "c.nagawa@yourschool.com" },
+  { id: "T-204", name: "Ouma Patrick", subject: "Physical Education", classes: 6, email: "p.ouma@yourschool.com" },
+  { id: "T-205", name: "Kemigisha Fiona", subject: "English Literature", classes: 5, email: "f.kemigisha@yourschool.com" },
+  { id: "T-206", name: "Ssekandi Isaac", subject: "Computer Studies", classes: 4, email: "i.ssekandi@yourschool.com" },
+  { id: "T-207", name: "Namukasa Amina", subject: "Fine Art", classes: 3, email: "a.namukasa@yourschool.com" },
+  { id: "T-208", name: "Opio Daniel", subject: "History & CRE", classes: 4, email: "d.opio@yourschool.com" },
 ];
 
 export const classes = [
@@ -112,7 +112,7 @@ export const applications = [
 
 export const siteContent = {
   testimonials: [
-    { name: "Amara Okafor", role: "Parent of S.2 student", quote: "Wellstar Bright has transformed how my daughter sees learning. She wakes up excited.", rating: 5 },
+    { name: "Amara Okafor", role: "Parent of S.2 student", quote: "EDUREXA has transformed how we monitor student progress and verify tuition receipts.", rating: 5 },
     { name: "James Patel", role: "Class of 2023", quote: "The teachers genuinely care. I left with confidence, friendships, and a place at MIT.", rating: 5 },
     { name: "Lin Chen", role: "Parent of S.1 & S.5 students", quote: "Beautiful campus, brilliant educators, and a community that feels like family.", rating: 5 },
   ],

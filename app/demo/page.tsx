@@ -13,7 +13,6 @@ import {
   Receipt,
   BookOpen,
   GraduationCap,
-  Sparkles,
   Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -187,26 +186,25 @@ export default function DemoPage() {
 
       {/* Main Centered Form Card */}
       <main className="flex-1 flex items-center justify-center px-4 py-8">
-        <div className="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-sm p-6 sm:p-8 space-y-6">
+        <div className="w-full max-w-md bg-white border border-slate-300 rounded-none shadow-none p-6 sm:p-8 space-y-6">
           {/* Card Header */}
           <div className="text-center space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#0b2256]/10 text-[#0b2256] text-xs font-bold">
-              <Sparkles className="size-3 text-[#f26522]" />
-              <span>Client Demonstration</span>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-none border border-slate-300 bg-slate-100 text-[#0b2256] text-[11px] font-mono uppercase tracking-widest font-bold">
+              <span>Interactive Client Sandbox</span>
             </div>
-            <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-              Demo Portal Sign-In
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+              Demo Portal Authentication
             </h1>
             <p className="text-xs text-slate-500 font-mono">
-              Simulated School: <span className="font-bold text-slate-700">yourschool.com</span>
+              Target Tenant: <span className="font-bold text-slate-800">yourschool.com</span>
             </p>
           </div>
 
           {/* The Primary Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Demo Account Email
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider font-mono">
+                Account ID / Email
               </label>
               <Input
                 type="text"
@@ -214,14 +212,14 @@ export default function DemoPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="e.g. cashier@yourschool.com"
-                className="h-11 rounded-xl text-xs font-mono font-medium border-slate-200 bg-white"
+                className="h-10 rounded-none text-xs font-mono font-medium border-slate-300 bg-white"
               />
             </div>
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Password or PIN
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider font-mono">
+                  Access Key / PIN
                 </label>
                 <button
                   type="button"
@@ -238,33 +236,33 @@ export default function DemoPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password or PIN"
-                className="h-11 rounded-xl text-xs font-mono font-medium border-slate-200 bg-white"
+                className="h-10 rounded-none text-xs font-mono font-medium border-slate-300 bg-white"
               />
             </div>
 
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-11 bg-[#0b2256] hover:bg-[#081a42] text-white font-bold text-xs rounded-xl shadow-sm gap-2 transition-all mt-2"
+              className="w-full h-10 bg-[#0b2256] hover:bg-[#081a42] text-white font-bold text-xs rounded-none shadow-none gap-2 transition-colors mt-2"
             >
               {loading ? (
-                <span>Authenticating...</span>
+                <span>Authenticating Session...</span>
               ) : (
                 <>
                   <span>Sign In & Launch Demo</span>
-                  <ArrowRight className="size-4 text-[#f26522]" />
+                  <ArrowRight className="size-3.5 text-[#f26522]" />
                 </>
               )}
             </Button>
           </form>
 
-          {/* BUTTONS BELOW THE FORM (Pure Flex Layout) */}
-          <div className="pt-4 border-t border-slate-100 space-y-3">
-            <div className="flex items-center justify-between text-xs text-slate-500 font-semibold">
-              <span className="flex items-center gap-1.5">
-                <Lock className="size-3 text-[#f26522]" /> Choose role to test:
+          {/* BUTTONS BELOW THE FORM (Pure Flex Layout, Strictly Non-Curved) */}
+          <div className="pt-4 border-t border-slate-200 space-y-3">
+            <div className="flex items-center justify-between text-xs text-slate-600 font-semibold">
+              <span className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider">
+                <Lock className="size-3 text-[#f26522]" /> Select Test Role:
               </span>
-              <span className="text-[11px] text-slate-400">Click to autofill</span>
+              <span className="text-[11px] text-slate-400 font-mono">1-click autofill</span>
             </div>
 
             <div className="flex flex-wrap gap-2">
@@ -277,10 +275,10 @@ export default function DemoPage() {
                     key={opt.key}
                     type="button"
                     onClick={() => handleSelectRole(opt)}
-                    className={`flex-1 min-w-[calc(50%-0.25rem)] p-2.5 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+                    className={`flex-1 min-w-[calc(50%-0.25rem)] p-2.5 rounded-none border text-xs font-bold transition-colors flex items-center justify-center gap-2 ${
                       isSelected
-                        ? "bg-[#0b2256] text-white border-[#0b2256] shadow-xs"
-                        : "bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200"
+                        ? "bg-[#0b2256] text-white border-[#0b2256]"
+                        : "bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-300"
                     }`}
                   >
                     <Icon className={`size-3.5 ${isSelected ? "text-[#f26522]" : "text-slate-500"}`} />
@@ -292,15 +290,15 @@ export default function DemoPage() {
           </div>
 
           {/* Security Disclaimer */}
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 text-[11px] text-slate-500 text-center leading-relaxed">
+          <div className="p-3 rounded-none bg-slate-50 border border-slate-200 text-[11px] text-slate-500 text-center leading-relaxed">
             <ShieldCheck className="size-3.5 text-emerald-600 inline mr-1 -mt-0.5" />
-            Client sandbox mode. All records are isolated with pre-loaded mock data.
+            Simulated sandbox environment. All interactions are strictly isolated within demo records.
           </div>
         </div>
       </main>
 
       {/* Simple Footer */}
-      <footer className="py-4 text-center text-xs text-slate-400">
+      <footer className="py-4 text-center text-xs text-slate-400 font-mono">
         <p>© 2026 EDUREXA. Educational Institution Operating System.</p>
       </footer>
     </div>

@@ -147,7 +147,7 @@ export function NotificationCenter({
 
         // Send Welcome Native Push Notification
         triggerNativePush(
-          "Wellstar Bright SMS — Notifications Active",
+          "EDUREXA SMS — Notifications Active",
           `Real-time ${role.toLowerCase()} alerts and academic announcements are now enabled.`,
           window.location.pathname
         );
@@ -167,7 +167,7 @@ export function NotificationCenter({
     }
 
     const testItem = notifications[0] || {
-      title: "Wellstar Bright — Portal Push Alert",
+      title: "EDUREXA — System Alert",
       message: "This is a real-time system test notification from the school management system.",
       url: window.location.pathname
     };

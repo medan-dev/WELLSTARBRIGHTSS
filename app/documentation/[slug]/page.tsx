@@ -69,11 +69,11 @@ export default async function DocArticlePage({ params }: PageProps) {
         {/* Article Header */}
         <header className="space-y-4 pb-8 border-b border-slate-200">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-[#0b2256] text-white">
+            <span className="px-2.5 py-1 rounded-none text-xs font-mono font-bold bg-[#0b2256] text-white">
               {article.category}
             </span>
             {article.badge && (
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">
+              <span className="px-2 py-0.5 rounded-none text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">
                 {article.badge.text}
               </span>
             )}
@@ -82,10 +82,10 @@ export default async function DocArticlePage({ params }: PageProps) {
               <span>{article.readingTime}</span>
             </span>
             <span className="text-slate-300">•</span>
-            <span className="text-xs text-slate-500">Updated {article.lastUpdated}</span>
+            <span className="text-xs text-slate-500 font-mono">Updated {article.lastUpdated}</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight">
             {article.title}
           </h1>
 
@@ -98,7 +98,7 @@ export default async function DocArticlePage({ params }: PageProps) {
         <div className="space-y-12 pt-8">
           {article.content.sections.map((section) => (
             <section key={section.id} id={section.id} className="space-y-4 scroll-mt-20">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight border-b border-slate-100 pb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight border-b border-slate-200 pb-2">
                 {section.title}
               </h2>
 
@@ -123,9 +123,9 @@ export default async function DocArticlePage({ params }: PageProps) {
                   {section.steps.map((st, stIdx) => (
                     <div
                       key={stIdx}
-                      className="p-4 rounded-xl border border-slate-200 bg-white hover:border-[#0b2256]/30 transition-all flex gap-3.5"
+                      className="p-4 rounded-none border border-slate-300 bg-white hover:border-[#0b2256] transition-colors flex gap-3.5"
                     >
-                      <div className="size-8 rounded-lg bg-[#0b2256] text-white flex items-center justify-center font-bold text-xs shrink-0">
+                      <div className="size-8 rounded-none bg-[#0b2256] text-white flex items-center justify-center font-mono font-bold text-xs shrink-0">
                         {st.stepNumber}
                       </div>
                       <div className="space-y-1">
@@ -139,9 +139,9 @@ export default async function DocArticlePage({ params }: PageProps) {
 
               {/* Table if present */}
               {section.table && (
-                <div className="my-6 overflow-x-auto rounded-xl border border-slate-200">
+                <div className="my-6 overflow-x-auto rounded-none border border-slate-300">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-700 font-bold">
+                    <thead className="bg-slate-50 border-b border-slate-300 text-slate-700 font-bold font-mono">
                       <tr>
                         {section.table.headers.map((h, hIdx) => (
                           <th key={hIdx} className="p-3 whitespace-nowrap">
@@ -150,11 +150,11 @@ export default async function DocArticlePage({ params }: PageProps) {
                         ))}
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 bg-white text-slate-600">
+                    <tbody className="divide-y divide-slate-200 bg-white text-slate-600">
                       {section.table.rows.map((row, rIdx) => (
                         <tr key={rIdx} className="hover:bg-slate-50/50 transition-colors">
                           {row.map((cell, cIdx) => (
-                            <td key={cIdx} className={`p-3 ${cIdx === 0 ? "font-semibold text-slate-900" : ""}`}>
+                            <td key={cIdx} className={`p-3 ${cIdx === 0 ? "font-semibold text-slate-900 font-mono" : ""}`}>
                               {cell}
                             </td>
                           ))}
@@ -182,11 +182,11 @@ export default async function DocArticlePage({ params }: PageProps) {
           {prevArticle ? (
             <Link
               href={`/documentation/${prevArticle.slug}`}
-              className="flex-1 min-w-[200px] p-3.5 rounded-xl border border-slate-200 hover:border-[#0b2256]/30 hover:bg-slate-50 transition-all group flex items-center gap-3"
+              className="flex-1 min-w-[200px] p-3.5 rounded-none border border-slate-300 hover:border-[#0b2256] hover:bg-slate-50 transition-colors group flex items-center gap-3"
             >
               <ArrowLeft className="size-4 text-slate-400 group-hover:text-[#0b2256] group-hover:-translate-x-0.5 transition-transform" />
               <div>
-                <div className="text-[10px] uppercase font-bold text-slate-400">Previous</div>
+                <div className="text-[10px] uppercase font-mono font-bold text-slate-400">Previous</div>
                 <div className="text-xs font-bold text-slate-900 group-hover:text-[#0b2256] transition-colors">
                   {prevArticle.title}
                 </div>
@@ -199,10 +199,10 @@ export default async function DocArticlePage({ params }: PageProps) {
           {nextArticle && (
             <Link
               href={`/documentation/${nextArticle.slug}`}
-              className="flex-1 min-w-[200px] p-3.5 rounded-xl border border-slate-200 hover:border-[#f26522]/30 hover:bg-slate-50 transition-all group flex items-center justify-end text-right gap-3"
+              className="flex-1 min-w-[200px] p-3.5 rounded-none border border-slate-300 hover:border-[#f26522] hover:bg-slate-50 transition-colors group flex items-center justify-end text-right gap-3"
             >
               <div>
-                <div className="text-[10px] uppercase font-bold text-slate-400">Next</div>
+                <div className="text-[10px] uppercase font-mono font-bold text-slate-400">Next</div>
                 <div className="text-xs font-bold text-slate-900 group-hover:text-[#f26522] transition-colors">
                   {nextArticle.title}
                 </div>

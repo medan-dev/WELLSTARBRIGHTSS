@@ -109,7 +109,7 @@ export default function EdurexaMarketingHome() {
 
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
             <Link href="/demo">
-              <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-sm font-bold px-7 h-12 shadow-sm gap-2">
+              <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-none text-sm font-bold px-7 h-12 shadow-sm gap-2">
                 <span>Launch Live System Demo</span>
                 <ArrowRight className="size-4" />
               </Button>
@@ -118,7 +118,7 @@ export default function EdurexaMarketingHome() {
             <a href="#features">
               <Button
                 variant="outline"
-                className="border-slate-300 bg-white hover:bg-slate-50 text-[#0b2256] rounded-lg text-sm font-semibold px-6 h-12 gap-2 shadow-2xs"
+                className="border-slate-300 bg-white hover:bg-slate-50 text-[#0b2256] rounded-none text-sm font-semibold px-6 h-12 gap-2 shadow-2xs"
               >
                 <span>Explore Features</span>
                 <ChevronRight className="size-4 text-[#0b2256]" />
@@ -154,8 +154,8 @@ export default function EdurexaMarketingHome() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row gap-6">
             {/* Card 1 */}
-            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs hover:border-slate-300 transition-colors">
-              <div className="size-12 rounded-lg bg-blue-50 text-[#0b2256] flex items-center justify-center font-bold">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-none p-6 space-y-3 shadow-2xs hover:border-slate-300 transition-colors">
+              <div className="size-12 rounded-none bg-blue-50 text-[#0b2256] flex items-center justify-center font-bold">
                 <BarChart3 className="size-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900">Advanced Statistics & Analytics</h3>
@@ -165,8 +165,8 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* Card 2 */}
-            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs hover:border-slate-300 transition-colors">
-              <div className="size-12 rounded-lg bg-orange-50 text-[#f26522] flex items-center justify-center font-bold">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-none p-6 space-y-3 shadow-2xs hover:border-slate-300 transition-colors">
+              <div className="size-12 rounded-none bg-orange-50 text-[#f26522] flex items-center justify-center font-bold">
                 <ShieldCheck className="size-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900">Powerful Multi-Campus Admin</h3>
@@ -176,8 +176,8 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* Card 3 */}
-            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs hover:border-slate-300 transition-colors">
-              <div className="size-12 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-none p-6 space-y-3 shadow-2xs hover:border-slate-300 transition-colors">
+              <div className="size-12 rounded-none bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
                 <HardDrive className="size-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900">Security Updates & Continuous WAL</h3>
@@ -205,8 +205,8 @@ export default function EdurexaMarketingHome() {
 
           <div className="flex flex-wrap gap-5">
             {/* 1. School Admin Dashboard */}
-            <div className="flex-1 min-w-[220px] bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs">
-              <div className="size-10 rounded-lg bg-blue-50 text-[#0b2256] flex items-center justify-center">
+            <div className="flex-1 min-w-[220px] bg-white border border-slate-200 rounded-none p-5 space-y-3 shadow-2xs">
+              <div className="size-10 rounded-none bg-blue-50 text-[#0b2256] flex items-center justify-center">
                 <MonitorCheck className="size-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900">School Admin Dashboard</h4>
@@ -216,8 +216,8 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* 2. Teacher Portal */}
-            <div className="flex-1 min-w-[220px] bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs">
-              <div className="size-10 rounded-lg bg-orange-50 text-[#f26522] flex items-center justify-center">
+            <div className="flex-1 min-w-[220px] bg-white border border-slate-200 rounded-none p-5 space-y-3 shadow-2xs">
+              <div className="size-10 rounded-none bg-orange-50 text-[#f26522] flex items-center justify-center">
                 <BookOpen className="size-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900">Teacher & Gradebook Engine</h4>
@@ -227,8 +227,8 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* 3. Digital Library & Logistics */}
-            <div className="flex-1 min-w-[220px] bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs">
-              <div className="size-10 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center">
+            <div className="flex-1 min-w-[220px] bg-white border border-slate-200 rounded-none p-5 space-y-3 shadow-2xs">
+              <div className="size-10 rounded-none bg-purple-50 text-purple-700 flex items-center justify-center">
                 <Library className="size-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900">Digital Library & Logistics</h4>
@@ -238,8 +238,8 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* 4. Accounts & Bursary Dashboard */}
-            <div className="flex-1 min-w-[220px] bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-2xs">
-              <div className="size-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+            <div className="flex-1 min-w-[220px] bg-white border border-slate-200 rounded-none p-5 space-y-3 shadow-2xs">
+              <div className="size-10 rounded-none bg-emerald-50 text-emerald-700 flex items-center justify-center">
                 <Receipt className="size-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900">Accounts & Fee Dashboard</h4>
@@ -264,19 +264,19 @@ export default function EdurexaMarketingHome() {
           </div>
 
           <div className="flex flex-wrap gap-6 justify-center">
-            <div className="flex-1 min-w-[200px] p-4 bg-white/10 rounded-xl border border-white/10 backdrop-blur-sm">
+            <div className="flex-1 min-w-[200px] p-4 bg-white/10 rounded-none border border-white/10 backdrop-blur-sm">
               <div className="text-3xl sm:text-4xl font-extrabold text-white font-mono">200+</div>
               <div className="text-xs text-slate-300 mt-1">Schools Architecture Capacity</div>
             </div>
-            <div className="flex-1 min-w-[200px] p-4 bg-white/10 rounded-xl border border-white/10 backdrop-blur-sm">
+            <div className="flex-1 min-w-[200px] p-4 bg-white/10 rounded-none border border-white/10 backdrop-blur-sm">
               <div className="text-3xl sm:text-4xl font-extrabold text-white font-mono">25,000+</div>
               <div className="text-xs text-slate-300 mt-1">Students Capacity Supported</div>
             </div>
-            <div className="flex-1 min-w-[200px] p-4 bg-white/10 rounded-xl border border-white/10 backdrop-blur-sm">
+            <div className="flex-1 min-w-[200px] p-4 bg-white/10 rounded-none border border-white/10 backdrop-blur-sm">
               <div className="text-3xl sm:text-4xl font-extrabold text-white font-mono">1,200+</div>
               <div className="text-xs text-slate-300 mt-1">Teachers & Staff Active</div>
             </div>
-            <div className="flex-1 min-w-[200px] p-4 bg-white/10 rounded-xl border border-white/10 backdrop-blur-sm">
+            <div className="flex-1 min-w-[200px] p-4 bg-white/10 rounded-none border border-white/10 backdrop-blur-sm">
               <div className="text-3xl sm:text-4xl font-extrabold text-amber-300 font-mono">20 Max</div>
               <div className="text-xs text-slate-300 mt-1">Campuses per School Group</div>
             </div>
@@ -301,14 +301,14 @@ export default function EdurexaMarketingHome() {
 
             <div className="flex flex-wrap items-center gap-3">
               <Link href="/demo">
-                <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold h-10 px-5 gap-1.5 shadow-sm">
+                <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-none text-xs font-bold h-10 px-5 gap-1.5 shadow-sm">
                   <span>Enter Live Demo Gateway</span>
                   <ArrowRight className="size-3.5" />
                 </Button>
               </Link>
 
               <a href="https://wa.me/256758611414" target="_blank" rel="noreferrer">
-                <Button variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-50 rounded-lg text-xs font-semibold h-10 px-4 gap-1.5">
+                <Button variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-50 rounded-none text-xs font-semibold h-10 px-4 gap-1.5">
                   <span>Talk to Solutions Engineer</span>
                   <Phone className="size-3.5 text-[#f26522]" />
                 </Button>
@@ -316,7 +316,7 @@ export default function EdurexaMarketingHome() {
             </div>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row gap-8 items-stretch">
+          <div className="bg-slate-50 border border-slate-200 rounded-none p-6 sm:p-8 flex flex-col lg:flex-row gap-8 items-stretch">
             <div className="flex-1 space-y-6">
               <div className="space-y-1.5">
                 <div className="text-xs uppercase font-mono tracking-wider text-[#f26522] font-bold">
@@ -331,15 +331,15 @@ export default function EdurexaMarketingHome() {
               </div>
 
               <div className="flex flex-wrap gap-3">
-                <div className="flex-1 min-w-[130px] p-3.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+                <div className="flex-1 min-w-[130px] p-3.5 bg-white rounded-none border border-slate-200 shadow-2xs">
                   <div className="text-xl font-bold text-[#0b2256] font-mono">4 Hours</div>
                   <div className="text-[11px] text-slate-500 mt-0.5 font-medium">Free Live Sandbox</div>
                 </div>
-                <div className="flex-1 min-w-[130px] p-3.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+                <div className="flex-1 min-w-[130px] p-3.5 bg-white rounded-none border border-slate-200 shadow-2xs">
                   <div className="text-xl font-bold text-slate-900 font-mono">100%</div>
                   <div className="text-[11px] text-slate-500 mt-0.5 font-medium">All Modules Unlocked</div>
                 </div>
-                <div className="flex-1 min-w-[130px] p-3.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+                <div className="flex-1 min-w-[130px] p-3.5 bg-white rounded-none border border-slate-200 shadow-2xs">
                   <div className="text-xl font-bold text-emerald-700 font-mono">UGX 0</div>
                   <div className="text-[11px] text-slate-500 mt-0.5 font-medium">Zero Commitment</div>
                 </div>
@@ -361,7 +361,7 @@ export default function EdurexaMarketingHome() {
               </div>
             </div>
 
-            <div className="lg:w-[380px] bg-white border border-slate-200 rounded-xl p-6 space-y-5 shadow-2xs shrink-0 flex flex-col justify-between">
+            <div className="lg:w-[380px] bg-white border border-slate-200 rounded-none p-6 space-y-5 shadow-2xs shrink-0 flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   REQUEST PRIVATE DEMO SANDBOX
@@ -393,7 +393,7 @@ export default function EdurexaMarketingHome() {
 
               <div className="space-y-2 pt-2 border-t border-slate-100">
                 <a href="#demo-form" className="w-full block">
-                  <Button className="w-full bg-[#f26522] hover:bg-[#d95314] text-white text-xs font-bold rounded-lg h-10 shadow-sm">
+                  <Button className="w-full bg-[#f26522] hover:bg-[#d95314] text-white text-xs font-bold rounded-none h-10 shadow-sm">
                     Book Boardroom Demonstration
                   </Button>
                 </a>
@@ -403,7 +403,7 @@ export default function EdurexaMarketingHome() {
                   rel="noreferrer"
                   className="w-full block"
                 >
-                  <Button variant="outline" className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-semibold rounded-lg h-10">
+                  <Button variant="outline" className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-semibold rounded-none h-10">
                     Chat on WhatsApp (+256 758 611 414)
                   </Button>
                 </a>
@@ -434,11 +434,11 @@ export default function EdurexaMarketingHome() {
             </span>
             <button
               onClick={() => setBillingPeriod(billingPeriod === "term" ? "year" : "term")}
-              className="relative w-12 h-6 rounded-full bg-slate-300 p-0.5 transition-colors"
+              className="relative w-12 h-6 rounded-none bg-slate-300 p-0.5 transition-colors"
             >
               <div
                 className={cn(
-                  "size-5 rounded-full bg-white shadow-md transition-transform",
+                  "size-5 rounded-none bg-white shadow-md transition-transform",
                   billingPeriod === "year" ? "translate-x-6 bg-[#f26522]" : "translate-x-0"
                 )}
               />
@@ -451,10 +451,10 @@ export default function EdurexaMarketingHome() {
           {/* 3 Pricing Cards */}
           <div className="flex flex-col md:flex-row gap-6 text-left">
             {/* Tier 1: 1–500 Students */}
-            <div className="flex-1 flex flex-col justify-between bg-white border border-slate-200 rounded-xl p-6 sm:p-8 space-y-6 shadow-2xs">
+            <div className="flex-1 flex flex-col justify-between bg-white border border-slate-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
               <div>
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded-none">
                     1–500 STUDENTS
                   </span>
                   <h3 className="text-lg font-bold text-slate-900 pt-1">Standard Plan</h3>
@@ -491,7 +491,7 @@ export default function EdurexaMarketingHome() {
 
               <div className="pt-6">
                 <a href="#demo-form">
-                  <Button variant="outline" className="w-full text-xs font-bold rounded-lg border-slate-300 h-10 hover:bg-slate-50">
+                  <Button variant="outline" className="w-full text-xs font-bold rounded-none border-slate-300 h-10 hover:bg-slate-50">
                     Get Started
                   </Button>
                 </a>
@@ -499,14 +499,14 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* Tier 2: 501–1,500 Students (Popular) */}
-            <div className="flex-1 flex flex-col justify-between bg-white border-2 border-[#f26522] rounded-xl p-6 sm:p-8 space-y-6 shadow-md relative">
+            <div className="flex-1 flex flex-col justify-between bg-white border-2 border-[#f26522] rounded-none p-6 sm:p-8 space-y-6 shadow-md relative">
               <div>
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#f26522] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-xs">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#f26522] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-none shadow-xs">
                   MOST POPULAR
                 </span>
 
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#f26522] bg-orange-50 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#f26522] bg-orange-50 px-2 py-0.5 rounded-none">
                     501–1,500 STUDENTS
                   </span>
                   <h3 className="text-lg font-bold text-slate-900 pt-1">Professional Plan</h3>
@@ -547,7 +547,7 @@ export default function EdurexaMarketingHome() {
 
               <div className="pt-6">
                 <a href="#demo-form">
-                  <Button className="w-full text-xs font-bold rounded-lg bg-[#f26522] hover:bg-[#d95314] text-white h-10 shadow-sm">
+                  <Button className="w-full text-xs font-bold rounded-none bg-[#f26522] hover:bg-[#d95314] text-white h-10 shadow-sm">
                     Choose Professional
                   </Button>
                 </a>
@@ -555,10 +555,10 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* Tier 3: 1,500+ Students or Multi-Campus Enterprise */}
-            <div className="flex-1 flex flex-col justify-between bg-white border border-slate-200 rounded-xl p-6 sm:p-8 space-y-6 shadow-2xs">
+            <div className="flex-1 flex flex-col justify-between bg-white border border-slate-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
               <div>
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded-none">
                     MULTI-CAMPUS CONGLOMERATE
                   </span>
                   <h3 className="text-lg font-bold text-slate-900 pt-1">Enterprise Plan</h3>
@@ -599,7 +599,7 @@ export default function EdurexaMarketingHome() {
 
               <div className="pt-6">
                 <a href="#demo-form">
-                  <Button variant="outline" className="w-full text-xs font-bold rounded-lg border-slate-300 h-10 hover:bg-slate-50">
+                  <Button variant="outline" className="w-full text-xs font-bold rounded-none border-slate-300 h-10 hover:bg-slate-50">
                     Choose Enterprise
                   </Button>
                 </a>
@@ -625,7 +625,7 @@ export default function EdurexaMarketingHome() {
 
           <div className="flex flex-col md:flex-row gap-6">
             {/* Review 1 */}
-            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-none p-6 space-y-4 shadow-2xs flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex text-amber-400">
                   {[...Array(5)].map((_, i) => (
@@ -643,7 +643,7 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* Review 2 */}
-            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-none p-6 space-y-4 shadow-2xs flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex text-amber-400">
                   {[...Array(5)].map((_, i) => (
@@ -661,7 +661,7 @@ export default function EdurexaMarketingHome() {
             </div>
 
             {/* Review 3 */}
-            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-none p-6 space-y-4 shadow-2xs flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex text-amber-400">
                   {[...Array(5)].map((_, i) => (
@@ -696,7 +696,7 @@ export default function EdurexaMarketingHome() {
               </p>
             </div>
             <a href="#demo-form">
-              <Button className="bg-[#f26522] hover:bg-[#d95314] text-white font-bold rounded-lg px-6 h-12 text-xs sm:text-sm shadow-md shrink-0">
+              <Button className="bg-[#f26522] hover:bg-[#d95314] text-white font-bold rounded-none px-6 h-12 text-xs sm:text-sm shadow-md shrink-0">
                 Join Now / Book Demo
               </Button>
             </a>
@@ -718,7 +718,7 @@ export default function EdurexaMarketingHome() {
             </p>
           </div>
 
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 text-left shadow-2xs">
+          <div className="bg-white border border-slate-200 rounded-none p-6 sm:p-8 space-y-6 text-left shadow-2xs">
             <div className="flex flex-col sm:flex-row gap-6">
               <div className="flex-1 space-y-2">
                 <div className="flex justify-between text-xs font-bold text-slate-700">
@@ -731,7 +731,7 @@ export default function EdurexaMarketingHome() {
                   max={20}
                   value={campusesCount}
                   onChange={(e) => setCampusesCount(Number(e.target.value))}
-                  className="w-full accent-[#f26522] h-2 bg-slate-100 rounded-lg cursor-pointer"
+                  className="w-full accent-[#f26522] h-2 bg-slate-100 rounded-none cursor-pointer"
                 />
               </div>
 
@@ -747,12 +747,12 @@ export default function EdurexaMarketingHome() {
                   step={500}
                   value={studentsCount}
                   onChange={(e) => setStudentsCount(Number(e.target.value))}
-                  className="w-full accent-[#f26522] h-2 bg-slate-100 rounded-lg cursor-pointer"
+                  className="w-full accent-[#f26522] h-2 bg-slate-100 rounded-none cursor-pointer"
                 />
               </div>
             </div>
 
-            <div className="p-5 bg-blue-50/70 border border-blue-200 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div className="p-5 bg-blue-50/70 border border-blue-200 rounded-none flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
               <div>
                 <div className="text-[11px] uppercase font-bold tracking-wider text-[#0b2256]">
                   ESTIMATED REVENUE LEAKAGE PREVENTED ANNUALLY
@@ -765,7 +765,7 @@ export default function EdurexaMarketingHome() {
                 </div>
               </div>
               <a href="#demo-form">
-                <Button className="bg-[#f26522] hover:bg-[#d95314] text-white font-bold rounded-lg px-5 h-10 text-xs shadow-2xs">
+                <Button className="bg-[#f26522] hover:bg-[#d95314] text-white font-bold rounded-none px-5 h-10 text-xs shadow-2xs">
                   Protect Your School's Revenue
                 </Button>
               </a>
@@ -789,9 +789,9 @@ export default function EdurexaMarketingHome() {
           </div>
 
           <div className="flex flex-col md:flex-row gap-6">
-            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-none p-6 space-y-4 shadow-2xs flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="size-11 rounded-lg bg-blue-50 text-[#0b2256] flex items-center justify-center font-bold">
+                <div className="size-11 rounded-none bg-blue-50 text-[#0b2256] flex items-center justify-center font-bold">
                   <BookOpen className="size-5" />
                 </div>
                 <h4 className="text-base font-bold text-slate-900">Administrator & Setup Manual</h4>
@@ -805,9 +805,9 @@ export default function EdurexaMarketingHome() {
               </Link>
             </div>
 
-            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-none p-6 space-y-4 shadow-2xs flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="size-11 rounded-lg bg-orange-50 text-[#f26522] flex items-center justify-center font-bold">
+                <div className="size-11 rounded-none bg-orange-50 text-[#f26522] flex items-center justify-center font-bold">
                   <FileSpreadsheet className="size-5" />
                 </div>
                 <h4 className="text-base font-bold text-slate-900">UNEB & Academic Assessment</h4>
@@ -821,9 +821,9 @@ export default function EdurexaMarketingHome() {
               </Link>
             </div>
 
-            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-none p-6 space-y-4 shadow-2xs flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="size-11 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+                <div className="size-11 rounded-none bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
                   <Receipt className="size-5" />
                 </div>
                 <h4 className="text-base font-bold text-slate-900">Bursary & POS Cashier Desk</h4>
@@ -840,7 +840,7 @@ export default function EdurexaMarketingHome() {
 
           <div className="text-center pt-2">
             <Link href="/documentation">
-              <Button className="bg-[#0b2256] hover:bg-[#081a42] text-white rounded-xl text-xs font-bold px-6 h-11 gap-2 shadow-sm">
+              <Button className="bg-[#0b2256] hover:bg-[#081a42] text-white rounded-none text-xs font-bold px-6 h-11 gap-2 shadow-sm">
                 <span>Browse Complete Documentation Hub</span>
                 <ArrowRight className="size-4" />
               </Button>
@@ -864,9 +864,9 @@ export default function EdurexaMarketingHome() {
           </div>
 
           <div className="flex flex-col md:flex-row gap-6">
-            <div className="flex-1 bg-white border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs flex flex-col justify-between">
+            <div className="flex-1 bg-white border border-slate-200 rounded-none p-6 space-y-3 shadow-2xs flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="size-11 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                <div className="size-11 rounded-none bg-emerald-50 text-emerald-700 flex items-center justify-center">
                   <MessageSquare className="size-5" />
                 </div>
                 <h4 className="text-base font-bold text-slate-900">Direct WhatsApp Help Desk</h4>
@@ -885,9 +885,9 @@ export default function EdurexaMarketingHome() {
               </a>
             </div>
 
-            <div className="flex-1 bg-white border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs flex flex-col justify-between">
+            <div className="flex-1 bg-white border border-slate-200 rounded-none p-6 space-y-3 shadow-2xs flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="size-11 rounded-lg bg-blue-50 text-[#0b2256] flex items-center justify-center">
+                <div className="size-11 rounded-none bg-blue-50 text-[#0b2256] flex items-center justify-center">
                   <Phone className="size-5" />
                 </div>
                 <h4 className="text-base font-bold text-slate-900">Telephone Technical Hotline</h4>
@@ -904,9 +904,9 @@ export default function EdurexaMarketingHome() {
               </a>
             </div>
 
-            <div className="flex-1 bg-white border border-slate-200 rounded-xl p-6 space-y-3 shadow-2xs flex flex-col justify-between">
+            <div className="flex-1 bg-white border border-slate-200 rounded-none p-6 space-y-3 shadow-2xs flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="size-11 rounded-lg bg-orange-50 text-[#f26522] flex items-center justify-center">
+                <div className="size-11 rounded-none bg-orange-50 text-[#f26522] flex items-center justify-center">
                   <Mail className="size-5" />
                 </div>
                 <h4 className="text-base font-bold text-slate-900">Official Email Support</h4>
@@ -939,10 +939,10 @@ export default function EdurexaMarketingHome() {
           </p>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-10 shadow-sm">
+        <div className="bg-white border border-slate-200 rounded-none p-6 sm:p-10 shadow-sm">
           {bookingSubmitted ? (
             <div className="text-center py-10 space-y-4">
-              <div className="size-14 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mx-auto">
+              <div className="size-14 rounded-none bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mx-auto">
                 <Check className="size-7" />
               </div>
               <h3 className="text-2xl font-bold text-slate-900">Demo Request Received!</h3>
@@ -956,7 +956,7 @@ export default function EdurexaMarketingHome() {
                 target="_blank"
                 rel="noreferrer"
               >
-                <Button className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-lg h-10 px-5 mt-2 text-xs">
+                <Button className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-none h-10 px-5 mt-2 text-xs">
                   Chat With Enterprise Team on WhatsApp
                 </Button>
               </a>
@@ -971,7 +971,7 @@ export default function EdurexaMarketingHome() {
                     value={bookingData.schoolName}
                     onChange={(e) => setBookingData({ ...bookingData, schoolName: e.target.value })}
                     required
-                    className="h-10 rounded-lg bg-slate-50 border-slate-200 text-slate-900 text-xs"
+                    className="h-10 rounded-none bg-slate-50 border-slate-200 text-slate-900 text-xs"
                   />
                 </div>
 
@@ -982,7 +982,7 @@ export default function EdurexaMarketingHome() {
                     value={bookingData.contactPerson}
                     onChange={(e) => setBookingData({ ...bookingData, contactPerson: e.target.value })}
                     required
-                    className="h-10 rounded-lg bg-slate-50 border-slate-200 text-slate-900 text-xs"
+                    className="h-10 rounded-none bg-slate-50 border-slate-200 text-slate-900 text-xs"
                   />
                 </div>
               </div>
@@ -995,7 +995,7 @@ export default function EdurexaMarketingHome() {
                     value={bookingData.phone}
                     onChange={(e) => setBookingData({ ...bookingData, phone: e.target.value })}
                     required
-                    className="h-10 rounded-lg bg-slate-50 border-slate-200 text-slate-900 text-xs"
+                    className="h-10 rounded-none bg-slate-50 border-slate-200 text-slate-900 text-xs"
                   />
                 </div>
 
@@ -1007,7 +1007,7 @@ export default function EdurexaMarketingHome() {
                     value={bookingData.email}
                     onChange={(e) => setBookingData({ ...bookingData, email: e.target.value })}
                     required
-                    className="h-10 rounded-lg bg-slate-50 border-slate-200 text-slate-900 text-xs"
+                    className="h-10 rounded-none bg-slate-50 border-slate-200 text-slate-900 text-xs"
                   />
                 </div>
               </div>
@@ -1017,7 +1017,7 @@ export default function EdurexaMarketingHome() {
                 <select
                   value={bookingData.campuses}
                   onChange={(e) => setBookingData({ ...bookingData, campuses: e.target.value })}
-                  className="w-full h-10 px-3 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:ring-1 focus:ring-[#0b2256]"
+                  className="w-full h-10 px-3 rounded-none bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:ring-1 focus:ring-[#0b2256]"
                 >
                   <option value="1">1 Single Campus</option>
                   <option value="2-5">2 to 5 Campuses (Most Common)</option>
@@ -1028,7 +1028,7 @@ export default function EdurexaMarketingHome() {
 
               <Button
                 type="submit"
-                className="w-full bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg h-11 text-xs font-bold shadow-2xs transition-colors"
+                className="w-full bg-[#f26522] hover:bg-[#d95314] text-white rounded-none h-11 text-xs font-bold shadow-2xs transition-colors"
               >
                 Confirm Free 4-Hour Demo Request
               </Button>

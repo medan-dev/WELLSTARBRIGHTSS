@@ -90,7 +90,7 @@ export function Navbar() {
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 text-slate-200 hover:text-white font-semibold transition-colors"
             >
-              <span className="size-1.5 rounded-full bg-emerald-400" />
+              <span className="size-1.5 bg-emerald-400" />
               <span>WhatsApp: +256 758 611 414</span>
             </a>
           </div>
@@ -160,7 +160,7 @@ export function Navbar() {
           {/* Desktop Right CTA: Try Out Demo */}
           <div className="hidden lg:flex items-center gap-3">
             <Link href="/demo">
-              <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold px-4 h-9.5 shadow-sm transition-colors gap-1.5">
+              <Button className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-none text-xs font-bold px-4 h-9.5 shadow-none transition-colors gap-1.5">
                 <span>Try Out Demo</span>
                 <ArrowRight className="size-3.5" />
               </Button>
@@ -172,7 +172,7 @@ export function Navbar() {
             <Link href="/demo">
               <Button
                 size="sm"
-                className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold px-3 h-8.5 shadow-sm"
+                className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-none text-xs font-bold px-3 h-8.5 shadow-none"
               >
                 Demo
               </Button>
@@ -180,7 +180,7 @@ export function Navbar() {
 
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="p-2 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition-colors"
+              className="p-2 rounded-none text-slate-700 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition-colors"
               aria-label="Open mobile navigation menu"
             >
               <Menu className="size-5" />
@@ -214,7 +214,7 @@ export function Navbar() {
               </Link>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+                className="p-2 rounded-none text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
                 aria-label="Close menu"
               >
                 <X className="size-5" />
@@ -233,7 +233,7 @@ export function Navbar() {
                     key={idx}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between p-3 rounded-xl text-sm font-semibold text-slate-800 hover:bg-slate-50 hover:text-[#0b2256] transition-colors"
+                    className="flex items-center justify-between p-3 rounded-none text-sm font-semibold text-slate-800 hover:bg-slate-50 hover:text-[#0b2256] transition-colors"
                   >
                     <span>{link.label}</span>
                   </Link>
@@ -270,7 +270,7 @@ export function Navbar() {
                 rel="noreferrer"
                 className="w-full block"
               >
-                <Button className="w-full bg-[#f26522] hover:bg-[#d95314] text-white rounded-xl text-sm font-bold h-11 gap-2 shadow-sm">
+                <Button className="w-full bg-[#f26522] hover:bg-[#d95314] text-white rounded-none text-sm font-bold h-11 gap-2 shadow-none">
                   <span>Schedule Executive Demo</span>
                   <ArrowRight className="size-4" />
                 </Button>

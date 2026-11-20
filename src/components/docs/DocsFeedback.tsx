@@ -19,14 +19,14 @@ export function DocsFeedback() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setFeedbackGiven("yes")}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-none border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-medium transition-colors font-mono"
             >
               <ThumbsUp className="size-3 text-slate-500" />
               <span>Yes</span>
             </button>
             <button
               onClick={() => setFeedbackGiven("no")}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-none border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-medium transition-colors font-mono"
             >
               <ThumbsDown className="size-3 text-slate-500" />
               <span>No</span>

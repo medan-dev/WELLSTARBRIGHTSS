@@ -23,14 +23,14 @@ export function DocsCodeBlock({ title, language, code }: DocsCodeBlockProps) {
   };
 
   return (
-    <div className="my-5 rounded-xl border border-slate-200 bg-slate-900 text-slate-100 overflow-hidden shadow-xs">
+    <div className="my-5 rounded-none border border-slate-300 bg-slate-900 text-slate-100 overflow-hidden shadow-none">
       {/* Code Header Bar */}
       <div className="flex items-center justify-between px-4 py-2 bg-slate-950/60 border-b border-slate-800 text-xs">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
-            <span className="size-2.5 rounded-full bg-rose-500/80 inline-block" />
-            <span className="size-2.5 rounded-full bg-amber-500/80 inline-block" />
-            <span className="size-2.5 rounded-full bg-emerald-500/80 inline-block" />
+            <span className="size-2 bg-rose-500/80 inline-block" />
+            <span className="size-2 bg-amber-500/80 inline-block" />
+            <span className="size-2 bg-emerald-500/80 inline-block" />
           </div>
           {title && <span className="font-mono text-slate-300 text-[11px] ml-2">{title}</span>}
         </div>
@@ -43,7 +43,7 @@ export function DocsCodeBlock({ title, language, code }: DocsCodeBlockProps) {
           )}
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1 px-2 py-1 rounded text-[11px] font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+            className="flex items-center gap-1 px-2 py-1 rounded-none text-[11px] font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
             aria-label="Copy code to clipboard"
           >
             {copied ? (

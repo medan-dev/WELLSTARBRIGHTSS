@@ -37,7 +37,7 @@ export function DocsSidebar({ activeSlug, onLinkClick }: DocsSidebarProps) {
             placeholder="Filter documentation..."
             value={filterQuery}
             onChange={(e) => setFilterQuery(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#0b2256] focus:border-[#0b2256] transition-all placeholder:text-slate-400"
+            className="w-full pl-8 pr-3 py-1.5 text-xs rounded-none border border-slate-300 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#0b2256] focus:border-[#0b2256] transition-colors placeholder:text-slate-400 font-mono"
           />
         </div>
       </div>
@@ -46,7 +46,7 @@ export function DocsSidebar({ activeSlug, onLinkClick }: DocsSidebarProps) {
       <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
         {filteredCategories.map((cat, idx) => (
           <div key={idx} className="space-y-1.5">
-            <div className="px-3 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+            <div className="px-3 text-[11px] font-extrabold uppercase tracking-wider text-slate-400 font-mono">
               {cat.title}
             </div>
 
@@ -59,9 +59,9 @@ export function DocsSidebar({ activeSlug, onLinkClick }: DocsSidebarProps) {
                     href={`/documentation/${item.slug}`}
                     onClick={onLinkClick}
                     className={cn(
-                      "flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all group",
+                      "flex items-center justify-between px-3 py-2 rounded-none text-xs font-medium transition-colors group",
                       isActive
-                        ? "bg-[#0b2256] text-white font-semibold shadow-xs"
+                        ? "bg-[#0b2256] text-white font-semibold"
                         : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                     )}
                   >
@@ -71,10 +71,10 @@ export function DocsSidebar({ activeSlug, onLinkClick }: DocsSidebarProps) {
                       {item.badge && (
                         <span
                           className={cn(
-                            "px-1.5 py-0.5 rounded text-[10px] font-bold tracking-tight",
+                            "px-1.5 py-0.5 rounded-none text-[10px] font-mono font-bold tracking-tight border",
                             isActive
-                              ? "bg-white/20 text-white"
-                              : item.badgeColor || "bg-slate-100 text-slate-600"
+                              ? "bg-white/20 text-white border-white/30"
+                              : item.badgeColor || "bg-slate-100 text-slate-600 border-slate-200"
                           )}
                         >
                           {item.badge}
@@ -93,10 +93,10 @@ export function DocsSidebar({ activeSlug, onLinkClick }: DocsSidebarProps) {
       </div>
 
       {/* Bottom Assistance Card */}
-      <div className="p-3 border-t border-slate-100">
-        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
-            <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+      <div className="p-3 border-t border-slate-200">
+        <div className="p-3 rounded-none bg-slate-50 border border-slate-300 space-y-2">
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-900 font-mono">
+            <span className="size-2 bg-emerald-500" />
             <span>Implementation Support</span>
           </div>
           <p className="text-[11px] text-slate-600 leading-relaxed">
@@ -106,7 +106,7 @@ export function DocsSidebar({ activeSlug, onLinkClick }: DocsSidebarProps) {
             href="https://wa.me/256758611414"
             target="_blank"
             rel="noreferrer"
-            className="block text-center py-1.5 px-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] transition-colors shadow-2xs"
+            className="block text-center py-1.5 px-2 rounded-none bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] transition-colors"
           >
             Chat with Engineer (+256 758 611 414)
           </a>

@@ -21,7 +21,7 @@ export function DocsHeader({ onMobileMenuToggle, mobileMenuOpen }: DocsHeaderPro
           {onMobileMenuToggle && (
             <button
               onClick={onMobileMenuToggle}
-              className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 lg:hidden"
+              className="p-1.5 rounded-none text-slate-600 hover:text-slate-900 hover:bg-slate-100 lg:hidden border border-slate-200"
               aria-label="Toggle navigation sidebar"
             >
               {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -37,7 +37,7 @@ export function DocsHeader({ onMobileMenuToggle, mobileMenuOpen }: DocsHeaderPro
             />
           </Link>
 
-          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-[#0b2256]/10 text-[#0b2256] border border-[#0b2256]/20">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-none text-[11px] font-mono font-bold bg-[#0b2256]/10 text-[#0b2256] border border-[#0b2256]/20">
             Docs
           </span>
         </div>
@@ -45,10 +45,10 @@ export function DocsHeader({ onMobileMenuToggle, mobileMenuOpen }: DocsHeaderPro
         {/* Center: Search Indicator / Quick Jump (Desktop) */}
         <div className="hidden md:flex items-center flex-1 max-w-md mx-4">
           <div className="w-full relative">
-            <div className="flex items-center w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-400 text-xs gap-2">
+            <div className="flex items-center w-full px-3 py-1.5 rounded-none border border-slate-200 bg-slate-50 text-slate-400 text-xs gap-2">
               <Search className="size-3.5 text-slate-400" />
               <span>Search documentation, UNEB guides & POS...</span>
-              <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-slate-200 bg-white px-1.5 font-mono text-[10px] font-medium text-slate-500 shadow-2xs">
+              <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded-none border border-slate-200 bg-white px-1.5 font-mono text-[10px] font-medium text-slate-500 shadow-none">
                 ⌘K
               </kbd>
             </div>
@@ -68,9 +68,9 @@ export function DocsHeader({ onMobileMenuToggle, mobileMenuOpen }: DocsHeaderPro
             href="https://wa.me/256758611414"
             target="_blank"
             rel="noreferrer"
-            className="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg border border-emerald-200 transition-colors"
+            className="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-none border border-emerald-200 transition-colors"
           >
-            <span className="size-1.5 rounded-full bg-emerald-500" />
+            <span className="size-1.5 bg-emerald-500" />
             <span>Support: +256 758 611 414</span>
           </a>
 
@@ -81,7 +81,7 @@ export function DocsHeader({ onMobileMenuToggle, mobileMenuOpen }: DocsHeaderPro
           >
             <Button
               size="sm"
-              className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-lg text-xs font-bold px-3.5 h-8.5 shadow-sm gap-1.5"
+              className="bg-[#f26522] hover:bg-[#d95314] text-white rounded-none text-xs font-bold px-3.5 h-8.5 shadow-none gap-1.5"
             >
               <span>Try 4h Demo</span>
               <ArrowRight className="size-3.5" />

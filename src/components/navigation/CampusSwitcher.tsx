@@ -418,15 +418,15 @@ export function CampusSwitcher() {
                 <Input
                   id="campus-email"
                   type="email"
-                  placeholder="entebbe@wellstarbright.sc.ug"
+                  placeholder="branch@yourschool.com"
                   value={formData.contactEmail}
                   onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
-                  className="rounded-xl text-xs h-9"
+                  className="rounded-none text-xs h-9"
                 />
               </div>
             </div>
 
-            <div className="p-3 bg-secondary/50 rounded-xl flex items-center justify-between text-xs text-muted-foreground border border-border/50">
+            <div className="p-3 bg-secondary/50 rounded-none flex items-center justify-between text-xs text-muted-foreground border border-border/50">
               <span className="flex items-center gap-1.5 font-medium">
                 <ShieldCheck className="size-4 text-emerald-600" />
                 Current Capacity

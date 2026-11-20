@@ -39,7 +39,7 @@ export function DocsCallout({ type, title, message }: DocsCalloutProps) {
   const Icon = config.icon;
 
   return (
-    <div className={cn("my-4 p-4 rounded-xl border flex gap-3.5", config.bg)}>
+    <div className={cn("my-4 p-4 rounded-none border border-l-4 flex gap-3.5", config.bg)}>
       <div className="shrink-0 mt-0.5">
         <Icon className={cn("size-5", config.iconColor)} />
       </div>
