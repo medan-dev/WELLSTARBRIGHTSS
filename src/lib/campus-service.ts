@@ -31,12 +31,12 @@ export async function initializeDefaultSchoolAndCampus() {
     org = await prisma.schoolOrganization.create({
       data: {
         id: "sch_wellstar_hq",
-        name: "Wellstar Bright Educational Group",
+        name: "Demo Educational Group",
         code: "WEG-2026",
         motto: "Excellence, Discipline & Academic Distinction",
-        contactEmail: "admin@wellstarbright.sc.ug",
-        contactPhone: "+256 701 116 781",
-        website: "https://wellstarbrightss.vercel.app",
+        contactEmail: "admin@yourschool.com",
+        contactPhone: "+256 758 611 414",
+        website: "https://edurexa.com",
         status: "ACTIVE",
         maxCampuses: MAX_CAMPUSES_PER_SCHOOL, // 🛡️ 20 Campus Hard Limit
       },
@@ -53,12 +53,12 @@ export async function initializeDefaultSchoolAndCampus() {
       data: {
         id: "camp_mukono_main",
         schoolId: org.id,
-        name: "Mukono Main Campus (Senior & Boarding)",
+        name: "Main Campus (Senior & Boarding)",
         code: "MUK-01",
-        location: "Mukono High Street, Mukono District",
-        headteacher: "Dr. Arthur Ssentongo",
-        contactEmail: "mukono@wellstarbright.sc.ug",
-        contactPhone: "+256 701 116 781",
+        location: "Central Educational Zone",
+        headteacher: "School Head & Principal",
+        contactEmail: "mukono@yourschool.com",
+        contactPhone: "+256 758 611 414",
         status: "ACTIVE",
       },
     });
@@ -74,12 +74,12 @@ export async function initializeDefaultSchoolAndCampus() {
       data: {
         id: "camp_jinja_branch",
         schoolId: org.id,
-        name: "Jinja Nile Valley Branch Campus",
+        name: "Valley Branch Campus",
         code: "JIN-02",
-        location: "Nile Crescent, Jinja City",
-        headteacher: "Mr. Patrick Ochieng",
-        contactEmail: "jinja@wellstarbright.sc.ug",
-        contactPhone: "+256 702 334 890",
+        location: "Eastern Educational Zone",
+        headteacher: "Branch Administrator",
+        contactEmail: "jinja@yourschool.com",
+        contactPhone: "+256 758 611 414",
         status: "ACTIVE",
       },
     });

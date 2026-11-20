@@ -775,7 +775,7 @@ export default function SuperAdminFinancePage() {
             <div>
               <div className="flex flex-wrap items-center gap-2.5">
                 <h1 className="text-2xl lg:text-3xl font-black tracking-tight text-white">
-                  Wellstar Finance Command
+                  Finance & Treasury Command
                 </h1>
                 <span className="px-3 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-widest flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-amber-400" /> Executive Analytics Suite
@@ -2276,7 +2276,7 @@ export default function SuperAdminFinancePage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
           <div className="bg-white text-slate-900 border border-slate-300 rounded-3xl max-w-sm w-full p-6 shadow-2xl font-mono text-xs space-y-3 animate-in zoom-in-95 duration-150">
             <div className="text-center pb-2 border-b-2 border-dashed border-slate-400">
-              <div className="text-xl font-black">WELLSTAR BRIGHT SCHOOL</div>
+              <div className="text-xl font-black">EDUREXA DEMO ACADEMY</div>
               <div className="text-[10px] uppercase font-bold text-slate-600">Official Tuition & Fees Payment Receipt</div>
               <div className="text-[10px] mt-1">Receipt #: <strong>{selectedReceiptForPrint.receiptNumber}</strong></div>
               <div className="text-[10px]">Date: {new Date(selectedReceiptForPrint.issuedAt).toLocaleString()}</div>
@@ -2296,7 +2296,7 @@ export default function SuperAdminFinancePage() {
 
             <div className="text-center text-[9px] text-slate-500 pt-1">
               Computer-Generated Official Receipt • Valid Without Seal
-              <br />Thank you for supporting Wellstar Bright School!
+              <br />Thank you for supporting your child's education!
             </div>
 
             <div className="flex items-center gap-2 pt-3 no-print">
@@ -2709,7 +2709,7 @@ export default function SuperAdminFinancePage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
           <div className="bg-white text-slate-900 border border-slate-300 rounded-3xl max-w-md w-full p-6 shadow-2xl font-mono text-xs space-y-4 animate-in zoom-in-95 duration-150">
             <div className="text-center pb-2 border-b-2 border-slate-900">
-              <div className="text-lg font-black">WELLSTAR BRIGHT SECONDARY SCHOOL</div>
+              <div className="text-lg font-black">EDUREXA DEMO ACADEMY</div>
               <div className="text-[11px] font-bold text-slate-600 uppercase">Official Confidential Staff Payslip</div>
               <div className="text-[10px]">Payslip Ref: <strong>{selectedPayslipForPrint.payslipRef}</strong></div>
               <div className="text-[10px]">Period: {selectedPayslipForPrint.month} {selectedPayslipForPrint.year}</div>

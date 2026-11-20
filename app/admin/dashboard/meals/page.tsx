@@ -849,7 +849,7 @@ export default function MealCardsManagementPage() {
                 <div className="flex items-center justify-between border-b border-amber-500/20 pb-3">
                   <div>
                     <div className="text-[10px] tracking-wider uppercase font-bold text-amber-600 dark:text-amber-400">
-                      Wellstar Bright School
+                      EDUREXA Demo Academy
                     </div>
                     <div className="text-xs font-extrabold text-foreground tracking-tight">
                       STUDENT MEAL PASS

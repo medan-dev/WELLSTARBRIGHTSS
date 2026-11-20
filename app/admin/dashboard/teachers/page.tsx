@@ -203,7 +203,7 @@ export default function TeachersPage() {
               </div>
               <div>
                 <Label htmlFor="temail">Email *</Label>
-                <Input id="temail" type="email" value={newTeacher.email} onChange={(e) => setNewTeacher((p) => ({ ...p, email: e.target.value }))} className="mt-1.5" placeholder="j.smith@wellstarbright.sc.ug" />
+                <Input id="temail" type="email" value={newTeacher.email} onChange={(e) => setNewTeacher((p) => ({ ...p, email: e.target.value }))} className="mt-1.5" placeholder="j.smith@yourschool.com" />
               </div>
               <div>
                 <Label htmlFor="tpass">Temporary Password *</Label>

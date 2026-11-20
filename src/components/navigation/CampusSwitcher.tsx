@@ -61,7 +61,7 @@ export function CampusSwitcher() {
     code: "",
     location: "",
     headteacher: "",
-    contactPhone: "+256 701 116 781",
+    contactPhone: "+256 758 611 414",
     contactEmail: "",
   });
 
@@ -172,18 +172,15 @@ export function CampusSwitcher() {
             </div>
 
             <div className="flex flex-col items-start text-left leading-tight">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1">
-                <span>Campus</span>
-                <span className="text-[9px] px-1 py-0.2 bg-primary/15 text-primary rounded font-mono font-bold">
-                  {campuses.length}/{maxLimit}
-                </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                Active Campus
               </span>
               <span className="text-xs font-bold truncate max-w-[140px] md:max-w-[200px]">
                 {loading
                   ? "Loading..."
                   : activeCampusId === "ALL"
-                  ? "Consolidated HQ (All)"
-                  : selectedCampus?.name || "Select Campus"}
+                  ? "Main Campus"
+                  : selectedCampus?.name || "Main Campus"}
               </span>
             </div>
 
@@ -198,14 +195,10 @@ export function CampusSwitcher() {
           {/* Organization Banner */}
           <DropdownMenuLabel className="p-2 pb-1.5">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">Multi-Campus Hierarchy</span>
-              <span className="flex items-center gap-1 font-mono text-[10px] bg-secondary px-1.5 py-0.5 rounded text-secondary-foreground font-semibold">
-                <ShieldCheck className="size-3 text-emerald-600 dark:text-emerald-400" />
-                Limit: {maxLimit}
-              </span>
+              <span className="font-semibold text-foreground">Institutional Campuses</span>
             </div>
             <p className="text-[11px] text-muted-foreground font-normal mt-0.5">
-              Enterprise multi-tenant isolation with unlimited student scale.
+              Select or manage campuses for your institution.
             </p>
           </DropdownMenuLabel>
 
@@ -222,10 +215,7 @@ export function CampusSwitcher() {
               </div>
               <div>
                 <div className="font-semibold text-xs flex items-center gap-1.5">
-                  Consolidated (All Campuses)
-                  <Badge variant="outline" className="text-[10px] py-0 px-1 font-mono">
-                    HQ
-                  </Badge>
+                  All Campuses (Consolidated)
                 </div>
                 <div className="text-[11px] text-muted-foreground">
                   {campuses.length} active campuses &bull; {totalStudents} total students
@@ -336,8 +326,8 @@ export function CampusSwitcher() {
             </div>
             <DialogTitle className="text-lg font-bold">Register New Campus Branch</DialogTitle>
             <DialogDescription className="text-xs text-muted-foreground">
-              Add a branch campus to the Wellstar Bright group. Enforces strict isolation with
-              dedicated fee schedules, staff, classes, and unlimited student admissions.
+              Add a branch campus to the institution. Enforces strict isolation with
+              dedicated fee schedules, staff, classes, and admissions.
             </DialogDescription>
           </DialogHeader>
 
