@@ -940,7 +940,7 @@ export default function EdurexaMarketingHome() {
           </p>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-none p-6 sm:p-10 shadow-sm">
+        <div className="max-w-2xl mx-auto">
           {bookingSubmitted ? (
             <div className="text-center py-10 space-y-4">
               <div className="size-14 rounded-none bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mx-auto">
@@ -972,7 +972,7 @@ export default function EdurexaMarketingHome() {
                     value={bookingData.schoolName}
                     onChange={(e) => setBookingData({ ...bookingData, schoolName: e.target.value })}
                     required
-                    className="h-10 rounded-none bg-slate-50 border-slate-200 text-slate-900 text-xs"
+                    className="h-10 rounded-none bg-white border-slate-300 text-slate-900 text-xs"
                   />
                 </div>
 
@@ -983,7 +983,7 @@ export default function EdurexaMarketingHome() {
                     value={bookingData.contactPerson}
                     onChange={(e) => setBookingData({ ...bookingData, contactPerson: e.target.value })}
                     required
-                    className="h-10 rounded-none bg-slate-50 border-slate-200 text-slate-900 text-xs"
+                    className="h-10 rounded-none bg-white border-slate-300 text-slate-900 text-xs"
                   />
                 </div>
               </div>
@@ -996,7 +996,7 @@ export default function EdurexaMarketingHome() {
                     value={bookingData.phone}
                     onChange={(e) => setBookingData({ ...bookingData, phone: e.target.value })}
                     required
-                    className="h-10 rounded-none bg-slate-50 border-slate-200 text-slate-900 text-xs"
+                    className="h-10 rounded-none bg-white border-slate-300 text-slate-900 text-xs"
                   />
                 </div>
 
@@ -1008,7 +1008,7 @@ export default function EdurexaMarketingHome() {
                     value={bookingData.email}
                     onChange={(e) => setBookingData({ ...bookingData, email: e.target.value })}
                     required
-                    className="h-10 rounded-none bg-slate-50 border-slate-200 text-slate-900 text-xs"
+                    className="h-10 rounded-none bg-white border-slate-300 text-slate-900 text-xs"
                   />
                 </div>
               </div>
@@ -1018,7 +1018,7 @@ export default function EdurexaMarketingHome() {
                 <select
                   value={bookingData.campuses}
                   onChange={(e) => setBookingData({ ...bookingData, campuses: e.target.value })}
-                  className="w-full h-10 px-3 rounded-none bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:ring-1 focus:ring-[#0b2256]"
+                  className="w-full h-10 px-3 rounded-none bg-white border border-slate-300 text-slate-900 text-xs focus:ring-1 focus:ring-[#0b2256]"
                 >
                   <option value="1">1 Single Campus</option>
                   <option value="2-5">2 to 5 Campuses (Most Common)</option>
@@ -1029,7 +1029,7 @@ export default function EdurexaMarketingHome() {
 
               <Button
                 type="submit"
-                className="w-full bg-[#f26522] hover:bg-[#d95314] text-white rounded-none h-11 text-xs font-bold shadow-2xs transition-colors"
+                className="w-full bg-[#f26522] hover:bg-[#d95314] text-white rounded-none h-11 text-xs font-bold shadow-none transition-colors"
               >
                 Confirm Free 4-Hour Demo Request
               </Button>

@@ -165,66 +165,62 @@ export default function DemoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between font-sans">
-      {/* Top Simple Bar */}
-      <header className="px-4 py-4 flex items-center justify-between max-w-5xl mx-auto w-full">
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col justify-between font-sans">
+      {/* Top Navigation */}
+      <header className="px-6 py-6 flex items-center justify-between max-w-5xl mx-auto w-full">
         <Link href="/" className="inline-block transition-opacity hover:opacity-90">
           <Image
             src={edurexaHorizontal}
             alt="EDUREXA Logo"
-            className="h-8 sm:h-9 w-auto object-contain"
+            className="h-9 w-auto object-contain"
             priority
           />
         </Link>
         <Link
           href="/"
-          className="text-xs font-semibold text-slate-600 hover:text-[#0b2256] transition-colors"
+          className="text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors"
         >
-          ← Return to Main Website
+          ← Return to Website
         </Link>
       </header>
 
-      {/* Main Centered Form Card */}
+      {/* Main Centered Form */}
       <main className="flex-1 flex items-center justify-center px-4 py-8">
-        <div className="w-full max-w-md bg-white border border-slate-300 rounded-none shadow-none p-6 sm:p-8 space-y-6">
-          {/* Card Header */}
-          <div className="text-center space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-none border border-slate-300 bg-slate-100 text-[#0b2256] text-[11px] font-mono uppercase tracking-widest font-bold">
-              <span>Interactive Client Sandbox</span>
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-              Demo Portal Authentication
+        <div className="w-full max-w-sm space-y-6">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+              Login
             </h1>
-            <p className="text-xs text-slate-500 font-mono">
-              Target Tenant: <span className="font-bold text-slate-800">yourschool.com</span>
+            <p className="text-xs text-slate-500">
+              Enter your credentials to access your account.
             </p>
           </div>
 
-          {/* The Primary Form */}
+          {/* Clean Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider font-mono">
-                Account ID / Email
+              <label className="block text-xs font-semibold text-slate-700">
+                Email
               </label>
               <Input
-                type="text"
+                type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="e.g. cashier@yourschool.com"
-                className="h-10 rounded-none text-xs font-mono font-medium border-slate-300 bg-white"
+                placeholder="name@school.com"
+                className="h-10 rounded-none text-xs border-slate-300 bg-white"
               />
             </div>
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider font-mono">
-                  Access Key / PIN
+                <label className="block text-xs font-semibold text-slate-700">
+                  Password
                 </label>
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-xs text-[#f26522] hover:underline font-semibold flex items-center gap-1"
+                  className="text-xs text-slate-500 hover:text-slate-800 font-medium flex items-center gap-1"
                 >
                   {showPassword ? <EyeOff className="size-3" /> : <Eye className="size-3" />}
                   <span>{showPassword ? "Hide" : "Show"}</span>
@@ -235,71 +231,51 @@ export default function DemoPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password or PIN"
-                className="h-10 rounded-none text-xs font-mono font-medium border-slate-300 bg-white"
+                placeholder="Enter password"
+                className="h-10 rounded-none text-xs border-slate-300 bg-white"
               />
             </div>
 
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-10 bg-[#0b2256] hover:bg-[#081a42] text-white font-bold text-xs rounded-none shadow-none gap-2 transition-colors mt-2"
+              className="w-full h-10 bg-[#0b2256] hover:bg-[#081a42] text-white font-semibold text-xs rounded-none shadow-none transition-colors mt-2"
             >
-              {loading ? (
-                <span>Authenticating Session...</span>
-              ) : (
-                <>
-                  <span>Sign In & Launch Demo</span>
-                  <ArrowRight className="size-3.5 text-[#f26522]" />
-                </>
-              )}
+              {loading ? "Logging in..." : "Login"}
             </Button>
           </form>
 
-          {/* BUTTONS BELOW THE FORM (Pure Flex Layout, Strictly Non-Curved) */}
-          <div className="pt-4 border-t border-slate-200 space-y-3">
-            <div className="flex items-center justify-between text-xs text-slate-600 font-semibold">
-              <span className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider">
-                <Lock className="size-3 text-[#f26522]" /> Select Test Role:
-              </span>
-              <span className="text-[11px] text-slate-400 font-mono">1-click autofill</span>
+          {/* Quick Select Buttons Below Form */}
+          <div className="pt-6 border-t border-slate-100 space-y-2">
+            <div className="text-[11px] font-medium text-slate-400">
+              Test accounts:
             </div>
-
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {roleOptions.map((opt) => {
-                const Icon = opt.icon;
                 const isSelected = selectedRole === opt.key;
-
                 return (
                   <button
                     key={opt.key}
                     type="button"
                     onClick={() => handleSelectRole(opt)}
-                    className={`flex-1 min-w-[calc(50%-0.25rem)] p-2.5 rounded-none border text-xs font-bold transition-colors flex items-center justify-center gap-2 ${
+                    className={`text-xs px-2.5 py-1.5 border transition-colors ${
                       isSelected
-                        ? "bg-[#0b2256] text-white border-[#0b2256]"
-                        : "bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-300"
+                        ? "border-[#0b2256] bg-[#0b2256] text-white font-medium"
+                        : "border-slate-200 text-slate-600 hover:border-slate-400 bg-white"
                     }`}
                   >
-                    <Icon className={`size-3.5 ${isSelected ? "text-[#f26522]" : "text-slate-500"}`} />
-                    <span className="truncate">{opt.label}</span>
+                    {opt.label.split(" (")[0]}
                   </button>
                 );
               })}
             </div>
           </div>
-
-          {/* Security Disclaimer */}
-          <div className="p-3 rounded-none bg-slate-50 border border-slate-200 text-[11px] text-slate-500 text-center leading-relaxed">
-            <ShieldCheck className="size-3.5 text-emerald-600 inline mr-1 -mt-0.5" />
-            Simulated sandbox environment. All interactions are strictly isolated within demo records.
-          </div>
         </div>
       </main>
 
       {/* Simple Footer */}
-      <footer className="py-4 text-center text-xs text-slate-400 font-mono">
-        <p>© 2026 EDUREXA. Educational Institution Operating System.</p>
+      <footer className="py-6 text-center text-xs text-slate-400">
+        <p>© 2026 EDUREXA. All rights reserved.</p>
       </footer>
     </div>
   );

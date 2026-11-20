@@ -18,7 +18,6 @@ import {
   ShieldCheck,
   CheckCircle2,
   Lock,
-  Sparkles,
   ArrowRight,
 } from "lucide-react";
 
@@ -88,11 +87,6 @@ export default function TeacherLogin() {
 
         {/* Center Pitch */}
         <div className="relative z-10 space-y-6 max-w-lg">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-orange-300 text-xs font-bold border border-white/20">
-            <Sparkles className="size-3 text-orange-300" />
-            <span>Faculty Academic Gradebook & UNEB Engine</span>
-          </div>
-
           <h1 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">
             Empowering teachers to <br />
             <span className="text-[#f26522]">inspire excellence.</span>
@@ -102,21 +96,21 @@ export default function TeacherLogin() {
             Record class attendance, enter continuous competence scores (1.0 to 3.0 scale), generate automated report cards, and track student mastery seamlessly.
           </p>
 
-          {/* Value Props (Pure Flexbox) */}
+          {/* Value Props */}
           <div className="flex flex-wrap gap-3 pt-2">
-            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xs">
+            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-none bg-white/5 border border-white/10">
               <ClipboardCheck className="size-4 text-emerald-400 shrink-0" />
               <span className="text-xs font-semibold text-slate-200">Daily Class Attendance</span>
             </div>
-            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xs">
+            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-none bg-white/5 border border-white/10">
               <FileSpreadsheet className="size-4 text-amber-400 shrink-0" />
               <span className="text-xs font-semibold text-slate-200">UNEB CBC Competence Grading</span>
             </div>
-            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xs">
+            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-none bg-white/5 border border-white/10">
               <BookOpen className="size-4 text-orange-400 shrink-0" />
               <span className="text-xs font-semibold text-slate-200">Assigned Streams & Subjects</span>
             </div>
-            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xs">
+            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-none bg-white/5 border border-white/10">
               <ShieldCheck className="size-4 text-blue-400 shrink-0" />
               <span className="text-xs font-semibold text-slate-200">Automated Report Cards</span>
             </div>
@@ -131,92 +125,51 @@ export default function TeacherLogin() {
       </div>
 
       {/* Right Login Form */}
-      <div className="lg:w-1/2 xl:w-5/12 flex items-center justify-center p-6 sm:p-12 relative">
-        <div className="w-full max-w-md space-y-6">
+      <div className="lg:w-1/2 xl:w-5/12 flex items-center justify-center p-6 sm:p-12 relative bg-white">
+        <div className="w-full max-w-sm space-y-6">
           {/* Mobile Header */}
           <div className="lg:hidden flex items-center justify-between mb-4">
             <Link href="/" className="inline-block">
               <Image src={edurexaHorizontal} alt="EDUREXA Logo" className="h-9 w-auto object-contain" />
             </Link>
-            <Link href="/demo" className="text-xs font-bold text-[#f26522] hover:underline">
-              Demo Gateway →
-            </Link>
           </div>
 
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-orange-50 text-[#f26522]">
-              <span>Simulated Domain: yourschool.com</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-              Teacher Gradebook Sign-In
+          <div className="space-y-1">
+            <h2 className="text-2xl font-bold text-foreground tracking-tight">
+              Teacher Login
             </h2>
             <p className="text-xs text-muted-foreground">
               Sign in with your faculty credentials to enter marks and attendance.
             </p>
           </div>
 
-          {/* Quick Demo Switcher */}
-          <div className="p-3 bg-muted/60 border border-border/80 rounded-2xl space-y-2 text-xs">
-            <div className="flex items-center justify-between text-muted-foreground font-semibold">
-              <span className="flex items-center gap-1.5 text-xs text-slate-700 font-bold">
-                <Lock className="size-3.5 text-primary" /> Fast Demo Accounts:
-              </span>
-              <Link href="/demo" className="text-[11px] text-[#f26522] hover:underline font-bold">
-                All Roles →
-              </Link>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => handleAutofillDemo("senior")}
-                className="flex-1 min-w-[90px] py-2 px-2.5 rounded-xl bg-white border border-border hover:bg-slate-50 font-bold text-[11px] text-foreground transition-all text-center"
-              >
-                Senior DOS
-              </button>
-              <button
-                type="button"
-                onClick={() => handleAutofillDemo("science")}
-                className="flex-1 min-w-[90px] py-2 px-2.5 rounded-xl bg-white border border-border hover:bg-slate-50 font-bold text-[11px] text-emerald-600 transition-all text-center"
-              >
-                Sciences
-              </button>
-              <button
-                type="button"
-                onClick={() => handleAutofillDemo("humanities")}
-                className="flex-1 min-w-[90px] py-2 px-2.5 rounded-xl bg-white border border-border hover:bg-slate-50 font-bold text-[11px] text-blue-600 transition-all text-center"
-              >
-                Humanities
-              </button>
-            </div>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-4 pt-1">
+          <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-foreground uppercase tracking-wider">
-                Teacher Email Address
+              <label className="block text-xs font-semibold text-foreground">
+                Email
               </label>
               <Input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="teacher@yourschool.com"
-                className="h-11 rounded-xl text-sm font-medium border-border font-mono"
+                placeholder="name@school.com"
+                className="h-10 rounded-none text-xs border-slate-300 bg-white"
               />
             </div>
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="block text-xs font-bold text-foreground uppercase tracking-wider">
+                <label className="block text-xs font-semibold text-foreground">
                   Password
                 </label>
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-xs text-[#f26522] hover:underline font-semibold flex items-center gap-1"
+                  className="text-xs text-slate-500 hover:text-slate-800 font-medium flex items-center gap-1"
                 >
                   {showPassword ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
-                  {showPassword ? "Hide" : "Show"}
+                  <span>{showPassword ? "Hide" : "Show"}</span>
                 </button>
               </div>
               <Input
@@ -224,42 +177,61 @@ export default function TeacherLogin() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="password123"
-                className="h-11 rounded-xl text-sm font-medium border-border font-mono"
+                placeholder="Enter password"
+                className="h-10 rounded-none text-xs border-slate-300 bg-white"
               />
             </div>
 
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-11 bg-[#f26522] hover:bg-[#d95314] text-white font-bold text-sm rounded-xl shadow-md transition-all gap-2"
+              className="w-full h-10 bg-[#f26522] hover:bg-[#d95314] text-white font-semibold text-xs rounded-none shadow-none transition-colors mt-2"
             >
-              {loading ? (
-                <span>Signing in...</span>
-              ) : (
-                <>
-                  <span>Sign In to Gradebook</span>
-                  <ArrowRight className="size-4" />
-                </>
-              )}
+              {loading ? "Logging in..." : "Login"}
             </Button>
           </form>
 
-          <div className="pt-4 border-t border-border/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-            <Link href="/" className="hover:text-foreground font-semibold transition-colors">
-              ← Main Website
+          {/* Quick Select Buttons Below Form */}
+          <div className="pt-6 border-t border-slate-100 space-y-2">
+            <div className="text-[11px] font-medium text-slate-400">
+              Quick select account:
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              <button
+                type="button"
+                onClick={() => handleAutofillDemo("senior")}
+                className="text-xs px-2.5 py-1.5 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
+              >
+                Senior DOS
+              </button>
+              <button
+                type="button"
+                onClick={() => handleAutofillDemo("science")}
+                className="text-xs px-2.5 py-1.5 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
+              >
+                Sciences
+              </button>
+              <button
+                type="button"
+                onClick={() => handleAutofillDemo("humanities")}
+                className="text-xs px-2.5 py-1.5 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
+              >
+                Humanities
+              </button>
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-muted-foreground">
+            <Link href="/" className="hover:text-foreground transition-colors">
+              ← Return to Website
             </Link>
             <div className="flex items-center gap-3 font-medium">
-              <Link href="/demo" className="text-[#f26522] font-bold hover:underline">
-                Demo Gateway
+              <Link href="/admin" className="hover:text-foreground">
+                Admin
               </Link>
               <span>•</span>
-              <Link href="/admin" className="text-emerald-600 hover:underline">
-                Admin Console
-              </Link>
-              <span>•</span>
-              <Link href="/student" className="text-blue-600 hover:underline">
-                Student Portal
+              <Link href="/student" className="hover:text-foreground">
+                Student
               </Link>
             </div>
           </div>

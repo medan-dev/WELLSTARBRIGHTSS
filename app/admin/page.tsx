@@ -17,7 +17,6 @@ import {
   EyeOff,
   Lock,
   Award,
-  Sparkles,
   Receipt,
   ArrowRight,
 } from "lucide-react";
@@ -95,11 +94,6 @@ export default function AdminLogin() {
 
         {/* Center Pitch */}
         <div className="relative z-10 space-y-6 max-w-lg">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-amber-300 text-xs font-bold border border-white/20">
-            <Sparkles className="size-3 text-amber-300" />
-            <span>Multi-Tenant School Administration & Finance</span>
-          </div>
-
           <h1 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">
             Total operational clarity, <br />
             <span className="text-[#f26522]">for your institution.</span>
@@ -111,19 +105,19 @@ export default function AdminLogin() {
 
           {/* Value Props */}
           <div className="flex flex-wrap gap-3 pt-2">
-            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xs">
+            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-none bg-white/5 border border-white/10">
               <Wallet className="size-4 text-emerald-400 shrink-0" />
               <span className="text-xs font-semibold text-slate-200">11-Sector Finance POS</span>
             </div>
-            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xs">
+            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-none bg-white/5 border border-white/10">
               <ShieldCheck className="size-4 text-blue-400 shrink-0" />
               <span className="text-xs font-semibold text-slate-200">Anti-Leakage Auditing</span>
             </div>
-            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xs">
+            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-none bg-white/5 border border-white/10">
               <Users className="size-4 text-amber-400 shrink-0" />
               <span className="text-xs font-semibold text-slate-200">Student & Staff SIS</span>
             </div>
-            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xs">
+            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-none bg-white/5 border border-white/10">
               <LayoutDashboard className="size-4 text-purple-400 shrink-0" />
               <span className="text-xs font-semibold text-slate-200">Real-Time Ledger Sync</span>
             </div>
@@ -133,13 +127,13 @@ export default function AdminLogin() {
         {/* Bottom Trust Badge */}
         <div className="relative z-10 flex items-center gap-3 pt-6 border-t border-white/10 text-xs text-slate-400">
           <Award className="size-4 text-amber-400" />
-          <span>EDUREXA Multi-Tenant Cloud Architecture • ISO & MOES Standard</span>
+          <span>EDUREXA Multi-Tenant Cloud Architecture</span>
         </div>
       </div>
 
       {/* Right Login Form Column */}
-      <div className="lg:w-1/2 xl:w-5/12 flex flex-col justify-center px-6 sm:px-12 lg:px-16 py-12">
-        <div className="w-full max-w-md mx-auto space-y-6">
+      <div className="lg:w-1/2 xl:w-5/12 flex flex-col justify-center px-6 sm:px-12 lg:px-16 py-12 bg-white">
+        <div className="w-full max-w-sm mx-auto space-y-6">
           {/* Mobile Brand Link */}
           <div className="lg:hidden flex items-center justify-between mb-4">
             <Link href="/" className="inline-block">
@@ -150,100 +144,44 @@ export default function AdminLogin() {
                 priority
               />
             </Link>
-            <Link href="/demo" className="text-xs font-bold text-[#f26522] hover:underline">
-              Demo Gateway →
-            </Link>
           </div>
 
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-[#0b2256]/10 text-[#0b2256]">
-              <span>Simulated Domain: yourschool.com</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-              Administrative Sign-In
+          <div className="space-y-1">
+            <h2 className="text-2xl font-bold text-foreground tracking-tight">
+              Login
             </h2>
             <p className="text-xs text-muted-foreground">
-              Choose your role below to test the full system live.
+              Enter your credentials to access your administrative workstation.
             </p>
           </div>
 
-          {/* Role Chooser Tabs: Cashier, Admin, Bursar */}
-          <div className="p-3 bg-muted/60 border border-border/80 rounded-2xl space-y-2 text-xs">
-            <div className="flex items-center justify-between text-muted-foreground font-semibold">
-              <span className="flex items-center gap-1.5 text-xs text-slate-700 font-bold">
-                <Lock className="size-3.5 text-[#0b2256]" /> Choose Workstation to Test:
-              </span>
-              <Link href="/demo" className="text-[11px] text-[#f26522] hover:underline font-bold">
-                All Roles →
-              </Link>
-            </div>
-
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => handleFillAccount("cashier")}
-                className={`flex-1 min-w-[90px] py-2 px-2.5 rounded-xl border text-xs font-bold transition-all text-center ${
-                  selectedRole === "cashier"
-                    ? "bg-[#0b2256] text-white border-[#0b2256] shadow-xs"
-                    : "bg-white hover:bg-slate-100 text-emerald-700 border-border"
-                }`}
-              >
-                Cashier Desk
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleFillAccount("admin")}
-                className={`flex-1 min-w-[90px] py-2 px-2.5 rounded-xl border text-xs font-bold transition-all text-center ${
-                  selectedRole === "admin"
-                    ? "bg-[#0b2256] text-white border-[#0b2256] shadow-xs"
-                    : "bg-white hover:bg-slate-100 text-slate-900 border-border"
-                }`}
-              >
-                School Admin
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleFillAccount("bursar")}
-                className={`flex-1 min-w-[90px] py-2 px-2.5 rounded-xl border text-xs font-bold transition-all text-center ${
-                  selectedRole === "bursar"
-                    ? "bg-[#0b2256] text-white border-[#0b2256] shadow-xs"
-                    : "bg-white hover:bg-slate-100 text-blue-700 border-border"
-                }`}
-              >
-                Chief Bursar
-              </button>
-            </div>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-4 pt-1">
+          <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-foreground uppercase tracking-wider">
-                Staff Email or Username
+              <label className="block text-xs font-semibold text-foreground">
+                Email
               </label>
               <Input
                 type="text"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="e.g. cashier@yourschool.com"
-                className="h-11 rounded-xl text-sm font-medium border-border font-mono"
+                placeholder="name@school.com"
+                className="h-10 rounded-none text-xs border-slate-300 bg-white"
               />
             </div>
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="block text-xs font-bold text-foreground uppercase tracking-wider">
-                  Password or 4-Digit Security PIN
+                <label className="block text-xs font-semibold text-foreground">
+                  Password
                 </label>
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-xs text-[#f26522] hover:underline font-semibold flex items-center gap-1"
+                  className="text-xs text-slate-500 hover:text-slate-800 font-medium flex items-center gap-1"
                 >
                   {showPassword ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
-                  {showPassword ? "Hide" : "Show"}
+                  <span>{showPassword ? "Hide" : "Show"}</span>
                 </button>
               </div>
               <Input
@@ -251,41 +189,74 @@ export default function AdminLogin() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password or 4-digit PIN..."
-                className="h-11 rounded-xl text-sm font-medium border-border font-mono"
+                placeholder="Enter password"
+                className="h-10 rounded-none text-xs border-slate-300 bg-white"
               />
             </div>
 
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-11 bg-[#0b2256] hover:bg-[#081a42] text-white font-bold text-sm rounded-xl shadow-md transition-all gap-2"
+              className="w-full h-10 bg-[#0b2256] hover:bg-[#081a42] text-white font-semibold text-xs rounded-none shadow-none transition-colors mt-2"
             >
-              {loading ? (
-                <span>Verifying Credentials...</span>
-              ) : (
-                <>
-                  <span>Sign In as {selectedRole === "cashier" ? "Cashier" : selectedRole === "admin" ? "Admin" : "Bursar"}</span>
-                  <ArrowRight className="size-4 text-[#f26522]" />
-                </>
-              )}
+              {loading ? "Logging in..." : "Login"}
             </Button>
           </form>
 
-          <div className="pt-4 border-t border-border/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-            <Link href="/" className="hover:text-foreground font-semibold transition-colors">
-              ← Main Website
+          {/* Quick Select Buttons Below Form */}
+          <div className="pt-6 border-t border-slate-100 space-y-2">
+            <div className="text-[11px] font-medium text-slate-400">
+              Quick select account:
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              <button
+                type="button"
+                onClick={() => handleFillAccount("cashier")}
+                className={`text-xs px-2.5 py-1.5 border transition-colors ${
+                  selectedRole === "cashier"
+                    ? "bg-[#0b2256] text-white border-[#0b2256] font-medium"
+                    : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
+                }`}
+              >
+                Cashier
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleFillAccount("admin")}
+                className={`text-xs px-2.5 py-1.5 border transition-colors ${
+                  selectedRole === "admin"
+                    ? "bg-[#0b2256] text-white border-[#0b2256] font-medium"
+                    : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
+                }`}
+              >
+                Administrator
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleFillAccount("bursar")}
+                className={`text-xs px-2.5 py-1.5 border transition-colors ${
+                  selectedRole === "bursar"
+                    ? "bg-[#0b2256] text-white border-[#0b2256] font-medium"
+                    : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
+                }`}
+              >
+                Bursar
+              </button>
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-muted-foreground">
+            <Link href="/" className="hover:text-foreground transition-colors">
+              ← Return to Website
             </Link>
             <div className="flex items-center gap-3 font-medium">
-              <Link href="/demo" className="text-[#f26522] font-bold hover:underline">
-                Demo Gateway
-              </Link>
-              <span>•</span>
-              <Link href="/teacher" className="text-orange-600 hover:underline">
+              <Link href="/teacher" className="hover:text-foreground">
                 Teacher
               </Link>
               <span>•</span>
-              <Link href="/student" className="text-blue-600 hover:underline">
+              <Link href="/student" className="hover:text-foreground">
                 Student
               </Link>
             </div>

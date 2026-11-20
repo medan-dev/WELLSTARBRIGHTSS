@@ -456,17 +456,17 @@ function SuperAdminContent() {
   // =========================================================================
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-        <div className="w-full max-w-sm bg-white border border-slate-200/90 rounded-2xl p-8 shadow-[0_2px_12px_rgba(0,0,0,0.04)] space-y-6">
+      <div className="min-h-screen flex items-center justify-center bg-white p-4">
+        <div className="w-full max-w-sm space-y-6">
           <div className="text-center space-y-4">
             <Image
               src={edurexaLogo}
               alt="EDUREXA"
-              className="h-14 w-auto mx-auto object-contain"
+              className="h-12 w-auto mx-auto object-contain"
               priority
             />
             <div className="space-y-1">
-              <h1 className="text-sm font-semibold text-slate-900 tracking-tight">Super Admin Console</h1>
+              <h1 className="text-xl font-bold text-slate-900 tracking-tight">Super Admin Console</h1>
               <p className="text-xs text-slate-500">
                 Enter your Master PIN to manage global cluster infrastructure.
               </p>
@@ -475,13 +475,13 @@ function SuperAdminContent() {
 
           <form onSubmit={handlePinSubmit} className="space-y-4">
             {pinError && (
-              <div className="p-2.5 bg-red-50 border border-red-200 rounded-lg text-red-600 text-xs font-medium text-center">
+              <div className="p-2.5 bg-red-50 border border-red-200 text-red-600 text-xs font-medium text-center">
                 {pinError}
               </div>
             )}
 
             <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-slate-700">Master Access PIN</Label>
+              <Label className="text-xs font-semibold text-slate-700">Master Access PIN</Label>
               <Input
                 type="password"
                 placeholder="&bull;&bull;&bull;&bull;"
@@ -489,20 +489,20 @@ function SuperAdminContent() {
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
                 autoFocus
-                className="text-center tracking-widest text-lg h-10 rounded-lg bg-slate-50 border-slate-200 font-mono"
+                className="text-center tracking-widest text-lg h-10 rounded-none bg-white border-slate-300 font-mono"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-lg h-9 font-medium text-xs transition-colors"
+              className="w-full bg-[#0b2256] hover:bg-[#081a42] text-white rounded-none h-10 font-semibold text-xs shadow-none transition-colors"
             >
               Unlock Console
             </Button>
           </form>
 
-          <div className="text-[11px] text-slate-400 text-center border-t border-slate-100 pt-3">
-            EDUREXA Ecosystem &bull; Master PIN: 9900
+          <div className="text-xs text-slate-400 text-center border-t border-slate-100 pt-4">
+            EDUREXA Ecosystem Platform
           </div>
         </div>
       </div>
