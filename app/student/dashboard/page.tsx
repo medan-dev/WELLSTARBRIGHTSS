@@ -269,7 +269,7 @@ export default function StudentOverview() {
             </div>
             
             <div className="mt-6 pt-4 border-t border-gray-50 text-center text-xs text-gray-400">
-              Wellstar Bright Academy • Kabembe, Mukono
+              EDUREXA Demo Academy • Main Campus
             </div>
           </div>
         </div>

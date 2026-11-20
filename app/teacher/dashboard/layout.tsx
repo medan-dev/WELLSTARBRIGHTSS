@@ -5,7 +5,7 @@ import { NotificationCenter } from "@/components/notifications/NotificationCente
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/edurexa-mark.png";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, BookOpen, ClipboardCheck, FileSpreadsheet, UserPlus,
@@ -93,7 +93,7 @@ export default function TeacherDashboardLayout({ children }: { children: React.R
       >
         <div className="p-4 flex items-center justify-between border-b border-gray-100">
           <Link href="/teacher/dashboard" className={cn("flex items-center gap-3", !isSidebarOpen && "justify-center w-full")}>
-            <div className="bg-orange-100 p-2 rounded-xl shrink-0">
+            <div className="bg-primary/10 p-2 shrink-0">
               <Image src={logo} alt="Logo" width={32} height={32} className="w-8 h-8 object-contain" />
             </div>
             {isSidebarOpen && (

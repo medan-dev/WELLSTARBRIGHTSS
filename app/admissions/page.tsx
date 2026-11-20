@@ -19,7 +19,7 @@ const steps = [
   { icon: FileText, title: "Apply online", desc: "Complete our short enquiry form in under 5 minutes." },
   { icon: MessageSquare, title: "Family interview", desc: "A warm conversation with our admissions team." },
   { icon: UserCheck, title: "Student visit day", desc: "Your child spends a joyful day on campus with us." },
-  { icon: CheckCircle2, title: "Offer & welcome", desc: "Receive your offer and join the Wellstar Bright family." },
+  { icon: CheckCircle2, title: "Offer & welcome", desc: "Receive your offer and join our learning community." },
 ];
 
 const faqs = [
@@ -98,7 +98,7 @@ export default function AdmissionsPage() {
       <PageHero
         subtitle="Admissions"
         title="Begin your"
-        accentTitle="Wellstar Bright journey."
+        accentTitle="educational journey."
         image={admissionsHero}
         description="Our admissions process is warm, transparent, and built around your family. We follow each child's lead to ensure a joyful transition to our community."
       />
@@ -204,7 +204,7 @@ export default function AdmissionsPage() {
             <p className="text-sm font-medium">Still have questions?</p>
             <p suppressHydrationWarning className="mt-1 text-sm text-muted-foreground">
               Call us on <a href="tel:+256772589430" className="text-primary font-medium hover:underline">+256 772 589 430</a> or email{" "}
-              <a href="mailto:admissions@wellstarbright.sc.ug" className="text-primary font-medium hover:underline">admissions@wellstarbright.sc.ug</a>
+              <a href="mailto:admissions@edurexa.com" className="text-primary font-medium hover:underline">admissions@edurexa.com</a>
             </p>
           </div>
         </div>

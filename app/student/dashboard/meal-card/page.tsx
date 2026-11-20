@@ -77,12 +77,12 @@ export default function StudentMealCardPage() {
               <div className="flex items-center justify-between border-b border-white/20 pb-4">
                 <div>
                   <div className="text-[10px] tracking-wider uppercase font-bold text-amber-200">
-                    Wellstar Bright School
+                    EDUREXA Demo Academy
                   </div>
                   <div className="text-sm font-extrabold tracking-tight">DINING & MEAL PASS</div>
                 </div>
-                <div className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center font-bold text-xs">
-                  WB
+                <div className="w-9 h-9 bg-white/20 backdrop-blur-sm flex items-center justify-center font-bold text-xs">
+                  EX
                 </div>
               </div>
 

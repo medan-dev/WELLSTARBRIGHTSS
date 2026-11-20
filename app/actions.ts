@@ -127,7 +127,7 @@ const getSiteContentCached = unstable_cache(
         { value: 100, label: "University acceptance", suffix: "%" },
       ],
       testimonials: testimonials.length > 0 ? testimonials : [
-        { name: "Amara Okafor", role: "Parent of S.2 student", quote: "Wellstar Bright has transformed how my daughter sees learning. She wakes up excited.", rating: 5 },
+        { name: "Amara Okafor", role: "Parent of S.2 student", quote: "The platform has transformed how my daughter sees learning. She wakes up excited.", rating: 5 },
       ]
     }));
   },
@@ -138,8 +138,8 @@ const getSiteContentCached = unstable_cache(
 const defaultSongs = [
   {
     id: "s1",
-    title: "Wellstar Bright School Anthem",
-    artist: "Wellstar Bright Choir",
+    title: "Academy School Anthem",
+    artist: "Demo Academy Choir",
     duration: "3:42",
     size: "4.2 MB",
     quality: "320 kbps",
@@ -176,7 +176,7 @@ const defaultSongs = [
   {
     id: "s4",
     title: "Graduation Ceremony Processional",
-    artist: "Wellstar Bright Orchestra",
+    artist: "Demo Academy Orchestra",
     duration: "5:20",
     size: "6.1 MB",
     quality: "320 kbps",
@@ -212,7 +212,7 @@ const defaultSongs = [
   {
     id: "s7",
     title: "Prize Giving Fanfare",
-    artist: "Wellstar Bright Choir",
+    artist: "Demo Academy Choir",
     duration: "1:55",
     size: "2.3 MB",
     quality: "192 kbps",
@@ -238,7 +238,7 @@ const defaultSongs = [
 const defaultVideos = [
   {
     id: "v1",
-    title: "Wellstar Bright Campus Tour 2025",
+    title: "Academy Campus Tour 2025",
     duration: "5:12",
     cover: "/gallery/hero-campus.jpg",
     category: "Campus",
@@ -440,7 +440,7 @@ const defaultGalleryItems = [
   },
   {
     src: "/gallery/hero-campus.jpg",
-    alt: "Wellstar Bright campus grounds",
+    alt: "Academic campus grounds",
     caption: "Panoramic View of the Main Academic Complex, Gardens & Campus Walkways",
     category: "Campus Life"
   },

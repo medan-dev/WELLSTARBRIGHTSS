@@ -24,15 +24,25 @@ export interface CampusTelemetry {
 export async function initializeDefaultSchoolAndCampus() {
   // 1. Ensure Default School Organization exists
   let org = await prisma.schoolOrganization.findFirst({
-    where: { code: "WEG-2026" },
+    where: { OR: [{ code: "DEMO-2026" }, { code: "WEG-2026" }] },
   });
+
+  if (org && (org.name.includes("Wellstar") || org.code === "WEG-2026")) {
+    org = await prisma.schoolOrganization.update({
+      where: { id: org.id },
+      data: {
+        name: "Demo Educational Group",
+        code: "DEMO-2026",
+      },
+    });
+  }
 
   if (!org) {
     org = await prisma.schoolOrganization.create({
       data: {
-        id: "sch_wellstar_hq",
+        id: "sch_demo_hq",
         name: "Demo Educational Group",
-        code: "WEG-2026",
+        code: "DEMO-2026",
         motto: "Excellence, Discipline & Academic Distinction",
         contactEmail: "admin@yourschool.com",
         contactPhone: "+256 758 611 414",

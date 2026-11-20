@@ -232,7 +232,7 @@ export async function provisionNewSchoolOrganization(input: {
         data: {
           name: input.adminUser.name.trim(),
           email: input.adminUser.email.trim().toLowerCase(),
-          password: input.adminUser.password || "Wellstar@2026",
+          password: input.adminUser.password || "Admin@2026",
           role: "ADMIN",
           campusId: primaryCampus.id,
         },

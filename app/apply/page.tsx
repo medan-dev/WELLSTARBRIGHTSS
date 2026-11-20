@@ -68,7 +68,7 @@ export default function ApplyPage() {
         title="Formal"
         accentTitle="Application Form"
         image={applyHero}
-        description="Please fill in the applicant's details below to formally apply for a place at Wellstar Bright Secondary School. Our team will review your submission and contact you within 3-5 working days."
+        description="Please fill in the applicant's details below to formally apply for a place at our academy. Our team will review your submission and contact you within 3-5 working days."
       />
 
       <section className="relative overflow-hidden py-20 bg-secondary/20">

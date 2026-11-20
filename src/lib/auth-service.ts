@@ -21,7 +21,7 @@ export const SESSION_COOKIE_NAME = "ws_session_token";
 const AUTH_SECRET_STRING =
   process.env.AUTH_SECRET ||
   process.env.NEXTAUTH_SECRET ||
-  "wellstar-bright-high-security-jwt-secret-key-2026-uganda-mukono-sda";
+  "edurexa-enterprise-multi-tenant-jwt-secret-key-2026";
 
 const secretKey = new TextEncoder().encode(AUTH_SECRET_STRING);
 

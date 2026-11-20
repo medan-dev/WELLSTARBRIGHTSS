@@ -22,7 +22,7 @@ const team = [
     name: "Nshuti Medan",
     role: "Head of School / Director",
     initials: "NM",
-    bio: "Nshuti has led Wellstar Bright since 2012. A former Makerere University Fellow, he has shaped our whole-child approach to education over the past decade.",
+    bio: "Nshuti has led our educational institutions since 2012. A former Makerere University Fellow, he has shaped our whole-child approach to education over the past decade.",
   },
   {
     name: "Sserwadda Ivan",
@@ -34,7 +34,7 @@ const team = [
     name: "Nagawa Christine",
     role: "Head of Admissions",
     initials: "NC",
-    bio: "Christine ensures every family feels welcomed from their very first enquiry. She has been part of the Wellstar Bright team since the founding year.",
+    bio: "Christine ensures every family feels welcomed from their very first enquiry. She has been part of the leadership team since the founding year.",
   },
   {
     name: "Kemigisha Fiona",
@@ -87,7 +87,7 @@ export default function AboutPage() {
         title="Nurturing character,"
         accentTitle="inspiring minds."
         image={aboutImg}
-        description="Since 2008, Wellstar Bright Secondary School has offered a dynamic learning environment where students discover their strengths, build lifelong friendships, and grow into compassionate global leaders."
+        description="Since 2008, our partner academic institutions have offered dynamic learning environments where students discover their strengths, build lifelong friendships, and grow into compassionate global leaders."
       />
 
       {/* Mission & Vision */}
@@ -119,7 +119,7 @@ export default function AboutPage() {
               Our Journey
             </p>
             <h2 className="font-display text-3xl md:text-5xl font-bold tracking-tight">
-              A brief history of Wellstar Bright
+              A brief history of our academy
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
               From our humble beginnings with just 42 students to a thriving campus of over 1,200 learners, our journey has been defined by continuous growth, innovation, and an unwavering commitment to our core values.

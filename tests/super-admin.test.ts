@@ -59,8 +59,8 @@ describe("Super Admin SaaS Engine & Cluster Quota Guardrails", () => {
       const mockSchools = [
         {
           id: "sch_1",
-          name: "Wellstar Bright Educational Group",
-          code: "WEG-2026",
+          name: "Demo Educational Group",
+          code: "DEMO-2026",
           campuses: 2,
           students: 4950,
           status: "ACTIVE",

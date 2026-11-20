@@ -11,7 +11,7 @@ describe("Cryptographic Authentication & Session Engine", () => {
   const mockUser: SessionUser = {
     id: "usr-bursar-test-01",
     name: "CPA Sarah Namubiru",
-    email: "bursar@wellstarbright.sc.ug",
+    email: "bursar@yourschool.com",
     role: "BURSAR",
     title: "Chief Bursar",
     permissions: ["POST_JOURNALS", "RECONCILE_BANK", "RUN_PAYROLL"],

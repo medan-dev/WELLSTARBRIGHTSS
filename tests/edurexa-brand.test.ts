@@ -29,19 +29,19 @@ describe("EDUREXA Brand, Product Architecture & Ecosystem Integrity", () => {
     expect(EDUREXA_BRAND.values).toContain("Reliability");
   });
 
-  it("should preserve the flagship school (Wellstar Bright) as Tenant #1 without modification", () => {
+  it("should configure the demo school (Demo Educational Group) as Tenant #1 for sandbox demonstrations", () => {
     const flagshipTenant = {
-      id: "sch_wellstar_hq",
-      name: "Wellstar Bright Educational Group",
-      code: "WEG-2026",
+      id: "sch_demo_hq",
+      name: "Demo Educational Group",
+      code: "DEMO-2026",
       maxCampuses: 20,
       campuses: [
-        { code: "MUK-01", name: "Mukono Main Campus (Senior & Boarding)" },
-        { code: "JIN-02", name: "Jinja Nile Valley Branch Campus" },
+        { code: "MUK-01", name: "Main Campus (Senior & Boarding)" },
+        { code: "JIN-02", name: "Valley Branch Campus" },
       ],
     };
 
-    expect(flagshipTenant.name).toBe("Wellstar Bright Educational Group");
+    expect(flagshipTenant.name).toBe("Demo Educational Group");
     expect(flagshipTenant.campuses).toHaveLength(2);
     expect(flagshipTenant.maxCampuses).toBe(20);
     expect(flagshipTenant.campuses[0].code).toBe("MUK-01");

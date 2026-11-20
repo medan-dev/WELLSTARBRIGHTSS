@@ -98,4 +98,27 @@ describe("Enterprise Company Standards & Guardrails", () => {
     expect(portalsArticle).toBeDefined();
     expect(portalsArticle.title).toContain("Portal Access");
   });
+
+  it("strictly ensures demo and client dashboards contain zero Wellstar references", () => {
+    const filesToCheck = [
+      "app/demo/page.tsx",
+      "app/admin/page.tsx",
+      "app/teacher/page.tsx",
+      "app/student/page.tsx",
+      "app/student/dashboard/page.tsx",
+      "app/student/dashboard/layout.tsx",
+      "app/teacher/dashboard/layout.tsx",
+      "app/student/dashboard/meal-card/page.tsx",
+      "app/about/page.tsx",
+      "app/admissions/page.tsx",
+      "app/apply/page.tsx",
+      "app/gallery/page.tsx",
+      "app/media/page.tsx",
+    ];
+
+    for (const file of filesToCheck) {
+      const content = fs.readFileSync(file, "utf8");
+      expect(content.toLowerCase()).not.toContain("wellstar");
+    }
+  });
 });

@@ -23,7 +23,7 @@ export const viewport: Viewport = {
   themeColor: "#0b2256",
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://wellstarbrightss.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://edurexa.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

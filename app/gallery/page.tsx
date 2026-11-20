@@ -83,7 +83,7 @@ const staticFallbackItems: Item[] = [
   },
   {
     src: "/gallery/hero-campus.jpg",
-    alt: "Wellstar Bright campus grounds",
+    alt: "Academic campus grounds",
     caption: "Panoramic View of the Main Academic Complex, Gardens & Campus Walkways",
     category: "Campus Life"
   },
@@ -142,7 +142,7 @@ export default function GalleryPage() {
         title="Moments of"
         accentTitle="Excellence & Discovery."
         image={galleryHero}
-        description="Explore the vibrant life at Wellstar Bright Secondary School — from modern science laboratories and ICT tech hubs to sports championships, creative arts, and celebratory milestones."
+        description="Explore the vibrant academic life across our institutions — from modern science laboratories and ICT tech hubs to sports championships, creative arts, and celebratory milestones."
       />
 
       {/* Gallery Filter & Search Control Bar */}

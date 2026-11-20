@@ -616,7 +616,7 @@ function VideoCard({ video, index, onWatch }: {
               {video.title}
             </h3>
             <div className="flex items-center justify-between mt-1">
-              <p className="text-white/40 text-xs">Wellstar Bright</p>
+              <p className="text-white/40 text-xs">EDUREXA Academy</p>
               {video.videoUrl && (
                 <a href={video.videoUrl}
                   download={`${video.title}.${getExt(video.videoUrl, "mp4").toLowerCase()}`}
@@ -724,13 +724,13 @@ export default function MediaPage() {
           <div className="relative z-10 px-6 sm:px-10 lg:px-16 pt-16 pb-12">
             {/* Label */}
             <p className="text-amber-400 text-xs font-bold uppercase tracking-[0.25em] mb-3">
-              🎵 Wellstar Bright
+              🎵 EDUREXA Campus
             </p>
             <h1 className="text-white font-display font-black text-5xl md:text-7xl leading-none mb-4">
               Media Hub
             </h1>
             <p className="text-white/50 text-sm max-w-md mb-6">
-              Official music, videos, and event recordings from Wellstar Bright Secondary School.
+              Official music, videos, and event recordings from our partner school campuses.
               Stream or download in full quality.
             </p>
 
@@ -965,7 +965,7 @@ export default function MediaPage() {
             Need media for a <span className="text-amber-400">project?</span>
           </h2>
           <p className="text-white/45 text-sm max-w-md mx-auto mb-7">
-            Contact the Wellstar Bright media team for high-resolution downloads, B-roll footage,
+            Contact our media and production team for high-resolution downloads, B-roll footage,
             and music licensing. We deliver fast Uganda-wide.
           </p>
           <a href="/contact"
