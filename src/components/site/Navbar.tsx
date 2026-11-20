@@ -49,7 +49,7 @@ export function Navbar() {
     { href: "/#features", label: "Features" },
     { href: "/#pricing", label: "Pricing" },
     { href: "/#demo", label: "Demo" },
-    { href: "/#documentation", label: "Documentation" },
+    { href: "/documentation", label: "Documentation" },
     { href: "/#support", label: "Help & Support" },
   ];
 
@@ -136,9 +136,15 @@ export function Navbar() {
               Demo
             </a>
 
-            <a href="/#documentation" className="transition-colors hover:text-[#f26522]">
+            <Link
+              href="/documentation"
+              className={cn(
+                "transition-colors hover:text-[#f26522]",
+                pathname?.startsWith("/documentation") ? "text-[#f26522]" : "text-slate-700"
+              )}
+            >
               Documentation
-            </a>
+            </Link>
 
             <a href="/#support" className="transition-colors hover:text-[#f26522]">
               Help & Support

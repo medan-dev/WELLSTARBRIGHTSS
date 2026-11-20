@@ -46,9 +46,9 @@ export default function ContactPage() {
       <PageHero
         subtitle="Contact Us"
         title="Get in touch with"
-        accentTitle="Wellstar Bright."
+        accentTitle="EDUREXA."
         image={contactImg}
-        description="Have questions about admissions, academic combinations, or student life? Reach out to us or visit our campus in Kabembe, Mukono."
+        description="Have questions about onboarding your school, pricing, or custom integrations? Reach out to our team in Kampala, Uganda."
       />
 
       <section className="relative overflow-hidden py-20 bg-secondary/20">
@@ -57,9 +57,9 @@ export default function ContactPage() {
         <div>
           <div className="space-y-4">
             {[
-              { icon: MapPin, title: "Visit Us", value: "off Kayunga Road, Kabembe, Mukono District, Uganda" },
-              { icon: Phone, title: "Call Us", value: "+256 772 589 430" },
-              { icon: Mail, title: "Email Us", value: "info@wellstarbright.sc.ug" },
+              { icon: MapPin, title: "Location", value: "Kampala, Uganda" },
+              { icon: Phone, title: "Call & WhatsApp", value: "+256 758 611 414" },
+              { icon: Mail, title: "Email Us", value: "sales@edurexa.com" },
             ].map(({ icon: Icon, title, value }) => (
               <div key={title} className="flex items-start gap-4 p-5 rounded-2xl bg-card border shadow-sm">
                 <div className="size-12 rounded-xl bg-primary/10 grid place-items-center shrink-0">
@@ -75,7 +75,7 @@ export default function ContactPage() {
 
           <div className="mt-6 rounded-2xl overflow-hidden shadow-sm aspect-[4/3] border border-border">
             <iframe
-              title="Wellstar Bright Location"
+              title="EDUREXA Location"
               src="https://www.openstreetmap.org/export/embed.html?bbox=32.75%2C0.35%2C32.90%2C0.45&layer=mapnik&marker=0.395%2C32.815"
               loading="lazy"
               className="size-full"

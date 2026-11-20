@@ -799,10 +799,10 @@ export default function EdurexaMarketingHome() {
                   Learn how to configure multi-campus hierarchies, assign teacher roles, import legacy student records, and set up academic terms.
                 </p>
               </div>
-              <a href="#demo" className="text-xs font-bold text-[#f26522] hover:underline flex items-center gap-1 pt-2">
+              <Link href="/documentation/onboarding" className="text-xs font-bold text-[#f26522] hover:underline flex items-center gap-1 pt-2">
                 <span>View Setup Guide</span>
                 <ChevronRight className="size-3.5" />
-              </a>
+              </Link>
             </div>
 
             <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
@@ -815,10 +815,10 @@ export default function EdurexaMarketingHome() {
                   Comprehensive documentation on competency rubric scoring, automatic aggregate computations, and bulk PDF report card printing.
                 </p>
               </div>
-              <a href="#demo" className="text-xs font-bold text-[#f26522] hover:underline flex items-center gap-1 pt-2">
+              <Link href="/documentation/academics" className="text-xs font-bold text-[#f26522] hover:underline flex items-center gap-1 pt-2">
                 <span>View Grading Specs</span>
                 <ChevronRight className="size-3.5" />
-              </a>
+              </Link>
             </div>
 
             <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4 shadow-2xs flex flex-col justify-between">
@@ -831,11 +831,20 @@ export default function EdurexaMarketingHome() {
                   Guide to running thermal slip cashier desks, reconciling bank deposits with SchoolPay/Centenary slips, and WhatsApp notifications.
                 </p>
               </div>
-              <a href="#demo" className="text-xs font-bold text-[#f26522] hover:underline flex items-center gap-1 pt-2">
+              <Link href="/documentation/finance" className="text-xs font-bold text-[#f26522] hover:underline flex items-center gap-1 pt-2">
                 <span>View Bursary Specs</span>
                 <ChevronRight className="size-3.5" />
-              </a>
+              </Link>
             </div>
+          </div>
+
+          <div className="text-center pt-2">
+            <Link href="/documentation">
+              <Button className="bg-[#0b2256] hover:bg-[#081a42] text-white rounded-xl text-xs font-bold px-6 h-11 gap-2 shadow-sm">
+                <span>Browse Complete Documentation Hub</span>
+                <ArrowRight className="size-4" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -1055,9 +1064,9 @@ export default function EdurexaMarketingHome() {
             <a href="#demo" className="hover:text-[#0b2256] transition-colors">
               Demo
             </a>
-            <a href="#documentation" className="hover:text-[#0b2256] transition-colors">
+            <Link href="/documentation" className="hover:text-[#0b2256] transition-colors">
               Documentation
-            </a>
+            </Link>
             <a href="#support" className="hover:text-[#0b2256] transition-colors">
               Help & Support
             </a>
