@@ -252,7 +252,7 @@ export async function loginStudentAction(
  * Provisions an immediate authenticated session for any requested workstation.
  */
 export async function quickDemoLoginAction(
-  role: "admin" | "cashier" | "bursar" | "teacher" | "student" | "super-admin"
+  role: "admin" | "cashier" | "bursar" | "teacher" | "student"
 ): Promise<AuthResponse> {
   if (role === "admin") {
     const sessionUser: SessionUser = {
@@ -325,21 +325,7 @@ export async function quickDemoLoginAction(
     return { success: true, user: sessionUser, redirectUrl: "/student/dashboard" };
   }
 
-  if (role === "super-admin") {
-    const sessionUser: SessionUser = {
-      id: "usr-super-admin",
-      name: "Multi-Campus Fleet Director",
-      email: "superadmin@yourschool.com",
-      role: "SUPER_ADMIN",
-      title: "Group Educational Director",
-      permissions: ["ALL_ACCESS"],
-    };
-    const token = await signSessionToken(sessionUser);
-    await setSessionCookie(token);
-    return { success: true, user: sessionUser, redirectUrl: "/super-admin" };
-  }
-
-  return { success: false, error: "Unsupported demo role requested." };
+  return { success: false, error: "Unsupported client demo role requested." };
 }
 
 /**

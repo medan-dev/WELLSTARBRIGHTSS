@@ -127,7 +127,7 @@ export const DOC_ARTICLES: Record<string, DocArticle> = {
             rows: [
               ["Anti-Leakage Finance", "Stops fee slippage, fake bank slips, and unauthorized manual ledger alterations.", "Offline POS desk, thermal receipts, cryptographic receipt verification codes."],
               ["Academic Accuracy", "Zero-error marks entry, automated UNEB division calculations, and instant report cards.", "O-Level CBC 1.0-3.0 scale, A-Level combinations, broad-sheets with 1-click PDF export."],
-              ["Direct Slashing Portals", "Clean, unencumbered user experience with role-based routing.", "Direct access via /admin, /teacher, /student, and /super-admin with zero marketing distraction."],
+              ["Direct Slashing Portals", "Clean, unencumbered user experience with role-based routing.", "Direct access via /admin, /teacher, and /student with zero marketing distraction."],
               ["Instant Communications", "Immediate stakeholder transparency on fees, attendance, and emergency alerts.", "Direct WhatsApp notification dispatch and automated SMS gateway triggers."],
             ],
           },
@@ -693,7 +693,6 @@ Verify online: https://edurexa.com/verify
       { id: "admin-portal", title: "School Admin Console (/admin)" },
       { id: "teacher-portal", title: "Teacher Gradebook (/teacher)" },
       { id: "student-portal", title: "Student Results Station (/student)" },
-      { id: "super-admin", title: "Multi-Campus Super Admin (/super-admin)" },
     ],
     content: {
       lead: "To maintain an enterprise-grade user experience, EDUREXA isolates operational workstations from marketing pages. Portals are never cluttered with promotional links; users navigate directly to their dedicated role by appending the appropriate slash route to their browser URL.",
@@ -748,18 +747,6 @@ Verify online: https://edurexa.com/verify
             "• Real-time fees ledger transparency showing every payment, receipt number, and outstanding balance.",
             "• Mid-term examination timetables and holiday package assignments.",
             "• Dining hall and dormitory allocation information.",
-          ],
-        },
-        {
-          id: "super-admin",
-          title: "Multi-Campus Super Admin (/super-admin)",
-          body: [
-            "**Access Route:** `your-domain.com/super-admin`",
-            "**Who Uses It:** Educational Group Directors, Board of Governors, and Multi-Campus Executives.",
-            "**Core Capabilities:**",
-            "• Consolidated multi-branch financial intelligence across all school campuses.",
-            "• Fleet health metrics, server status, database sizing, and tenant provisioning.",
-            "• Global license management, audit monitoring, and multi-tenant security policy enforcement.",
           ],
         },
       ],
