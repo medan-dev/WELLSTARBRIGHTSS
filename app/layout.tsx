@@ -44,7 +44,6 @@ export const metadata: Metadata = {
     "cloud school management Africa",
     "school fees management system",
     "UNEB report card system",
-    "Wellstar Bright Secondary School",
     "student information system",
     "school timetable and attendance software",
     "digital school ecosystem",

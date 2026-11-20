@@ -3,27 +3,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import edurexaHorizontal from "@/assets/edurexa-horizontal.png";
 import {
   Menu,
   X,
-  ChevronDown,
-  GraduationCap,
-  BookOpen,
-  ShieldCheck,
-  ArrowRight,
   Phone,
   Mail,
   MapPin,
-  Sparkles,
-  Lock,
-  Layers,
-  FileSpreadsheet,
-  Receipt,
-  Users,
-  CheckCircle2,
-  ExternalLink,
+  ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -31,7 +19,6 @@ import { cn } from "@/lib/utils";
 interface NavLink {
   href: string;
   label: string;
-  isExternal?: boolean;
 }
 
 export function Navbar() {
@@ -55,6 +42,8 @@ export function Navbar() {
     };
   }, [mobileMenuOpen]);
 
+  // STRICTLY THE EXACT 6 LINKS REQUESTED BY USER:
+  // [Home] [Features] [Pricing] [Demo] [Documentation] [Help & Support]
   const mainNavLinks: NavLink[] = [
     { href: "/", label: "Home" },
     { href: "/#features", label: "Features" },
@@ -67,7 +56,7 @@ export function Navbar() {
   return (
     <>
       {/* ========================================================================= */}
-      {/* 1. TOP UTILITY / ANNOUNCEMENT BAR (SchoolHive Style)                      */}
+      {/* 1. TOP UTILITY / ANNOUNCEMENT BAR                                         */}
       {/* ========================================================================= */}
       <div className="bg-[#0b2256] text-white text-xs py-2 px-4 border-b border-[#081a42]">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
@@ -238,8 +227,6 @@ export function Navbar() {
                   </Link>
                 ))}
               </div>
-
-
 
               {/* Contact Information */}
               <div className="space-y-2.5 pt-2 border-t border-slate-100 text-xs text-slate-600">

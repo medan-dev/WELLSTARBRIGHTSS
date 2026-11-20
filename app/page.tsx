@@ -220,7 +220,7 @@ export default function EdurexaMarketingHome() {
               <div className="size-10 rounded-lg bg-orange-50 text-[#f26522] flex items-center justify-center">
                 <BookOpen className="size-5" />
               </div>
-              <h4 className="text-sm font-bold text-slate-900">Teacher & Gradebook Portal</h4>
+              <h4 className="text-sm font-bold text-slate-900">Teacher & Gradebook Engine</h4>
               <p className="text-xs text-slate-600 leading-relaxed">
                 Lessons, UNEB competency assessments, period attendance, and automatic report card generation.
               </p>
@@ -528,7 +528,7 @@ export default function EdurexaMarketingHome() {
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="size-4 text-emerald-600 shrink-0" />
-                    <span>Dedicated Parent Portal & WhatsApp Alerts</span>
+                    <span>Dedicated Parent Access & WhatsApp Alerts</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="size-4 text-emerald-600 shrink-0" />
