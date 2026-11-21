@@ -391,20 +391,6 @@ export default function SuperAdminFinancePage() {
     }
   };
 
-  // Seed sample data
-  const handleSeedData = async () => {
-    try {
-      setRefreshing(true);
-      const res = await seedSampleFinanceIfEmpty();
-      toast.success(res.message);
-      await loadData();
-    } catch (e) {
-      toast.error("Failed to seed finance suite");
-    } finally {
-      setRefreshing(false);
-    }
-  };
-
   // Operations Handlers
   const handleCreateExpense = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -824,20 +810,10 @@ export default function SuperAdminFinancePage() {
               size="sm"
               onClick={loadData}
               disabled={refreshing}
-              className="border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs rounded-xl"
+              className="border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs rounded-none"
             >
               <RefreshCw className={`w-3.5 h-3.5 mr-1 ${refreshing ? "animate-spin" : ""}`} />
               Refresh
-            </Button>
-
-            <Button
-              size="sm"
-              onClick={handleSeedData}
-              disabled={refreshing}
-              className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl shadow-lg"
-            >
-              <SlidersHorizontal className="w-3.5 h-3.5 mr-1" />
-              Demo Data
             </Button>
           </div>
         </div>

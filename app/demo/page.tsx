@@ -100,10 +100,10 @@ export default function DemoPage() {
           "wf_web_user",
           JSON.stringify({
             id: `usr-${selectedRole}`,
-            name: selectedRole === "admin" ? "School Administrator" : "Counter Cashier",
+            name: selectedRole === "admin" ? "Administrator" : "Cashier",
             email: email,
             role: selectedRole === "admin" ? "SUPER_ADMIN" : "CASHIER",
-            title: selectedRole === "admin" ? "Executive Administration" : "Cashier Desk",
+            title: selectedRole === "admin" ? "Administrator" : "Cashier Desk",
           })
         );
 
@@ -123,7 +123,7 @@ export default function DemoPage() {
         }
       } else if (selectedRole === "teacher") {
         sessionStorage.setItem("ns_teacher_id", "demo-teacher-01");
-        sessionStorage.setItem("ns_teacher_name", "Senior Faculty Instructor (DOS)");
+        sessionStorage.setItem("ns_teacher_name", "Teacher");
 
         const res = await loginTeacherAction(email, password);
         if (res.success && res.user) {
@@ -140,8 +140,8 @@ export default function DemoPage() {
         }
       } else if (selectedRole === "student") {
         sessionStorage.setItem("ns_student_id", "demo-student-01");
-        sessionStorage.setItem("ns_student_name", "Ronald Mutebi (S.4 East)");
-        sessionStorage.setItem("ns_student_class", "cls-senior-4-east");
+        sessionStorage.setItem("ns_student_name", "Student");
+        sessionStorage.setItem("ns_student_class", "");
 
         const res = await loginStudentAction(email, password);
         if (res.success && res.user) {

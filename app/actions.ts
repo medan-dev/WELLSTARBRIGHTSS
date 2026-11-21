@@ -120,15 +120,8 @@ const getSiteContentCached = unstable_cache(
     const testimonials = await prisma.testimonial.findMany();
     
     return JSON.parse(JSON.stringify({
-      stats: stats.length > 0 ? stats : [
-        { value: 1240, label: "Students", suffix: "+" },
-        { value: 15, label: "Average class size", suffix: "" },
-        { value: 42, label: "Nationalities", suffix: "" },
-        { value: 100, label: "University acceptance", suffix: "%" },
-      ],
-      testimonials: testimonials.length > 0 ? testimonials : [
-        { name: "Amara Okafor", role: "Parent of S.2 student", quote: "The platform has transformed how my daughter sees learning. She wakes up excited.", rating: 5 },
-      ]
+      stats,
+      testimonials,
     }));
   },
   ['site-content'],
@@ -361,9 +354,9 @@ const getMediaContentCached = unstable_cache(
     const videos = await prisma.mediaItem.findMany({ where: { format: "video" } });
     const events = await prisma.event.findMany({ orderBy: { date: 'asc' } });
     return JSON.parse(JSON.stringify({
-      songs: songs.length > 0 ? songs : defaultSongs,
-      videos: videos.length > 0 ? videos : defaultVideos,
-      events: events.length > 0 ? events : defaultEvents,
+      songs,
+      videos,
+      events,
     }));
   },
   ['media-content'],
@@ -448,16 +441,7 @@ const defaultGalleryItems = [
 
 const getGalleryItemsCached = unstable_cache(
   async () => {
-    let items = await prisma.galleryItem.findMany({ orderBy: { createdAt: 'desc' } });
-    if (items.length === 0) {
-      try {
-        await prisma.galleryItem.createMany({ data: defaultGalleryItems });
-        items = await prisma.galleryItem.findMany({ orderBy: { createdAt: 'desc' } });
-      } catch (err) {
-        console.error("Auto-seeding gallery error:", err);
-        return defaultGalleryItems.map((item, idx) => ({ id: `default-${idx}`, ...item }));
-      }
-    }
+    const items = await prisma.galleryItem.findMany({ orderBy: { createdAt: 'desc' } });
     return JSON.parse(JSON.stringify(items));
   },
   ['gallery-content'],

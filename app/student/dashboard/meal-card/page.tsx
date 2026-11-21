@@ -119,8 +119,8 @@ export default function StudentMealCardPage() {
                   <span className="text-amber-200">Status:</span>
                   <span
                     className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${card.status === "ACTIVE"
-                        ? "bg-emerald-400 text-emerald-950"
-                        : "bg-rose-400 text-rose-950"
+                      ? "bg-emerald-400 text-emerald-950"
+                      : "bg-rose-400 text-rose-950"
                       }`}
                   >
                     {card.status}

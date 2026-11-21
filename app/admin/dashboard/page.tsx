@@ -9,18 +9,9 @@ import { Button } from "@/components/ui/button";
 import { getDashboardStats, getStudents } from "../../actions";
 import { Loader2 } from "lucide-react";
 
-const schedule = [
-  { time: "09:00", title: "All-staff briefing", room: "Hall" },
-  { time: "11:30", title: "S.4 Parent meetings", room: "Block C" },
-  { time: "14:00", title: "Admissions interviews", room: "Office" },
-  { time: "16:30", title: "Senior leadership", room: "Boardroom" },
-];
+const schedule: { time: string; title: string; room: string }[] = [];
 
-const notifications = [
-  { id: 1, text: "3 new admission applications received", type: "success" },
-  { id: 2, text: "Mira Patel's attendance dropped below 80%", type: "alert" },
-  { id: 3, text: "New admissions enquiry received", type: "info" },
-];
+const notifications: { id: number; text: string; type: string }[] = [];
 
 function LiveClock() {
   const [time, setTime] = useState("");
@@ -73,7 +64,7 @@ export default function Overview() {
     <>
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight">Welcome back, Nshuti 👋</h1>
+          <h1 className="font-display text-3xl font-bold tracking-tight">Welcome back, Administrator 👋</h1>
           <p className="mt-1 text-muted-foreground">Here's what's happening across the academy today.</p>
         </div>
         <LiveClock />
@@ -133,18 +124,18 @@ export default function Overview() {
             </div>
           </div>
           <div className="flex-1 mt-auto">
-            <ChartBar
-              data={[
-                { label: "T1 '23", value: 980 },
-                { label: "T2 '23", value: 1010 },
-                { label: "T3 '23", value: 1050 },
-                { label: "T1 '24", value: 1090 },
-                { label: "T2 '24", value: 1120 },
-                { label: "T3 '24", value: 1170 },
-                { label: "T1 '25", value: 1210 },
-                { label: "T2 '25", value: Math.max(1240, stats.studentCount) },
-              ]}
-            />
+            {stats.studentCount > 0 ? (
+              <ChartBar
+                data={[
+                  { label: "Term 1", value: stats.studentCount },
+                ]}
+              />
+            ) : (
+              <div className="py-12 text-center text-xs text-muted-foreground border border-dashed border-border rounded-none">
+                <TrendingUp className="size-6 text-muted-foreground/40 mx-auto mb-2" />
+                No student enrolment records found.
+              </div>
+            )}
           </div>
         </div>
 
@@ -152,17 +143,24 @@ export default function Overview() {
         <div className="p-6 rounded-2xl bg-card border shadow-sm">
           <h3 className="font-display text-lg font-semibold">Today's schedule</h3>
           <p className="text-xs text-muted-foreground mb-4">Upcoming events</p>
-          <ul className="space-y-3">
-            {schedule.map((e, i) => (
-              <li key={i} className="flex gap-3 p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-smooth">
-                <Calendar className="size-4 text-primary mt-0.5 shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold truncate">{e.title}</div>
-                  <div className="text-xs text-muted-foreground">{e.time} · {e.room}</div>
-                </div>
-              </li>
-            ))}
-          </ul>
+          {schedule.length === 0 ? (
+            <div className="py-12 text-center text-xs text-muted-foreground border border-dashed border-border rounded-none">
+              <Calendar className="size-6 text-muted-foreground/40 mx-auto mb-2" />
+              No events or briefings scheduled for today.
+            </div>
+          ) : (
+            <ul className="space-y-3">
+              {schedule.map((e, i) => (
+                <li key={i} className="flex gap-3 p-3 rounded-none bg-secondary/50 hover:bg-secondary transition-smooth">
+                  <Calendar className="size-4 text-primary mt-0.5 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold truncate">{e.title}</div>
+                    <div className="text-xs text-muted-foreground">{e.time} · {e.room}</div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
 
@@ -213,6 +211,12 @@ export default function Overview() {
                 <tr>
                   <td colSpan={4} className="py-8 text-center text-muted-foreground">
                     <Loader2 className="size-5 animate-spin mx-auto text-primary" />
+                  </td>
+                </tr>
+              ) : recent.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="py-8 text-center text-xs text-muted-foreground">
+                    No students enrolled yet. Add students or run onboarding to begin.
                   </td>
                 </tr>
               ) : recent.map((s) => (

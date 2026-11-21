@@ -145,7 +145,7 @@ function AudioPlayerModal({ song, onClose, songs, onChangeSong }: {
     const audio = audioRef.current;
     if (!audio) return;
     if (playing) { audio.pause(); setPlaying(false); }
-    else { await audio.play().catch(() => {}); setPlaying(true); }
+    else { await audio.play().catch(() => { }); setPlaying(true); }
   }, [playing]);
 
   const seek = (val: number) => {
@@ -187,7 +187,7 @@ function AudioPlayerModal({ song, onClose, songs, onChangeSong }: {
     setPlaying(false);
     setLoading(true);
     const t = setTimeout(() => {
-      audio.play().then(() => setPlaying(true)).catch(() => {});
+      audio.play().then(() => setPlaying(true)).catch(() => { });
     }, 200);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -419,7 +419,7 @@ function VideoPlayerModal({ video, onClose }: { video: VideoItem; onClose: () =>
   }, [onClose]);
 
   useEffect(() => {
-    videoRef.current?.play().catch(() => {});
+    videoRef.current?.play().catch(() => { });
   }, []);
 
   return (
@@ -463,8 +463,10 @@ function PlayingBars() {
     <div className="flex items-end gap-[2px] h-3.5 w-3.5">
       {[1, 2, 3].map((i) => (
         <div key={i} className="flex-1 rounded-sm bg-amber-400"
-          style={{ animation: `playing-bar ${0.6 + i * 0.15}s ease-in-out infinite alternate`,
-            animationDelay: `${i * 0.1}s`, height: "60%" }} />
+          style={{
+            animation: `playing-bar ${0.6 + i * 0.15}s ease-in-out infinite alternate`,
+            animationDelay: `${i * 0.1}s`, height: "60%"
+          }} />
       ))}
       <style>{`
         @keyframes playing-bar {
@@ -831,7 +833,7 @@ export default function MediaPage() {
                   isActive={activeAudioId === song.id}
                   isPlaying={activeAudioId === song.id && isAudioPlaying}
                   onStream={() => handleStream(song)}
-                  onDownload={() => {}}
+                  onDownload={() => { }}
                 />
               ))}
             </div>

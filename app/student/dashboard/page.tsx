@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { 
-  BookOpen, Calendar, FileSpreadsheet, Bell, Megaphone, Loader2, 
+import {
+  BookOpen, Calendar, FileSpreadsheet, Bell, Megaphone, Loader2,
   Trophy, MapPin, Video, ExternalLink, Award, Pin, Sparkles
 } from "lucide-react";
 import { PageHeader, StatTile } from "@/components/admin/Widgets";
@@ -54,8 +54,8 @@ export default function StudentOverview() {
 
   return (
     <div className="space-y-6">
-      <PageHeader 
-        title={`Welcome, ${studentName}`} 
+      <PageHeader
+        title={`Welcome, ${studentName}`}
         subtitle="Here is your academic overview, performance recognition, and school announcements."
       />
 
@@ -98,19 +98,18 @@ export default function StudentOverview() {
               if (notice.type === "PERFORMANCE" && notice.metadata) {
                 try {
                   studentHonorList = JSON.parse(notice.metadata).students || [];
-                } catch (e) {}
+                } catch (e) { }
               }
 
               return (
-                <div 
-                  key={notice.id} 
-                  className={`rounded-xl border p-5 transition-all ${
-                    notice.pinned 
-                      ? "bg-amber-50/40 border-amber-200 ring-1 ring-amber-200/60" 
-                      : notice.type === "PERFORMANCE"
+                <div
+                  key={notice.id}
+                  className={`rounded-xl border p-5 transition-all ${notice.pinned
+                    ? "bg-amber-50/40 border-amber-200 ring-1 ring-amber-200/60"
+                    : notice.type === "PERFORMANCE"
                       ? "bg-gradient-to-br from-amber-50/30 to-orange-50/20 border-amber-100"
                       : "bg-gray-50/60 border-gray-100 hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   {/* Pinned & Category Header */}
                   <div className="flex items-center justify-between gap-2 mb-2.5">
@@ -135,9 +134,9 @@ export default function StudentOverview() {
                   {/* Banner Image */}
                   {notice.mediaUrl && notice.mediaType !== "video" && (
                     <div className="mb-3 rounded-lg overflow-hidden h-44 bg-gray-100">
-                      <img 
-                        src={notice.mediaUrl} 
-                        alt={notice.title} 
+                      <img
+                        src={notice.mediaUrl}
+                        alt={notice.title}
                         className="w-full h-full object-cover"
                         onError={(e) => (e.currentTarget.style.display = 'none')}
                       />
@@ -168,10 +167,10 @@ export default function StudentOverview() {
                       <div className="flex items-center gap-2 font-semibold">
                         <Video className="w-4 h-4 text-blue-600" /> Video Presentation Available
                       </div>
-                      <a 
-                        href={notice.mediaUrl} 
-                        target="_blank" 
-                        rel="noreferrer" 
+                      <a
+                        href={notice.mediaUrl}
+                        target="_blank"
+                        rel="noreferrer"
                         className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1 rounded text-xs flex items-center gap-1 transition-colors"
                       >
                         Watch Video <ExternalLink className="w-3 h-3" />
@@ -191,16 +190,16 @@ export default function StudentOverview() {
                         <Trophy className="w-4 h-4 text-amber-600" />
                         Academic Merit Roll & Outperforming Students
                       </div>
-                      
+
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         {studentHonorList.map((stu: any, idx: number) => (
-                          <div 
-                            key={idx} 
+                          <div
+                            key={idx}
                             className="p-3 bg-white rounded-xl border border-amber-100 shadow-sm flex items-center gap-3"
                           >
-                            <img 
-                              src={stu.avatar} 
-                              alt={stu.name} 
+                            <img
+                              src={stu.avatar}
+                              alt={stu.name}
                               className="w-10 h-10 rounded-full object-cover border-2 border-amber-300 shadow-xs"
                             />
                             <div className="min-w-0 flex-1">
@@ -267,7 +266,7 @@ export default function StudentOverview() {
                 </Link>
               </div>
             </div>
-            
+
             <div className="mt-6 pt-4 border-t border-gray-50 text-center text-xs text-gray-400">
               EDUREXA Demo Academy • Main Campus
             </div>

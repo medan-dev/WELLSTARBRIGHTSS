@@ -74,28 +74,7 @@ export async function initializeDefaultSchoolAndCampus() {
     });
   }
 
-  // 3. Optional Mock Campus #2 for live Multi-Campus demonstration
-  let campusJinja = await prisma.campus.findFirst({
-    where: { code: "JIN-02" },
-  });
-
-  if (!campusJinja) {
-    campusJinja = await prisma.campus.create({
-      data: {
-        id: "camp_jinja_branch",
-        schoolId: org.id,
-        name: "Valley Branch Campus",
-        code: "JIN-02",
-        location: "Eastern Educational Zone",
-        headteacher: "Branch Administrator",
-        contactEmail: "jinja@yourschool.com",
-        contactPhone: "+256 758 611 414",
-        status: "ACTIVE",
-      },
-    });
-  }
-
-  // 4. Zero-Loss Historical Data Linker:
+  // 3. Zero-Loss Historical Data Linker:
   // Associate any existing students, teachers, classes, invoices, and meal cards to Campus #1
   await Promise.all([
     prisma.student.updateMany({
@@ -128,7 +107,7 @@ export async function initializeDefaultSchoolAndCampus() {
     }),
   ]);
 
-  return { org, campus, campusJinja };
+  return { org, campus };
 }
 
 /**

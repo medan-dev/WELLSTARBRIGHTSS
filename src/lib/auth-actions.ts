@@ -108,10 +108,10 @@ export async function loginTeacherAction(
   if (isDemoTeacher && (cleanPassword === "password123" || cleanPassword === "password123!" || cleanPassword === "demo1234")) {
     const sessionUser: SessionUser = {
       id: "demo-teacher-01",
-      name: "Senior Faculty Instructor (DOS)",
+      name: "Teacher",
       email: cleanEmail,
       role: "TEACHER",
-      title: "Mathematics & UNEB Assessment Coordinator",
+      title: "Faculty Instructor",
     };
     const token = await signSessionToken(sessionUser);
     await setSessionCookie(token);
@@ -188,11 +188,11 @@ export async function loginStudentAction(
   if (isDemoStudent && (cleanPassword === "student123" || cleanPassword === "demo1234")) {
     const sessionUser: SessionUser = {
       id: "demo-student-01",
-      name: "Ronald Mutebi (S.4 Boarding)",
+      name: "Student",
       email: cleanEmail,
       role: "STUDENT",
-      classId: "cls-senior-4-east",
-      title: "Senior 4 East",
+      classId: "",
+      title: "Student",
     };
     const token = await signSessionToken(sessionUser);
     await setSessionCookie(token);
@@ -257,10 +257,10 @@ export async function quickDemoLoginAction(
   if (role === "admin") {
     const sessionUser: SessionUser = {
       id: "usr-super-admin",
-      name: "School Administrator & Head",
+      name: "Administrator",
       email: "admin@yourschool.com",
       role: "SUPER_ADMIN",
-      title: "Executive Head & Principal",
+      title: "School Administrator",
       permissions: ["ALL_ACCESS"],
     };
     const token = await signSessionToken(sessionUser);
@@ -271,10 +271,10 @@ export async function quickDemoLoginAction(
   if (role === "cashier") {
     const sessionUser: SessionUser = {
       id: "usr-cashier-1",
-      name: "Senior Counter Cashier",
+      name: "Cashier",
       email: "cashier@yourschool.com",
       role: "CASHIER",
-      title: "Counter Cashier & POS Desk 1",
+      title: "Counter Cashier",
       permissions: ["COLLECT_FEES", "ISSUE_RECEIPTS", "RECORD_PETTY_CASH"],
       workstationId: "WS-COUNTER-POS1",
     };
@@ -286,10 +286,10 @@ export async function quickDemoLoginAction(
   if (role === "bursar") {
     const sessionUser: SessionUser = {
       id: "usr-chief-bursar",
-      name: "Chief Bursar",
+      name: "Bursar",
       email: "bursar@yourschool.com",
       role: "BURSAR",
-      title: "Head of Accounts & Financial Control",
+      title: "School Bursar",
       permissions: ["POST_JOURNALS", "RECONCILE_BANK", "RUN_PAYROLL"],
       workstationId: "WS-BURSAR-PC01",
     };
@@ -301,10 +301,10 @@ export async function quickDemoLoginAction(
   if (role === "teacher") {
     const sessionUser: SessionUser = {
       id: "demo-teacher-01",
-      name: "Senior Faculty Instructor (DOS)",
+      name: "Teacher",
       email: "teacher@yourschool.com",
       role: "TEACHER",
-      title: "Mathematics & UNEB Assessment Coordinator",
+      title: "Faculty Instructor",
     };
     const token = await signSessionToken(sessionUser);
     await setSessionCookie(token);
@@ -314,11 +314,11 @@ export async function quickDemoLoginAction(
   if (role === "student") {
     const sessionUser: SessionUser = {
       id: "demo-student-01",
-      name: "Ronald Mutebi (S.4 Boarding)",
+      name: "Student",
       email: "student@yourschool.com",
       role: "STUDENT",
-      classId: "cls-senior-4-east",
-      title: "Senior 4 East",
+      classId: "",
+      title: "Student",
     };
     const token = await signSessionToken(sessionUser);
     await setSessionCookie(token);

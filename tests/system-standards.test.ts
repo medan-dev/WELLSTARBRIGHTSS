@@ -121,4 +121,31 @@ describe("Enterprise Company Standards & Guardrails", () => {
       expect(content.toLowerCase()).not.toContain("wellstar");
     }
   });
+
+  it("strictly ensures demo systems are completely empty with zero mock data", async () => {
+    const dataModule = await import("@/components/admin/data");
+    expect(dataModule.students).toEqual([]);
+    expect(dataModule.teachers).toEqual([]);
+    expect(dataModule.classes).toEqual([]);
+    expect(dataModule.applications).toEqual([]);
+    expect(dataModule.fees).toEqual([]);
+    expect(dataModule.attendance).toEqual([]);
+
+    const studentRes = await quickDemoLoginAction("student");
+    expect(studentRes.user?.name).toBe("Student");
+    expect(studentRes.user?.classId).toBe("");
+
+    const teacherRes = await quickDemoLoginAction("teacher");
+    expect(teacherRes.user?.name).toBe("Teacher");
+
+    const adminRes = await quickDemoLoginAction("admin");
+    expect(adminRes.user?.name).toBe("Administrator");
+
+    const cashierRes = await quickDemoLoginAction("cashier");
+    expect(cashierRes.user?.name).toBe("Cashier");
+
+    const adminOverview = fs.readFileSync("app/admin/dashboard/page.tsx", "utf8");
+    expect(adminOverview).toContain("Welcome back, Administrator");
+    expect(adminOverview).not.toContain("Nshuti");
+  });
 });
