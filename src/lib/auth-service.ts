@@ -14,6 +14,9 @@ export interface SessionUser {
   classId?: string;
   permissions?: string[];
   workstationId?: string;
+  schoolId?: string;
+  campusId?: string;
+  isDemo?: boolean;
 }
 
 export const SESSION_COOKIE_NAME = "ws_session_token";
@@ -38,6 +41,9 @@ export async function signSessionToken(user: SessionUser): Promise<string> {
     classId: user.classId,
     permissions: user.permissions,
     workstationId: user.workstationId,
+    schoolId: user.schoolId,
+    campusId: user.campusId,
+    isDemo: user.isDemo,
   })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -60,6 +66,9 @@ export async function verifySessionToken(token: string): Promise<SessionUser | n
       classId: payload.classId as string | undefined,
       permissions: payload.permissions as string[] | undefined,
       workstationId: payload.workstationId as string | undefined,
+      schoolId: payload.schoolId as string | undefined,
+      campusId: payload.campusId as string | undefined,
+      isDemo: payload.isDemo as boolean | undefined,
     };
   } catch (err) {
     return null;

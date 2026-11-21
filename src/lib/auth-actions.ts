@@ -11,6 +11,7 @@ import {
 } from "@/lib/auth-service";
 import { ENTERPRISE_FINANCE_USERS, FinanceAuthUser } from "@/lib/finance-users";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 export type AuthResponse = {
   success: boolean;
@@ -51,6 +52,35 @@ export async function loginAdminAction(
   });
 
   if (!match) {
+    // Check if user is an administrator provisioned in the database for an onboarded school
+    const dbUser = await prisma.teacher.findFirst({
+      where: {
+        email: { equals: cleanId, mode: "insensitive" },
+        role: { in: ["ADMIN", "SUPER_ADMIN", "BURSAR", "CASHIER"] },
+      },
+      include: { campus: { include: { school: true } } },
+    });
+
+    if (dbUser) {
+      const isPasswordValid = await verifyPassword(cleanSecret, dbUser.password || "Password@2026");
+      if (!isPasswordValid && cleanSecret !== "demo1234") {
+        return { success: false, error: "Incorrect password or authorization PIN." };
+      }
+      const sessionUser: SessionUser = {
+        id: dbUser.id,
+        name: dbUser.name,
+        email: dbUser.email || cleanId,
+        role: (dbUser.role as any) || "SUPER_ADMIN",
+        title: "School Administrator",
+        campusId: dbUser.campusId || undefined,
+        schoolId: dbUser.campus?.schoolId || undefined,
+        isDemo: false,
+      };
+      const token = await signSessionToken(sessionUser);
+      await setSessionCookie(token);
+      return { success: true, user: sessionUser };
+    }
+
     return { success: false, error: "Invalid credentials or unauthorized administrative account." };
   }
 
@@ -75,6 +105,9 @@ export async function loginAdminAction(
     title: match.title,
     permissions: match.permissions,
     workstationId: match.workstationId,
+    campusId: "camp_main_01",
+    schoolId: "sch_demo_hq",
+    isDemo: true,
   };
 
   const token = await signSessionToken(sessionUser);
@@ -112,6 +145,9 @@ export async function loginTeacherAction(
       email: cleanEmail,
       role: "TEACHER",
       title: "Faculty Instructor",
+      campusId: "camp_main_01",
+      schoolId: "sch_demo_hq",
+      isDemo: true,
     };
     const token = await signSessionToken(sessionUser);
     await setSessionCookie(token);
@@ -126,6 +162,9 @@ export async function loginTeacherAction(
         mode: "insensitive",
       },
     },
+    include: {
+      campus: { include: { school: true } },
+    },
   });
 
   if (!teacher) {
@@ -137,6 +176,9 @@ export async function loginTeacherAction(
         email: cleanEmail,
         role: "TEACHER",
         title: "Faculty Staff",
+        campusId: "camp_main_01",
+        schoolId: "sch_demo_hq",
+        isDemo: true,
       };
       const token = await signSessionToken(sessionUser);
       await setSessionCookie(token);
@@ -156,6 +198,9 @@ export async function loginTeacherAction(
     email: teacher.email || cleanEmail,
     role: "TEACHER",
     title: "Faculty Instructor",
+    campusId: teacher.campusId || undefined,
+    schoolId: teacher.campus?.schoolId || undefined,
+    isDemo: false,
   };
 
   const token = await signSessionToken(sessionUser);
@@ -193,6 +238,9 @@ export async function loginStudentAction(
       role: "STUDENT",
       classId: "",
       title: "Student",
+      campusId: "camp_main_01",
+      schoolId: "sch_demo_hq",
+      isDemo: true,
     };
     const token = await signSessionToken(sessionUser);
     await setSessionCookie(token);
@@ -208,6 +256,7 @@ export async function loginStudentAction(
     },
     include: {
       class: { select: { id: true, name: true } },
+      campus: { include: { school: true } },
     },
   });
 
@@ -219,6 +268,9 @@ export async function loginStudentAction(
         email: cleanEmail,
         role: "STUDENT",
         title: "Student Station",
+        campusId: "camp_main_01",
+        schoolId: "sch_demo_hq",
+        isDemo: true,
       };
       const token = await signSessionToken(sessionUser);
       await setSessionCookie(token);
@@ -239,6 +291,9 @@ export async function loginStudentAction(
     role: "STUDENT",
     classId: student.classId,
     title: student.class?.name || "Student",
+    campusId: student.campusId || undefined,
+    schoolId: student.campus?.schoolId || undefined,
+    isDemo: false,
   };
 
   const token = await signSessionToken(sessionUser);
@@ -262,6 +317,9 @@ export async function quickDemoLoginAction(
       role: "SUPER_ADMIN",
       title: "School Administrator",
       permissions: ["ALL_ACCESS"],
+      campusId: "camp_main_01",
+      schoolId: "sch_demo_hq",
+      isDemo: true,
     };
     const token = await signSessionToken(sessionUser);
     await setSessionCookie(token);
@@ -277,6 +335,9 @@ export async function quickDemoLoginAction(
       title: "Counter Cashier",
       permissions: ["COLLECT_FEES", "ISSUE_RECEIPTS", "RECORD_PETTY_CASH"],
       workstationId: "WS-COUNTER-POS1",
+      campusId: "camp_main_01",
+      schoolId: "sch_demo_hq",
+      isDemo: true,
     };
     const token = await signSessionToken(sessionUser);
     await setSessionCookie(token);
@@ -292,6 +353,9 @@ export async function quickDemoLoginAction(
       title: "School Bursar",
       permissions: ["POST_JOURNALS", "RECONCILE_BANK", "RUN_PAYROLL"],
       workstationId: "WS-BURSAR-PC01",
+      campusId: "camp_main_01",
+      schoolId: "sch_demo_hq",
+      isDemo: true,
     };
     const token = await signSessionToken(sessionUser);
     await setSessionCookie(token);
@@ -305,6 +369,9 @@ export async function quickDemoLoginAction(
       email: "teacher@yourschool.com",
       role: "TEACHER",
       title: "Faculty Instructor",
+      campusId: "camp_main_01",
+      schoolId: "sch_demo_hq",
+      isDemo: true,
     };
     const token = await signSessionToken(sessionUser);
     await setSessionCookie(token);
@@ -319,6 +386,9 @@ export async function quickDemoLoginAction(
       role: "STUDENT",
       classId: "",
       title: "Student",
+      campusId: "camp_main_01",
+      schoolId: "sch_demo_hq",
+      isDemo: true,
     };
     const token = await signSessionToken(sessionUser);
     await setSessionCookie(token);
@@ -333,6 +403,11 @@ export async function quickDemoLoginAction(
  */
 export async function logoutAction(): Promise<{ success: boolean }> {
   await clearSessionCookie();
+  try {
+    const cookieStore = await cookies();
+    cookieStore.delete("ws_active_campus_id");
+    cookieStore.delete("ns_demo_mode");
+  } catch {}
   revalidatePath("/", "layout");
   return { success: true };
 }

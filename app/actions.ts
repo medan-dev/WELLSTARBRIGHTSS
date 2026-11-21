@@ -3,6 +3,39 @@ import prisma from "@/lib/prisma";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { unstable_cache, revalidateTag } from "next/cache";
+import { cookies } from "next/headers";
+import { getServerSession } from "@/lib/auth-service";
+
+export async function resolveActiveTenantContext(): Promise<{
+  campusId: string | null;
+  isConsolidated: boolean;
+  isDemo: boolean;
+}> {
+  try {
+    const cookieStore = await cookies();
+    const demoCookie = cookieStore.get("ns_demo_mode")?.value === "1";
+    const session = await getServerSession();
+    const isDemo: boolean = Boolean(
+      demoCookie ||
+      session?.isDemo === true ||
+      session?.email?.includes("@yourschool.") ||
+      session?.id?.startsWith("demo-")
+    );
+    const activeCampusCookie = cookieStore.get("ws_active_campus_id")?.value;
+
+    if (activeCampusCookie && activeCampusCookie !== "ALL") {
+      return { campusId: activeCampusCookie, isConsolidated: false, isDemo };
+    }
+
+    if (session?.campusId) {
+      return { campusId: session.campusId, isConsolidated: false, isDemo };
+    }
+
+    return { campusId: null, isConsolidated: true, isDemo };
+  } catch {
+    return { campusId: null, isConsolidated: true, isDemo: false };
+  }
+}
 
 // Actions updated with latest schema
 
@@ -539,11 +572,57 @@ export async function deleteGalleryItem(id: string) {
 // ==========================================
 // EXPORTED SERVER ACTIONS (Students & Classes)
 // ==========================================
-export async function getStudents() { return await getStudentsCached(); }
-export async function getSubjects() { return await getSubjectsCached(); }
-export async function getDashboardStats() { return await getDashboardStatsCached(); }
-export async function getTeachers() { return await getTeachersCached(); }
-export async function getClasses() { return await getClassesCached(); }
+export async function getStudents() {
+  const { campusId, isDemo } = await resolveActiveTenantContext();
+  if (isDemo) return [];
+  const where = campusId ? { campusId } : {};
+  const data = await prisma.student.findMany({
+    where,
+    include: { class: true },
+    orderBy: { createdAt: "desc" },
+  });
+  return JSON.parse(JSON.stringify(data));
+}
+
+export async function getSubjects() {
+  return await getSubjectsCached();
+}
+
+export async function getDashboardStats() {
+  const { campusId, isDemo } = await resolveActiveTenantContext();
+  if (isDemo) return { studentCount: 0, teacherCount: 0, classCount: 0 };
+  const where = campusId ? { campusId } : {};
+  const [studentCount, teacherCount, classCount] = await Promise.all([
+    prisma.student.count({ where }),
+    prisma.teacher.count({ where }),
+    prisma.class.count({ where }),
+  ]);
+  return { studentCount, teacherCount, classCount };
+}
+
+export async function getTeachers() {
+  const { campusId, isDemo } = await resolveActiveTenantContext();
+  if (isDemo) return [];
+  const where = campusId ? { campusId } : {};
+  const data = await prisma.teacher.findMany({
+    where,
+    include: { subjects: true, classes: true },
+    orderBy: { name: "asc" },
+  });
+  return JSON.parse(JSON.stringify(data));
+}
+
+export async function getClasses() {
+  const { campusId, isDemo } = await resolveActiveTenantContext();
+  if (isDemo) return [];
+  const where = campusId ? { campusId } : {};
+  const data = await prisma.class.findMany({
+    where,
+    include: { subjects: true },
+    orderBy: { name: "asc" },
+  });
+  return JSON.parse(JSON.stringify(data));
+}
 
 export async function addSubject(name: string) {
   const data = await prisma.subject.create({ data: { name } });
@@ -680,8 +759,33 @@ export async function loginTeacher(email: string) {
 }
 
 export async function addStudent(name: string, email: string, passwordHash: string, classId: string) {
-  const data = await prisma.student.create({ data: { name, email, password: passwordHash, classId } });
+  const { campusId } = await resolveActiveTenantContext();
+  const targetCampusId = campusId || "camp_main_01";
+  const data = await prisma.student.create({
+    data: {
+      name,
+      email,
+      password: passwordHash,
+      classId,
+      campusId: targetCampusId,
+    },
+  });
   revalidateTag('students');
+  revalidateTag('stats');
+  return JSON.parse(JSON.stringify(data));
+}
+
+export async function addClass(name: string, grade?: string) {
+  const { campusId } = await resolveActiveTenantContext();
+  const targetCampusId = campusId || "camp_main_01";
+  const data = await prisma.class.create({
+    data: {
+      name,
+      grade: grade || name,
+      campusId: targetCampusId,
+    },
+  });
+  revalidateTag('classes');
   revalidateTag('stats');
   return JSON.parse(JSON.stringify(data));
 }
@@ -734,10 +838,17 @@ export async function deleteStudent(id: string) {
 }
 
 export async function addTeacher(name: string, email: string, passwordHash: string, subjectId?: string, classIds: string[] = []) {
+  const { campusId } = await resolveActiveTenantContext();
+  const targetCampusId = campusId || "camp_main_01";
   const existing = await prisma.teacher.findUnique({ where: { email } });
   if(existing) throw new Error('Email is already in use');
   
-  const dataToCreate: any = { name, email, password: passwordHash };
+  const dataToCreate: any = {
+    name,
+    email,
+    password: passwordHash,
+    campusId: targetCampusId,
+  };
   if(subjectId) dataToCreate.subjects = { connect: { id: subjectId } };
   if(classIds.length > 0) dataToCreate.classes = { connect: classIds.map(cid => ({ id: cid })) };
 
@@ -839,47 +950,37 @@ export async function getAllNotices() {
 }
 
 export async function getStudentNotices(classId?: string) {
-  const fetchCached = unstable_cache(
-    async () => {
-      const orConditions: any[] = [
-        { target: "ALL" },
-        { target: "STUDENTS" },
-        { target: "PUBLIC" }
-      ];
-      if (classId) {
-        orConditions.push({ target: classId });
-      }
-      const data = await prisma.notice.findMany({
-        where: { OR: orConditions },
-        orderBy: [{ pinned: 'desc' }, { date: 'desc' }, { createdAt: 'desc' }]
-      });
-      return JSON.parse(JSON.stringify(data));
-    },
-    [`student-notices-${classId || 'all'}`],
-    { tags: ['notices'] }
-  );
-  return await fetchCached();
+  const { isDemo, campusId } = await resolveActiveTenantContext();
+  if (isDemo) return [];
+  const orConditions: any[] = [
+    { target: "ALL" },
+    { target: "STUDENTS" },
+    { target: "PUBLIC" }
+  ];
+  if (classId) {
+    orConditions.push({ target: classId });
+  }
+  const data = await prisma.notice.findMany({
+    where: { OR: orConditions },
+    orderBy: [{ pinned: 'desc' }, { date: 'desc' }, { createdAt: 'desc' }]
+  });
+  return JSON.parse(JSON.stringify(data));
 }
 
 export async function getTeacherNotices() {
-  const fetchCached = unstable_cache(
-    async () => {
-      const data = await prisma.notice.findMany({
-        where: {
-          OR: [
-            { target: "ALL" },
-            { target: "TEACHERS" },
-            { target: "PUBLIC" }
-          ]
-        },
-        orderBy: [{ pinned: 'desc' }, { date: 'desc' }, { createdAt: 'desc' }]
-      });
-      return JSON.parse(JSON.stringify(data));
+  const { isDemo, campusId } = await resolveActiveTenantContext();
+  if (isDemo) return [];
+  const data = await prisma.notice.findMany({
+    where: {
+      OR: [
+        { target: "ALL" },
+        { target: "TEACHERS" },
+        { target: "PUBLIC" }
+      ]
     },
-    ['teacher-notices'],
-    { tags: ['notices'] }
-  );
-  return await fetchCached();
+    orderBy: [{ pinned: 'desc' }, { date: 'desc' }, { createdAt: 'desc' }]
+  });
+  return JSON.parse(JSON.stringify(data));
 }
 
 export async function getPublicNotices() {

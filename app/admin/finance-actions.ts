@@ -15,93 +15,111 @@ import {
 } from "@/lib/finance-service";
 import { AccountClass } from "../../generated/prisma/client";
 import { requireAuth } from "@/lib/auth-service";
+import { resolveActiveTenantContext } from "../actions";
 
 // ============================================================================
 // 1. OVERVIEW & EXECUTIVE KPI TELEMETRY (CACHED)
 // ============================================================================
-const getSuperAdminFinanceOverviewCached = unstable_cache(
-  async () => {
-    // Ensure chart of accounts exists
-    await initializeStandardChartOfAccounts();
-
-    // 1. Invoices & Receivables
-    const invoices = await prisma.studentFeeInvoice.findMany({
-      select: {
-        totalDue: true,
-        paidAmount: true,
-        balance: true,
-        status: true,
-      },
-    });
-
-    const totalInvoiced = invoices.reduce((acc, inv) => acc + inv.totalDue, 0);
-    const totalCollectedFromInvoices = invoices.reduce((acc, inv) => acc + inv.paidAmount, 0);
-    const totalArrears = invoices.reduce((acc, inv) => acc + Math.max(0, inv.balance), 0);
-    const totalDefaulters = invoices.filter((inv) => inv.balance > 0).length;
-
-    // 2. Total Receipts (All payments recorded)
-    const receipts = await prisma.paymentReceipt.findMany({
-      select: { amount: true, isOfflineSync: true },
-    });
-    const totalReceiptsAmount = receipts.reduce((acc, r) => acc + r.amount, 0);
-    const offlineReceiptsCount = receipts.filter((r) => r.isOfflineSync).length;
-
-    // 3. Expenses
-    const expenses = await prisma.expenseRecord.findMany({
-      select: { amount: true, approvalStatus: true },
-    });
-    const totalExpenses = expenses.reduce((acc, e) => acc + e.amount, 0);
-
-    // 4. Bank & Cash Position
-    const cashAndBankAccounts = await prisma.account.findMany({
-      where: { isBankOrCash: true },
-    });
-    const totalLiquidCash = cashAndBankAccounts.reduce((acc, a) => acc + a.balance, 0);
-
-    // 5. Workstations Status
-    const workstations = await prisma.workstation.findMany({
-      orderBy: { createdAt: "desc" },
-    });
-    const activeWorkstations = workstations.filter((w) => !w.isBlocked).length;
-    const blockedWorkstations = workstations.filter((w) => w.isBlocked).length;
-
-    // 6. Recent Audit Logs
-    const recentAudits = await prisma.financeAuditLog.findMany({
-      take: 8,
-      orderBy: { createdAt: "desc" },
-    });
-
-    // 7. Recent Transactions (Receipts + Expenses)
-    const recentReceipts = await prisma.paymentReceipt.findMany({
-      take: 6,
-      orderBy: { createdAt: "desc" },
-      include: { student: { select: { name: true } } },
-    });
-
-    return JSON.parse(JSON.stringify({
-      kpis: {
-        totalInvoiced,
-        totalCollected: totalCollectedFromInvoices || totalReceiptsAmount,
-        totalArrears,
-        totalDefaulters,
-        totalExpenses,
-        netCashflow: (totalCollectedFromInvoices || totalReceiptsAmount) - totalExpenses,
-        totalLiquidCash,
-        offlineReceiptsCount,
-        activeWorkstations,
-        blockedWorkstations,
-      },
-      cashAndBankAccounts,
-      recentAudits,
-      recentReceipts,
-    }));
-  },
-  ["super-admin-finance-overview"],
-  { tags: ["finance-overview", "finance-accounts", "finance-invoices", "finance-receipts"] }
-);
-
 export async function getSuperAdminFinanceOverview() {
-  return await getSuperAdminFinanceOverviewCached();
+  const { campusId, isDemo } = await resolveActiveTenantContext();
+
+  if (isDemo) {
+    return JSON.parse(
+      JSON.stringify({
+        kpis: {
+          totalInvoiced: 0,
+          totalCollected: 0,
+          totalArrears: 0,
+          totalDefaulters: 0,
+          totalExpenses: 0,
+          netCashflow: 0,
+          totalLiquidCash: 0,
+          offlineReceiptsCount: 0,
+          activeWorkstations: 0,
+          blockedWorkstations: 0,
+        },
+        cashAndBankAccounts: [],
+        recentAudits: [],
+        recentReceipts: [],
+      })
+    );
+  }
+
+  // 1. Invoices & Receivables
+  const invoices = await prisma.studentFeeInvoice.findMany({
+    where: campusId ? { campusId } : {},
+    select: {
+      totalDue: true,
+      paidAmount: true,
+      balance: true,
+      status: true,
+    },
+  });
+
+  const totalInvoiced = invoices.reduce((acc, inv) => acc + inv.totalDue, 0);
+  const totalCollectedFromInvoices = invoices.reduce((acc, inv) => acc + inv.paidAmount, 0);
+  const totalArrears = invoices.reduce((acc, inv) => acc + Math.max(0, inv.balance), 0);
+  const totalDefaulters = invoices.filter((inv) => inv.balance > 0).length;
+
+  // 2. Total Receipts (All payments recorded)
+  const receipts = await prisma.paymentReceipt.findMany({
+    where: campusId ? { campusId } : {},
+    select: { amount: true, isOfflineSync: true },
+  });
+  const totalReceiptsAmount = receipts.reduce((acc, r) => acc + r.amount, 0);
+  const offlineReceiptsCount = receipts.filter((r) => r.isOfflineSync).length;
+
+  // 3. Expenses
+  const expenses = await prisma.expenseRecord.findMany({
+    select: { amount: true, approvalStatus: true },
+  });
+  const totalExpenses = expenses.reduce((acc, e) => acc + e.amount, 0);
+
+  // 4. Bank & Cash Position
+  const cashAndBankAccounts = await prisma.account.findMany({
+    where: { isBankOrCash: true },
+  });
+  const totalLiquidCash = cashAndBankAccounts.reduce((acc, a) => acc + a.balance, 0);
+
+  // 5. Workstations Status
+  const workstations = await prisma.workstation.findMany({
+    where: campusId ? { campusId } : {},
+    orderBy: { createdAt: "desc" },
+  });
+  const activeWorkstations = workstations.filter((w) => !w.isBlocked).length;
+  const blockedWorkstations = workstations.filter((w) => w.isBlocked).length;
+
+  // 6. Recent Audit Logs
+  const recentAudits = await prisma.financeAuditLog.findMany({
+    take: 8,
+    orderBy: { createdAt: "desc" },
+  });
+
+  // 7. Recent Transactions (Receipts + Expenses)
+  const recentReceipts = await prisma.paymentReceipt.findMany({
+    where: campusId ? { campusId } : {},
+    take: 6,
+    orderBy: { createdAt: "desc" },
+    include: { student: { select: { name: true } } },
+  });
+
+  return JSON.parse(JSON.stringify({
+    kpis: {
+      totalInvoiced,
+      totalCollected: totalCollectedFromInvoices || totalReceiptsAmount,
+      totalArrears,
+      totalDefaulters,
+      totalExpenses,
+      netCashflow: (totalCollectedFromInvoices || totalReceiptsAmount) - totalExpenses,
+      totalLiquidCash,
+      offlineReceiptsCount,
+      activeWorkstations,
+      blockedWorkstations,
+    },
+    cashAndBankAccounts,
+    recentAudits,
+    recentReceipts,
+  }));
 }
 
 // ============================================================================
@@ -120,14 +138,23 @@ const getFinanceAccountsCached = unstable_cache(
 );
 
 export async function getFinanceAccounts() {
-  return await getFinanceAccountsCached();
+  const { isDemo } = await resolveActiveTenantContext();
+  const accounts = await getFinanceAccountsCached();
+  if (isDemo && Array.isArray(accounts)) {
+    return accounts.map((a: any) => ({ ...a, balance: 0 }));
+  }
+  return accounts;
 }
 
 // ============================================================================
 // 3. INVOICES & STUDENT BILLING
 // ============================================================================
 export async function getFinanceInvoices() {
+  const { campusId, isDemo } = await resolveActiveTenantContext();
+  if (isDemo) return [];
+
   const invoices = await prisma.studentFeeInvoice.findMany({
+    where: campusId ? { campusId } : {},
     orderBy: { createdAt: "desc" },
     include: {
       student: { select: { id: true, name: true, class: { select: { name: true } } } },
@@ -151,7 +178,11 @@ export async function getFinanceInvoices() {
 // 4. PAYMENTS & RECEIPTS
 // ============================================================================
 export async function getFinanceReceipts() {
+  const { campusId, isDemo } = await resolveActiveTenantContext();
+  if (isDemo) return [];
+
   const receipts = await prisma.paymentReceipt.findMany({
+    where: campusId ? { campusId } : {},
     orderBy: { createdAt: "desc" },
     include: {
       student: { select: { name: true, class: { select: { name: true } } } },
@@ -165,6 +196,9 @@ export async function getFinanceReceipts() {
 // 5. EXPENSES & ACCOUNTS PAYABLE
 // ============================================================================
 export async function getFinanceExpenses() {
+  const { isDemo } = await resolveActiveTenantContext();
+  if (isDemo) return { expenses: [], suppliers: [] };
+
   const expenses = await prisma.expenseRecord.findMany({
     orderBy: { expenseDate: "desc" },
     include: {
@@ -181,13 +215,18 @@ export async function getFinanceExpenses() {
 // 6. PAYROLL & STATUTORY (PAYE / NSSF)
 // ============================================================================
 export async function getFinancePayroll() {
+  const { campusId, isDemo } = await resolveActiveTenantContext();
+  if (isDemo) return { payroll: [], loans: [] };
+
   const payroll = await prisma.staffPayrollRecord.findMany({
+    where: campusId ? { teacher: { campusId } } : {},
     orderBy: { createdAt: "desc" },
     include: {
       teacher: { select: { name: true, role: true } },
     },
   });
   const loans = await prisma.staffLoanAdvance.findMany({
+    where: campusId ? { teacher: { campusId } } : {},
     orderBy: { disbursedAt: "desc" },
     include: {
       teacher: { select: { name: true } },
@@ -200,6 +239,9 @@ export async function getFinancePayroll() {
 // 7. BUDGETING & DEPARTMENTAL VARIANCE
 // ============================================================================
 export async function getFinanceBudgets() {
+  const { isDemo } = await resolveActiveTenantContext();
+  if (isDemo) return [];
+
   const budgets = await prisma.budget.findMany({
     include: {
       lines: {
@@ -215,6 +257,9 @@ export async function getFinanceBudgets() {
 // 8. FIXED ASSETS REGISTER
 // ============================================================================
 export async function getFinanceFixedAssets() {
+  const { isDemo } = await resolveActiveTenantContext();
+  if (isDemo) return [];
+
   const assets = await prisma.fixedAsset.findMany({
     orderBy: { purchaseDate: "desc" },
   });
@@ -225,7 +270,11 @@ export async function getFinanceFixedAssets() {
 // 9. WORKSTATION TELEMETRY & SECURITY CONTROL
 // ============================================================================
 export async function getFinanceWorkstations() {
+  const { campusId, isDemo } = await resolveActiveTenantContext();
+  if (isDemo) return [];
+
   const workstations = await prisma.workstation.findMany({
+    where: campusId ? { campusId } : {},
     orderBy: { lastSyncAt: "desc" },
   });
   return workstations;
@@ -341,7 +390,27 @@ export async function getFinancialStatementsAction() {
 // 14. TAX & STATUTORY COMPLIANCE (MODULE 9: PAYE, NSSF, WHT)
 // ============================================================================
 export async function getTaxComplianceAction() {
+  const { campusId, isDemo } = await resolveActiveTenantContext();
+
+  if (isDemo) {
+    return {
+      summary: {
+        totalPayeDeducted: 0,
+        totalNssfEmployee: 0,
+        totalNssfEmployer: 0,
+        totalNssfCombined: 0,
+        totalWhtCalculated: 0,
+        totalStatutoryDue: 0,
+        filingDeadline: "15th of Next Month",
+        complianceStatus: "CURRENT / COMPLIANT",
+      },
+      payrollRecords: [],
+      supplierInvoices: [],
+    };
+  }
+
   const payroll = await prisma.staffPayrollRecord.findMany({
+    where: campusId ? { teacher: { campusId } } : {},
     orderBy: { createdAt: "desc" },
     include: { teacher: true },
   });
@@ -383,6 +452,7 @@ export async function getTaxComplianceAction() {
 // 15. BANK & CASH MANAGEMENT (MODULE 3)
 // ============================================================================
 export async function getBankAndCashAction() {
+  const { campusId, isDemo } = await resolveActiveTenantContext();
   await initializeStandardChartOfAccounts();
 
   const bankAndCashAccounts = await prisma.account.findMany({
@@ -390,7 +460,28 @@ export async function getBankAndCashAction() {
     orderBy: { code: "asc" },
   });
 
+  if (isDemo) {
+    return {
+      accounts: bankAndCashAccounts.map((a) => ({ ...a, balance: 0 })),
+      positions: {
+        totalLiquid: 0,
+        cashInDrawer: 0,
+        pettyFloat: 0,
+        stanbicBank: 0,
+        momoMerchant: 0,
+      },
+      recentReceipts: [],
+      recentExpenses: [],
+      reconciliationStatus: {
+        lastReconciledDate: new Date().toLocaleDateString("en-GB"),
+        statementDifference: 0,
+        status: "RECONCILED",
+      },
+    };
+  }
+
   const receipts = await prisma.paymentReceipt.findMany({
+    where: campusId ? { campusId } : {},
     take: 20,
     orderBy: { issuedAt: "desc" },
     include: { student: { select: { name: true } } },

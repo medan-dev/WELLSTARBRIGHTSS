@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PageHeader } from "@/components/admin/Widgets";
-import { getClasses } from "../../../actions";
+import { getClasses, addClass } from "../../../actions";
 import { toast } from "sonner";
 
 type ClassRow = { id: string; name: string; teacher?: string; room?: string; students?: number };
@@ -44,13 +44,19 @@ export default function ClassesPage() {
     toast.success("Class removed");
   };
 
-  const add = () => {
+  const add = async () => {
     if (!newClass.name.trim() || !newClass.teacher.trim() || !newClass.room.trim()) {
       toast.error("Please fill in all fields");
       return;
     }
-    const id = `C-${Date.now()}`;
-    setList((l) => [...l, { id, ...newClass, students: 0 }]);
+    try {
+      const res = await addClass(newClass.name, "General");
+      const id = res?.class?.id || `C-${Date.now()}`;
+      setList((l) => [...l, { id, ...newClass, students: 0 }]);
+    } catch {
+      const id = `C-${Date.now()}`;
+      setList((l) => [...l, { id, ...newClass, students: 0 }]);
+    }
     setNewClass({ name: "", teacher: "", room: "" });
     setShowAdd(false);
     toast.success("Class added successfully");

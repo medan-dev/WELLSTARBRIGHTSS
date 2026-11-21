@@ -183,7 +183,7 @@ function SuperAdminContent() {
   const [migrationCampusId, setMigrationCampusId] = useState<string>("");
   const [migrationCsvText, setMigrationCsvText] = useState<string>(
     "Student_Name,Class_Grade,Gender,Parent_Phone\n" +
-    "Ronald Mutebi,Senior 4,Male,+256701116781\n" +
+    "Ronald Mutebi,Senior 4,Male,+256758611414\n" +
     "Amina Nakato,Senior 5,Female,+256702223344\n" +
     "David Mukasa,Senior 3,Male,+256788990011\n"
   );
@@ -196,7 +196,7 @@ function SuperAdminContent() {
     code: "",
     motto: "",
     contactEmail: "",
-    contactPhone: "+256 701 116 781",
+    contactPhone: "+256 758 611 414",
     website: "",
     maxCampuses: 5,
     primaryCampusName: "",
@@ -421,7 +421,7 @@ function SuperAdminContent() {
         code: "",
         motto: "",
         contactEmail: "",
-        contactPhone: "+256 701 116 781",
+        contactPhone: "+256 758 611 414",
         website: "",
         maxCampuses: 5,
         primaryCampusName: "",
@@ -740,14 +740,14 @@ function SuperAdminContent() {
                     <span className="text-xs text-slate-400 font-normal ml-1.5">/ {telemetry?.maxSchoolsLimit ?? 200} Max</span>
                   </div>
                   <div className="text-[11px] text-slate-400 pt-0.5">
-                    {(telemetry?.maxSchoolsLimit ?? 200) - (telemetry?.totalSchools ?? 1)} open onboarding slots
+                    {Math.max(0, (telemetry?.maxSchoolsLimit ?? 200) - (telemetry?.totalSchools ?? 1))} open onboarding slots
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200/90 rounded-xl p-5 space-y-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+                <div className="bg-white border border-slate-200/90 rounded-none p-5 space-y-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
                   <div className="text-xs font-medium text-slate-500">Active Campuses</div>
                   <div className="text-2xl font-bold text-slate-900">
-                    {telemetry?.totalCampuses ?? 2}
+                    {telemetry?.totalCampuses ?? 1}
                     <span className="text-xs text-slate-400 font-normal ml-1.5">/ {telemetry?.maxCampusesClusterLimit ?? 4000}</span>
                   </div>
                   <div className="text-[11px] text-slate-400 pt-0.5">

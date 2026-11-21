@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { unstable_cache, revalidateTag } from "next/cache";
 import { requireAuth } from "@/lib/auth-service";
+import { resolveActiveTenantContext } from "../actions";
 
 export type MealPlanType = 
   | "BOARDING_FULL" 
@@ -35,80 +36,31 @@ function sanitizeMealCard<T extends Record<string, any>>(card: T | null | undefi
 // ============================================================================
 
 export async function getAllMealCards() {
-  const fetchCached = unstable_cache(
-    async () => {
-      let cards = await prisma.mealCard.findMany({
-        include: {
-          student: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              class: { select: { id: true, name: true, grade: true } },
-            },
-          },
-          logs: {
-            take: 3,
-            orderBy: { servedAt: "desc" },
-          },
+  const { campusId, isDemo } = await resolveActiveTenantContext();
+  if (isDemo) return [];
+
+  const where = campusId ? { campusId } : {};
+  const cards = await prisma.mealCard.findMany({
+    where,
+    include: {
+      student: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          class: { select: { id: true, name: true, grade: true } },
         },
-        orderBy: { createdAt: "desc" },
-      });
-
-      if (cards.length === 0) {
-        const allStudents = await prisma.student.findMany({
-          take: 60,
-        });
-
-        for (let i = 0; i < allStudents.length; i++) {
-          const s = allStudents[i];
-          const cardNum = `MC-2026-${(1001 + i).toString().padStart(4, "0")}`;
-          const plan: MealPlanType =
-            i % 3 === 0
-              ? "BOARDING_FULL"
-              : i % 3 === 1
-              ? "DAY_LUNCH"
-              : "BURSARY_SUBSIDIZED";
-
-          await prisma.mealCard.create({
-            data: {
-              cardNumber: cardNum,
-              studentId: s.id,
-              planType: plan,
-              status: "ACTIVE",
-              dailyQuota: plan === "BOARDING_FULL" ? 3 : 1,
-              points: 120,
-            },
-          });
-        }
-
-        cards = await prisma.mealCard.findMany({
-          include: {
-            student: {
-              select: {
-                id: true,
-                name: true,
-                email: true,
-                class: { select: { id: true, name: true, grade: true } },
-              },
-            },
-            logs: {
-              take: 3,
-              orderBy: { servedAt: "desc" },
-            },
-          },
-          orderBy: { createdAt: "desc" },
-        });
-      }
-
-      const parsed = JSON.parse(JSON.stringify(cards));
-      return Array.isArray(parsed) ? parsed.map(sanitizeMealCard) : [];
+      },
+      logs: {
+        take: 3,
+        orderBy: { servedAt: "desc" },
+      },
     },
-    ["all-meal-cards"],
-    { tags: ["meal-cards"] }
-  );
+    orderBy: { createdAt: "desc" },
+  });
 
-  return await fetchCached();
+  const parsed = JSON.parse(JSON.stringify(cards));
+  return Array.isArray(parsed) ? parsed.map(sanitizeMealCard) : [];
 }
 
 export async function getMealCardByStudent(studentId: string) {
@@ -163,7 +115,11 @@ export async function getMealCardByNumber(cardNumber: string) {
 }
 
 export async function getRecentMealLogs(limit: number = 30) {
+  const { campusId, isDemo } = await resolveActiveTenantContext();
+  if (isDemo) return [];
+
   const logs = await prisma.mealLog.findMany({
+    where: campusId ? { mealCard: { campusId } } : {},
     take: limit,
     orderBy: { servedAt: "desc" },
     include: {
@@ -185,60 +141,71 @@ export async function getRecentMealLogs(limit: number = 30) {
 }
 
 export async function getDailyMealStats(targetDate?: string) {
+  const { campusId, isDemo } = await resolveActiveTenantContext();
   const dateStr = targetDate || new Date().toISOString().split("T")[0];
 
-  const fetchCached = unstable_cache(
-    async () => {
-      const [todayLogs, totalCards, activeCards] = await Promise.all([
-        prisma.mealLog.findMany({
-          where: { date: dateStr },
-          select: {
-            id: true,
-            mealSession: true,
-            portionQty: true,
-            studentId: true,
-          },
-        }),
-        prisma.mealCard.count(),
-        prisma.mealCard.count({ where: { status: "ACTIVE" } }),
-      ]);
+  if (isDemo) {
+    return {
+      date: dateStr,
+      totalMealsServed: 0,
+      uniqueStudentsServed: 0,
+      totalCards: 0,
+      activeCards: 0,
+      breakfastCount: 0,
+      lunchCount: 0,
+      dinnerCount: 0,
+      specialBreakCount: 0,
+    };
+  }
 
-      const totalMealsServed = todayLogs.reduce((acc, l) => acc + l.portionQty, 0);
-      const uniqueStudentsServed = new Set(todayLogs.map((l) => l.studentId)).size;
-
-      const breakfastCount = todayLogs
-        .filter((l) => l.mealSession === "BREAKFAST")
-        .reduce((acc, l) => acc + l.portionQty, 0);
-
-      const lunchCount = todayLogs
-        .filter((l) => l.mealSession === "LUNCH")
-        .reduce((acc, l) => acc + l.portionQty, 0);
-
-      const dinnerCount = todayLogs
-        .filter((l) => l.mealSession === "DINNER")
-        .reduce((acc, l) => acc + l.portionQty, 0);
-
-      const specialBreakCount = todayLogs
-        .filter((l) => l.mealSession === "SPECIAL_BREAK")
-        .reduce((acc, l) => acc + l.portionQty, 0);
-
-      return {
+  const where = campusId ? { campusId } : {};
+  const [todayLogs, totalCards, activeCards] = await Promise.all([
+    prisma.mealLog.findMany({
+      where: {
         date: dateStr,
-        totalMealsServed,
-        uniqueStudentsServed,
-        totalCards,
-        activeCards,
-        breakfastCount,
-        lunchCount,
-        dinnerCount,
-        specialBreakCount,
-      };
-    },
-    [`meal-stats-${dateStr}`],
-    { tags: ["meal-stats", "meal-logs"] }
-  );
+        ...(campusId ? { mealCard: { campusId } } : {}),
+      },
+      select: {
+        id: true,
+        mealSession: true,
+        portionQty: true,
+        studentId: true,
+      },
+    }),
+    prisma.mealCard.count({ where }),
+    prisma.mealCard.count({ where: { ...where, status: "ACTIVE" } }),
+  ]);
 
-  return await fetchCached();
+  const totalMealsServed = todayLogs.reduce((acc, l) => acc + l.portionQty, 0);
+  const uniqueStudentsServed = new Set(todayLogs.map((l) => l.studentId)).size;
+
+  const breakfastCount = todayLogs
+    .filter((l) => l.mealSession === "BREAKFAST")
+    .reduce((acc, l) => acc + l.portionQty, 0);
+
+  const lunchCount = todayLogs
+    .filter((l) => l.mealSession === "LUNCH")
+    .reduce((acc, l) => acc + l.portionQty, 0);
+
+  const dinnerCount = todayLogs
+    .filter((l) => l.mealSession === "DINNER")
+    .reduce((acc, l) => acc + l.portionQty, 0);
+
+  const specialBreakCount = todayLogs
+    .filter((l) => l.mealSession === "SPECIAL_BREAK")
+    .reduce((acc, l) => acc + l.portionQty, 0);
+
+  return {
+    date: dateStr,
+    totalMealsServed,
+    uniqueStudentsServed,
+    totalCards,
+    activeCards,
+    breakfastCount,
+    lunchCount,
+    dinnerCount,
+    specialBreakCount,
+  };
 }
 
 // ============================================================================
@@ -411,8 +378,12 @@ export async function issueOrUpdateMealCard(data: {
   allergies?: string;
   dailyQuota?: number;
   points?: number;
+  campusId?: string;
 }) {
   await requireAuth(["SUPER_ADMIN", "BURSAR", "CASHIER", "AUDITOR"]);
+  const { campusId: activeCampusId } = await resolveActiveTenantContext();
+  const campusId = data.campusId || activeCampusId || null;
+
   const existingByStudent = await prisma.mealCard.findUnique({
     where: { studentId: data.studentId },
   });
@@ -429,6 +400,7 @@ export async function issueOrUpdateMealCard(data: {
         allergies: data.allergies !== undefined ? data.allergies : existingByStudent.allergies,
         dailyQuota: data.dailyQuota !== undefined ? data.dailyQuota : existingByStudent.dailyQuota,
         points: data.points !== undefined ? data.points : existingByStudent.points,
+        campusId: existingByStudent.campusId || campusId,
       },
       include: { student: { select: { name: true } } },
     });
@@ -437,6 +409,7 @@ export async function issueOrUpdateMealCard(data: {
       data: {
         cardNumber: generatedCardNum,
         studentId: data.studentId,
+        campusId,
         planType: data.planType,
         status: data.status || "ACTIVE",
         allergies: data.allergies || null,
@@ -455,9 +428,12 @@ export async function issueOrUpdateMealCard(data: {
 
 export async function batchGenerateMealCards() {
   await requireAuth(["SUPER_ADMIN", "BURSAR"]);
+  const { campusId } = await resolveActiveTenantContext();
+  const where = campusId ? { campusId } : {};
+
   const studentsWithoutCard = await prisma.student.findMany({
-    where: { mealCard: null },
-    select: { id: true, name: true },
+    where: { ...where, mealCard: null },
+    select: { id: true, name: true, campusId: true },
   });
 
   if (studentsWithoutCard.length === 0) {
@@ -473,6 +449,7 @@ export async function batchGenerateMealCards() {
       data: {
         cardNumber,
         studentId: student.id,
+        campusId: student.campusId || campusId || null,
         planType: "BOARDING_FULL",
         status: "ACTIVE",
         dailyQuota: 3,

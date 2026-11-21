@@ -253,7 +253,7 @@ const relatableAnswers = [
     category: "Admissions & Fees",
     badge: "Admissions & S.1 / S.5",
     question: "How do I apply for S.1 or S.5, and what are the admission requirements?",
-    answer: "Applications can be completed online on our website in just 3 minutes, or by connecting with Admissions on WhatsApp at 0701116781. S.1 applicants present their PLE result slip, while S.5 applicants present their UCE result slip. We schedule a friendly family interview and campus tour before issuing an admission letter."
+    answer: "Applications can be completed online on our website in just 3 minutes, or by connecting with Admissions on WhatsApp at 0758611414. S.1 applicants present their PLE result slip, while S.5 applicants present their UCE result slip. We schedule a friendly family interview and campus tour before issuing an admission letter."
   },
   {
     category: "Admissions & Fees",
@@ -847,7 +847,7 @@ export default function HomePage() {
             </div>
             <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
               <a
-                href="https://wa.me/256701116781?text=Hello%20Wellstar%20Bright%2C%20I%20have%20a%20question%20about%20admissions"
+                href="https://wa.me/256758611414?text=Hello%20Wellstar%20Bright%2C%20I%20have%20a%20question%20about%20admissions"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-smooth"
