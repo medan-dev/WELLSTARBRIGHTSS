@@ -147,5 +147,13 @@ describe("Enterprise Company Standards & Guardrails", () => {
     const adminOverview = fs.readFileSync("app/admin/dashboard/page.tsx", "utf8");
     expect(adminOverview).toContain("Welcome back, Administrator");
     expect(adminOverview).not.toContain("Nshuti");
+
+    const adminLayout = fs.readFileSync("app/admin/dashboard/layout.tsx", "utf8");
+    expect(adminLayout).toContain("AD");
+    expect(adminLayout).not.toContain("NM");
+
+    const campusSwitcher = fs.readFileSync("src/components/navigation/CampusSwitcher.tsx", "utf8");
+    expect(campusSwitcher).toContain("if (isDemo)");
+    expect(campusSwitcher).toContain("return null;");
   });
 });

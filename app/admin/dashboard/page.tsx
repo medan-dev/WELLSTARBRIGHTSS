@@ -99,28 +99,51 @@ export default function Overview() {
 
       {/* Stat tiles */}
       {isLoading ? (
-        <div className="h-24 rounded-2xl bg-card border shadow-sm flex items-center justify-center text-muted-foreground">
+        <div className="h-24 rounded-none bg-card border shadow-sm flex items-center justify-center text-muted-foreground">
           <Loader2 className="size-6 animate-spin text-primary" />
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatTile label="Total students" value={stats.studentCount} delta="+4.2% this term" icon={<Users className="size-5" />} />
-          <StatTile label="Faculty" value={stats.teacherCount} delta="+2 new hires" accent="accent" icon={<GraduationCap className="size-5" />} />
-          <StatTile label="Classes" value={stats.classCount} accent="success" icon={<BookOpen className="size-5" />} />
-          <StatTile label="Notifications" value={active.length} delta={`${active.length} unread alerts`} accent="warning" icon={<Bell className="size-5" />} />
+          <StatTile
+            label="Total students"
+            value={stats.studentCount}
+            delta={stats.studentCount > 0 ? "+4.2% this term" : "0 enrolled"}
+            icon={<Users className="size-5" />}
+          />
+          <StatTile
+            label="Faculty"
+            value={stats.teacherCount}
+            delta={stats.teacherCount > 0 ? "+2 new hires" : "0 faculty"}
+            accent="accent"
+            icon={<GraduationCap className="size-5" />}
+          />
+          <StatTile
+            label="Classes"
+            value={stats.classCount}
+            delta={stats.classCount > 0 ? "Active classes" : "0 classes"}
+            accent="success"
+            icon={<BookOpen className="size-5" />}
+          />
+          <StatTile
+            label="Notifications"
+            value={active.length}
+            delta={`${active.length} unread alerts`}
+            accent="warning"
+            icon={<Bell className="size-5" />}
+          />
         </div>
       )}
 
       <div className="mt-6 grid lg:grid-cols-3 gap-6">
         {/* Chart */}
-        <div className="lg:col-span-2 p-6 rounded-2xl bg-card border shadow-sm flex flex-col h-full">
+        <div className="lg:col-span-2 p-6 rounded-none bg-card border shadow-sm flex flex-col h-full">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="font-display text-lg font-semibold">Enrolment trend</h3>
               <p className="text-xs text-muted-foreground">Students per term, last 8 terms</p>
             </div>
             <div className="flex items-center gap-1 text-sm text-emerald-600 font-medium">
-              <TrendingUp className="size-4" /> +18.4%
+              <TrendingUp className="size-4" /> {stats.studentCount > 0 ? "+18.4%" : "0%"}
             </div>
           </div>
           <div className="flex-1 mt-auto">
@@ -140,7 +163,7 @@ export default function Overview() {
         </div>
 
         {/* Schedule */}
-        <div className="p-6 rounded-2xl bg-card border shadow-sm">
+        <div className="p-6 rounded-none bg-card border shadow-sm">
           <h3 className="font-display text-lg font-semibold">Today's schedule</h3>
           <p className="text-xs text-muted-foreground mb-4">Upcoming events</p>
           {schedule.length === 0 ? (
@@ -175,10 +198,10 @@ export default function Overview() {
           <Link
             key={href}
             href={href}
-            className="flex items-center justify-between p-4 rounded-xl bg-card border shadow-sm hover-lift group"
+            className="flex items-center justify-between p-4 rounded-none bg-card border shadow-sm hover-lift group"
           >
             <div className="flex items-center gap-3">
-              <div className="size-10 rounded-lg bg-primary/10 grid place-items-center shrink-0">
+              <div className="size-10 rounded-none bg-primary/10 grid place-items-center shrink-0">
                 <Icon className="size-5 text-primary" />
               </div>
               <span className="font-medium text-sm">{label}</span>
@@ -189,7 +212,7 @@ export default function Overview() {
       </div>
 
       {/* Recent students table */}
-      <div className="mt-6 p-6 rounded-2xl bg-card border shadow-sm">
+      <div className="mt-6 p-6 rounded-none bg-card border shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-display text-lg font-semibold">Recent enrolments</h3>
           <Button asChild variant="ghost" size="sm">

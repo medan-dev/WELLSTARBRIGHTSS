@@ -66,10 +66,10 @@ export default function TeacherOverview() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
         {/* Staff Notice Board */}
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
+        <div className="lg:col-span-2 bg-white rounded-none shadow-sm border border-gray-100 p-6 space-y-6">
           <div className="flex items-center justify-between pb-4 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-orange-50 text-orange-600 rounded-xl">
+              <div className="p-2.5 bg-orange-50 text-orange-600 rounded-none">
                 <Megaphone className="w-5 h-5" />
               </div>
               <div>
@@ -77,7 +77,7 @@ export default function TeacherOverview() {
                 <p className="text-xs text-gray-500">Administrative communications, academic performance briefs, and events</p>
               </div>
             </div>
-            <span className="text-xs font-bold text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full border border-orange-100">
+            <span className="text-xs font-bold text-orange-700 bg-orange-50 px-2.5 py-1 rounded-none border border-orange-100">
               {notices.length} Active
             </span>
           </div>
@@ -94,7 +94,7 @@ export default function TeacherOverview() {
               return (
                 <div 
                   key={notice.id} 
-                  className={`rounded-xl border p-5 transition-all ${
+                  className={`rounded-none border p-5 transition-all ${
                     notice.pinned 
                       ? "bg-amber-50/40 border-amber-200 ring-1 ring-amber-200/60" 
                       : notice.type === "PERFORMANCE"
@@ -105,11 +105,11 @@ export default function TeacherOverview() {
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2">
                       {notice.pinned && (
-                        <span className="text-[10px] font-extrabold uppercase tracking-wider bg-orange-600 text-white px-2 py-0.5 rounded flex items-center gap-1 shadow-sm">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider bg-orange-600 text-white px-2 py-0.5 rounded-none flex items-center gap-1 shadow-sm">
                           <Pin className="w-3 h-3" /> PINNED
                         </span>
                       )}
-                      <span className="text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-orange-800 px-2.5 py-0.5 rounded-full">
+                      <span className="text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-orange-800 px-2.5 py-0.5 rounded-none">
                         {notice.category || notice.type}
                       </span>
                     </div>
@@ -121,7 +121,7 @@ export default function TeacherOverview() {
                   </h4>
 
                   {notice.mediaUrl && notice.mediaType !== "video" && (
-                    <div className="mb-3 rounded-lg overflow-hidden h-40 bg-gray-100">
+                    <div className="mb-3 rounded-none overflow-hidden h-40 bg-gray-100">
                       <img 
                         src={notice.mediaUrl} 
                         alt={notice.title} 
@@ -132,7 +132,7 @@ export default function TeacherOverview() {
                   )}
 
                   {notice.type === "EVENT" && (notice.eventDate || notice.location) && (
-                    <div className="p-3 bg-orange-50 border border-orange-100 rounded-lg text-xs space-y-1 mb-3 text-orange-950 font-medium">
+                    <div className="p-3 bg-orange-50 border border-orange-100 rounded-none text-xs space-y-1 mb-3 text-orange-950 font-medium">
                       {notice.eventDate && (
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4 text-orange-600" />
@@ -159,8 +159,8 @@ export default function TeacherOverview() {
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {studentHonorList.map((stu: any, idx: number) => (
-                          <div key={idx} className="p-2.5 bg-white rounded-lg border border-amber-100 shadow-xs flex items-center gap-2.5 text-xs">
-                            <img src={stu.avatar} alt={stu.name} className="w-8 h-8 rounded-full object-cover" />
+                          <div key={idx} className="p-2.5 bg-white rounded-none border border-amber-100 shadow-xs flex items-center gap-2.5 text-xs">
+                            <img src={stu.avatar} alt={stu.name} className="w-8 h-8 rounded-none object-cover" />
                             <div className="min-w-0 flex-1">
                               <p className="font-bold text-gray-900 truncate">{stu.name} ({stu.class})</p>
                               <p className="text-[10px] text-amber-800 font-semibold">{stu.badge} • {stu.score}</p>
@@ -175,7 +175,7 @@ export default function TeacherOverview() {
             })}
 
             {notices.length === 0 && (
-              <div className="text-center py-10 text-gray-400 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+              <div className="text-center py-10 text-gray-400 bg-gray-50 rounded-none border border-dashed border-gray-200">
                 <Bell className="w-8 h-8 text-gray-300 mx-auto mb-2" />
                 <p className="font-medium text-sm text-gray-600">No active staff notices</p>
               </div>
@@ -185,11 +185,11 @@ export default function TeacherOverview() {
 
         {/* Quick Actions & Guide */}
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
+          <div className="bg-white rounded-none shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
             <div>
               <h3 className="font-bold text-gray-900 text-base mb-4">Quick Tasks</h3>
               <div className="space-y-3">
-                <Link href="/teacher/dashboard/attendance" className="flex items-center gap-3 p-3 rounded-xl border border-gray-50 hover:bg-orange-50/40 hover:border-orange-100 transition-all group">
+                <Link href="/teacher/dashboard/attendance" className="flex items-center gap-3 p-3 rounded-none border border-gray-50 hover:bg-orange-50/40 hover:border-orange-100 transition-all group">
                   <ClipboardCheck className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
                   <div>
                     <div className="font-semibold text-sm text-gray-800">Track Attendance</div>
@@ -197,7 +197,7 @@ export default function TeacherOverview() {
                   </div>
                 </Link>
 
-                <Link href="/teacher/dashboard/results" className="flex items-center gap-3 p-3 rounded-xl border border-gray-50 hover:bg-orange-50/40 hover:border-orange-100 transition-all group">
+                <Link href="/teacher/dashboard/results" className="flex items-center gap-3 p-3 rounded-none border border-gray-50 hover:bg-orange-50/40 hover:border-orange-100 transition-all group">
                   <FileSpreadsheet className="w-5 h-5 text-amber-500 group-hover:scale-110 transition-transform" />
                   <div>
                     <div className="font-semibold text-sm text-gray-800">Enter Exam Marks</div>
@@ -205,7 +205,7 @@ export default function TeacherOverview() {
                   </div>
                 </Link>
 
-                <Link href="/teacher/dashboard/homework" className="flex items-center gap-3 p-3 rounded-xl border border-gray-50 hover:bg-orange-50/40 hover:border-orange-100 transition-all group">
+                <Link href="/teacher/dashboard/homework" className="flex items-center gap-3 p-3 rounded-none border border-gray-50 hover:bg-orange-50/40 hover:border-orange-100 transition-all group">
                   <PlusCircle className="w-5 h-5 text-orange-500 group-hover:scale-110 transition-transform" />
                   <div>
                     <div className="font-semibold text-sm text-gray-800">Assign Homework</div>

@@ -141,7 +141,7 @@ export function CampusSwitcher() {
         code: "",
         location: "",
         headteacher: "",
-        contactPhone: "+256 701 116 781",
+        contactPhone: "+256 758 611 414",
         contactEmail: "",
       });
     } catch (err: any) {
@@ -153,6 +153,16 @@ export function CampusSwitcher() {
 
   const isAtLimit = campuses.length >= maxLimit;
 
+  // In demo mode or single campus configuration, do not show complex multi-campus switcher
+  const isDemo =
+    typeof window !== "undefined" &&
+    (sessionStorage.getItem("ns_admin_demo") === "1" ||
+      campuses.length <= 1);
+
+  if (isDemo) {
+    return null;
+  }
+
   return (
     <>
       <DropdownMenu>
@@ -160,10 +170,10 @@ export function CampusSwitcher() {
           <Button
             variant="outline"
             size="sm"
-            className="h-10 px-3 bg-secondary/40 hover:bg-secondary border-border/80 text-foreground flex items-center gap-2.5 rounded-xl transition-all shadow-xs"
+            className="h-10 px-3 bg-secondary/40 hover:bg-secondary border-border/80 text-foreground flex items-center gap-2.5 rounded-none transition-all shadow-xs"
             disabled={loading}
           >
-            <div className="size-6 rounded-lg bg-primary/10 text-primary grid place-items-center">
+            <div className="size-6 rounded-none bg-primary/10 text-primary grid place-items-center">
               {activeCampusId === "ALL" ? (
                 <Layers className="size-3.5" />
               ) : (
@@ -190,7 +200,7 @@ export function CampusSwitcher() {
 
         <DropdownMenuContent
           align="start"
-          className="w-80 p-2 shadow-xl border-border bg-popover rounded-2xl"
+          className="w-80 p-2 shadow-xl border-border bg-popover rounded-none"
         >
           {/* Organization Banner */}
           <DropdownMenuLabel className="p-2 pb-1.5">
@@ -207,10 +217,10 @@ export function CampusSwitcher() {
           {/* Consolidated Group View */}
           <DropdownMenuItem
             onClick={() => handleSelectCampus("ALL")}
-            className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-secondary/70 focus:bg-secondary/70 transition-colors"
+            className="flex items-center justify-between p-2.5 rounded-none cursor-pointer hover:bg-secondary/70 focus:bg-secondary/70 transition-colors"
           >
             <div className="flex items-center gap-2.5">
-              <div className="size-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 grid place-items-center">
+              <div className="size-8 rounded-none bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 grid place-items-center">
                 <Layers className="size-4" />
               </div>
               <div>
@@ -237,11 +247,11 @@ export function CampusSwitcher() {
                 <DropdownMenuItem
                   key={campus.id}
                   onClick={() => handleSelectCampus(campus.id)}
-                  className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-secondary/70 focus:bg-secondary/70 transition-colors"
+                  className="flex items-center justify-between p-2.5 rounded-none cursor-pointer hover:bg-secondary/70 focus:bg-secondary/70 transition-colors"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
                     <div
-                      className={`size-8 rounded-lg grid place-items-center shrink-0 ${
+                      className={`size-8 rounded-none grid place-items-center shrink-0 ${
                         isSelected
                           ? "bg-primary text-primary-foreground font-bold shadow-xs"
                           : "bg-secondary text-secondary-foreground"
@@ -254,7 +264,7 @@ export function CampusSwitcher() {
                         <span className="truncate">{campus.name}</span>
                         <Badge
                           variant="secondary"
-                          className="text-[9px] py-0 px-1 font-mono font-bold shrink-0"
+                          className="text-[9px] py-0 px-1 font-mono font-bold shrink-0 rounded-none"
                         >
                           {campus.code}
                         </Badge>
@@ -290,7 +300,7 @@ export function CampusSwitcher() {
               </span>
             </div>
             {/* Visual Quota Progress Bar */}
-            <div className="w-full bg-secondary h-1.5 rounded-full overflow-hidden">
+            <div className="w-full bg-secondary h-1.5 rounded-none overflow-hidden">
               <div
                 className={`h-full transition-all duration-300 ${
                   isAtLimit
@@ -306,7 +316,7 @@ export function CampusSwitcher() {
             <Button
               variant="outline"
               size="sm"
-              className="w-full text-xs font-semibold rounded-xl h-8 gap-1.5 mt-1 border-dashed"
+              className="w-full text-xs font-semibold rounded-none h-8 gap-1.5 mt-1 border-dashed"
               disabled={isAtLimit}
               onClick={() => setIsCreateOpen(true)}
             >
@@ -319,9 +329,9 @@ export function CampusSwitcher() {
 
       {/* Add Campus Modal */}
       <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-        <DialogContent className="sm:max-w-[480px] rounded-3xl p-6 bg-card border-border">
+        <DialogContent className="sm:max-w-[480px] rounded-none p-6 bg-card border-border">
           <DialogHeader>
-            <div className="size-10 rounded-2xl bg-primary/10 text-primary grid place-items-center mb-2">
+            <div className="size-10 rounded-none bg-primary/10 text-primary grid place-items-center mb-2">
               <Building2 className="size-5" />
             </div>
             <DialogTitle className="text-lg font-bold">Register New Campus Branch</DialogTitle>
@@ -333,7 +343,7 @@ export function CampusSwitcher() {
 
           <form onSubmit={handleCreateSubmit} className="space-y-4 pt-2">
             {createError && (
-              <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
+              <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-none text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
                 <AlertCircle className="size-4 shrink-0" />
                 <span>{createError}</span>
               </div>

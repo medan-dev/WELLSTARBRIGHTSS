@@ -56,9 +56,9 @@ export function StatTile({
   };
 
   return (
-    <div className={`relative p-5 rounded-2xl bg-card border border-border/80 shadow-card hover-lift transition-all overflow-hidden group ${accentConfig.border}`}>
+    <div className={`relative p-5 rounded-none bg-card border border-border/80 shadow-card hover-lift transition-all overflow-hidden group ${accentConfig.border}`}>
       {/* Subtle Background Glow */}
-      <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${accentConfig.glow} rounded-full blur-2xl pointer-events-none`} />
+      <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${accentConfig.glow} rounded-none blur-2xl pointer-events-none`} />
 
       <div className="relative flex items-start justify-between gap-4">
         <div className="space-y-1">
@@ -76,7 +76,7 @@ export function StatTile({
         </div>
 
         {icon && (
-          <div className={`size-12 rounded-2xl ${accentConfig.bg} grid place-items-center shrink-0 shadow-xs group-hover:scale-110 transition-transform duration-300`}>
+          <div className={`size-12 rounded-none ${accentConfig.bg} grid place-items-center shrink-0 shadow-xs group-hover:scale-110 transition-transform duration-300`}>
             {icon}
           </div>
         )}
@@ -102,7 +102,7 @@ export function ChartBar({ data, height = 200 }: { data: { label: string; value:
         <div key={d.label} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
           <div className="w-full flex-1 flex items-end">
             <div
-              className="w-full rounded-t-xl bg-gradient-to-t from-primary/80 to-primary shadow-xs hover:brightness-110 transition-all duration-700"
+              className="w-full rounded-none bg-gradient-to-t from-primary/80 to-primary shadow-xs hover:brightness-110 transition-all duration-700"
               style={{
                 height: mounted ? `${(d.value / max) * 100}%` : "0%",
                 transitionDelay: `${i * 50}ms`,
@@ -131,7 +131,7 @@ export function PageHeader({
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
       <div className="space-y-1">
         {badge && (
-          <span className="inline-block text-[10px] font-extrabold uppercase tracking-wider bg-primary/10 text-primary px-2.5 py-0.5 rounded-full mb-1">
+          <span className="inline-block text-[10px] font-extrabold uppercase tracking-wider bg-primary/10 text-primary px-2.5 py-0.5 rounded-none mb-1">
             {badge}
           </span>
         )}

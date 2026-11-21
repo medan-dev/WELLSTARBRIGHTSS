@@ -55,19 +55,33 @@ export async function initializeDefaultSchoolAndCampus() {
 
   // 2. Ensure Primary Campus exists
   let campus = await prisma.campus.findFirst({
-    where: { code: "MUK-01" },
+    where: { OR: [{ code: "CAMP-01" }, { code: "MUK-01" }] },
   });
+
+  if (campus && (campus.code === "MUK-01" || campus.name.includes("Mukono") || campus.contactEmail?.includes("wellstar") || campus.contactEmail?.includes("mukono"))) {
+    campus = await prisma.campus.update({
+      where: { id: campus.id },
+      data: {
+        name: "Main Campus",
+        code: "CAMP-01",
+        location: "Central Educational Zone",
+        headteacher: "Campus Principal",
+        contactEmail: "campus@yourschool.com",
+        contactPhone: "+256 758 611 414",
+      },
+    });
+  }
 
   if (!campus) {
     campus = await prisma.campus.create({
       data: {
-        id: "camp_mukono_main",
+        id: "camp_main_01",
         schoolId: org.id,
-        name: "Main Campus (Senior & Boarding)",
-        code: "MUK-01",
+        name: "Main Campus",
+        code: "CAMP-01",
         location: "Central Educational Zone",
-        headteacher: "School Head & Principal",
-        contactEmail: "mukono@yourschool.com",
+        headteacher: "Campus Principal",
+        contactEmail: "campus@yourschool.com",
         contactPhone: "+256 758 611 414",
         status: "ACTIVE",
       },

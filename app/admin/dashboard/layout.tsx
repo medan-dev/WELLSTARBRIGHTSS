@@ -89,7 +89,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         )}
       >
         <div className={cn("p-6 flex items-center gap-3 border-b border-sidebar-border transition-all", collapsed ? "justify-center px-2" : "")}>
-          <div className="size-8 rounded-xl bg-primary text-primary-foreground font-black text-sm grid place-items-center shrink-0">
+          <div className="size-8 rounded-none bg-primary text-primary-foreground font-black text-sm grid place-items-center shrink-0">
             EX
           </div>
           {!collapsed && (
@@ -109,10 +109,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 onClick={() => setOpen(false)}
                 title={collapsed ? label : undefined}
                 className={cn(
-                  "flex items-center rounded-xl font-medium transition-all duration-200 group relative",
+                  "flex items-center rounded-none font-medium transition-all duration-200 group relative",
                   collapsed ? "justify-center p-3" : "gap-3 px-3 py-3 text-sm",
                   active
-                    ? "bg-primary text-primary-foreground shadow-md"
+                    ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                 )}
               >
@@ -127,7 +127,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Toggle Button for Desktop */}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="hidden lg:flex w-full items-center justify-center p-3 rounded-xl text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all duration-200"
+            className="hidden lg:flex w-full items-center justify-center p-3 rounded-none text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all duration-200"
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {collapsed ? <ChevronRight className="size-6" /> : (
@@ -141,7 +141,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             onClick={logout}
             title={collapsed ? "Sign out" : undefined}
             className={cn(
-              "flex items-center rounded-xl font-medium text-sidebar-foreground/80 hover:bg-red-500 hover:text-white transition-all duration-200",
+              "flex items-center rounded-none font-medium text-sidebar-foreground/80 hover:bg-red-500 hover:text-white transition-all duration-200",
               collapsed ? "justify-center p-3" : "gap-3 px-3 py-3 text-sm w-full"
             )}
           >
@@ -159,21 +159,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* Topbar */}
         <header className="sticky top-0 z-20 bg-background border-b border-border shadow-sm">
           <div className="flex items-center gap-4 px-4 lg:px-8 h-16">
-            <button className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-secondary transition-colors" onClick={() => setOpen(true)}>
+            <button className="lg:hidden p-2 -ml-2 rounded-none hover:bg-secondary transition-colors" onClick={() => setOpen(true)}>
               <Menu className="size-5" />
             </button>
             <CampusSwitcher />
             <div className="hidden md:flex relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-              <Input placeholder="Search students, teachers, classes…" className="pl-9 bg-secondary/50 border-none focus-visible:ring-1" />
+              <Input placeholder="Search students, teachers, classes…" className="pl-9 bg-secondary/50 border-none focus-visible:ring-1 rounded-none" />
             </div>
             <div className="ml-auto flex items-center gap-3">
               <Button variant="ghost" size="icon" onClick={toggleDark} aria-label="Toggle theme" className="rounded-full">
                 {dark ? <Sun className="size-5" /> : <Moon className="size-5" />}
               </Button>
               <NotificationCenter role="ADMIN" />
-              <div className="size-9 rounded-full bg-primary grid place-items-center text-primary-foreground text-sm font-bold shadow-md cursor-pointer hover:ring-2 ring-primary/30 transition-all">
-                NM
+              <div className="size-9 rounded-none bg-primary grid place-items-center text-primary-foreground text-xs font-bold shadow-sm cursor-pointer hover:ring-2 ring-primary/30 transition-all">
+                AD
               </div>
             </div>
           </div>
