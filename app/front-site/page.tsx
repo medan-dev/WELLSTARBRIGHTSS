@@ -30,23 +30,23 @@ import {
   Sparkles,
   ChevronDown,
   MessageSquare,
+  Sliders,
   Phone,
   Mail,
   MapPin,
-  Sliders,
-  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SiteLayout } from "@/components/site/SiteLayout";
 import { SectionDivider } from "@/components/ui/SectionDivider";
+import { siteContent as defaultSiteContent } from "@/components/admin/data";
+import { getSiteContent } from "../actions";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
+import heroImg from "@/assets/hero-campus.jpg";
+import aboutImg from "@/assets/about-students.jpg";
 import { useSchoolBrand } from "@/context/SchoolBrandContext";
 import { SchoolAutomationWizard } from "@/components/wizard/SchoolAutomationWizard";
 
-// Campus Fallback Images
-import heroImg from "@/assets/hero-campus.jpg";
-import aboutImg from "@/assets/about-students.jpg";
-
-function useCounter(target: number, duration = 1500, start = false) {
+function useCounterLocal(target: number, duration = 1500, start = false) {
   const [n, setN] = useState(0);
   useEffect(() => {
     if (!start) return;
@@ -75,39 +75,218 @@ function StatCard({
   icon?: any;
 }) {
   const [visible, setVisible] = useState(false);
-  const n = useCounter(value, 1600, visible);
+  const n = useCounterLocal(value, 1600, visible);
   return (
     <div
       ref={(el) => {
         if (!el || visible) return;
-        const io = new IntersectionObserver(
-          ([e]) => e.isIntersecting && setVisible(true),
-          { threshold: 0.4 }
-        );
+        const io = new IntersectionObserver(([e]) => e.isIntersecting && setVisible(true), {
+          threshold: 0.4,
+        });
         io.observe(el);
       }}
-      className="relative p-6 sm:p-7 rounded-none bg-card border border-border/80 shadow-sm hover-lift transition-all group text-center flex flex-col items-center justify-center space-y-2.5"
+      className="relative p-7 sm:p-8 rounded-3xl bg-card border border-border/80 shadow-card hover-lift transition-all group text-center flex flex-col items-center justify-center space-y-3"
     >
       {Icon && (
-        <div className="size-11 rounded-none bg-primary/10 text-primary grid place-items-center mb-1 group-hover:scale-105 transition-transform">
-          <Icon className="size-5" />
+        <div className="size-12 rounded-2xl bg-primary/10 text-primary grid place-items-center mb-1 group-hover:scale-105 transition-transform">
+          <Icon className="size-6" />
         </div>
       )}
-      <div className="font-display text-3xl sm:text-4xl font-black text-foreground tracking-tight">
+      <div className="font-display text-4xl sm:text-5xl font-extrabold text-foreground tracking-tight">
         {n.toLocaleString()}
         {suffix}
       </div>
-      <div className="text-[11px] sm:text-xs text-muted-foreground font-semibold uppercase tracking-wider">
+      <div className="text-xs sm:text-sm text-muted-foreground font-semibold uppercase tracking-wider">
         {label}
       </div>
     </div>
   );
 }
 
-export default function StandardCustomizableFrontSite() {
+function HeroTextAnimation({ brand }: { brand: any }) {
+  const text1 = "Where intellect meets ";
+  const text2 = "character ";
+  const text3 = "& innovation.";
+  const fullText = text1 + text2 + text3;
+
+  const [currentText, setCurrentText] = useState("");
+  const [isDone, setIsDone] = useState(false);
+
+  useEffect(() => {
+    let idx = 0;
+    const interval = setInterval(() => {
+      if (idx <= fullText.length) {
+        setCurrentText(fullText.substring(0, idx));
+        idx++;
+      } else {
+        setIsDone(true);
+        clearInterval(interval);
+      }
+    }, 35);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="min-h-[140px] sm:min-h-[180px] md:min-h-[220px] flex flex-col justify-center">
+      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/25 text-amber-300 text-xs font-semibold tracking-wide uppercase mb-3 backdrop-blur-md self-start">
+        <Sparkles className="size-3.5 text-amber-400" />
+        <span>UNEB Center #{brand.unebCenterNumber} • {brand.level}</span>
+      </div>
+      <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-tight leading-[1.12] m-0">
+        {brand.name}
+      </h1>
+      <p className="mt-4 text-base sm:text-lg md:text-xl text-slate-200/90 max-w-2xl font-normal leading-relaxed">
+        &ldquo;{brand.motto}&rdquo; — A modern secondary school combining academic excellence with moral character, practical innovation, and individual mentorship from Senior 1 to Senior 6.
+      </p>
+    </div>
+  );
+}
+
+export default function StandardOriginalFrontSite() {
   const { brand } = useSchoolBrand();
   const [wizardOpen, setWizardOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [content, setContent] = useState(defaultSiteContent);
+  const [activeReviewIdx, setActiveReviewIdx] = useState(0);
+  const [cardsToShow, setCardsToShow] = useState(3);
+  const [paused, setPaused] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [faqFilter, setFaqFilter] = useState<string>("All");
+
+  const socialReviews = [
+    {
+      id: 1,
+      platform: "google",
+      name: "Dr. Ronald Mukasa",
+      role: "Parent of S.4 Student",
+      avatar: "RM",
+      rating: 5,
+      date: "1 week ago",
+      content: `${brand.name} has been a blessing to our family. The focus on both academic excellence and strong moral character is exactly what secondary students need. Highly recommend it!`,
+    },
+    {
+      id: 2,
+      platform: "facebook",
+      name: "Sarah Namubiru",
+      role: "Alumni (Class of 2022)",
+      avatar: "SN",
+      rating: 5,
+      date: "3 days ago",
+      content: `So proud of my alma mater! The science labs and computer studies at ${brand.name} gave me the best head start for my software engineering degree at Makerere. Best secondary school!`,
+    },
+    {
+      id: 3,
+      platform: "twitter",
+      name: "Nsubuga Derrick",
+      role: "Local Leader",
+      avatar: "ND",
+      rating: 5,
+      date: "Yesterday",
+      content: `Congratulations to the ${brand.name} choir for winning the National Music & Drama school finals once again! The talent at this school is unmatched. 🌟🏆`,
+    },
+    {
+      id: 4,
+      platform: "whatsapp",
+      name: "Mrs. Nabirye Gloria",
+      role: "Parent of S.1 Student",
+      avatar: "NG",
+      rating: 5,
+      date: "Just now",
+      content: `Good evening teacher, I just wanted to thank you for the student portal updates. Being able to see my daughter's marks and attendance instantly helps me support her from home.`,
+    },
+    {
+      id: 5,
+      platform: "google",
+      name: "Eng. Samuel Kizza",
+      role: "Parent of S.6 Candidate",
+      avatar: "SK",
+      rating: 5,
+      date: "2 weeks ago",
+      content: `Excellent teachers and dedicated administration under ${brand.directorName}. The school facilities are modern and expanding. A top-tier secondary institution!`,
+    },
+    {
+      id: 6,
+      platform: "facebook",
+      name: "Apio Brenda",
+      role: "Parent & Business Owner",
+      avatar: "AB",
+      rating: 5,
+      date: "5 days ago",
+      content: `The discipline at ${brand.name} is outstanding. My son has grown so much in terms of self-responsibility and moral character.`,
+    },
+  ];
+
+  const relatableAnswers = [
+    {
+      category: "Academics & UNEB",
+      badge: "Academics & UNEB",
+      question: `Why is ${brand.name} ranked among top secondary institutions?`,
+      answer: `${brand.name} has earned its reputation through rigorous UNEB national examination preparation, dedicated subject specialists, modern science and ICT laboratories, and individual student progress tracking. Our students consistently attain Division 1 in both O-Level (UCE) and A-Level (UACE).`,
+    },
+    {
+      category: "Values & Character",
+      badge: "Holistic Ethos",
+      question: "How does the school shape student character, discipline, and spiritual growth?",
+      answer: "We practice holistic education—developing the Mind, Body, and Spirit together. We promote morning and evening assemblies, positive mentorship, wholesome lifestyle principles, zero tolerance for bullying, and leadership integrity.",
+    },
+    {
+      category: "Values & Character",
+      badge: "All Welcome",
+      question: `Are students from diverse religious and cultural backgrounds accepted at ${brand.name}?`,
+      answer: "Yes, warmly! We welcome students from all religious backgrounds and denominations. Every student who values a quiet, respectful, morally upright, and high-achieving environment is embraced as an equal member of our community.",
+    },
+    {
+      category: "Boarding & Campus",
+      badge: "Boarding & Safety",
+      question: `What are the boarding facilities, safety measures, and meals like at ${brand.location}?`,
+      answer: `Located in a serene and secure setting in ${brand.location}, our boarding section features clean, spacious separate dormitories, 24/7 security personnel, perimeter fencing, resident nurse, and healthy, balanced meals every day.`,
+    },
+    {
+      category: "Admissions & Fees",
+      badge: "Admissions & Intake",
+      question: "How do I apply for S.1 or S.5, and what are the admission requirements?",
+      answer: `Applications can be completed online on our website or by contacting admissions directly at ${brand.phone}. S.1 applicants present their PLE result slip, while S.5 applicants present their UCE result slip.`,
+    },
+    {
+      category: "Admissions & Fees",
+      badge: "Fees & Bursaries",
+      question: "How are school fees structured, and do you offer bursaries or scholarships?",
+      answer: `${brand.name} offers moderate, transparent fees that provide unmatched value for comprehensive secondary education. We support flexible installment plans for parents and provide merit-based bursaries for exceptional national performers.`,
+    },
+  ];
+
+  const getPlatformIcon = (platform: string) => {
+    switch (platform) {
+      case "google":
+        return (
+          <svg viewBox="0 0 24 24" className="size-5 shrink-0" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05" />
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335" />
+          </svg>
+        );
+      case "facebook":
+        return (
+          <svg viewBox="0 0 24 24" className="size-5 fill-[#1877F2] shrink-0" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+          </svg>
+        );
+      case "twitter":
+        return (
+          <svg viewBox="0 0 24 24" className="size-4.5 fill-foreground shrink-0 dark:fill-white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+          </svg>
+        );
+      case "whatsapp":
+        return (
+          <svg viewBox="0 0 24 24" className="size-5 fill-[#25D366] shrink-0" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.705 1.459h.006c6.56 0 11.89-5.336 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
 
   const programs = [
     {
@@ -148,472 +327,560 @@ export default function StandardCustomizableFrontSite() {
     },
   ];
 
-  const stages = [
-    {
-      name: "Lower Secondary (S.1–S.2)",
-      desc: "Comprehensive foundation under the Competence-Based Curriculum (CBC) with practical science and computing.",
-      tag: "Form 1 – Form 2",
-    },
-    {
-      name: "Upper Secondary (S.3–S.4)",
-      desc: "Specialized candidate mentorship for Uganda Certificate of Education (UCE) national examination distinction.",
-      tag: "Form 3 – Form 4 • UNEB UCE",
-    },
-    {
-      name: "Advanced Level (S.5–S.6)",
-      desc: "Rigorous Science & Arts combinations preparing learners for top university degree programmes.",
-      tag: "Senior 5 – Senior 6 • UNEB UACE",
-    },
-  ];
+  useEffect(() => {
+    getSiteContent().then((data: any) => {
+      if (data) setContent(data);
+    });
+  }, []);
 
-  const galleryPreview = [
-    { src: "/gallery/stem-lab.png", title: "Modern Science Laboratories" },
-    { src: "/gallery/computer-lab.png", title: "ICT & Computing Tech Hub" },
-    { src: "/gallery/library-study.png", title: "Main Academic Library" },
-    { src: "/gallery/sports-field.png", title: "Athletic & Sports Grounds" },
-  ];
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setCardsToShow(1);
+      } else if (window.innerWidth < 1024) {
+        setCardsToShow(2);
+      } else {
+        setCardsToShow(3);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const maxIdx = Math.max(0, socialReviews.length - cardsToShow);
+
+  useEffect(() => {
+    if (paused) return;
+    const t = setInterval(() => {
+      setActiveReviewIdx((prev) => (prev >= maxIdx ? 0 : prev + 1));
+    }, 6000);
+    return () => clearInterval(t);
+  }, [paused, maxIdx]);
+
+  const prevReview = () => {
+    setPaused(true);
+    setActiveReviewIdx((prev) => (prev === 0 ? maxIdx : prev - 1));
+  };
+
+  const nextReview = () => {
+    setPaused(true);
+    setActiveReviewIdx((prev) => (prev >= maxIdx ? 0 : prev + 1));
+  };
+
+  const statIcons = [Users, Award, Building, Trophy];
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans antialiased selection:bg-[#f26522] selection:text-white">
-      {/* ========================================================================= */}
-      {/* 1. TOP UTILITY BAR WITH SYSTEM WIZARD LAUNCHER                             */}
-      {/* ========================================================================= */}
-      <div className="bg-[#0b2256] text-white text-xs py-2 px-4 sm:px-8 border-b border-white/10">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2.5">
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className="font-mono text-[11px] bg-[#f26522] text-white px-2 py-0.5 font-bold">
-              STANDALONE SCHOOL FRONT SITE
-            </span>
-            <span className="text-slate-300 text-xs">
-              Center #{brand.unebCenterNumber} • {brand.location}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3 text-xs">
-            {/* Automation Wizard Launcher */}
-            <Button
-              type="button"
-              size="sm"
-              onClick={() => setWizardOpen(true)}
-              className="h-7 rounded-none text-[11px] bg-white text-[#0b2256] hover:bg-slate-100 font-bold gap-1 px-2.5 shadow-none"
-            >
-              <Sliders className="size-3 text-[#f26522]" />
-              <span>Customize School Wizard</span>
-            </Button>
-
-            <a
-              href={`tel:${brand.phone}`}
-              className="hidden md:flex items-center gap-1 text-slate-200 hover:text-white"
-            >
-              <Phone className="size-3 text-[#f26522]" />
-              <span>{brand.phone}</span>
-            </a>
-
-            <Link
-              href="/demo"
-              className="font-bold text-[#f26522] hover:underline flex items-center gap-1 pl-2 border-l border-white/20"
-            >
-              <span>Portal Login</span>
-              <ArrowRight className="size-3" />
-            </Link>
-          </div>
-        </div>
+    <SiteLayout>
+      {/* FLOATING SYSTEM WIZARD LAUNCHER PILL */}
+      <div className="fixed bottom-6 left-6 z-50">
+        <Button
+          type="button"
+          onClick={() => setWizardOpen(true)}
+          className="h-10 px-4 bg-[#0b2256] text-white hover:bg-[#081a42] rounded-full shadow-2xl border border-white/20 text-xs font-bold gap-2 hover:scale-105 transition-transform"
+        >
+          <Sliders className="size-4 text-[#f26522]" />
+          <span>System Setup Wizard</span>
+        </Button>
       </div>
 
-      {/* ========================================================================= */}
-      {/* 2. SCHOOL NAVBAR                                                          */}
-      {/* ========================================================================= */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
-          {/* Logo & School Name */}
-          <Link href="/front-site" className="flex items-center gap-3">
-            <div className="size-10 bg-[#0b2256] text-white font-black text-sm grid place-items-center rounded-none overflow-hidden border border-slate-300">
-              {brand.badgeUrl ? (
-                <img
-                  src={brand.badgeUrl}
-                  alt={brand.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                brand.badgeInitials || "DA"
-              )}
-            </div>
-            <div>
-              <div className="font-black text-base text-[#0b2256] tracking-tight uppercase leading-tight">
-                {brand.name}
-              </div>
-              <div className="text-[10px] text-slate-500 font-medium tracking-tight">
-                {brand.motto}
-              </div>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold text-slate-700">
-            <Link
-              href="/front-site"
-              className="px-3.5 py-2 text-[#0b2256] font-bold border-b-2 border-[#0b2256]"
-            >
-              Home
-            </Link>
-            <Link
-              href="/about"
-              className="px-3.5 py-2 hover:text-[#0b2256] transition-colors"
-            >
-              About
-            </Link>
-            <Link
-              href="/academics"
-              className="px-3.5 py-2 hover:text-[#0b2256] transition-colors"
-            >
-              Academics
-            </Link>
-            <Link
-              href="/admissions"
-              className="px-3.5 py-2 hover:text-[#0b2256] transition-colors"
-            >
-              Admissions
-            </Link>
-            <Link
-              href="/gallery"
-              className="px-3.5 py-2 hover:text-[#0b2256] transition-colors"
-            >
-              Photos & Campus Tour
-            </Link>
-            <Link
-              href="/contact"
-              className="px-3.5 py-2 hover:text-[#0b2256] transition-colors"
-            >
-              Contact
-            </Link>
-          </nav>
-
-          {/* Direct Login Button */}
-          <div className="flex items-center gap-2">
-            <Link href="/demo">
-              <Button
-                size="sm"
-                className="h-9 px-4 bg-[#0b2256] hover:bg-[#081a42] text-white text-xs font-bold rounded-none shadow-none"
-              >
-                Access Workstation
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      {/* ========================================================================= */}
-      {/* 3. HERO SECTION (WITH CAMPUS PHOTOS & BADGE)                              */}
-      {/* ========================================================================= */}
-      <section className="relative bg-slate-900 text-white min-h-[580px] flex items-center overflow-hidden">
-        {/* Real Campus Hero Image Background */}
-        <div className="absolute inset-0">
+      {/* CINEMATIC HERO WITH INCREASED HEIGHT & BALANCED SPACING */}
+      <section className="relative overflow-hidden bg-slate-950 min-h-[500px] md:min-h-[580px] flex items-center pt-16 pb-20 md:pt-24 md:pb-24">
+        {/* Background Image & Blocker Overlays */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
           <Image
             src={heroImg}
             alt="School Campus"
-            fill
-            className="object-cover opacity-35 filter brightness-95"
+            className="size-full object-cover scale-105"
+            placeholder="blur"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0b2256]/95 via-[#0b2256]/85 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/65 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+          <div className="absolute -top-32 -left-32 size-[600px] bg-blue-500/35 rounded-full blur-[130px] pointer-events-none" />
+          <div className="absolute top-0 right-1/4 size-[400px] bg-amber-200/20 rounded-full blur-[100px] pointer-events-none mix-blend-screen" />
+          <div className="absolute top-1/3 -right-32 size-[500px] bg-amber-400/25 rounded-full blur-[120px] pointer-events-none" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 py-20 lg:py-24 grid lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-8 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-white">
-              <Sparkles className="size-3.5 text-[#f26522]" />
-              <span>National Examination Center #{brand.unebCenterNumber} • {brand.level}</span>
-            </div>
+        <div className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 relative z-10">
+          <div className="max-w-3xl space-y-6">
+            <HeroTextAnimation brand={brand} />
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
-              {brand.name}
-            </h1>
+            <div className="pt-2 w-full max-w-sm sm:max-w-none flex flex-row items-center justify-between sm:justify-start sm:gap-4 animate-fade-up delay-200">
+              <Button
+                asChild
+                size="lg"
+                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-extrabold border-0 shadow-md hover-lift-sm h-12 px-6 sm:px-8 rounded-xl text-sm md:text-base justify-center text-center"
+              >
+                <Link href="/admissions" className="flex items-center justify-center">
+                  <span>Apply for Admission</span>
+                  <ArrowRight className="ml-1.5 sm:ml-2 size-4" />
+                </Link>
+              </Button>
 
-            <p className="text-base sm:text-lg text-slate-200 max-w-2xl leading-relaxed">
-              &ldquo;{brand.motto}&rdquo; — Nurturing academic rigor, holistic integrity, and transformative character through cutting-edge science labs, competence-based curriculum, and vibrant student life.
-            </p>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="bg-white/10 border-white/20 text-white hover:bg-white/20 h-12 px-6 sm:px-7 rounded-xl text-sm md:text-base backdrop-blur-md justify-center text-center"
+              >
+                <Link href="/about" className="flex items-center justify-center">
+                  <span>Discover {brand.name}</span>
+                </Link>
+              </Button>
 
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <Link href="/admissions">
-                <Button className="h-11 px-6 bg-[#f26522] hover:bg-[#d95316] text-white font-bold text-xs rounded-none shadow-none gap-2">
-                  <span>Enrol for 2026 Academic Year</span>
-                  <ArrowRight className="size-4" />
-                </Button>
-              </Link>
-              <Link href="/gallery">
-                <Button
-                  variant="outline"
-                  className="h-11 px-6 bg-white/10 hover:bg-white/20 text-white border-white/20 font-semibold text-xs rounded-none"
-                >
-                  Explore Campus Tour & Photos
-                </Button>
-              </Link>
               <Button
                 type="button"
-                variant="outline"
+                size="lg"
                 onClick={() => setWizardOpen(true)}
-                className="h-11 px-4 bg-white text-[#0b2256] hover:bg-slate-100 font-bold text-xs rounded-none border-none gap-1.5"
+                className="h-12 px-5 bg-white text-[#0b2256] hover:bg-slate-100 rounded-xl font-bold text-sm shadow-md gap-2"
               >
-                <Sliders className="size-3.5 text-[#f26522]" />
-                <span>Customization Wizard</span>
+                <Sliders className="size-4 text-[#f26522]" />
+                <span>Customize</span>
               </Button>
             </div>
           </div>
+        </div>
 
-          {/* Quick Info Badge Card on Right */}
-          <div className="lg:col-span-4 bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-none space-y-4 text-xs text-white">
-            <div className="flex items-center gap-3 border-b border-white/15 pb-3">
-              <div className="size-12 bg-white/20 grid place-items-center font-black text-sm">
-                {brand.badgeInitials || "DA"}
+        <SectionDivider position="bottom" fillColor="fill-background" />
+      </section>
+
+      {/* QUICK PORTAL ACCESS STRIP (ORIGINAL ROUNDED-3XL CARDS INTACT) */}
+      <section className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 -mt-4 relative z-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Student Card */}
+          <Link
+            href="/student"
+            className="p-7 rounded-3xl bg-card border border-border/80 shadow-card hover-lift transition-all group flex items-start gap-4"
+          >
+            <div className="p-3.5 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 group-hover:scale-105 transition-transform shrink-0">
+              <GraduationCap className="size-6" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <h3 className="font-display font-bold text-base text-foreground group-hover:text-blue-600 transition-colors">
+                  Student Portal
+                </h3>
+                <ArrowRight className="size-4 text-muted-foreground group-hover:text-blue-600 group-hover:translate-x-1 transition-all shrink-0" />
+              </div>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 leading-relaxed">
+                Check exam scores, class timetable, homework, and dining meal pass.
+              </p>
+            </div>
+          </Link>
+
+          {/* Teacher Card */}
+          <Link
+            href="/teacher"
+            className="p-7 rounded-3xl bg-card border border-border/80 shadow-card hover-lift transition-all group flex items-start gap-4"
+          >
+            <div className="p-3.5 rounded-2xl bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 group-hover:scale-105 transition-transform shrink-0">
+              <BookOpen className="size-6" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <h3 className="font-display font-bold text-base text-foreground group-hover:text-orange-600 transition-colors">
+                  Teacher Portal
+                </h3>
+                <ArrowRight className="size-4 text-muted-foreground group-hover:text-orange-600 group-hover:translate-x-1 transition-all shrink-0" />
+              </div>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 leading-relaxed">
+                Record attendance, enter exam marks, and assign class homework.
+              </p>
+            </div>
+          </Link>
+
+          {/* Admin Card */}
+          <Link
+            href="/admin"
+            className="p-7 rounded-3xl bg-card border border-border/80 shadow-card hover-lift transition-all group flex items-start gap-4"
+          >
+            <div className="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 group-hover:scale-105 transition-transform shrink-0">
+              <ShieldCheck className="size-6 text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <h3 className="font-display font-bold text-base text-foreground group-hover:text-primary transition-colors">
+                  Admin Console
+                </h3>
+                <ArrowRight className="size-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0" />
+              </div>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 leading-relaxed">
+                Manage student records, notice studio, admissions, and website.
+              </p>
+            </div>
+          </Link>
+        </div>
+      </section>
+
+      {/* STATS SECTION (ROUNDED CARDS) */}
+      <section className="relative overflow-hidden bg-secondary/20 py-20 md:py-24">
+        <SectionDivider position="top" fillColor="fill-background" flipY={true} />
+        <div className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 relative z-20">
+          <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
+            <p className="text-xs sm:text-sm font-bold tracking-widest uppercase text-primary">
+              By The Numbers
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight">
+              A Track Record of Proven Excellence
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 sm:gap-6">
+            <AnimatedSection delay={0} animation="scale-in">
+              <StatCard value={1240} label="Enrolled Students" suffix="+" icon={Users} />
+            </AnimatedSection>
+            <AnimatedSection delay={100} animation="scale-in">
+              <StatCard value={68} label="Teaching Faculty" suffix=" Staff" icon={Award} />
+            </AnimatedSection>
+            <AnimatedSection delay={200} animation="scale-in">
+              <StatCard value={99} label="UNEB Pass Distinction" suffix=".4%" icon={Building} />
+            </AnimatedSection>
+            <AnimatedSection delay={300} animation="scale-in">
+              <StatCard value={100} label="Digital Operations" suffix="%" icon={Trophy} />
+            </AnimatedSection>
+          </div>
+        </div>
+        <SectionDivider position="bottom" fillColor="fill-background" />
+      </section>
+
+      {/* ABOUT BLOCK (ROUNDED CARDS) */}
+      <section className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-12 md:py-16 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <AnimatedSection animation="slide-right">
+          <div className="relative">
+            <div className="relative rounded-3xl overflow-hidden shadow-elegant border border-border">
+              <Image
+                src={aboutImg}
+                alt="Students collaborating in classroom"
+                className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"
+                placeholder="blur"
+              />
+            </div>
+
+            {/* Floating Recognition Card */}
+            <div className="absolute -bottom-6 -right-6 bg-card/95 backdrop-blur-md border border-border/80 rounded-2xl p-5 shadow-elegant hidden md:flex items-center gap-3.5 animate-float">
+              <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600">
+                <Trophy className="size-7 text-amber-500" />
               </div>
               <div>
-                <div className="font-bold text-sm tracking-tight">{brand.name}</div>
-                <div className="text-[11px] text-slate-300 font-mono">UNEB Center #{brand.unebCenterNumber}</div>
+                <div className="font-display font-extrabold text-base text-foreground">Top Performing</div>
+                <div className="text-xs text-muted-foreground font-medium">{brand.location}</div>
               </div>
             </div>
-
-            <div className="space-y-2 text-[11px] text-slate-200">
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Curriculum:</span>
-                <span className="font-semibold text-right">Uganda CBC / UNEB</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Class Range:</span>
-                <span className="font-semibold">Senior 1 to Senior 6</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Enrollment Status:</span>
-                <span className="font-bold text-emerald-400">Open for Admissions</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Admissions Desk:</span>
-                <span className="font-semibold">{brand.phone}</span>
-              </div>
-            </div>
-
-            <Link href="/demo" className="block pt-2">
-              <Button className="w-full h-9 bg-white text-[#0b2256] hover:bg-slate-100 font-bold text-xs rounded-none shadow-none">
-                Open Administrative Workstation
-              </Button>
-            </Link>
           </div>
-        </div>
-      </section>
+        </AnimatedSection>
 
-      {/* ========================================================================= */}
-      {/* 4. INSTITUTIONAL METRICS                                                  */}
-      {/* ========================================================================= */}
-      <section className="py-12 bg-slate-50 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            <StatCard value={1240} label="Enrolled Students" suffix="+" icon={Users} />
-            <StatCard value={68} label="Expert Teaching Faculty" suffix=" Staff" icon={Award} />
-            <StatCard value={99} label="UNEB Pass Distinction" suffix=".4%" icon={Trophy} />
-            <StatCard value={100} label="Digital Campus Audit" suffix="%" icon={ShieldCheck} />
+        <AnimatedSection delay={200} className="space-y-6">
+          <div className="space-y-2">
+            <p className="text-xs sm:text-sm font-bold tracking-widest uppercase text-primary">
+              About {brand.name}
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+              A holistic school built for <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">character & intellect.</span>
+            </h2>
           </div>
-        </div>
-      </section>
 
-      {/* ========================================================================= */}
-      {/* 5. ACADEMIC CURRICULUM & STAGES                                           */}
-      {/* ========================================================================= */}
-      <section className="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
-        <div className="text-center max-w-3xl mx-auto space-y-2">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#f26522]">
-            ACADEMIC EXCELLENCE & UNEB STANDARDS
+          <p className="text-base text-muted-foreground leading-relaxed">
+            Founded with a vision to nurture future-ready, principled leaders, {brand.name} combines rigorous national curriculum standards with Christian values, practical innovation, and individual mentorship under {brand.directorName}.
           </p>
-          <h2 className="text-3xl sm:text-4xl font-black text-[#0b2256] tracking-tight">
-            Curriculum Structure at {brand.name}
-          </h2>
-          <p className="text-sm text-slate-600">
-            A comprehensive, competence-driven academic framework aligned with the Ministry of Education and UNEB guidelines.
-          </p>
-        </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {stages.map((st, i) => (
-            <div
-              key={i}
-              className="p-6 border border-slate-200 bg-white rounded-none shadow-xs hover:border-[#0b2256] transition-colors space-y-3"
-            >
-              <div className="text-[10px] font-mono font-bold text-[#f26522] tracking-wider uppercase">
-                {st.tag}
-              </div>
-              <h3 className="font-bold text-lg text-slate-900">{st.name}</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">{st.desc}</p>
-              <Link
-                href="/academics"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0b2256] hover:underline pt-2"
-              >
-                <span>Curriculum Details</span>
-                <ArrowRight className="size-3" />
-              </Link>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 6. CAMPUS PHOTO TOUR & FACILITIES                                         */}
-      {/* ========================================================================= */}
-      <section className="py-16 bg-slate-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-10">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div className="space-y-1">
-              <p className="text-xs font-bold uppercase tracking-widest text-[#f26522]">
-                LEARNING ENVIRONMENT & FACILITIES
-              </p>
-              <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
-                Explore the {brand.name} Campus
-              </h2>
-            </div>
-            <Link href="/gallery">
-              <Button
-                variant="outline"
-                className="h-9 px-4 bg-white/10 hover:bg-white/20 text-white border-white/20 text-xs font-bold rounded-none"
-              >
-                <span>View Full Photo Gallery</span>
-                <ArrowRight className="size-3.5 ml-1.5" />
-              </Button>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {galleryPreview.map((item, idx) => (
-              <div
-                key={idx}
-                className="group relative aspect-4/3 overflow-hidden bg-slate-800 border border-white/10"
-              >
-                <img
-                  src={item.src}
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-4">
-                  <div className="text-xs font-bold text-white tracking-tight">
-                    {item.title}
-                  </div>
+          <div className="grid sm:grid-cols-2 gap-3.5 pt-1">
+            {[
+              { icon: BookOpen, title: "O-Level & A-Level Curriculum" },
+              { icon: Users, title: "Dedicated Faculty Mentorship" },
+              { icon: Trophy, title: "Science & Innovation Labs" },
+              { icon: HeartHandshake, title: "Christian Moral Values" },
+            ].map(({ icon: Icon, title }) => (
+              <div key={title} className="flex items-center gap-3 p-4 rounded-2xl bg-secondary/60 border border-border/50">
+                <div className="size-9 rounded-xl bg-primary text-primary-foreground grid place-items-center shrink-0 shadow-xs">
+                  <Icon className="size-4" />
                 </div>
+                <div className="font-semibold text-xs sm:text-sm text-foreground">{title}</div>
               </div>
             ))}
           </div>
-        </div>
+
+          <div className="pt-2">
+            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-7 rounded-xl shadow-md hover-lift-sm">
+              <Link href="/about">
+                Explore Our Full Story <ArrowRight className="ml-2 size-4" />
+              </Link>
+            </Button>
+          </div>
+        </AnimatedSection>
       </section>
 
-      {/* ========================================================================= */}
-      {/* 7. HEAD OF SCHOOL MESSAGE                                                 */}
-      {/* ========================================================================= */}
-      <section className="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-8">
-        <div className="grid lg:grid-cols-12 gap-8 items-center p-8 sm:p-12 border border-slate-200 bg-slate-50/50">
-          <div className="lg:col-span-4">
-            <div className="aspect-square bg-slate-200 relative overflow-hidden border border-slate-300">
-              <Image
-                src={aboutImg}
-                alt={brand.directorName}
-                fill
-                className="object-cover"
-              />
+      {/* PROGRAMMES (ORIGINAL ROUNDED CARDS) */}
+      <section className="relative overflow-hidden bg-secondary/40 py-20 md:py-24">
+        <SectionDivider position="top" fillColor="fill-background" flipY={true} />
+        <div className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 relative z-20">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+            <div className="space-y-2">
+              <p className="text-xs sm:text-sm font-bold tracking-widest uppercase text-primary">
+                Curriculum & Pathways
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight">
+                Empowering every passion & discipline.
+              </h2>
+            </div>
+            <Button asChild variant="outline" className="rounded-xl border-border hover:bg-card">
+              <Link href="/academics">
+                View Academic Guide <ArrowRight className="ml-1.5 size-4" />
+              </Link>
+            </Button>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {programs.map(({ icon: Icon, title, desc, href }, i) => (
+              <AnimatedSection key={title} delay={i * 80} animation="fade-up">
+                <Link
+                  href={href}
+                  className="group relative p-8 rounded-3xl bg-card border border-border/80 shadow-card hover-lift transition-all overflow-hidden flex flex-col justify-between h-full space-y-6"
+                >
+                  <div className="space-y-4">
+                    <div className="size-13 rounded-2xl bg-primary/10 text-primary grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 shadow-xs">
+                      <Icon className="size-6" />
+                    </div>
+                    <h3 className="font-display text-xl font-bold text-foreground group-hover:text-primary transition-colors">{title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
+                  </div>
+                  <div className="pt-4 border-t border-border/50 flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-wider">
+                    <span>Learn more</span>
+                    <ArrowRight className="size-3.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+        <SectionDivider position="bottom" fillColor="fill-background" />
+      </section>
+
+      {/* TESTIMONIALS & SOCIAL PROOF CARDS */}
+      <section className="relative overflow-hidden w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-20 md:py-24 bg-gradient-to-b from-transparent to-secondary/15">
+        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
+          <p className="text-xs sm:text-sm font-bold tracking-widest uppercase text-primary">
+            Testimonials & Social Proof
+          </p>
+          <h2 className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight">
+            What parents, alumni & students are saying
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Hear from our community across Google, Facebook, Twitter, and WhatsApp about their experience at {brand.name}.
+          </p>
+        </div>
+
+        <AnimatedSection>
+          <div className="relative overflow-hidden w-full py-4 px-2">
+            <div
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${activeReviewIdx * (100 / cardsToShow)}%)` }}
+            >
+              {socialReviews.map((item) => {
+                const isGoogle = item.platform === "google";
+                const isFacebook = item.platform === "facebook";
+                const isTwitter = item.platform === "twitter";
+                const isWhatsapp = item.platform === "whatsapp";
+
+                let avatarBg = "bg-primary/10 text-primary";
+                if (isGoogle) avatarBg = "bg-red-500/10 text-red-600 dark:bg-red-500/20 dark:text-red-400";
+                if (isFacebook) avatarBg = "bg-blue-600/10 text-blue-600 dark:bg-blue-600/20 dark:text-blue-400";
+                if (isTwitter) avatarBg = "bg-slate-950/10 text-slate-950 dark:bg-white/10 dark:text-white";
+                if (isWhatsapp) avatarBg = "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400";
+
+                return (
+                  <div
+                    key={item.id}
+                    className="w-full md:w-1/2 lg:w-1/3 shrink-0 px-3 flex"
+                    onMouseEnter={() => setPaused(true)}
+                    onMouseLeave={() => setPaused(false)}
+                  >
+                    <div className="w-full flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-card border border-border/80 shadow-soft hover-lift transition-all group">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3">
+                            <div className={`size-11 rounded-2xl ${avatarBg} grid place-items-center font-display font-bold text-sm shrink-0 shadow-xs`}>
+                              {item.avatar}
+                            </div>
+                            <div className="text-left min-w-0">
+                              <h4 className="font-display font-bold text-sm sm:text-base text-foreground truncate">
+                                {item.name}
+                              </h4>
+                              <p className="text-[11px] font-semibold text-muted-foreground truncate">
+                                {item.role}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="p-2 rounded-xl bg-secondary/50 border border-border/40 shrink-0">
+                            {getPlatformIcon(item.platform)}
+                          </div>
+                        </div>
+
+                        <div className="relative text-left">
+                          {isWhatsapp ? (
+                            <div className="p-4.5 rounded-2xl bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-100/60 dark:border-emerald-900/40 text-xs sm:text-sm text-foreground relative">
+                              <p className="leading-relaxed whitespace-pre-wrap font-medium">&ldquo;{item.content}&rdquo;</p>
+                              <div className="mt-2.5 flex items-center justify-end gap-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">
+                                <span>WhatsApp Message</span>
+                                <span className="text-[11px]">✓✓</span>
+                              </div>
+                            </div>
+                          ) : isTwitter ? (
+                            <div className="p-4.5 rounded-2xl bg-slate-50/50 dark:bg-slate-900/40 border border-slate-100/80 dark:border-slate-800/80 text-xs sm:text-sm text-foreground">
+                              <p className="leading-relaxed">&ldquo;{item.content}&rdquo;</p>
+                              <div className="mt-2.5 flex items-center gap-1.5 text-[10px] text-sky-500 font-bold">
+                                <span>Twitter Feed</span>
+                                <span className="inline-block size-3 rounded-full bg-sky-500 text-white p-0.5 flex items-center justify-center text-[7px]">✓</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="space-y-2 text-xs sm:text-sm text-muted-foreground text-left">
+                              <div className="flex gap-0.5">
+                                {Array.from({ length: item.rating }).map((_, j) => (
+                                  <Star key={j} className="size-4 fill-amber-400 text-amber-400" />
+                                ))}
+                              </div>
+                              <p className="leading-relaxed text-foreground/90 font-medium font-display font-semibold">&ldquo;{item.content}&rdquo;</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="mt-5 pt-4 border-t border-border/40 flex items-center justify-between text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">
+                        <span>{item.date}</span>
+                        <span className="text-primary font-bold">Verified Review</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
-          <div className="lg:col-span-8 space-y-4">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#f26522]">
-              LEADERSHIP WELCOME
+          {/* Navigation Controls */}
+          <div className="mt-8 flex justify-center items-center gap-4">
+            <button
+              onClick={prevReview}
+              aria-label="Previous testimonial"
+              className="p-2.5 rounded-xl border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground transition-smooth"
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+            <div className="flex gap-2">
+              {Array.from({ length: maxIdx + 1 }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    setPaused(true);
+                    setActiveReviewIdx(i);
+                  }}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    i === activeReviewIdx ? "w-8 bg-primary" : "w-2 bg-border"
+                  }`}
+                  aria-label={`Reviews deck page ${i + 1}`}
+                />
+              ))}
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-[#0b2256] tracking-tight">
-              A Message from the {brand.directorTitle}
+            <button
+              onClick={nextReview}
+              aria-label="Next testimonial"
+              className="p-2.5 rounded-xl border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground transition-smooth"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+          </div>
+        </AnimatedSection>
+        <SectionDivider position="bottom" fillColor="fill-background" />
+      </section>
+
+      {/* RELATABLE SEO & PARENT QUESTIONS SECTION (ORIGINAL ACCORDIONS INTACT) */}
+      <section className="py-20 md:py-28 bg-muted/30 border-t border-border/60 relative overflow-hidden">
+        <AnimatedSection className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 max-w-5xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 text-xs font-bold tracking-wide uppercase">
+              <Sparkles className="size-3.5 text-amber-500" />
+              <span>Parent Guide • UNEB Center #{brand.unebCenterNumber}</span>
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
+              Relatable Answers to What Parents Ask Most
             </h2>
-            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
-              &ldquo;{brand.directorBio}&rdquo;
+            <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
+              Real questions parents and guardians ask when searching for academic excellence, moral values, and boarding security at {brand.name}.
             </p>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              At {brand.name}, our responsibility extends beyond delivering exceptional national examination grades. We build men and women of sound discipline, scientific aptitude, and moral leadership ready to shape society.
-            </p>
-
-            <div className="pt-2 border-t border-slate-200 flex items-center justify-between">
-              <div>
-                <div className="font-bold text-sm text-slate-900">{brand.directorName}</div>
-                <div className="text-xs text-slate-500">{brand.directorTitle} • {brand.name}</div>
-              </div>
-              <div className="font-serif italic text-sm text-slate-500 border-b border-slate-400">
-                Official Signature
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 8. FOOTER                                                                 */}
-      {/* ========================================================================= */}
-      <footer className="bg-[#0b2256] text-white py-12 px-4 sm:px-8 border-t border-white/10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-xs">
-          <div className="md:col-span-2 space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="size-8 bg-white/20 grid place-items-center font-bold text-xs">
-                {brand.badgeInitials || "DA"}
-              </div>
-              <div className="font-bold text-sm tracking-tight">{brand.name}</div>
-            </div>
-            <p className="text-slate-300 max-w-sm">
-              &ldquo;{brand.motto}&rdquo; — {brand.level}. Examination Center #{brand.unebCenterNumber}.
-            </p>
-            <div className="text-slate-400">
-              {brand.location}
-            </div>
           </div>
 
-          <div className="space-y-2">
-            <div className="font-bold text-white uppercase tracking-wider">Quick Navigation</div>
-            <ul className="space-y-1.5 text-slate-300">
-              <li><Link href="/front-site" className="hover:text-white">Home</Link></li>
-              <li><Link href="/about" className="hover:text-white">About the School</Link></li>
-              <li><Link href="/academics" className="hover:text-white">Academics & UNEB</Link></li>
-              <li><Link href="/admissions" className="hover:text-white">Admissions & Fees</Link></li>
-              <li><Link href="/gallery" className="hover:text-white">Photos & Campus Tour</Link></li>
-              <li><Link href="/contact" className="hover:text-white">Contact Administration</Link></li>
-            </ul>
+          <div className="space-y-4">
+            {relatableAnswers.map((item, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <div
+                  key={idx}
+                  className="border border-border/80 bg-card rounded-2xl overflow-hidden shadow-xs hover:border-amber-500/40 transition-all duration-200"
+                >
+                  <button
+                    onClick={() => setOpenFaq(isOpen ? null : idx)}
+                    className="w-full flex items-center justify-between p-5 sm:p-6 text-left gap-4 font-display font-bold text-foreground text-base sm:text-lg hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
+                    aria-expanded={isOpen}
+                  >
+                    <div className="flex items-start sm:items-center gap-3">
+                      <span className="shrink-0 size-7 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold text-xs flex items-center justify-center mt-0.5 sm:mt-0">
+                        Q{idx + 1}
+                      </span>
+                      <span>{item.question}</span>
+                    </div>
+                    <ChevronDown
+                      className={`size-5 shrink-0 text-muted-foreground transition-transform duration-300 ${
+                        isOpen ? "rotate-180 text-amber-500" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {isOpen && (
+                    <div className="px-5 sm:px-6 pb-6 pt-0 animate-in fade-in-50 duration-200">
+                      <div className="pt-2 border-t border-border/50 text-muted-foreground text-sm sm:text-base leading-relaxed space-y-3">
+                        <p>{item.answer}</p>
+                        <div className="flex items-center gap-2 pt-2 text-xs font-semibold text-amber-600 dark:text-amber-400">
+                          <CheckCircle2 className="size-4 shrink-0" />
+                          <span>Verified information for {brand.name}, {brand.location}.</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
-          <div className="space-y-2">
-            <div className="font-bold text-white uppercase tracking-wider">School Administration</div>
-            <div className="space-y-1 text-slate-300">
-              <div>Phone: {brand.phone}</div>
-              <div>Email: {brand.email}</div>
-              <div>WhatsApp: {brand.whatsapp}</div>
+          {/* Direct Help Callout Banner */}
+          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+            <div className="space-y-1">
+              <h3 className="font-display font-extrabold text-lg sm:text-xl text-foreground">
+                Still have a specific question about your child?
+              </h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                Our Admissions Office is online right now to guide you on vacancies, fees, and requirements.
+              </p>
             </div>
-            <div className="pt-2">
-              <Button
-                size="sm"
-                onClick={() => setWizardOpen(true)}
-                className="h-8 rounded-none text-xs bg-white text-[#0b2256] hover:bg-slate-100 font-bold"
+            <div className="flex items-center gap-3 shrink-0">
+              <a
+                href={`https://wa.me/${brand.whatsapp.replace(/[^0-9]/g, "")}`}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#25D366] text-white font-bold text-xs sm:text-sm hover:opacity-90 shadow-sm"
               >
-                <Sliders className="size-3 mr-1 text-[#f26522]" />
-                Customize School
-              </Button>
+                <span>Chat on WhatsApp</span>
+                <ArrowRight className="size-4" />
+              </a>
             </div>
           </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto pt-8 mt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
-          <div>
-            © 2026 {brand.name}. All rights reserved.
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/demo" className="text-slate-300 hover:text-white">Administrative Portal</Link>
-            <span>•</span>
-            <Link href="/teacher" className="text-slate-300 hover:text-white">Teacher Gradebook</Link>
-            <span>•</span>
-            <Link href="/student" className="text-slate-300 hover:text-white">Student Portal</Link>
-          </div>
-        </div>
-      </footer>
+        </AnimatedSection>
+      </section>
 
       {/* System Automation Wizard Modal */}
       <SchoolAutomationWizard
         isOpen={wizardOpen}
         onClose={() => setWizardOpen(false)}
       />
-    </div>
+    </SiteLayout>
   );
 }
