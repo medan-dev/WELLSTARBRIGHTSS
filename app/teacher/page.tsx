@@ -8,18 +8,16 @@ import edurexaHorizontal from "@/assets/edurexa-horizontal.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Eye, EyeOff, Globe, ArrowRight, Sliders } from "lucide-react";
+import { Eye, EyeOff, Globe } from "lucide-react";
 import { loginTeacherAction } from "@/lib/auth-actions";
-import { SchoolAutomationWizard } from "@/components/wizard/SchoolAutomationWizard";
 
 export default function TeacherLogin() {
   const router = useRouter();
   const [email, setEmail] = useState("teacher@yourschool.com");
-  const [password, setPassword] = useState("password123");
+  const [password, setPassword] = useState("demo1234");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [showWizard, setShowWizard] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<string>("senior");
+  const [selectedRole, setSelectedRole] = useState<"senior" | "science" | "humanities">("senior");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,37 +25,36 @@ export default function TeacherLogin() {
 
     try {
       const res = await loginTeacherAction(email, password);
-
-      if (!res.success || !res.user) {
-        throw new Error(res.error || "Invalid password or email.");
-      }
-
-      sessionStorage.setItem("ns_teacher_id", res.user.id);
-      sessionStorage.setItem("ns_teacher_name", res.user.name);
-
-      toast.success(`Welcome back, ${res.user.name}!`);
-      router.push("/teacher/dashboard");
-    } catch (err: any) {
-      toast.error(err?.message || "Invalid credentials. Please check your credentials.");
-    } finally {
       setLoading(false);
+
+      if (res.success && res.user) {
+        sessionStorage.setItem("ns_teacher_id", res.user.id);
+        sessionStorage.setItem("ns_teacher_name", res.user.name);
+        toast.success(`Welcome back, ${res.user.name}!`);
+        router.push("/teacher/dashboard");
+      } else {
+        toast.error(res.error || "Invalid staff email or password. Please try again.");
+      }
+    } catch {
+      setLoading(false);
+      toast.error("Authentication server error. Please try again.");
     }
   };
 
-  const handleAutofillDemo = (teacherType: "senior" | "science" | "humanities" = "senior") => {
-    setSelectedRole(teacherType);
-    if (teacherType === "science") {
-      setEmail("science@yourschool.com");
-      setPassword("password123");
-      toast.success("Loaded Science Faculty credentials");
-    } else if (teacherType === "humanities") {
-      setEmail("humanities@yourschool.com");
-      setPassword("password123");
-      toast.success("Loaded Humanities Faculty credentials");
-    } else {
+  const handleAutofillDemo = (type: "senior" | "science" | "humanities") => {
+    setSelectedRole(type);
+    if (type === "senior") {
       setEmail("teacher@yourschool.com");
-      setPassword("password123");
-      toast.success("Loaded Senior Faculty credentials");
+      setPassword("demo1234");
+      toast.success("Senior Faculty selected (@yourschool.com)");
+    } else if (type === "science") {
+      setEmail("science@yourschool.com");
+      setPassword("demo1234");
+      toast.success("Science Faculty selected (@yourschool.com)");
+    } else {
+      setEmail("humanities@yourschool.com");
+      setPassword("demo1234");
+      toast.success("Humanities Faculty selected (@yourschool.com)");
     }
   };
 
@@ -72,31 +69,12 @@ export default function TeacherLogin() {
             priority
           />
         </Link>
-        <div className="flex items-center gap-2.5">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setShowWizard(true)}
-            className="h-8 rounded-none text-xs gap-1.5 border-slate-300 hover:bg-slate-50 text-slate-800"
-          >
-            <Sliders className="size-3.5 text-[#f26522]" />
-            <span>System Wizard</span>
-          </Button>
-          <Link
-            href="/front-site"
-            className="inline-flex items-center gap-1.5 h-8 px-3 border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold rounded-none transition-colors"
-          >
-            <Globe className="size-3.5 text-[#0b2256]" />
-            <span>Front Site View</span>
-          </Link>
-          <Link
-            href="/"
-            className="text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors hidden sm:inline"
-          >
-            ← Return to Website
-          </Link>
-        </div>
+        <Link
+          href="/"
+          className="text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors"
+        >
+          ← Return to Website
+        </Link>
       </header>
 
       <main className="flex-1 flex items-center justify-center px-4 py-8">
@@ -149,38 +127,24 @@ export default function TeacherLogin() {
               />
             </div>
 
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full h-10 bg-[#0b2256] hover:bg-[#081a42] text-white font-semibold text-xs rounded-none shadow-none transition-colors mt-2"
-            >
-              {loading ? "Logging in..." : "Login"}
-            </Button>
+            {/* Flexible Action Buttons with Identical Height and Design */}
+            <div className="flex flex-col sm:flex-row items-center gap-2.5 pt-2">
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full sm:flex-1 h-10 bg-[#0b2256] hover:bg-[#081a42] text-white font-semibold text-xs rounded-none shadow-none transition-colors flex items-center justify-center gap-1.5"
+              >
+                {loading ? "Logging in..." : "Login"}
+              </Button>
 
-            <Link
-              href="/front-site"
-              className="w-full flex items-center justify-between py-2.5 px-3 border border-slate-200 hover:border-slate-400 bg-slate-50/80 hover:bg-slate-100 text-xs text-slate-700 rounded-none transition-colors group"
-            >
-              <span className="flex items-center gap-2">
+              <Link
+                href="/front-site"
+                className="w-full sm:flex-1 h-10 inline-flex items-center justify-center gap-2 border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold rounded-none transition-colors"
+              >
                 <Globe className="size-3.5 text-[#0b2256]" />
-                <span className="font-semibold text-slate-900">Front Site View</span>
-                <span className="text-[11px] text-slate-500">• Standard School Website</span>
-              </span>
-              <ArrowRight className="size-3 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-
-            <button
-              type="button"
-              onClick={() => setShowWizard(true)}
-              className="w-full flex items-center justify-between py-2 px-3 border border-dashed border-slate-300 hover:border-slate-500 bg-white text-xs text-slate-600 rounded-none transition-colors group"
-            >
-              <span className="flex items-center gap-2">
-                <Sliders className="size-3.5 text-[#f26522]" />
-                <span className="font-semibold text-slate-800">System Setup Wizard</span>
-                <span className="text-[10px] text-slate-400">• Customize School & Badge</span>
-              </span>
-              <ArrowRight className="size-3 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-            </button>
+                <span>Front Site View</span>
+              </Link>
+            </div>
           </form>
 
           {/* Quick Select Buttons Below Form */}
@@ -188,14 +152,14 @@ export default function TeacherLogin() {
             <div className="text-[11px] font-medium text-slate-400">
               Quick select faculty:
             </div>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => handleAutofillDemo("senior")}
-                className={`text-xs px-2.5 py-1.5 border rounded-none transition-colors ${
+                className={`flex-1 min-w-[90px] h-9 text-xs px-3 border rounded-none transition-colors flex items-center justify-center ${
                   selectedRole === "senior"
-                    ? "bg-[#0b2256] text-white border-[#0b2256] font-medium"
-                    : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
+                    ? "bg-[#0b2256] text-white border-[#0b2256] font-semibold"
+                    : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200 font-medium"
                 }`}
               >
                 Senior Faculty
@@ -204,10 +168,10 @@ export default function TeacherLogin() {
               <button
                 type="button"
                 onClick={() => handleAutofillDemo("science")}
-                className={`text-xs px-2.5 py-1.5 border rounded-none transition-colors ${
+                className={`flex-1 min-w-[90px] h-9 text-xs px-3 border rounded-none transition-colors flex items-center justify-center ${
                   selectedRole === "science"
-                    ? "bg-[#0b2256] text-white border-[#0b2256] font-medium"
-                    : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
+                    ? "bg-[#0b2256] text-white border-[#0b2256] font-semibold"
+                    : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200 font-medium"
                 }`}
               >
                 Science & Math
@@ -216,10 +180,10 @@ export default function TeacherLogin() {
               <button
                 type="button"
                 onClick={() => handleAutofillDemo("humanities")}
-                className={`text-xs px-2.5 py-1.5 border rounded-none transition-colors ${
+                className={`flex-1 min-w-[90px] h-9 text-xs px-3 border rounded-none transition-colors flex items-center justify-center ${
                   selectedRole === "humanities"
-                    ? "bg-[#0b2256] text-white border-[#0b2256] font-medium"
-                    : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
+                    ? "bg-[#0b2256] text-white border-[#0b2256] font-semibold"
+                    : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200 font-medium"
                 }`}
               >
                 Humanities
@@ -247,12 +211,6 @@ export default function TeacherLogin() {
       <footer className="py-4 text-center text-xs text-slate-400 border-t border-slate-100">
         EDUREXA Ecosystem Platform
       </footer>
-
-      {/* School Setup & Customization Automation Wizard */}
-      <SchoolAutomationWizard
-        isOpen={showWizard}
-        onClose={() => setShowWizard(false)}
-      />
     </div>
   );
 }
