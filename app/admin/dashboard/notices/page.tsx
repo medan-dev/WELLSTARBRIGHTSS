@@ -234,7 +234,7 @@ export default function AdminNoticeBoard() {
       />
 
       {/* CREATOR STUDIO */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-none border border-gray-100 shadow-sm overflow-hidden">
         {/* Format Selector Header */}
         <div className="p-6 bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 text-white">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -247,11 +247,11 @@ export default function AdminNoticeBoard() {
             </div>
             
             {/* Format Tabs */}
-            <div className="flex flex-wrap gap-2 bg-black/20 p-1.5 rounded-xl backdrop-blur-sm">
+            <div className="flex flex-wrap gap-2 bg-black/20 p-1.5 rounded-none backdrop-blur-sm">
               <button
                 type="button"
                 onClick={() => setNoticeType("ANNOUNCEMENT")}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                className={`flex items-center gap-2 px-3 py-2 rounded-none text-xs font-bold transition-all ${
                   noticeType === "ANNOUNCEMENT" ? "bg-white text-orange-600 shadow-sm" : "text-white/80 hover:text-white"
                 }`}
               >
@@ -264,7 +264,7 @@ export default function AdminNoticeBoard() {
                   setTarget("PUBLIC");
                   setCategory("Event");
                 }}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                className={`flex items-center gap-2 px-3 py-2 rounded-none text-xs font-bold transition-all ${
                   noticeType === "EVENT" ? "bg-white text-orange-600 shadow-sm" : "text-white/80 hover:text-white"
                 }`}
               >
@@ -276,7 +276,7 @@ export default function AdminNoticeBoard() {
                   setNoticeType("PERFORMANCE");
                   setCategory("Academic");
                 }}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                className={`flex items-center gap-2 px-3 py-2 rounded-none text-xs font-bold transition-all ${
                   noticeType === "PERFORMANCE" ? "bg-white text-orange-600 shadow-sm" : "text-white/80 hover:text-white"
                 }`}
               >
@@ -289,7 +289,7 @@ export default function AdminNoticeBoard() {
                   setMediaType("video");
                   setCategory("Media");
                 }}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                className={`flex items-center gap-2 px-3 py-2 rounded-none text-xs font-bold transition-all ${
                   noticeType === "MEDIA" ? "bg-white text-orange-600 shadow-sm" : "text-white/80 hover:text-white"
                 }`}
               >
@@ -329,7 +329,7 @@ export default function AdminNoticeBoard() {
                 <select
                   value={target}
                   onChange={(e) => setTarget(e.target.value)}
-                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-sm font-medium focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded-none text-sm font-medium focus:ring-2 focus:ring-orange-500 focus:outline-none"
                 >
                   <option value="ALL">All (Public Website, Teachers & Students)</option>
                   <option value="PUBLIC">Public Website Only (Parents & Visitors)</option>
@@ -345,7 +345,7 @@ export default function AdminNoticeBoard() {
 
             {/* EVENT SPECIFIC FIELDS */}
             {noticeType === "EVENT" && (
-              <div className="p-4 bg-orange-50/50 border border-orange-100 rounded-xl space-y-4">
+              <div className="p-4 bg-orange-50/50 border border-orange-100 rounded-none space-y-4">
                 <div className="flex items-center gap-2 text-orange-800 font-bold text-sm">
                   <Calendar className="w-4 h-4 text-orange-600" /> Event Details
                 </div>
@@ -372,7 +372,7 @@ export default function AdminNoticeBoard() {
 
             {/* VIDEO MEDIA SPECIFIC FIELDS */}
             {noticeType === "MEDIA" && (
-              <div className="p-4 bg-blue-50/50 border border-blue-100 rounded-xl space-y-4">
+              <div className="p-4 bg-blue-50/50 border border-blue-100 rounded-none space-y-4">
                 <div className="flex items-center gap-2 text-blue-900 font-bold text-sm">
                   <Video className="w-4 h-4 text-blue-600" /> Video Spotlight Details
                 </div>
@@ -392,7 +392,7 @@ export default function AdminNoticeBoard() {
 
             {/* STUDENT PERFORMANCE BOARD BUILDER */}
             {noticeType === "PERFORMANCE" && (
-              <div className="p-5 bg-amber-50/60 border border-amber-200/70 rounded-xl space-y-5">
+              <div className="p-5 bg-amber-50/60 border border-amber-200/70 rounded-none space-y-5">
                 <div className="flex items-center justify-between border-b border-amber-200/50 pb-3">
                   <div className="flex items-center gap-2 text-amber-900 font-bold text-sm">
                     <Trophy className="w-5 h-5 text-amber-600" />
@@ -406,7 +406,7 @@ export default function AdminNoticeBoard() {
                 {/* List of Added Students */}
                 <div className="space-y-2.5 max-h-56 overflow-y-auto pr-1">
                   {studentsList.map((stu) => (
-                    <div key={stu.id} className="flex items-center justify-between gap-3 p-3 bg-white rounded-lg border border-amber-100 shadow-sm text-sm">
+                    <div key={stu.id} className="flex items-center justify-between gap-3 p-3 bg-white rounded-none border border-amber-100 shadow-sm text-sm">
                       <div className="flex items-center gap-3">
                         <img 
                           src={stu.avatar} 
@@ -446,7 +446,7 @@ export default function AdminNoticeBoard() {
                 </div>
 
                 {/* Add Student Sub-Form */}
-                <div className="bg-white/80 p-4 rounded-xl border border-amber-200/80 space-y-3">
+                <div className="bg-white/80 p-4 rounded-none border border-amber-200/80 space-y-3">
                   <h4 className="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
                     <Plus className="w-3.5 h-3.5 text-amber-600" /> Add Student Record
                   </h4>
@@ -550,7 +550,7 @@ export default function AdminNoticeBoard() {
                 placeholder="Write the full announcement or speech / remarks for students, teachers, or parents..."
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none leading-relaxed"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-none text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none leading-relaxed"
               />
             </div>
 
@@ -570,7 +570,7 @@ export default function AdminNoticeBoard() {
                     }}
                     className="text-sm"
                   />
-                  <label className="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-medium text-xs flex items-center gap-1.5 shrink-0 transition-colors">
+                  <label className="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-none font-medium text-xs flex items-center gap-1.5 shrink-0 transition-colors">
                     <Upload className="w-3.5 h-3.5" />
                     {uploading ? "Uploading..." : "Upload"}
                     <input type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
@@ -625,9 +625,9 @@ export default function AdminNoticeBoard() {
               <Eye className="w-3.5 h-3.5 text-orange-500" /> Live Interactive Preview
             </div>
             
-            <div className="flex-1 bg-gray-50/80 p-5 rounded-2xl border border-gray-200/80 flex flex-col justify-center">
+            <div className="flex-1 bg-gray-50/80 p-5 rounded-none border border-gray-200/80 flex flex-col justify-center">
               {/* Card Container */}
-              <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden relative">
+              <div className="bg-white rounded-none shadow-md border border-gray-100 overflow-hidden relative">
                 {pinned && (
                   <div className="bg-orange-600 text-white text-[10px] font-bold px-3 py-1 flex items-center justify-between">
                     <span className="flex items-center gap-1"><Pin className="w-3 h-3" /> PINNED NOTICE</span>
@@ -660,7 +660,7 @@ export default function AdminNoticeBoard() {
                   </h3>
 
                   {noticeType === "EVENT" && (
-                    <div className="p-3 bg-orange-50 rounded-lg text-xs space-y-1.5 text-orange-950 font-medium">
+                    <div className="p-3 bg-orange-50 rounded-none text-xs space-y-1.5 text-orange-950 font-medium">
                       {eventDate && (
                         <div className="flex items-center gap-2">
                           <Calendar className="w-3.5 h-3.5 text-orange-600" />
@@ -688,7 +688,7 @@ export default function AdminNoticeBoard() {
                       </div>
                       <div className="grid grid-cols-1 gap-2">
                         {studentsList.slice(0, 2).map((s) => (
-                          <div key={s.id} className="flex items-center gap-2.5 p-2 bg-amber-50/80 rounded-lg border border-amber-200 text-xs">
+                          <div key={s.id} className="flex items-center gap-2.5 p-2 bg-amber-50/80 rounded-none border border-amber-200 text-xs">
                             <img src={s.avatar} alt={s.name} className="w-7 h-7 rounded-full object-cover" />
                             <div className="flex-1 min-w-0">
                               <p className="font-bold text-gray-900 truncate">{s.name} ({s.class})</p>
@@ -727,7 +727,7 @@ export default function AdminNoticeBoard() {
               <button
                 key={f.id}
                 onClick={() => setActiveTabFilter(f.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-3 py-1.5 rounded-none text-xs font-semibold transition-all ${
                   activeTabFilter === f.id ? "bg-gray-900 text-white shadow-sm" : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
                 }`}
               >
@@ -738,12 +738,12 @@ export default function AdminNoticeBoard() {
         </div>
 
         {loading ? (
-          <div className="p-16 text-center text-gray-500 bg-white rounded-xl border border-gray-100">
+          <div className="p-16 text-center text-gray-500 bg-white rounded-none border border-gray-100">
             <Loader2 className="w-8 h-8 animate-spin text-orange-500 mx-auto mb-2" />
             <p className="text-sm">Loading active notices...</p>
           </div>
         ) : filteredNotices.length === 0 ? (
-          <div className="p-12 text-center text-gray-400 bg-white rounded-xl border border-dashed border-gray-300">
+          <div className="p-12 text-center text-gray-400 bg-white rounded-none border border-dashed border-gray-300">
             <Bell className="w-10 h-10 mx-auto text-gray-300 mb-2" />
             <h4 className="font-bold text-gray-700">No notices in this category</h4>
             <p className="text-xs text-gray-500">Publish a new notice above to make it visible across the system.</p>
@@ -761,7 +761,7 @@ export default function AdminNoticeBoard() {
               return (
                 <div 
                   key={notice.id} 
-                  className={`bg-white rounded-xl border shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden ${
+                  className={`bg-white rounded-none border shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden ${
                     notice.pinned ? "border-orange-300 ring-1 ring-orange-200" : "border-gray-100"
                   }`}
                 >
@@ -801,7 +801,7 @@ export default function AdminNoticeBoard() {
 
                     {/* EVENT SPECIFIC INFO */}
                     {notice.type === "EVENT" && (notice.eventDate || notice.location) && (
-                      <div className="p-2.5 bg-orange-50/70 border border-orange-100 rounded-lg text-xs space-y-1 text-orange-950 font-medium">
+                      <div className="p-2.5 bg-orange-50/70 border border-orange-100 rounded-none text-xs space-y-1 text-orange-950 font-medium">
                         {notice.eventDate && (
                           <div className="flex items-center gap-1.5">
                             <Calendar className="w-3.5 h-3.5 text-orange-600" />
@@ -819,7 +819,7 @@ export default function AdminNoticeBoard() {
 
                     {/* MEDIA EMBED OR LINK */}
                     {notice.type === "MEDIA" && notice.mediaUrl && (
-                      <div className="p-3 bg-blue-50/70 border border-blue-100 rounded-lg text-xs text-blue-900 flex items-center justify-between">
+                      <div className="p-3 bg-blue-50/70 border border-blue-100 rounded-none text-xs text-blue-900 flex items-center justify-between">
                         <span className="flex items-center gap-1.5 font-semibold">
                           <Video className="w-4 h-4 text-blue-600" /> Video Spotlight
                         </span>

@@ -72,7 +72,7 @@ export default function StudentTimetable() {
           return (
             <div 
               key={day} 
-              className={`rounded-2xl border bg-white shadow-sm flex flex-col overflow-hidden transition-all ${isToday ? 'ring-2 ring-blue-500 border-blue-200' : 'border-gray-100'}`}
+              className={`rounded-none border bg-white shadow-sm flex flex-col overflow-hidden transition-all ${isToday ? 'ring-2 ring-blue-500 border-blue-200' : 'border-gray-100'}`}
             >
               {/* Day Header */}
               <div className={`p-4 text-center font-bold border-b text-sm ${isToday ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-50 text-gray-900 border-gray-100'}`}>
@@ -85,7 +85,7 @@ export default function StudentTimetable() {
                 {slots.map((slot) => (
                   <div 
                     key={slot.id} 
-                    className="p-4 rounded-xl border border-gray-100 bg-white hover:border-blue-100 transition-colors shadow-sm"
+                    className="p-4 rounded-none border border-gray-100 bg-white hover:border-blue-100 transition-colors shadow-sm"
                   >
                     <div className="flex items-center gap-1.5 text-[10px] text-gray-400 font-semibold mb-2">
                       <Clock className="w-3.5 h-3.5 text-gray-300" />
@@ -107,7 +107,7 @@ export default function StudentTimetable() {
                 ))}
 
                 {slots.length === 0 && (
-                  <div className="h-full min-h-[150px] flex flex-col items-center justify-center text-center p-4 text-gray-400 text-xs italic bg-white rounded-xl border border-dashed border-gray-200">
+                  <div className="h-full min-h-[150px] flex flex-col items-center justify-center text-center p-4 text-gray-400 text-xs italic bg-white rounded-none border border-dashed border-gray-200">
                     <Calendar className="w-8 h-8 text-gray-300 mb-2" />
                     No classes scheduled.
                   </div>

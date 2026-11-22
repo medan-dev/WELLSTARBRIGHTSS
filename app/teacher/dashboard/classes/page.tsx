@@ -52,9 +52,9 @@ export default function MyClasses() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {classes.map((cls) => (
-          <div key={cls.id} className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div key={cls.id} className="bg-white p-6 rounded-none border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-orange-100 text-orange-600 rounded-lg">
+              <div className="p-3 bg-orange-100 text-orange-600 rounded-none">
                 <BookOpen className="w-6 h-6" />
               </div>
               <div>
@@ -67,7 +67,7 @@ export default function MyClasses() {
               <h4 className="text-sm font-semibold text-gray-700">Assigned Subjects:</h4>
               <div className="flex flex-wrap gap-2">
                 {cls.subjects?.map((sub: any) => (
-                  <span key={sub.id} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-md">
+                  <span key={sub.id} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-none">
                     {sub.name}
                   </span>
                 ))}
@@ -79,7 +79,7 @@ export default function MyClasses() {
           </div>
         ))}
         {classes.length === 0 && (
-          <div className="col-span-full p-8 text-center bg-white rounded-xl border border-dashed border-gray-300 text-gray-500">
+          <div className="col-span-full p-8 text-center bg-white rounded-none border border-dashed border-gray-300 text-gray-500">
             You have not been assigned to any classes yet.
           </div>
         )}

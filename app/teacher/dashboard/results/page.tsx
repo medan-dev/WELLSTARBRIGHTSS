@@ -104,11 +104,11 @@ export default function MarksEntry() {
         subtitle="Record exam and assessment scores for your students."
       />
 
-      <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex flex-wrap gap-4 items-end">
+      <div className="bg-white p-6 rounded-none border border-gray-100 shadow-sm flex flex-wrap gap-4 items-end">
         <div className="space-y-1 flex-1 min-w-[200px]">
           <label className="text-sm font-medium text-gray-700">Exam</label>
           <select 
-            className="w-full px-3 py-2 border rounded-lg bg-gray-50 outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full px-3 py-2 border rounded-none bg-gray-50 outline-none focus:ring-2 focus:ring-orange-500"
             value={selectedExam} onChange={(e) => setSelectedExam(e.target.value)}
           >
             <option value="">Select Exam</option>
@@ -119,7 +119,7 @@ export default function MarksEntry() {
         <div className="space-y-1 flex-1 min-w-[200px]">
           <label className="text-sm font-medium text-gray-700">Class</label>
           <select 
-            className="w-full px-3 py-2 border rounded-lg bg-gray-50 outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full px-3 py-2 border rounded-none bg-gray-50 outline-none focus:ring-2 focus:ring-orange-500"
             value={selectedClass} onChange={(e) => setSelectedClass(e.target.value)}
           >
             <option value="">Select Class</option>
@@ -130,7 +130,7 @@ export default function MarksEntry() {
         <div className="space-y-1 flex-1 min-w-[200px]">
           <label className="text-sm font-medium text-gray-700">Subject</label>
           <select 
-            className="w-full px-3 py-2 border rounded-lg bg-gray-50 outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full px-3 py-2 border rounded-none bg-gray-50 outline-none focus:ring-2 focus:ring-orange-500"
             value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)}
           >
             <option value="">Select Subject</option>
@@ -142,7 +142,7 @@ export default function MarksEntry() {
       {loading && <div className="p-8 text-center"><Loader2 className="w-8 h-8 animate-spin mx-auto text-orange-500" /></div>}
 
       {!loading && selectedClass && selectedSubject && selectedExam && students.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-none border border-gray-100 shadow-sm overflow-hidden">
           <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
             <h3 className="font-semibold text-gray-900">Student Roster</h3>
             <Button onClick={handleSaveAll} disabled={saving} className="bg-orange-600 hover:bg-orange-700">
@@ -180,7 +180,7 @@ export default function MarksEntry() {
       )}
       
       {!loading && selectedClass && selectedSubject && selectedExam && students.length === 0 && (
-        <div className="p-8 text-center text-gray-500 bg-white rounded-xl border border-dashed border-gray-300">
+        <div className="p-8 text-center text-gray-500 bg-white rounded-none border border-dashed border-gray-300">
           No students found in this class.
         </div>
       )}

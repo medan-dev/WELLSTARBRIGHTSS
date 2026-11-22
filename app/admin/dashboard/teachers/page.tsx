@@ -164,10 +164,10 @@ export default function TeachersPage() {
       {/* Add subject modal */}
       {showSubjectAdd && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-card rounded-2xl border shadow-xl p-8 w-full max-w-md animate-scale-in">
+          <div className="bg-card rounded-none border shadow-xl p-8 w-full max-w-md animate-scale-in">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-xl font-bold">Add dynamic subject</h2>
-              <button onClick={() => setShowSubjectAdd(false)} className="p-2 rounded-lg hover:bg-secondary"><X className="size-4" /></button>
+              <button onClick={() => setShowSubjectAdd(false)} className="p-2 rounded-none hover:bg-secondary"><X className="size-4" /></button>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
               Subjects added here will instantly appear in the Attendance Tracker dropdowns for roll calls.
@@ -191,10 +191,10 @@ export default function TeachersPage() {
       {/* Add teacher modal */}
       {showAdd && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-card rounded-2xl border shadow-xl p-8 w-full max-w-md animate-scale-in max-h-screen overflow-y-auto">
+          <div className="bg-card rounded-none border shadow-xl p-8 w-full max-w-md animate-scale-in max-h-screen overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-xl font-bold">Add teacher</h2>
-              <button onClick={() => setShowAdd(false)} className="p-2 rounded-lg hover:bg-secondary"><X className="size-4" /></button>
+              <button onClick={() => setShowAdd(false)} className="p-2 rounded-none hover:bg-secondary"><X className="size-4" /></button>
             </div>
             <div className="space-y-4">
               <div>
@@ -213,7 +213,7 @@ export default function TeachersPage() {
                 <Label htmlFor="tsubject">Primary Subject</Label>
                 <select 
                   id="tsubject"
-                  className="w-full mt-1.5 border rounded-md px-3 py-2 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full mt-1.5 border rounded-none px-3 py-2 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
                   value={newTeacher.subjectId}
                   onChange={(e) => setNewTeacher((p) => ({ ...p, subjectId: e.target.value }))}
                 >
@@ -225,7 +225,7 @@ export default function TeachersPage() {
               </div>
               <div>
                 <Label>Assigned Classes (for Attendance)</Label>
-                <div className="mt-2 space-y-2 max-h-32 overflow-y-auto border p-2 rounded-md">
+                <div className="mt-2 space-y-2 max-h-32 overflow-y-auto border p-2 rounded-none">
                   {classes.map(c => (
                     <label key={c.id} className="flex items-center gap-2 text-sm">
                       <input 
@@ -258,10 +258,10 @@ export default function TeachersPage() {
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.map((t) => (
-          <div key={t.id} className="p-5 rounded-2xl bg-card border shadow-sm hover-lift flex flex-col">
+          <div key={t.id} className="p-5 rounded-none bg-card border shadow-sm hover-lift flex flex-col">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
-                <div className="size-12 rounded-xl bg-primary grid place-items-center text-primary-foreground font-bold shadow-sm shrink-0">
+                <div className="size-12 rounded-none bg-primary grid place-items-center text-primary-foreground font-bold shadow-sm shrink-0">
                   {t.name.split(" ").map((n: string) => n[0]).join("").slice(0, 2)}
                 </div>
                 <div className="min-w-0 flex-1">
@@ -301,17 +301,28 @@ export default function TeachersPage() {
           </div>
         ))}
         {filtered.length === 0 && (
-          <div className="col-span-full text-center py-16 text-muted-foreground">No teachers match your search.</div>
+          <div className="col-span-full text-center py-16 text-muted-foreground border border-dashed rounded-none bg-card">
+            <div className="max-w-xs mx-auto space-y-3">
+              <BookOpen className="size-8 mx-auto text-muted-foreground/40" />
+              <div className="text-sm font-medium text-foreground">No faculty members added yet</div>
+              <p className="text-xs text-muted-foreground">
+                Add teaching faculty and assign them to departments, subjects, and classroom rosters.
+              </p>
+              <Button onClick={() => setShowAdd(true)} size="sm" className="rounded-none bg-primary text-primary-foreground text-xs">
+                <Plus className="size-3.5 mr-1.5" /> Add First Teacher
+              </Button>
+            </div>
+          </div>
         )}
       </div>
 
       {/* Edit teacher modal */}
       {editingTeacher && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-card rounded-2xl border shadow-xl p-8 w-full max-w-md animate-scale-in max-h-screen overflow-y-auto">
+          <div className="bg-card rounded-none border shadow-xl p-8 w-full max-w-md animate-scale-in max-h-screen overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-xl font-bold">Edit Teacher</h2>
-              <button onClick={() => setEditingTeacher(null)} className="p-2 rounded-lg hover:bg-secondary"><X className="size-4" /></button>
+              <button onClick={() => setEditingTeacher(null)} className="p-2 rounded-none hover:bg-secondary"><X className="size-4" /></button>
             </div>
             <div className="space-y-4">
               <div>
@@ -330,7 +341,7 @@ export default function TeachersPage() {
                 <Label htmlFor="esubject">Primary Subject</Label>
                 <select 
                   id="esubject"
-                  className="w-full mt-1.5 border rounded-md px-3 py-2 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full mt-1.5 border rounded-none px-3 py-2 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
                   value={editForm.subjectId}
                   onChange={(e) => setEditForm(p => ({ ...p, subjectId: e.target.value }))}
                 >
@@ -342,7 +353,7 @@ export default function TeachersPage() {
               </div>
               <div>
                 <Label>Assigned Classes (for Attendance)</Label>
-                <div className="mt-2 space-y-2 max-h-32 overflow-y-auto border p-2 rounded-md">
+                <div className="mt-2 space-y-2 max-h-32 overflow-y-auto border p-2 rounded-none">
                   {classes.map(c => (
                     <label key={c.id} className="flex items-center gap-2 text-sm">
                       <input 

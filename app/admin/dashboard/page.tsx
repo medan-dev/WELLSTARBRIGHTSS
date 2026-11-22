@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Users, GraduationCap, BookOpen, TrendingUp, Calendar, Bell, ArrowRight, FileText, Globe } from "lucide-react";
+import { Users, GraduationCap, BookOpen, TrendingUp, Calendar, Bell, ArrowRight, FileText, Globe, Plus } from "lucide-react";
 import Link from "next/link";
 import { PageHeader, StatTile, ChartBar } from "@/components/admin/Widgets";
 import { toast } from "sonner";
@@ -76,7 +76,7 @@ export default function Overview() {
           {active.map((n) => (
             <div
               key={n.id}
-              className={`flex items-center justify-between gap-3 px-4 py-3 rounded-xl border text-sm animate-fade-in ${
+              className={`flex items-center justify-between gap-3 px-4 py-3 rounded-none border text-sm animate-fade-in ${
                 n.type === "warning" ? "bg-amber-500/5 border-amber-500/20 text-amber-700" :
                 n.type === "alert" ? "bg-red-500/5 border-red-500/20 text-red-700" :
                 "bg-primary/5 border-primary/20 text-primary"
@@ -131,6 +131,67 @@ export default function Overview() {
             accent="warning"
             icon={<Bell className="size-5" />}
           />
+        </div>
+      )}
+
+      {/* Zero-Data Academy Setup Guidance */}
+      {stats.studentCount === 0 && stats.teacherCount === 0 && stats.classCount === 0 && !isLoading && (
+        <div className="mt-6 p-6 rounded-none bg-card border shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b">
+            <div>
+              <h3 className="font-display text-lg font-bold">New Institution Onboarding</h3>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Complete the three core setup milestones to activate your school's live academic workflow.
+              </p>
+            </div>
+            <div className="text-xs font-mono font-medium px-2.5 py-1 bg-secondary text-secondary-foreground border">
+              Step 1 of 3 Pending
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-4 mt-4">
+            <div className="border p-4 rounded-none bg-secondary/20 flex flex-col justify-between space-y-3">
+              <div>
+                <div className="text-xs font-mono font-bold text-primary">01 / CLASSES</div>
+                <div className="text-sm font-semibold mt-1">Configure Classrooms</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Define grade structures, streams, and physical classroom allocations.
+                </p>
+              </div>
+              <Link href="/admin/dashboard/classes">
+                <Button size="sm" className="w-full text-xs rounded-none bg-primary text-primary-foreground">
+                  <Plus className="size-3.5 mr-1.5" /> Add Class
+                </Button>
+              </Link>
+            </div>
+            <div className="border p-4 rounded-none bg-secondary/20 flex flex-col justify-between space-y-3">
+              <div>
+                <div className="text-xs font-mono font-bold text-primary">02 / FACULTY</div>
+                <div className="text-sm font-semibold mt-1">Appoint Teachers</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Register teaching staff and assign subject specializations.
+                </p>
+              </div>
+              <Link href="/admin/dashboard/teachers">
+                <Button size="sm" variant="outline" className="w-full text-xs rounded-none">
+                  <Plus className="size-3.5 mr-1.5" /> Add Teacher
+                </Button>
+              </Link>
+            </div>
+            <div className="border p-4 rounded-none bg-secondary/20 flex flex-col justify-between space-y-3">
+              <div>
+                <div className="text-xs font-mono font-bold text-primary">03 / ENROLLMENT</div>
+                <div className="text-sm font-semibold mt-1">Enroll Students</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Admit students and allocate them to their respective classes.
+                </p>
+              </div>
+              <Link href="/admin/dashboard/students">
+                <Button size="sm" variant="outline" className="w-full text-xs rounded-none">
+                  <Plus className="size-3.5 mr-1.5" /> Admit Student
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       )}
 

@@ -59,13 +59,13 @@ export default function GalleryManagerPage() {
     <>
       <PageHeader title="Gallery Manager" subtitle="Manage photos displayed in the public gallery" />
 
-      <section className="p-6 rounded-2xl bg-card border shadow-sm mt-6">
+      <section className="p-6 rounded-none bg-card border shadow-sm mt-6">
         <div className="flex items-center gap-2 mb-4">
           <ImageIcon className="size-5 text-primary" />
           <h3 className="font-display text-xl font-semibold">Upload & Manage Images</h3>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-4 mb-8 p-4 bg-secondary/30 rounded-xl border">
+        <div className="grid md:grid-cols-2 gap-4 mb-8 p-4 bg-secondary/30 rounded-none border">
           <div className="col-span-2">
             <Label>Image URL (or Upload)</Label>
             <div className="flex gap-2">
@@ -83,7 +83,7 @@ export default function GalleryManagerPage() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {items.map((it) => (
-            <div key={it.id} className="relative group rounded-xl overflow-hidden border bg-background aspect-square">
+            <div key={it.id} className="relative group rounded-none overflow-hidden border bg-background aspect-square">
               <img src={it.src} alt={it.alt} className="size-full object-cover" />
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-3">
                 <div className="text-white text-xs">
@@ -96,7 +96,7 @@ export default function GalleryManagerPage() {
               </div>
             </div>
           ))}
-          {items.length === 0 && <div className="col-span-full text-center p-8 text-muted-foreground border border-dashed rounded-xl">No images in the gallery yet.</div>}
+          {items.length === 0 && <div className="col-span-full text-center p-8 text-muted-foreground border border-dashed rounded-none">No images in the gallery yet.</div>}
         </div>
       </section>
     </>

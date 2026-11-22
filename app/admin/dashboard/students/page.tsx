@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { Plus, Search, Edit, Trash2, ChevronLeft, ChevronRight, Loader2, X, Check } from "lucide-react";
+import { Plus, Search, Edit, Trash2, ChevronLeft, ChevronRight, Loader2, X, Check, Users } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -110,7 +110,7 @@ export default function StudentsPage() {
         }
       />
 
-      <div className="rounded-2xl bg-card border shadow-sm overflow-hidden flex flex-col h-[calc(100vh-200px)]">
+      <div className="rounded-none bg-card border shadow-sm overflow-hidden flex flex-col h-[calc(100vh-200px)]">
         <div className="p-4 border-b border-border flex gap-3 shrink-0">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
@@ -138,7 +138,7 @@ export default function StudentsPage() {
                 {view.map((s) => (
                   <tr key={s.id} className="border-b border-border/50 hover:bg-secondary/40 transition-smooth">
                     <td className="px-4 py-3 font-medium flex items-center gap-3">
-                      <div className="size-8 rounded-full bg-primary grid place-items-center text-primary-foreground text-xs font-bold shrink-0">
+                      <div className="size-8 rounded-none bg-primary grid place-items-center text-primary-foreground text-xs font-bold shrink-0">
                         {s.name.split(" ").map((n: string) => n[0]).join("").slice(0, 2)}
                       </div>
                       {s.name}
@@ -170,7 +170,20 @@ export default function StudentsPage() {
                   </tr>
                 ))}
                 {view.length === 0 && (
-                  <tr><td colSpan={4} className="px-4 py-12 text-center text-muted-foreground">No students match your search.</td></tr>
+                  <tr>
+                    <td colSpan={4} className="px-4 py-16 text-center text-muted-foreground">
+                      <div className="max-w-xs mx-auto space-y-3">
+                        <Users className="size-8 mx-auto text-muted-foreground/40" />
+                        <div className="text-sm font-medium text-foreground">No students enrolled yet</div>
+                        <p className="text-xs text-muted-foreground">
+                          Enroll your first student into an assigned class to generate student profile and ID records.
+                        </p>
+                        <Button onClick={() => setShowAdd(true)} size="sm" className="rounded-none bg-primary text-primary-foreground text-xs">
+                          <Plus className="size-3.5 mr-1.5" /> Enroll First Student
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
                 )}
               </tbody>
             </table>
@@ -193,10 +206,10 @@ export default function StudentsPage() {
       {/* Add student modal */}
       {showAdd && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-card rounded-2xl border shadow-xl p-8 w-full max-w-md animate-scale-in max-h-screen overflow-y-auto">
+          <div className="bg-card rounded-none border shadow-xl p-8 w-full max-w-md animate-scale-in max-h-screen overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-xl font-bold">Add Student</h2>
-              <button onClick={() => setShowAdd(false)} className="p-2 rounded-lg hover:bg-secondary"><X className="size-4" /></button>
+              <button onClick={() => setShowAdd(false)} className="p-2 rounded-none hover:bg-secondary"><X className="size-4" /></button>
             </div>
             <div className="space-y-4">
               <div>
@@ -215,7 +228,7 @@ export default function StudentsPage() {
                 <Label htmlFor="sclass">Assigned Class *</Label>
                 <select 
                   id="sclass"
-                  className="w-full mt-1.5 border rounded-md px-3 py-2 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full mt-1.5 border rounded-none px-3 py-2 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
                   value={newStudent.classId}
                   onChange={(e) => setNewStudent(p => ({ ...p, classId: e.target.value }))}
                 >
@@ -239,10 +252,10 @@ export default function StudentsPage() {
       {/* Edit student modal */}
       {editingStudent && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-card rounded-2xl border shadow-xl p-8 w-full max-w-md animate-scale-in max-h-screen overflow-y-auto">
+          <div className="bg-card rounded-none border shadow-xl p-8 w-full max-w-md animate-scale-in max-h-screen overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-xl font-bold">Edit Student</h2>
-              <button onClick={() => setEditingStudent(null)} className="p-2 rounded-lg hover:bg-secondary"><X className="size-4" /></button>
+              <button onClick={() => setEditingStudent(null)} className="p-2 rounded-none hover:bg-secondary"><X className="size-4" /></button>
             </div>
             <div className="space-y-4">
               <div>
@@ -261,7 +274,7 @@ export default function StudentsPage() {
                 <Label htmlFor="eclass">Assigned Class</Label>
                 <select 
                   id="eclass"
-                  className="w-full mt-1.5 border rounded-md px-3 py-2 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full mt-1.5 border rounded-none px-3 py-2 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
                   value={editForm.classId}
                   onChange={(e) => setEditForm(p => ({ ...p, classId: e.target.value }))}
                 >

@@ -119,7 +119,7 @@ export default function StudentHomework() {
         />
 
         {/* Class Filter Bar */}
-        <div className="flex items-center gap-2 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl p-1.5 shadow-xs w-full sm:w-auto">
+        <div className="flex items-center gap-2 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-none p-1.5 shadow-xs w-full sm:w-auto">
           <Filter className="w-4 h-4 text-gray-400 ml-2 shrink-0" />
           <span className="text-xs font-semibold text-gray-600 dark:text-gray-300 hidden md:inline">
             Class Filter:
@@ -150,7 +150,7 @@ export default function StudentHomework() {
 
       {/* Information Banner if showing All classes */}
       {selectedFilter === "ALL" && (
-        <div className="p-3.5 bg-blue-50/70 border border-blue-200/80 rounded-xl flex items-center justify-between gap-3 text-xs text-blue-900">
+        <div className="p-3.5 bg-blue-50/70 border border-blue-200/80 rounded-none flex items-center justify-between gap-3 text-xs text-blue-900">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
             <span>
@@ -200,7 +200,7 @@ export default function StudentHomework() {
               return (
                 <div 
                   key={h.id} 
-                  className={`p-6 rounded-2xl border bg-white dark:bg-slate-900 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden ${
+                  className={`p-6 rounded-none border bg-white dark:bg-slate-900 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden ${
                     isOverdue 
                       ? 'border-red-200 dark:border-red-900 bg-red-50/10' 
                       : 'border-gray-100 dark:border-slate-800'
@@ -277,7 +277,7 @@ export default function StudentHomework() {
             })}
 
             {activeHomework.length === 0 && (
-              <div className="p-12 text-center text-gray-400 bg-white dark:bg-slate-900 rounded-2xl border border-dashed border-gray-200 dark:border-slate-800">
+              <div className="p-12 text-center text-gray-400 bg-white dark:bg-slate-900 rounded-none border border-dashed border-gray-200 dark:border-slate-800">
                 <CheckCircle2 className="w-12 h-12 mx-auto text-emerald-400 mb-3" />
                 <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
                   All Caught Up!
@@ -315,7 +315,7 @@ export default function StudentHomework() {
             {completedHomework.map((h) => (
               <div 
                 key={h.id} 
-                className="p-4 rounded-xl border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs flex items-start gap-3 opacity-80 hover:opacity-100 transition-opacity"
+                className="p-4 rounded-none border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs flex items-start gap-3 opacity-80 hover:opacity-100 transition-opacity"
               >
                 <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
@@ -358,7 +358,7 @@ export default function StudentHomework() {
               </div>
             ))}
             {completedHomework.length === 0 && (
-              <div className="p-8 text-center text-gray-400 text-xs italic bg-white dark:bg-slate-900 rounded-xl border border-dashed border-gray-100 dark:border-slate-800">
+              <div className="p-8 text-center text-gray-400 text-xs italic bg-white dark:bg-slate-900 rounded-none border border-dashed border-gray-100 dark:border-slate-800">
                 Completed assignments will appear here.
               </div>
             )}

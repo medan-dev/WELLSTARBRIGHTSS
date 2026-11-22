@@ -122,7 +122,7 @@ export default function StudentDashboardLayout({ children }: { children: React.R
                 href={item.href}
                 title={!isSidebarOpen ? item.label : undefined}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative",
+                  "flex items-center gap-3 px-3 py-2.5 rounded-none transition-all duration-200 group relative",
                   isActive 
                     ? "bg-blue-50 text-blue-600 font-medium" 
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
@@ -148,7 +148,7 @@ export default function StudentDashboardLayout({ children }: { children: React.R
             onClick={handleLogout}
             title={!isSidebarOpen ? "Log out" : undefined}
             className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-xl w-full text-red-600 hover:bg-red-50 transition-colors group",
+              "flex items-center gap-3 px-3 py-2.5 rounded-none w-full text-red-600 hover:bg-red-50 transition-colors group",
               !isSidebarOpen && "justify-center px-0"
             )}
           >

@@ -22,7 +22,7 @@ function Badge({ value, onClick }: { value: string; onClick?: () => void }) {
     <button
       onClick={onClick}
       title={onClick ? "Click to cycle status" : undefined}
-      className={`size-8 flex items-center justify-center rounded-md text-xs font-bold border transition-smooth ${color} ${onClick ? "hover:scale-110 cursor-pointer" : "cursor-default"}`}
+      className={`size-8 flex items-center justify-center rounded-none text-xs font-bold border transition-smooth ${color} ${onClick ? "hover:scale-110 cursor-pointer" : "cursor-default"}`}
     >
       {value}
     </button>
@@ -172,10 +172,10 @@ export default function AttendancePage() {
       />
 
       <div className="mb-6 grid sm:grid-cols-3 gap-4">
-        <div className="flex items-center gap-3 bg-card p-4 rounded-xl border shadow-sm">
+        <div className="flex items-center gap-3 bg-card p-4 rounded-none border shadow-sm">
           <label className="text-sm font-medium text-muted-foreground whitespace-nowrap">Class:</label>
           <select 
-            className="w-full border rounded-md px-3 py-1.5 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
+            className="w-full border rounded-none px-3 py-1.5 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
             value={selectedClassId}
             onChange={(e) => setSelectedClassId(e.target.value)}
           >
@@ -186,10 +186,10 @@ export default function AttendancePage() {
           </select>
         </div>
 
-        <div className="flex items-center gap-3 bg-card p-4 rounded-xl border shadow-sm border-primary/20 bg-primary/5">
+        <div className="flex items-center gap-3 bg-card p-4 rounded-none border shadow-sm border-primary/20 bg-primary/5">
           <label className="text-sm font-medium text-primary whitespace-nowrap">Subject/Lesson:</label>
           <select 
-            className="w-full border border-primary/20 rounded-md px-3 py-1.5 text-sm bg-background outline-none focus:ring-2 focus:ring-primary"
+            className="w-full border border-primary/20 rounded-none px-3 py-1.5 text-sm bg-background outline-none focus:ring-2 focus:ring-primary"
             value={selectedSubjectId}
             onChange={(e) => setSelectedSubjectId(e.target.value)}
           >
@@ -200,10 +200,10 @@ export default function AttendancePage() {
           </select>
         </div>
         
-        <div className="flex items-center gap-3 bg-card p-4 rounded-xl border shadow-sm">
+        <div className="flex items-center gap-3 bg-card p-4 rounded-none border shadow-sm">
           <label className="text-sm font-medium text-muted-foreground whitespace-nowrap">Date Range:</label>
           <select 
-            className="w-full border rounded-md px-3 py-1.5 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
+            className="w-full border rounded-none px-3 py-1.5 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
             value={dateRange}
             onChange={(e) => setDateRange(Number(e.target.value))}
           >
@@ -215,7 +215,7 @@ export default function AttendancePage() {
         </div>
       </div>
 
-      <div className="rounded-2xl bg-card border shadow-sm overflow-hidden flex flex-col max-h-[70vh]">
+      <div className="rounded-none bg-card border shadow-sm overflow-hidden flex flex-col max-h-[70vh]">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center p-16 text-muted-foreground">
             <Loader2 className="size-8 animate-spin text-primary mb-4" />

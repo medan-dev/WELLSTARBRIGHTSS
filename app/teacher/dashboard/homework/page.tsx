@@ -254,7 +254,7 @@ export default function TeacherHomework() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Creation Form */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-fit">
+        <div className="bg-white rounded-none shadow-sm border border-gray-100 p-6 h-fit">
           <div className="flex items-center gap-3 mb-6 pb-2 border-b border-gray-50">
             <Plus className="w-5 h-5 text-orange-500" />
             <h3 className="font-bold text-gray-900 text-lg">New Assignment</h3>
@@ -264,7 +264,7 @@ export default function TeacherHomework() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Select Class</label>
               <select
-                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm font-medium"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm font-medium"
                 value={selectedClassId}
                 onChange={(e) => setSelectedClassId(e.target.value)}
                 required
@@ -285,7 +285,7 @@ export default function TeacherHomework() {
                 </span>
               </label>
               <select
-                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm font-medium"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm font-medium"
                 value={selectedSubjectId}
                 onChange={(e) => setSelectedSubjectId(e.target.value)}
                 required
@@ -314,7 +314,7 @@ export default function TeacherHomework() {
               <label className="block text-sm font-medium text-gray-700 mb-1">Instructions / Details</label>
               <textarea
                 rows={3}
-                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
                 placeholder="Provide instructions, chapter references, or problems to solve..."
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
@@ -359,11 +359,11 @@ export default function TeacherHomework() {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  <div className="flex items-center gap-1 p-1 bg-gray-100 rounded-lg text-xs font-medium">
+                  <div className="flex items-center gap-1 p-1 bg-gray-100 rounded-none text-xs font-medium">
                     <button
                       type="button"
                       onClick={() => setAttachTab("upload")}
-                      className={`flex-1 py-1.5 px-2 rounded-md transition-all flex items-center justify-center gap-1.5 ${
+                      className={`flex-1 py-1.5 px-2 rounded-none transition-all flex items-center justify-center gap-1.5 ${
                         attachTab === "upload" 
                           ? "bg-white text-gray-900 shadow-xs font-semibold" 
                           : "text-gray-500 hover:text-gray-800"
@@ -375,7 +375,7 @@ export default function TeacherHomework() {
                     <button
                       type="button"
                       onClick={() => setAttachTab("link")}
-                      className={`flex-1 py-1.5 px-2 rounded-md transition-all flex items-center justify-center gap-1.5 ${
+                      className={`flex-1 py-1.5 px-2 rounded-none transition-all flex items-center justify-center gap-1.5 ${
                         attachTab === "link" 
                           ? "bg-white text-gray-900 shadow-xs font-semibold" 
                           : "text-gray-500 hover:text-gray-800"
@@ -399,7 +399,7 @@ export default function TeacherHomework() {
                       />
                       <label
                         htmlFor="hw-doc-upload"
-                        className={`border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-all ${
+                        className={`border-2 border-dashed rounded-none p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-all ${
                           uploadingDoc
                             ? "bg-gray-50 border-gray-300 pointer-events-none"
                             : "border-orange-200 hover:border-orange-400 bg-orange-50/20 hover:bg-orange-50/40"
@@ -426,7 +426,7 @@ export default function TeacherHomework() {
                       </label>
                     </div>
                   ) : (
-                    <div className="space-y-2 p-3 bg-gray-50 rounded-xl border border-gray-200">
+                    <div className="space-y-2 p-3 bg-gray-50 rounded-none border border-gray-200">
                       <div>
                         <label className="block text-[11px] font-medium text-gray-600 mb-1">
                           Document Link (e.g. Google Drive, OneDrive, PDF Link)
@@ -493,7 +493,7 @@ export default function TeacherHomework() {
             {homeworkList.map((h) => (
               <div 
                 key={h.id} 
-                className="p-5 rounded-xl border border-gray-100 bg-white shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between gap-4"
+                className="p-5 rounded-none border border-gray-100 bg-white shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between gap-4"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-2">
@@ -550,7 +550,7 @@ export default function TeacherHomework() {
             ))}
             
             {homeworkList.length === 0 && (
-              <div className="p-12 text-center text-gray-400 bg-white rounded-xl border border-dashed border-gray-300">
+              <div className="p-12 text-center text-gray-400 bg-white rounded-none border border-dashed border-gray-300">
                 <ClipboardList className="w-12 h-12 mx-auto text-gray-300 mb-3" />
                 <h3 className="font-semibold text-gray-900 mb-1">No Homework Found</h3>
                 <p className="text-xs max-w-sm mx-auto">No homework assignments have been assigned to this class yet.</p>

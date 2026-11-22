@@ -693,7 +693,7 @@ export default function SuperAdminFinancePage() {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
         <div className="bg-slate-900 border border-amber-500/40 rounded-3xl p-8 max-w-md w-full shadow-2xl text-center space-y-6 animate-in zoom-in-95 duration-200">
-          <div className="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto text-2xl border border-amber-500/50 shadow-inner">
+          <div className="w-16 h-16 rounded-none bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto text-2xl border border-amber-500/50 shadow-inner">
             <Lock className="w-8 h-8" />
           </div>
           <div>
@@ -703,7 +703,7 @@ export default function SuperAdminFinancePage() {
             </p>
           </div>
 
-          <div className="p-3.5 bg-slate-800/90 rounded-2xl border border-slate-700/70 text-left">
+          <div className="p-3.5 bg-slate-800/90 rounded-none border border-slate-700/70 text-left">
             <div className="text-[10px] text-amber-300 font-bold uppercase tracking-wider">Active Staff Profile</div>
             <div className="text-sm font-bold text-white mt-0.5">{currentUser.name}</div>
             <div className="text-xs text-slate-300">{currentUser.title} • {currentUser.role}</div>
@@ -719,13 +719,13 @@ export default function SuperAdminFinancePage() {
                 placeholder="Enter 4-Digit PIN..."
                 value={lockPinInput}
                 onChange={(e) => setLockPinInput(e.target.value)}
-                className="text-center text-2xl tracking-[0.5em] font-mono h-14 bg-slate-950 border-slate-700 text-amber-400 rounded-xl"
+                className="text-center text-2xl tracking-[0.5em] font-mono h-14 bg-slate-950 border-slate-700 text-amber-400 rounded-none"
               />
               <p className="text-[11px] text-slate-400 mt-2 font-mono">
                 Default PINs: Super Admin (9900) • Chief Bursar (1234) • Cashier (5566)
               </p>
             </div>
-            <Button type="submit" className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-6 rounded-xl shadow-lg">
+            <Button type="submit" className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-6 rounded-none shadow-lg">
               <KeyRound className="w-4 h-4 mr-2" /> Unlock Finance Console
             </Button>
           </form>
@@ -755,7 +755,7 @@ export default function SuperAdminFinancePage() {
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="flex items-center gap-4">
-            <div className="size-16 rounded-2xl bg-gradient-to-tr from-amber-500/30 to-amber-400/10 border border-amber-500/40 flex items-center justify-center text-amber-300 font-black text-3xl shadow-xl">
+            <div className="size-16 rounded-none bg-gradient-to-tr from-amber-500/30 to-amber-400/10 border border-amber-500/40 flex items-center justify-center text-amber-300 font-black text-3xl shadow-xl">
               💼
             </div>
             <div>
@@ -777,10 +777,10 @@ export default function SuperAdminFinancePage() {
           <div className="flex flex-wrap items-center gap-2.5">
             <div
               onClick={() => setShowSwitchUserModal(true)}
-              className="cursor-pointer flex items-center gap-3 px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md transition-all shadow-sm"
+              className="cursor-pointer flex items-center gap-3 px-3.5 py-2 rounded-none bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md transition-all shadow-sm"
               title="Click to Switch Staff Role"
             >
-              <div className="size-8 rounded-xl bg-gradient-to-tr from-amber-400 to-yellow-300 text-slate-950 flex items-center justify-center font-black text-xs shadow-md">
+              <div className="size-8 rounded-none bg-gradient-to-tr from-amber-400 to-yellow-300 text-slate-950 flex items-center justify-center font-black text-xs shadow-md">
                 {currentUser.name.slice(0, 2).toUpperCase()}
               </div>
               <div className="text-left">
@@ -800,7 +800,7 @@ export default function SuperAdminFinancePage() {
               variant="outline"
               size="sm"
               onClick={() => setIsLocked(true)}
-              className="bg-red-500/10 border-red-500/30 text-red-300 hover:bg-red-500/20 text-xs font-bold rounded-xl"
+              className="bg-red-500/10 border-red-500/30 text-red-300 hover:bg-red-500/20 text-xs font-bold rounded-none"
             >
               <Lock className="w-3.5 h-3.5 mr-1" /> Lock Terminal
             </Button>
@@ -823,7 +823,7 @@ export default function SuperAdminFinancePage() {
       <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-border/80 scrollbar-none">
         <button
           onClick={() => setActiveTab("overview")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "overview"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -834,7 +834,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("analytics")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "analytics"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -845,7 +845,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("invoices")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "invoices"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -856,7 +856,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("receipts")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "receipts"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -867,7 +867,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("meals")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "meals"
               ? "bg-amber-600 text-white shadow-lg shadow-amber-600/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -878,7 +878,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("bank")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "bank"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -889,7 +889,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("accounts")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "accounts"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -900,7 +900,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("expenses")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "expenses"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -911,7 +911,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("payroll")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "payroll"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -922,7 +922,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("budgets")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "budgets"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -933,7 +933,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("assets")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "assets"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -944,7 +944,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("tax")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "tax"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -955,7 +955,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("reports")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "reports"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -966,7 +966,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("workstations")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "workstations"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -977,7 +977,7 @@ export default function SuperAdminFinancePage() {
 
         <button
           onClick={() => setActiveTab("audit")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
             activeTab === "audit"
               ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
               : "text-muted-foreground hover:bg-muted/80"
@@ -1000,7 +1000,7 @@ export default function SuperAdminFinancePage() {
               </div>
               <div className="flex items-center justify-between text-muted-foreground text-xs font-bold uppercase tracking-wider">
                 <span>Total Term Billing</span>
-                <span className="p-2 rounded-xl bg-primary/10 text-primary">
+                <span className="p-2 rounded-none bg-primary/10 text-primary">
                   <DollarSign className="w-4 h-4" />
                 </span>
               </div>
@@ -1019,7 +1019,7 @@ export default function SuperAdminFinancePage() {
               </div>
               <div className="flex items-center justify-between text-muted-foreground text-xs font-bold uppercase tracking-wider">
                 <span>Collections Realized</span>
-                <span className="p-2 rounded-xl bg-emerald-500/10 text-emerald-500">
+                <span className="p-2 rounded-none bg-emerald-500/10 text-emerald-500">
                   <TrendingUp className="w-4 h-4" />
                 </span>
               </div>
@@ -1039,7 +1039,7 @@ export default function SuperAdminFinancePage() {
               </div>
               <div className="flex items-center justify-between text-muted-foreground text-xs font-bold uppercase tracking-wider">
                 <span>Outstanding Arrears</span>
-                <span className="p-2 rounded-xl bg-rose-500/10 text-rose-500">
+                <span className="p-2 rounded-none bg-rose-500/10 text-rose-500">
                   <AlertTriangle className="w-4 h-4" />
                 </span>
               </div>
@@ -1057,7 +1057,7 @@ export default function SuperAdminFinancePage() {
               </div>
               <div className="flex items-center justify-between text-muted-foreground text-xs font-bold uppercase tracking-wider">
                 <span>Total Liquid Reserves</span>
-                <span className="p-2 rounded-xl bg-blue-500/10 text-blue-500">
+                <span className="p-2 rounded-none bg-blue-500/10 text-blue-500">
                   <Wallet className="w-4 h-4" />
                 </span>
               </div>
@@ -1085,10 +1085,10 @@ export default function SuperAdminFinancePage() {
                       Monthly incoming student tuition and levies vs total departmental disbursements (UGX)
                     </p>
                   </div>
-                  <div className="flex items-center gap-1.5 p-1 rounded-xl bg-muted/60 border border-border/60 text-xs">
+                  <div className="flex items-center gap-1.5 p-1 rounded-none bg-muted/60 border border-border/60 text-xs">
                     <button
                       onClick={() => setChartTimeframe("6months")}
-                      className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+                      className={`px-2.5 py-1 rounded-none font-bold transition-all ${
                         chartTimeframe === "6months" ? "bg-card shadow-xs text-foreground" : "text-muted-foreground"
                       }`}
                     >
@@ -1096,7 +1096,7 @@ export default function SuperAdminFinancePage() {
                     </button>
                     <button
                       onClick={() => setChartTimeframe("year")}
-                      className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+                      className={`px-2.5 py-1 rounded-none font-bold transition-all ${
                         chartTimeframe === "year" ? "bg-card shadow-xs text-foreground" : "text-muted-foreground"
                       }`}
                     >
@@ -1321,7 +1321,7 @@ export default function SuperAdminFinancePage() {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               <Button
                 onClick={() => setShowPosModal(true)}
-                className="h-auto py-3.5 px-4 flex flex-col items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl shadow-sm transition-all hover:scale-102"
+                className="h-auto py-3.5 px-4 flex flex-col items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-none shadow-sm transition-all hover:scale-102"
               >
                 <Receipt className="w-5 h-5" />
                 <span className="text-xs font-bold">Fast POS Counter</span>
@@ -1330,7 +1330,7 @@ export default function SuperAdminFinancePage() {
               <Button
                 onClick={() => setShowInvoiceModal(true)}
                 variant="outline"
-                className="h-auto py-3.5 px-4 flex flex-col items-center gap-2 rounded-2xl border-border/80 hover:bg-muted/80 transition-all hover:scale-102"
+                className="h-auto py-3.5 px-4 flex flex-col items-center gap-2 rounded-none border-border/80 hover:bg-muted/80 transition-all hover:scale-102"
               >
                 <FileText className="w-5 h-5 text-blue-500" />
                 <span className="text-xs font-bold">Issue Student Bill</span>
@@ -1339,7 +1339,7 @@ export default function SuperAdminFinancePage() {
               <Button
                 onClick={() => setShowTransferModal(true)}
                 variant="outline"
-                className="h-auto py-3.5 px-4 flex flex-col items-center gap-2 rounded-2xl border-border/80 hover:bg-muted/80 transition-all hover:scale-102"
+                className="h-auto py-3.5 px-4 flex flex-col items-center gap-2 rounded-none border-border/80 hover:bg-muted/80 transition-all hover:scale-102"
               >
                 <ArrowRightLeft className="w-5 h-5 text-purple-500" />
                 <span className="text-xs font-bold">Bank/Cash Transfer</span>
@@ -1348,7 +1348,7 @@ export default function SuperAdminFinancePage() {
               <Button
                 onClick={() => setShowExpenseModal(true)}
                 variant="outline"
-                className="h-auto py-3.5 px-4 flex flex-col items-center gap-2 rounded-2xl border-border/80 hover:bg-muted/80 transition-all hover:scale-102"
+                className="h-auto py-3.5 px-4 flex flex-col items-center gap-2 rounded-none border-border/80 hover:bg-muted/80 transition-all hover:scale-102"
               >
                 <Briefcase className="w-5 h-5 text-amber-500" />
                 <span className="text-xs font-bold">Expense Voucher</span>
@@ -1357,7 +1357,7 @@ export default function SuperAdminFinancePage() {
               <Button
                 onClick={() => setShowJournalModal(true)}
                 variant="outline"
-                className="h-auto py-3.5 px-4 flex flex-col items-center gap-2 rounded-2xl border-border/80 hover:bg-muted/80 transition-all hover:scale-102"
+                className="h-auto py-3.5 px-4 flex flex-col items-center gap-2 rounded-none border-border/80 hover:bg-muted/80 transition-all hover:scale-102"
               >
                 <Scale className="w-5 h-5 text-indigo-500" />
                 <span className="text-xs font-bold">Journal Voucher</span>
@@ -1366,7 +1366,7 @@ export default function SuperAdminFinancePage() {
               <Button
                 onClick={() => setShowPayrollModal(true)}
                 variant="outline"
-                className="h-auto py-3.5 px-4 flex flex-col items-center gap-2 rounded-2xl border-border/80 hover:bg-muted/80 transition-all hover:scale-102"
+                className="h-auto py-3.5 px-4 flex flex-col items-center gap-2 rounded-none border-border/80 hover:bg-muted/80 transition-all hover:scale-102"
               >
                 <Users className="w-5 h-5 text-pink-500" />
                 <span className="text-xs font-bold">Staff Payroll</span>
@@ -1386,7 +1386,7 @@ export default function SuperAdminFinancePage() {
               <h2 className="text-xl font-black text-foreground">Advanced Financial Intelligence & Ratios</h2>
               <p className="text-xs text-muted-foreground">Real-time recovery ratios, cash velocity, and institutional solvency</p>
             </div>
-            <div className="px-3 py-1.5 rounded-2xl bg-emerald-500/10 text-emerald-500 font-bold text-xs border border-emerald-500/30 flex items-center gap-1.5">
+            <div className="px-3 py-1.5 rounded-none bg-emerald-500/10 text-emerald-500 font-bold text-xs border border-emerald-500/30 flex items-center gap-1.5">
               <Zap className="w-4 h-4" /> Live Double-Entry Telemetry
             </div>
           </div>
@@ -1396,7 +1396,7 @@ export default function SuperAdminFinancePage() {
             <h3 className="font-extrabold text-base text-foreground">Class-by-Class Fee Collection Targets</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {classCollectionData.map((cls) => (
-                <div key={cls.name} className="p-4 rounded-2xl bg-muted/40 border border-border/60 space-y-2">
+                <div key={cls.name} className="p-4 rounded-none bg-muted/40 border border-border/60 space-y-2">
                   <div className="flex justify-between items-center text-xs font-bold">
                     <span>{cls.name}</span>
                     <span className="text-emerald-500 font-mono">{cls.rate}% Recovered</span>
@@ -1466,7 +1466,7 @@ export default function SuperAdminFinancePage() {
               <p className="text-xs text-muted-foreground">Class tuition structures, scholarships, discounts, and term billing</p>
             </div>
             <div className="flex items-center gap-2">
-              <Button onClick={() => setShowInvoiceModal(true)} size="sm" className="rounded-xl">
+              <Button onClick={() => setShowInvoiceModal(true)} size="sm" className="rounded-none">
                 <Plus className="w-4 h-4 mr-1" /> New Student Bill
               </Button>
             </div>
@@ -1531,7 +1531,7 @@ export default function SuperAdminFinancePage() {
               <h2 className="text-lg font-extrabold text-foreground">Payments & Official Receipting (POS)</h2>
               <p className="text-xs text-muted-foreground">High-speed cashier counter and synchronized receipts</p>
             </div>
-            <Button onClick={() => setShowPosModal(true)} size="sm" className="bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md">
+            <Button onClick={() => setShowPosModal(true)} size="sm" className="bg-emerald-600 hover:bg-emerald-700 rounded-none shadow-md">
               <Receipt className="w-4 h-4 mr-1" /> Open Web POS Counter
             </Button>
           </div>
@@ -1558,7 +1558,7 @@ export default function SuperAdminFinancePage() {
                       <td className="py-3 px-4 font-sans font-semibold text-foreground">{r.student?.name}</td>
                       <td className="py-3 px-4 font-bold text-emerald-500">UGX {r.amount.toLocaleString()}</td>
                       <td className="py-3 px-4 font-sans">
-                        <span className="px-2 py-0.5 rounded-lg bg-muted text-foreground text-[10px] font-bold">
+                        <span className="px-2 py-0.5 rounded-none bg-muted text-foreground text-[10px] font-bold">
                           {r.paymentMethod}
                         </span>
                       </td>
@@ -1580,7 +1580,7 @@ export default function SuperAdminFinancePage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => setSelectedReceiptForPrint(r)}
-                          className="text-xs h-7 rounded-lg"
+                          className="text-xs h-7 rounded-none"
                         >
                           <Printer className="w-3.5 h-3.5 mr-1" /> Slip
                         </Button>
@@ -1604,7 +1604,7 @@ export default function SuperAdminFinancePage() {
               <h2 className="text-lg font-extrabold text-foreground">Bank & Cash Drawer Management</h2>
               <p className="text-xs text-muted-foreground">Drawer floats, bank accounts, inter-account transfers, and automated reconciliation</p>
             </div>
-            <Button onClick={() => setShowTransferModal(true)} size="sm" className="rounded-xl">
+            <Button onClick={() => setShowTransferModal(true)} size="sm" className="rounded-none">
               <ArrowRightLeft className="w-4 h-4 mr-1" /> Transfer Funds
             </Button>
           </div>
@@ -1666,7 +1666,7 @@ export default function SuperAdminFinancePage() {
               <h2 className="text-lg font-extrabold text-foreground">Chart of Accounts & General Ledger</h2>
               <p className="text-xs text-muted-foreground">Standard 5-class double-entry accounts with continuous balance verification</p>
             </div>
-            <Button onClick={() => setShowJournalModal(true)} size="sm" className="rounded-xl">
+            <Button onClick={() => setShowJournalModal(true)} size="sm" className="rounded-none">
               <Plus className="w-4 h-4 mr-1" /> New Journal Voucher
             </Button>
           </div>
@@ -1731,10 +1731,10 @@ export default function SuperAdminFinancePage() {
               <p className="text-xs text-muted-foreground">Vendor records, purchase orders, 3-way matching approvals, and disbursements</p>
             </div>
             <div className="flex items-center gap-2">
-              <Button onClick={() => setShowSupplierModal(true)} variant="outline" size="sm" className="rounded-xl">
+              <Button onClick={() => setShowSupplierModal(true)} variant="outline" size="sm" className="rounded-none">
                 <Plus className="w-4 h-4 mr-1" /> Add Supplier
               </Button>
-              <Button onClick={() => setShowExpenseModal(true)} size="sm" className="rounded-xl">
+              <Button onClick={() => setShowExpenseModal(true)} size="sm" className="rounded-none">
                 <Plus className="w-4 h-4 mr-1" /> Record Voucher
               </Button>
             </div>
@@ -1787,7 +1787,7 @@ export default function SuperAdminFinancePage() {
               <h2 className="text-lg font-extrabold text-foreground">Staff Payroll & Statutory Remittances</h2>
               <p className="text-xs text-muted-foreground">Salaries, allowances, PAYE tax, NSSF employee/employer splits, and automated payslips</p>
             </div>
-            <Button onClick={() => setShowPayrollModal(true)} size="sm" className="rounded-xl">
+            <Button onClick={() => setShowPayrollModal(true)} size="sm" className="rounded-none">
               <Plus className="w-4 h-4 mr-1" /> Run Monthly Payroll
             </Button>
           </div>
@@ -1826,7 +1826,7 @@ export default function SuperAdminFinancePage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => setSelectedPayslipForPrint(pay)}
-                          className="h-7 text-xs rounded-lg"
+                          className="h-7 text-xs rounded-none"
                         >
                           <Printer className="w-3.5 h-3.5 mr-1" /> View
                         </Button>
@@ -1850,7 +1850,7 @@ export default function SuperAdminFinancePage() {
               <h2 className="text-lg font-extrabold text-foreground">Departmental Budgeting & Variance Analysis</h2>
               <p className="text-xs text-muted-foreground">Allocated budgets vs real-time expenditure with overspend threshold controls</p>
             </div>
-            <Button onClick={() => setShowBudgetModal(true)} size="sm" className="rounded-xl">
+            <Button onClick={() => setShowBudgetModal(true)} size="sm" className="rounded-none">
               <Plus className="w-4 h-4 mr-1" /> New Budget Allocation
             </Button>
           </div>
@@ -1895,7 +1895,7 @@ export default function SuperAdminFinancePage() {
               <h2 className="text-lg font-extrabold text-foreground">Fixed Assets Register & Depreciation</h2>
               <p className="text-xs text-muted-foreground">Capital infrastructure, vehicles, IT labs, and automated straight-line depreciation</p>
             </div>
-            <Button onClick={() => setShowAssetModal(true)} size="sm" className="rounded-xl">
+            <Button onClick={() => setShowAssetModal(true)} size="sm" className="rounded-none">
               <Plus className="w-4 h-4 mr-1" /> Enroll Fixed Asset
             </Button>
           </div>
@@ -1932,7 +1932,7 @@ export default function SuperAdminFinancePage() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleRunDepreciation(ast.id)}
-                          className="h-7 text-xs rounded-lg"
+                          className="h-7 text-xs rounded-none"
                         >
                           Run Depreciation
                         </Button>
@@ -2007,7 +2007,7 @@ export default function SuperAdminFinancePage() {
               <h2 className="text-lg font-extrabold text-foreground">Financial Statements & Reporting Engine</h2>
               <p className="text-xs text-muted-foreground">Audited Balance Sheet, Income Statement (P&L), Cash Flow, and Aged Debtors report</p>
             </div>
-            <Button variant="outline" size="sm" onClick={() => window.print()} className="rounded-xl">
+            <Button variant="outline" size="sm" onClick={() => window.print()} className="rounded-none">
               <Printer className="w-4 h-4 mr-1" /> Print Official Report
             </Button>
           </div>
@@ -2124,7 +2124,7 @@ export default function SuperAdminFinancePage() {
                 <div
                   key={u.id}
                   onClick={() => handleSwitchUser(u)}
-                  className={`p-3.5 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
+                  className={`p-3.5 rounded-none border cursor-pointer transition-all flex items-center justify-between ${
                     currentUser.id === u.id
                       ? "bg-primary/10 border-primary shadow-sm"
                       : "bg-muted/30 hover:bg-muted/70 border-border/60"
@@ -2162,7 +2162,7 @@ export default function SuperAdminFinancePage() {
                 <label className="text-xs font-semibold text-muted-foreground">Select Invoiced Student *</label>
                 <select
                   required
-                  className="w-full h-11 rounded-2xl border border-input bg-background px-3 text-xs"
+                  className="w-full h-11 rounded-none border border-input bg-background px-3 text-xs"
                   value={posForm.invoiceId}
                   onChange={(e) => {
                     const selected = invoices.find((inv) => inv.id === e.target.value);
@@ -2194,7 +2194,7 @@ export default function SuperAdminFinancePage() {
                   required
                   value={posForm.amount}
                   onChange={(e) => setPosForm({ ...posForm, amount: e.target.value })}
-                  className="rounded-xl"
+                  className="rounded-none"
                 />
               </div>
 
@@ -2202,7 +2202,7 @@ export default function SuperAdminFinancePage() {
                 <div>
                   <label className="text-xs font-semibold text-muted-foreground">Payment Method</label>
                   <select
-                    className="w-full h-10 rounded-xl border border-input bg-background px-3 text-xs"
+                    className="w-full h-10 rounded-none border border-input bg-background px-3 text-xs"
                     value={posForm.paymentMethod}
                     onChange={(e) => setPosForm({ ...posForm, paymentMethod: e.target.value })}
                   >
@@ -2219,7 +2219,7 @@ export default function SuperAdminFinancePage() {
                     placeholder="e.g. SLIP-99881"
                     value={posForm.referenceNo}
                     onChange={(e) => setPosForm({ ...posForm, referenceNo: e.target.value })}
-                    className="rounded-xl"
+                    className="rounded-none"
                   />
                 </div>
               </div>
@@ -2230,15 +2230,15 @@ export default function SuperAdminFinancePage() {
                   placeholder="e.g. Term 1 Part payment"
                   value={posForm.notes}
                   onChange={(e) => setPosForm({ ...posForm, notes: e.target.value })}
-                  className="rounded-xl"
+                  className="rounded-none"
                 />
               </div>
 
               <div className="flex justify-end gap-2 pt-2">
-                <Button type="button" variant="outline" onClick={() => setShowPosModal(false)} className="rounded-xl">
+                <Button type="button" variant="outline" onClick={() => setShowPosModal(false)} className="rounded-none">
                   Cancel
                 </Button>
-                <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 rounded-xl font-bold">
+                <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 rounded-none font-bold">
                   🖨️ Collect & Issue Receipt
                 </Button>
               </div>
@@ -2276,10 +2276,10 @@ export default function SuperAdminFinancePage() {
             </div>
 
             <div className="flex items-center gap-2 pt-3 no-print">
-              <Button onClick={() => window.print()} className="w-full bg-slate-900 text-white font-bold rounded-xl">
+              <Button onClick={() => window.print()} className="w-full bg-slate-900 text-white font-bold rounded-none">
                 <Printer className="w-4 h-4 mr-1" /> Print Slip
               </Button>
-              <Button variant="outline" onClick={() => setSelectedReceiptForPrint(null)} className="rounded-xl">
+              <Button variant="outline" onClick={() => setSelectedReceiptForPrint(null)} className="rounded-none">
                 Close
               </Button>
             </div>
@@ -2301,7 +2301,7 @@ export default function SuperAdminFinancePage() {
                 <label className="text-xs font-semibold text-muted-foreground">Student *</label>
                 <select
                   required
-                  className="w-full h-11 rounded-2xl border border-input bg-background px-3 text-xs"
+                  className="w-full h-11 rounded-none border border-input bg-background px-3 text-xs"
                   value={invoiceForm.studentId}
                   onChange={(e) => setInvoiceForm({ ...invoiceForm, studentId: e.target.value })}
                 >
@@ -2320,7 +2320,7 @@ export default function SuperAdminFinancePage() {
                   <Input
                     value={invoiceForm.term}
                     onChange={(e) => setInvoiceForm({ ...invoiceForm, term: e.target.value })}
-                    className="rounded-xl"
+                    className="rounded-none"
                   />
                 </div>
                 <div>
@@ -2330,7 +2330,7 @@ export default function SuperAdminFinancePage() {
                     required
                     value={invoiceForm.subtotal}
                     onChange={(e) => setInvoiceForm({ ...invoiceForm, subtotal: e.target.value })}
-                    className="rounded-xl"
+                    className="rounded-none"
                   />
                 </div>
               </div>
@@ -2341,15 +2341,15 @@ export default function SuperAdminFinancePage() {
                   type="number"
                   value={invoiceForm.discountAmount}
                   onChange={(e) => setInvoiceForm({ ...invoiceForm, discountAmount: e.target.value })}
-                  className="rounded-xl"
+                  className="rounded-none"
                 />
               </div>
 
               <div className="flex justify-end gap-2 pt-2">
-                <Button type="button" variant="outline" onClick={() => setShowInvoiceModal(false)} className="rounded-xl">
+                <Button type="button" variant="outline" onClick={() => setShowInvoiceModal(false)} className="rounded-none">
                   Cancel
                 </Button>
-                <Button type="submit" className="rounded-xl font-bold">Issue & Post to Ledger</Button>
+                <Button type="submit" className="rounded-none font-bold">Issue & Post to Ledger</Button>
               </div>
             </form>
           </div>
@@ -2373,7 +2373,7 @@ export default function SuperAdminFinancePage() {
                   placeholder="e.g. Science Lab Consumables"
                   value={expenseForm.title}
                   onChange={(e) => setExpenseForm({ ...expenseForm, title: e.target.value })}
-                  className="rounded-xl"
+                  className="rounded-none"
                 />
               </div>
 
@@ -2385,13 +2385,13 @@ export default function SuperAdminFinancePage() {
                     required
                     value={expenseForm.amount}
                     onChange={(e) => setExpenseForm({ ...expenseForm, amount: e.target.value })}
-                    className="rounded-xl"
+                    className="rounded-none"
                   />
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-muted-foreground">Payment Method</label>
                   <select
-                    className="w-full h-10 rounded-xl border border-input bg-background px-3 text-xs"
+                    className="w-full h-10 rounded-none border border-input bg-background px-3 text-xs"
                     value={expenseForm.paymentMethod}
                     onChange={(e) => setExpenseForm({ ...expenseForm, paymentMethod: e.target.value })}
                   >
@@ -2410,7 +2410,7 @@ export default function SuperAdminFinancePage() {
                     placeholder="e.g. Shell Uganda Ltd"
                     value={expenseForm.paidTo}
                     onChange={(e) => setExpenseForm({ ...expenseForm, paidTo: e.target.value })}
-                    className="rounded-xl"
+                    className="rounded-none"
                   />
                 </div>
                 <div>
@@ -2419,16 +2419,16 @@ export default function SuperAdminFinancePage() {
                     placeholder="e.g. Boarding"
                     value={expenseForm.department}
                     onChange={(e) => setExpenseForm({ ...expenseForm, department: e.target.value })}
-                    className="rounded-xl"
+                    className="rounded-none"
                   />
                 </div>
               </div>
 
               <div className="flex justify-end gap-2 pt-2">
-                <Button type="button" variant="outline" onClick={() => setShowExpenseModal(false)} className="rounded-xl">
+                <Button type="button" variant="outline" onClick={() => setShowExpenseModal(false)} className="rounded-none">
                   Cancel
                 </Button>
-                <Button type="submit" className="rounded-xl font-bold">Post to General Ledger</Button>
+                <Button type="submit" className="rounded-none font-bold">Post to General Ledger</Button>
               </div>
             </form>
           </div>
@@ -2450,7 +2450,7 @@ export default function SuperAdminFinancePage() {
               <div>
                 <label className="text-xs font-semibold text-muted-foreground">From Account *</label>
                 <select
-                  className="w-full h-11 rounded-2xl border border-input bg-background px-3 text-xs"
+                  className="w-full h-11 rounded-none border border-input bg-background px-3 text-xs"
                   value={transferForm.fromAccountCode}
                   onChange={(e) => setTransferForm({ ...transferForm, fromAccountCode: e.target.value })}
                 >
@@ -2464,7 +2464,7 @@ export default function SuperAdminFinancePage() {
               <div>
                 <label className="text-xs font-semibold text-muted-foreground">To Account *</label>
                 <select
-                  className="w-full h-11 rounded-2xl border border-input bg-background px-3 text-xs"
+                  className="w-full h-11 rounded-none border border-input bg-background px-3 text-xs"
                   value={transferForm.toAccountCode}
                   onChange={(e) => setTransferForm({ ...transferForm, toAccountCode: e.target.value })}
                 >
@@ -2483,7 +2483,7 @@ export default function SuperAdminFinancePage() {
                   placeholder="e.g. 1000000"
                   value={transferForm.amount}
                   onChange={(e) => setTransferForm({ ...transferForm, amount: e.target.value })}
-                  className="rounded-xl"
+                  className="rounded-none"
                 />
               </div>
 
@@ -2492,15 +2492,15 @@ export default function SuperAdminFinancePage() {
                 <Input
                   value={transferForm.reason}
                   onChange={(e) => setTransferForm({ ...transferForm, reason: e.target.value })}
-                  className="rounded-xl"
+                  className="rounded-none"
                 />
               </div>
 
               <div className="flex justify-end gap-2 pt-2">
-                <Button type="button" variant="outline" onClick={() => setShowTransferModal(false)} className="rounded-xl">
+                <Button type="button" variant="outline" onClick={() => setShowTransferModal(false)} className="rounded-none">
                   Cancel
                 </Button>
-                <Button type="submit" className="rounded-xl font-bold">Execute Balanced Transfer</Button>
+                <Button type="submit" className="rounded-none font-bold">Execute Balanced Transfer</Button>
               </div>
             </form>
           </div>
@@ -2525,7 +2525,7 @@ export default function SuperAdminFinancePage() {
               <div>
                 <label className="text-xs font-semibold text-muted-foreground">Debit Account *</label>
                 <select
-                  className="w-full h-11 rounded-2xl border border-input bg-background px-3 text-xs"
+                  className="w-full h-11 rounded-none border border-input bg-background px-3 text-xs"
                   value={journalForm.debitAccount}
                   onChange={(e) => setJournalForm({ ...journalForm, debitAccount: e.target.value })}
                 >
@@ -2540,7 +2540,7 @@ export default function SuperAdminFinancePage() {
               <div>
                 <label className="text-xs font-semibold text-muted-foreground">Credit Account *</label>
                 <select
-                  className="w-full h-11 rounded-2xl border border-input bg-background px-3 text-xs"
+                  className="w-full h-11 rounded-none border border-input bg-background px-3 text-xs"
                   value={journalForm.creditAccount}
                   onChange={(e) => setJournalForm({ ...journalForm, creditAccount: e.target.value })}
                 >
@@ -2560,7 +2560,7 @@ export default function SuperAdminFinancePage() {
                   placeholder="500000"
                   value={journalForm.amount}
                   onChange={(e) => setJournalForm({ ...journalForm, amount: e.target.value })}
-                  className="rounded-xl"
+                  className="rounded-none"
                 />
               </div>
 
@@ -2571,15 +2571,15 @@ export default function SuperAdminFinancePage() {
                   placeholder="e.g. End of term audit adjustment"
                   value={journalForm.description}
                   onChange={(e) => setJournalForm({ ...journalForm, description: e.target.value })}
-                  className="rounded-xl"
+                  className="rounded-none"
                 />
               </div>
 
               <div className="flex justify-end gap-2 pt-2">
-                <Button type="button" variant="outline" onClick={() => setShowJournalModal(false)} className="rounded-xl">
+                <Button type="button" variant="outline" onClick={() => setShowJournalModal(false)} className="rounded-none">
                   Cancel
                 </Button>
-                <Button type="submit" className="rounded-xl font-bold">Post Balanced Entry</Button>
+                <Button type="submit" className="rounded-none font-bold">Post Balanced Entry</Button>
               </div>
             </form>
           </div>
@@ -2602,7 +2602,7 @@ export default function SuperAdminFinancePage() {
                 <label className="text-xs font-semibold text-muted-foreground">Faculty Member *</label>
                 <select
                   required
-                  className="w-full h-11 rounded-2xl border border-input bg-background px-3 text-xs"
+                  className="w-full h-11 rounded-none border border-input bg-background px-3 text-xs"
                   value={payrollForm.teacherId}
                   onChange={(e) => setPayrollForm({ ...payrollForm, teacherId: e.target.value })}
                 >
@@ -2624,7 +2624,7 @@ export default function SuperAdminFinancePage() {
                   <Input
                     value={payrollForm.month}
                     onChange={(e) => setPayrollForm({ ...payrollForm, month: e.target.value })}
-                    className="rounded-xl"
+                    className="rounded-none"
                   />
                 </div>
                 <div>
@@ -2632,7 +2632,7 @@ export default function SuperAdminFinancePage() {
                   <Input
                     value={payrollForm.year}
                     onChange={(e) => setPayrollForm({ ...payrollForm, year: e.target.value })}
-                    className="rounded-xl"
+                    className="rounded-none"
                   />
                 </div>
               </div>
@@ -2644,7 +2644,7 @@ export default function SuperAdminFinancePage() {
                   required
                   value={payrollForm.baseSalary}
                   onChange={(e) => setPayrollForm({ ...payrollForm, baseSalary: e.target.value })}
-                  className="rounded-xl"
+                  className="rounded-none"
                 />
               </div>
 
@@ -2655,7 +2655,7 @@ export default function SuperAdminFinancePage() {
                     type="number"
                     value={payrollForm.housingAllowance}
                     onChange={(e) => setPayrollForm({ ...payrollForm, housingAllowance: e.target.value })}
-                    className="rounded-xl"
+                    className="rounded-none"
                   />
                 </div>
                 <div>
@@ -2664,16 +2664,16 @@ export default function SuperAdminFinancePage() {
                     type="number"
                     value={payrollForm.transportAllowance}
                     onChange={(e) => setPayrollForm({ ...payrollForm, transportAllowance: e.target.value })}
-                    className="rounded-xl"
+                    className="rounded-none"
                   />
                 </div>
               </div>
 
               <div className="flex justify-end gap-2 pt-2">
-                <Button type="button" variant="outline" onClick={() => setShowPayrollModal(false)} className="rounded-xl">
+                <Button type="button" variant="outline" onClick={() => setShowPayrollModal(false)} className="rounded-none">
                   Cancel
                 </Button>
-                <Button type="submit" className="rounded-xl font-bold">Compute & Disburse</Button>
+                <Button type="submit" className="rounded-none font-bold">Compute & Disburse</Button>
               </div>
             </form>
           </div>
@@ -2730,10 +2730,10 @@ export default function SuperAdminFinancePage() {
             </div>
 
             <div className="flex items-center gap-2 pt-3 no-print">
-              <Button onClick={() => window.print()} className="w-full bg-slate-900 text-white font-bold rounded-xl">
+              <Button onClick={() => window.print()} className="w-full bg-slate-900 text-white font-bold rounded-none">
                 <Printer className="w-4 h-4 mr-1" /> Print Payslip
               </Button>
-              <Button variant="outline" onClick={() => setSelectedPayslipForPrint(null)} className="rounded-xl">
+              <Button variant="outline" onClick={() => setSelectedPayslipForPrint(null)} className="rounded-none">
                 Close
               </Button>
             </div>

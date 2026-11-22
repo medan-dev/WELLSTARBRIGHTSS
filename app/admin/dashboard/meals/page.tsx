@@ -258,7 +258,7 @@ export default function MealCardsManagementPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/80 pb-6">
         <div>
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 shadow-sm">
+            <div className="p-2.5 rounded-none bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 shadow-sm">
               <Utensils className="w-7 h-7" />
             </div>
             <div>
@@ -279,7 +279,7 @@ export default function MealCardsManagementPage() {
             size="sm"
             onClick={() => loadData(true)}
             disabled={refreshing}
-            className="gap-2 rounded-xl"
+            className="gap-2 rounded-none"
           >
             <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin text-primary" : ""}`} />
             Sync
@@ -292,7 +292,7 @@ export default function MealCardsManagementPage() {
               setActiveTab("print");
               setTimeout(() => window.print(), 300);
             }}
-            className="gap-2 rounded-xl"
+            className="gap-2 rounded-none"
           >
             <Printer className="w-4 h-4" />
             Print Badges
@@ -301,7 +301,7 @@ export default function MealCardsManagementPage() {
           <Button
             size="sm"
             onClick={() => setShowIssueModal(true)}
-            className="gap-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white shadow-sm"
+            className="gap-2 rounded-none bg-amber-600 hover:bg-amber-700 text-white shadow-sm"
           >
             <Plus className="w-4 h-4" />
             Issue Meal Card
@@ -313,7 +313,7 @@ export default function MealCardsManagementPage() {
       <div className="flex items-center gap-2 border-b border-border/70 pb-3 overflow-x-auto">
         <button
           onClick={() => setActiveTab("terminal")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-none text-sm font-semibold transition-all ${
             activeTab === "terminal"
               ? "bg-amber-600 text-white shadow-sm"
               : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
@@ -325,7 +325,7 @@ export default function MealCardsManagementPage() {
 
         <button
           onClick={() => setActiveTab("cards")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-none text-sm font-semibold transition-all ${
             activeTab === "cards"
               ? "bg-amber-600 text-white shadow-sm"
               : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
@@ -337,7 +337,7 @@ export default function MealCardsManagementPage() {
 
         <button
           onClick={() => setActiveTab("print")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-none text-sm font-semibold transition-all ${
             activeTab === "print"
               ? "bg-amber-600 text-white shadow-sm"
               : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
@@ -349,7 +349,7 @@ export default function MealCardsManagementPage() {
 
         <button
           onClick={() => setActiveTab("analytics")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-none text-sm font-semibold transition-all ${
             activeTab === "analytics"
               ? "bg-amber-600 text-white shadow-sm"
               : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
@@ -362,8 +362,8 @@ export default function MealCardsManagementPage() {
 
       {/* QUICK KPI TILES */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl bg-card border border-border shadow-sm flex items-center gap-3.5">
-          <div className="p-3 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
+        <div className="p-4 rounded-none bg-card border border-border shadow-sm flex items-center gap-3.5">
+          <div className="p-3 rounded-none bg-amber-500/10 text-amber-600 dark:text-amber-400">
             <Utensils className="w-5 h-5" />
           </div>
           <div>
@@ -374,8 +374,8 @@ export default function MealCardsManagementPage() {
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-card border border-border shadow-sm flex items-center gap-3.5">
-          <div className="p-3 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
+        <div className="p-4 rounded-none bg-card border border-border shadow-sm flex items-center gap-3.5">
+          <div className="p-3 rounded-none bg-blue-500/10 text-blue-600 dark:text-blue-400">
             <Coffee className="w-5 h-5" />
           </div>
           <div>
@@ -386,8 +386,8 @@ export default function MealCardsManagementPage() {
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-card border border-border shadow-sm flex items-center gap-3.5">
-          <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+        <div className="p-4 rounded-none bg-card border border-border shadow-sm flex items-center gap-3.5">
+          <div className="p-3 rounded-none bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
             <Soup className="w-5 h-5" />
           </div>
           <div>
@@ -398,8 +398,8 @@ export default function MealCardsManagementPage() {
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-card border border-border shadow-sm flex items-center gap-3.5">
-          <div className="p-3 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+        <div className="p-4 rounded-none bg-card border border-border shadow-sm flex items-center gap-3.5">
+          <div className="p-3 rounded-none bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
@@ -431,10 +431,10 @@ export default function MealCardsManagementPage() {
                 </div>
 
                 {/* Session Picker */}
-                <div className="flex items-center gap-1.5 bg-muted/60 p-1 rounded-xl">
+                <div className="flex items-center gap-1.5 bg-muted/60 p-1 rounded-none">
                   <button
                     onClick={() => setSelectedSession("BREAKFAST")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-xs font-semibold transition-all ${
                       selectedSession === "BREAKFAST"
                         ? "bg-amber-600 text-white shadow-sm"
                         : "text-muted-foreground hover:text-foreground"
@@ -446,7 +446,7 @@ export default function MealCardsManagementPage() {
 
                   <button
                     onClick={() => setSelectedSession("LUNCH")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-xs font-semibold transition-all ${
                       selectedSession === "LUNCH"
                         ? "bg-amber-600 text-white shadow-sm"
                         : "text-muted-foreground hover:text-foreground"
@@ -458,7 +458,7 @@ export default function MealCardsManagementPage() {
 
                   <button
                     onClick={() => setSelectedSession("DINNER")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-xs font-semibold transition-all ${
                       selectedSession === "DINNER"
                         ? "bg-amber-600 text-white shadow-sm"
                         : "text-muted-foreground hover:text-foreground"
@@ -478,14 +478,14 @@ export default function MealCardsManagementPage() {
                     value={scanInput}
                     onChange={(e) => setScanInput(e.target.value)}
                     placeholder="Scan Barcode or Enter Card No (e.g. MC-2026-1001) / Name..."
-                    className="pl-11 h-12 text-base rounded-2xl border-amber-500/30 focus-visible:ring-amber-500/30"
+                    className="pl-11 h-12 text-base rounded-none border-amber-500/30 focus-visible:ring-amber-500/30"
                     autoFocus
                   />
                 </div>
                 <Button
                   type="submit"
                   disabled={servingLoading || !scanInput.trim()}
-                  className="h-12 px-6 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white font-semibold shadow-sm"
+                  className="h-12 px-6 rounded-none bg-amber-600 hover:bg-amber-700 text-white font-semibold shadow-sm"
                 >
                   {servingLoading ? <RefreshCw className="w-5 h-5 animate-spin" /> : "Verify & Punch"}
                 </Button>
@@ -494,7 +494,7 @@ export default function MealCardsManagementPage() {
               {/* Verification Feedback Banner */}
               {verifiedResult && (
                 <div
-                  className={`p-5 rounded-2xl border animate-in fade-in slide-in-from-top-2 duration-200 ${
+                  className={`p-5 rounded-none border animate-in fade-in slide-in-from-top-2 duration-200 ${
                     verifiedResult.success
                       ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-950 dark:text-emerald-100"
                       : verifiedResult.alreadyServed
@@ -505,15 +505,15 @@ export default function MealCardsManagementPage() {
                   <div className="flex items-start gap-4">
                     <div className="mt-0.5 shrink-0">
                       {verifiedResult.success ? (
-                        <div className="p-2 rounded-xl bg-emerald-500 text-white">
+                        <div className="p-2 rounded-none bg-emerald-500 text-white">
                           <CheckCircle2 className="w-6 h-6" />
                         </div>
                       ) : verifiedResult.alreadyServed ? (
-                        <div className="p-2 rounded-xl bg-amber-500 text-white">
+                        <div className="p-2 rounded-none bg-amber-500 text-white">
                           <AlertTriangle className="w-6 h-6" />
                         </div>
                       ) : (
-                        <div className="p-2 rounded-xl bg-rose-500 text-white">
+                        <div className="p-2 rounded-none bg-rose-500 text-white">
                           <XCircle className="w-6 h-6" />
                         </div>
                       )}
@@ -564,10 +564,10 @@ export default function MealCardsManagementPage() {
                   {filteredCards.slice(0, 6).map((card) => (
                     <div
                       key={card.id}
-                      className="p-3.5 rounded-2xl bg-card hover:bg-muted/40 border border-border/80 transition-all flex items-center justify-between gap-3 group"
+                      className="p-3.5 rounded-none bg-card hover:bg-muted/40 border border-border/80 transition-all flex items-center justify-between gap-3 group"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary font-bold flex items-center justify-center shrink-0">
+                        <div className="w-10 h-10 rounded-none bg-primary/10 text-primary font-bold flex items-center justify-center shrink-0">
                           {card.student?.name?.charAt(0) || "S"}
                         </div>
                         <div className="min-w-0">
@@ -585,7 +585,7 @@ export default function MealCardsManagementPage() {
                         variant="secondary"
                         onClick={() => handleDirectServe(card)}
                         disabled={servingLoading || card.status !== "ACTIVE"}
-                        className="rounded-xl shrink-0 group-hover:bg-amber-600 group-hover:text-white transition-all text-xs"
+                        className="rounded-none shrink-0 group-hover:bg-amber-600 group-hover:text-white transition-all text-xs"
                       >
                         Punch
                       </Button>
@@ -625,10 +625,10 @@ export default function MealCardsManagementPage() {
                     return (
                       <div
                         key={log.id}
-                        className="p-3 rounded-2xl bg-muted/40 border border-border/60 text-xs flex items-center justify-between gap-3"
+                        className="p-3 rounded-none bg-muted/40 border border-border/60 text-xs flex items-center justify-between gap-3"
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
-                          <div className="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-600 flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-none bg-amber-500/15 text-amber-600 flex items-center justify-center shrink-0">
                             {log.mealSession === "BREAKFAST" ? (
                               <Coffee className="w-3.5 h-3.5" />
                             ) : log.mealSession === "LUNCH" ? (
@@ -677,7 +677,7 @@ export default function MealCardsManagementPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Filter by student name, card ID or class..."
-                  className="pl-10 h-10 rounded-xl"
+                  className="pl-10 h-10 rounded-none"
                 />
               </div>
 
@@ -685,7 +685,7 @@ export default function MealCardsManagementPage() {
               <select
                 value={filterPlan}
                 onChange={(e) => setFilterPlan(e.target.value)}
-                className="h-10 px-3 rounded-xl border border-border bg-background text-sm"
+                className="h-10 px-3 rounded-none border border-border bg-background text-sm"
               >
                 <option value="ALL">All Meal Plans</option>
                 <option value="BOARDING_FULL">Full Boarding (3 Meals)</option>
@@ -698,7 +698,7 @@ export default function MealCardsManagementPage() {
               <select
                 value={filterClass}
                 onChange={(e) => setFilterClass(e.target.value)}
-                className="h-10 px-3 rounded-xl border border-border bg-background text-sm"
+                className="h-10 px-3 rounded-none border border-border bg-background text-sm"
               >
                 <option value="ALL">All Classes</option>
                 {classes.map((cls) => (
@@ -715,7 +715,7 @@ export default function MealCardsManagementPage() {
                 size="sm"
                 onClick={handleBatchGenerate}
                 disabled={isPending}
-                className="rounded-xl gap-2"
+                className="rounded-none gap-2"
               >
                 <Sparkles className="w-4 h-4 text-amber-500" />
                 Auto-Issue Missing Cards
@@ -797,7 +797,7 @@ export default function MealCardsManagementPage() {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleToggleStatus(card)}
-                            className="rounded-xl text-xs h-8"
+                            className="rounded-none text-xs h-8"
                           >
                             {card.status === "ACTIVE" ? (
                               <span className="text-rose-500 flex items-center gap-1">
@@ -825,14 +825,14 @@ export default function MealCardsManagementPage() {
       {/* ===================================================================== */}
       {activeTab === "print" && (
         <div className="space-y-6">
-          <div className="flex items-center justify-between p-4 rounded-2xl bg-muted/40 border border-border">
+          <div className="flex items-center justify-between p-4 rounded-none bg-muted/40 border border-border">
             <div className="text-sm">
               <span className="font-bold">Print Preview Mode:</span> Click the button to print wallet-sized
               laminated badges with school crest and QR code.
             </div>
             <Button
               onClick={() => window.print()}
-              className="gap-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl"
+              className="gap-2 bg-amber-600 hover:bg-amber-700 text-white rounded-none"
             >
               <Printer className="w-4 h-4" />
               Print All ({filteredCards.length})
@@ -862,7 +862,7 @@ export default function MealCardsManagementPage() {
 
                 {/* Student Info */}
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-600 text-white font-bold flex items-center justify-center text-lg shadow-sm">
+                  <div className="w-12 h-12 rounded-none bg-amber-600 text-white font-bold flex items-center justify-center text-lg shadow-sm">
                     {card.student?.name?.charAt(0) || "S"}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -875,7 +875,7 @@ export default function MealCardsManagementPage() {
                 </div>
 
                 {/* Plan Badge & Daily Quota */}
-                <div className="p-2.5 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs space-y-1">
+                <div className="p-2.5 rounded-none bg-amber-500/5 border border-amber-500/20 text-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-[11px]">Meal Package:</span>
                     <span className="font-bold text-foreground text-[11px]">
@@ -912,7 +912,7 @@ export default function MealCardsManagementPage() {
             <h2 className="text-lg font-bold font-display">Cafeteria Kitchen Consumption & Breakdown</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-5 rounded-2xl bg-muted/40 border border-border/80 space-y-3">
+              <div className="p-5 rounded-none bg-muted/40 border border-border/80 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="font-bold text-sm">Breakfast Session</div>
                   <Coffee className="w-5 h-5 text-amber-500" />
@@ -925,7 +925,7 @@ export default function MealCardsManagementPage() {
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-muted/40 border border-border/80 space-y-3">
+              <div className="p-5 rounded-none bg-muted/40 border border-border/80 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="font-bold text-sm">Main Lunch Service</div>
                   <Soup className="w-5 h-5 text-amber-500" />
@@ -938,7 +938,7 @@ export default function MealCardsManagementPage() {
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-muted/40 border border-border/80 space-y-3">
+              <div className="p-5 rounded-none bg-muted/40 border border-border/80 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="font-bold text-sm">Dinner & Supper Service</div>
                   <Coffee className="w-5 h-5 text-emerald-500" />
@@ -983,7 +983,7 @@ export default function MealCardsManagementPage() {
                   value={modalStudentId}
                   onChange={(e) => setModalStudentId(e.target.value)}
                   required
-                  className="w-full h-11 px-3 rounded-xl border border-border bg-background text-sm"
+                  className="w-full h-11 px-3 rounded-none border border-border bg-background text-sm"
                 >
                   <option value="">-- Choose Student --</option>
                   {students.map((st) => (
@@ -1001,7 +1001,7 @@ export default function MealCardsManagementPage() {
                 <select
                   value={modalPlanType}
                   onChange={(e) => setModalPlanType(e.target.value as MealPlanType)}
-                  className="w-full h-11 px-3 rounded-xl border border-border bg-background text-sm"
+                  className="w-full h-11 px-3 rounded-none border border-border bg-background text-sm"
                 >
                   <option value="BOARDING_FULL">Boarding Full (Breakfast, Lunch, Supper)</option>
                   <option value="DAY_LUNCH">Day Scholar Lunch Only</option>
@@ -1021,7 +1021,7 @@ export default function MealCardsManagementPage() {
                     max="5"
                     value={modalDailyQuota}
                     onChange={(e) => setModalDailyQuota(Number(e.target.value))}
-                    className="rounded-xl h-11"
+                    className="rounded-none h-11"
                   />
                 </div>
 
@@ -1033,7 +1033,7 @@ export default function MealCardsManagementPage() {
                     type="number"
                     value={modalPoints}
                     onChange={(e) => setModalPoints(Number(e.target.value))}
-                    className="rounded-xl h-11"
+                    className="rounded-none h-11"
                   />
                 </div>
               </div>
@@ -1046,7 +1046,7 @@ export default function MealCardsManagementPage() {
                   value={modalAllergies}
                   onChange={(e) => setModalAllergies(e.target.value)}
                   placeholder="e.g. Lactose intolerant, peanut allergy, vegetarian"
-                  className="rounded-xl h-11"
+                  className="rounded-none h-11"
                 />
               </div>
 
@@ -1055,13 +1055,13 @@ export default function MealCardsManagementPage() {
                   type="button"
                   variant="outline"
                   onClick={() => setShowIssueModal(false)}
-                  className="rounded-xl"
+                  className="rounded-none"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-semibold"
+                  className="bg-amber-600 hover:bg-amber-700 text-white rounded-none font-semibold"
                 >
                   Issue Meal Pass
                 </Button>

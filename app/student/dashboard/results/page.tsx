@@ -88,35 +88,35 @@ export default function StudentResults() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white p-5 rounded-2xl border shadow-sm flex items-center justify-between">
+        <div className="bg-white p-5 rounded-none border shadow-sm flex items-center justify-between">
           <div>
             <div className="text-xs font-semibold tracking-wider uppercase text-gray-400">Average Score</div>
             <div className="mt-2 text-3xl font-bold text-gray-900">{averageScore}%</div>
             <div className="mt-1 text-xs text-gray-500">Across all terms</div>
           </div>
-          <div className="size-11 rounded-xl bg-blue-50 text-blue-600 grid place-items-center">
+          <div className="size-11 rounded-none bg-blue-50 text-blue-600 grid place-items-center">
             <Award className="w-6 h-6" />
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border shadow-sm flex items-center justify-between">
+        <div className="bg-white p-5 rounded-none border shadow-sm flex items-center justify-between">
           <div>
             <div className="text-xs font-semibold tracking-wider uppercase text-gray-400">Top Subject</div>
             <div className="mt-2 text-2xl font-bold text-gray-900 truncate max-w-[150px]">{topSubjectName}</div>
             <div className="mt-1 text-xs text-emerald-600 font-medium">Avg: {Math.round(topSubjectAvg)}%</div>
           </div>
-          <div className="size-11 rounded-xl bg-emerald-50 text-emerald-600 grid place-items-center">
+          <div className="size-11 rounded-none bg-emerald-50 text-emerald-600 grid place-items-center">
             <Star className="w-6 h-6" />
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border shadow-sm flex items-center justify-between">
+        <div className="bg-white p-5 rounded-none border shadow-sm flex items-center justify-between">
           <div>
             <div className="text-xs font-semibold tracking-wider uppercase text-gray-400">Assessments Taken</div>
             <div className="mt-2 text-3xl font-bold text-gray-900">{totalAssessments}</div>
             <div className="mt-1 text-xs text-gray-500">Graded tasks</div>
           </div>
-          <div className="size-11 rounded-xl bg-amber-50 text-amber-600 grid place-items-center">
+          <div className="size-11 rounded-none bg-amber-50 text-amber-600 grid place-items-center">
             <BookOpen className="w-6 h-6" />
           </div>
         </div>
@@ -125,7 +125,7 @@ export default function StudentResults() {
       {/* Grids / Results tables */}
       <div className="space-y-6 mt-8">
         {groupedExams.map((group, idx) => (
-          <div key={idx} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+          <div key={idx} className="bg-white rounded-none border border-gray-100 shadow-sm overflow-hidden">
             <div className="p-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
               <div>
                 <h3 className="font-bold text-gray-900">{group.examTitle}</h3>
@@ -179,7 +179,7 @@ export default function StudentResults() {
         ))}
 
         {groupedExams.length === 0 && (
-          <div className="p-12 text-center text-gray-400 bg-white rounded-xl border border-dashed border-gray-300">
+          <div className="p-12 text-center text-gray-400 bg-white rounded-none border border-dashed border-gray-300">
             <FileSpreadsheet className="w-12 h-12 mx-auto text-gray-300 mb-3" />
             <h3 className="font-semibold text-gray-900 mb-1">No Results Found</h3>
             <p className="text-xs max-w-sm mx-auto">No marks or exam grades have been recorded for your account yet. Please contact your subject teacher.</p>

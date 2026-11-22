@@ -42,7 +42,7 @@ export default function ApplicationsPage() {
     <>
       <PageHeader title="Applications" subtitle="Review and manage formal admission applications" />
 
-      <div className="rounded-2xl bg-card border shadow-sm overflow-hidden mt-6">
+      <div className="rounded-none bg-card border shadow-sm overflow-hidden mt-6">
         <div className="p-4 border-b border-border flex flex-wrap gap-3 items-center">
           <div className="relative flex-1 min-w-[200px] max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />

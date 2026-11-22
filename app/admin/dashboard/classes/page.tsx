@@ -147,7 +147,7 @@ export default function ClassesPage() {
                   <td className="px-6 py-4 text-right">
                     <button
                       onClick={() => remove(c.id)}
-                      className="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500/20 hover:text-red-700 transition-smooth inline-flex items-center gap-1.5 font-medium text-xs"
+                      className="px-3 py-1.5 rounded-none bg-red-500/10 text-red-600 hover:bg-red-500/20 hover:text-red-700 transition-smooth inline-flex items-center gap-1.5 font-medium text-xs"
                       title="Remove class"
                     >
                       <X className="size-3.5 shrink-0" />
@@ -159,7 +159,16 @@ export default function ClassesPage() {
               {filtered.length === 0 && (
                 <tr>
                   <td colSpan={6} className="text-center py-16 text-muted-foreground">
-                    No classes match your search.
+                    <div className="max-w-xs mx-auto space-y-3">
+                      <BookOpen className="size-8 mx-auto text-muted-foreground/40" />
+                      <div className="text-sm font-medium text-foreground">No classes registered yet</div>
+                      <p className="text-xs text-muted-foreground">
+                        Create your first academic class to begin organizing grades and timetable schedules.
+                      </p>
+                      <Button onClick={() => setShowAdd(true)} size="sm" className="rounded-none bg-primary text-primary-foreground text-xs">
+                        <Plus className="size-3.5 mr-1.5" /> Create First Class
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               )}

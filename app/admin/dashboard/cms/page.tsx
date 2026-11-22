@@ -50,11 +50,11 @@ export default function CMSPage() {
 
       <div className="grid gap-8">
         {/* STATS SECTION */}
-        <section className="p-6 rounded-2xl bg-card border shadow-sm">
+        <section className="p-6 rounded-none bg-card border shadow-sm">
           <h3 className="font-display text-xl font-semibold mb-4 text-foreground/90">Homepage Statistics</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {content.stats.map((stat: any, i: number) => (
-              <div key={i} className="p-4 border border-border/50 rounded-xl space-y-3 bg-secondary/20 hover:border-border transition-smooth">
+              <div key={i} className="p-4 border border-border/50 rounded-none space-y-3 bg-secondary/20 hover:border-border transition-smooth">
                 <div>
                   <Label>Label</Label>
                   <Input value={stat.label} onChange={(e) => updateStat(i, "label", e.target.value)} className="mt-1.5" />
@@ -73,7 +73,7 @@ export default function CMSPage() {
         </section>
 
         {/* TESTIMONIALS SECTION */}
-        <section className="p-6 rounded-2xl bg-card border shadow-sm">
+        <section className="p-6 rounded-none bg-card border shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-display text-xl font-semibold text-foreground/90">Testimonials</h3>
             <Button variant="outline" size="sm" onClick={() => setContent({ ...content, testimonials: [{ name: "New Name", role: "Role", quote: "Quote here...", rating: 5 }, ...content.testimonials] })}>
@@ -82,7 +82,7 @@ export default function CMSPage() {
           </div>
           <div className="grid gap-6">
             {content.testimonials.map((t: any, i: number) => (
-              <div key={i} className="p-5 border border-border/50 rounded-xl flex flex-col md:flex-row gap-5 bg-secondary/20 hover:border-border transition-smooth relative group">
+              <div key={i} className="p-5 border border-border/50 rounded-none flex flex-col md:flex-row gap-5 bg-secondary/20 hover:border-border transition-smooth relative group">
                 <div className="flex-1 space-y-4">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
@@ -99,7 +99,7 @@ export default function CMSPage() {
                     <textarea 
                       value={t.quote} 
                       onChange={(e) => updateTestimonial(i, "quote", e.target.value)} 
-                      className="flex min-h-[80px] w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 mt-1.5 resize-y" 
+                      className="flex min-h-[80px] w-full rounded-none border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 mt-1.5 resize-y" 
                     />
                   </div>
                 </div>

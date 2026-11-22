@@ -8,18 +8,7 @@ import edurexaHorizontal from "@/assets/edurexa-horizontal.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import {
-  Wallet,
-  ShieldCheck,
-  Users,
-  LayoutDashboard,
-  Eye,
-  EyeOff,
-  Lock,
-  Award,
-  Receipt,
-  ArrowRight,
-} from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { loginAdminAction } from "@/lib/auth-actions";
 
 export default function AdminLogin() {
@@ -75,90 +64,39 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-background">
-      {/* Left Showcase Hero Panel (Pure Flexbox) */}
-      <div className="lg:w-1/2 xl:w-7/12 relative hidden lg:flex flex-col justify-between p-12 lg:p-16 overflow-hidden bg-slate-950 text-white">
-        {/* Ambient Gradient Blobs */}
-        <div className="absolute -top-32 -left-32 size-[500px] bg-slate-800/50 rounded-full blur-[110px] pointer-events-none" />
-        <div className="absolute bottom-0 right-0 size-[450px] bg-[#f26522]/20 rounded-full blur-[100px] pointer-events-none" />
-
-        {/* Top Brand */}
-        <Link href="/" className="flex items-center gap-3 relative z-10 w-fit">
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col justify-between font-sans">
+      <header className="px-6 py-6 flex items-center justify-between max-w-5xl mx-auto w-full">
+        <Link href="/" className="inline-block transition-opacity hover:opacity-90">
           <Image
             src={edurexaHorizontal}
             alt="EDUREXA Logo"
-            className="h-10 w-auto object-contain brightness-0 invert"
+            className="h-9 w-auto object-contain"
             priority
           />
         </Link>
+        <Link
+          href="/"
+          className="text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors"
+        >
+          ← Return to Website
+        </Link>
+      </header>
 
-        {/* Center Pitch */}
-        <div className="relative z-10 space-y-6 max-w-lg">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">
-            Total operational clarity, <br />
-            <span className="text-[#f26522]">for your institution.</span>
-          </h1>
-
-          <p className="text-base text-slate-300/90 leading-relaxed">
-            Manage student fee billing, cashier counters, double-entry ledgers, staff payroll, admissions, and school operations with complete role separation and audit security.
-          </p>
-
-          {/* Value Props */}
-          <div className="flex flex-wrap gap-3 pt-2">
-            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-none bg-white/5 border border-white/10">
-              <Wallet className="size-4 text-emerald-400 shrink-0" />
-              <span className="text-xs font-semibold text-slate-200">11-Sector Finance POS</span>
-            </div>
-            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-none bg-white/5 border border-white/10">
-              <ShieldCheck className="size-4 text-blue-400 shrink-0" />
-              <span className="text-xs font-semibold text-slate-200">Anti-Leakage Auditing</span>
-            </div>
-            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-none bg-white/5 border border-white/10">
-              <Users className="size-4 text-amber-400 shrink-0" />
-              <span className="text-xs font-semibold text-slate-200">Student & Staff SIS</span>
-            </div>
-            <div className="flex-1 min-w-[200px] flex items-center gap-2.5 p-3 rounded-none bg-white/5 border border-white/10">
-              <LayoutDashboard className="size-4 text-purple-400 shrink-0" />
-              <span className="text-xs font-semibold text-slate-200">Real-Time Ledger Sync</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Trust Badge */}
-        <div className="relative z-10 flex items-center gap-3 pt-6 border-t border-white/10 text-xs text-slate-400">
-          <Award className="size-4 text-amber-400" />
-          <span>EDUREXA Multi-Tenant Cloud Architecture</span>
-        </div>
-      </div>
-
-      {/* Right Login Form Column */}
-      <div className="lg:w-1/2 xl:w-5/12 flex flex-col justify-center px-6 sm:px-12 lg:px-16 py-12 bg-white">
-        <div className="w-full max-w-sm mx-auto space-y-6">
-          {/* Mobile Brand Link */}
-          <div className="lg:hidden flex items-center justify-between mb-4">
-            <Link href="/" className="inline-block">
-              <Image
-                src={edurexaHorizontal}
-                alt="EDUREXA Logo"
-                className="h-9 w-auto object-contain"
-                priority
-              />
-            </Link>
-          </div>
-
+      <main className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-sm space-y-6">
           <div className="space-y-1">
-            <h2 className="text-2xl font-bold text-foreground tracking-tight">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
               Login
-            </h2>
-            <p className="text-xs text-muted-foreground">
+            </h1>
+            <p className="text-xs text-slate-500">
               Enter your credentials to access your administrative workstation.
             </p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-foreground">
-                Email
+              <label className="block text-xs font-semibold text-slate-700">
+                Email / Workstation ID
               </label>
               <Input
                 type="text"
@@ -172,7 +110,7 @@ export default function AdminLogin() {
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="block text-xs font-semibold text-foreground">
+                <label className="block text-xs font-semibold text-slate-700">
                   Password
                 </label>
                 <button
@@ -180,7 +118,7 @@ export default function AdminLogin() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="text-xs text-slate-500 hover:text-slate-800 font-medium flex items-center gap-1"
                 >
-                  {showPassword ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
+                  {showPassword ? <EyeOff className="size-3" /> : <Eye className="size-3" />}
                   <span>{showPassword ? "Hide" : "Show"}</span>
                 </button>
               </div>
@@ -206,13 +144,13 @@ export default function AdminLogin() {
           {/* Quick Select Buttons Below Form */}
           <div className="pt-6 border-t border-slate-100 space-y-2">
             <div className="text-[11px] font-medium text-slate-400">
-              Quick select account:
+              Quick select role:
             </div>
             <div className="flex flex-wrap gap-1.5">
               <button
                 type="button"
                 onClick={() => handleFillAccount("cashier")}
-                className={`text-xs px-2.5 py-1.5 border transition-colors ${
+                className={`text-xs px-2.5 py-1.5 border rounded-none transition-colors ${
                   selectedRole === "cashier"
                     ? "bg-[#0b2256] text-white border-[#0b2256] font-medium"
                     : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
@@ -224,7 +162,7 @@ export default function AdminLogin() {
               <button
                 type="button"
                 onClick={() => handleFillAccount("admin")}
-                className={`text-xs px-2.5 py-1.5 border transition-colors ${
+                className={`text-xs px-2.5 py-1.5 border rounded-none transition-colors ${
                   selectedRole === "admin"
                     ? "bg-[#0b2256] text-white border-[#0b2256] font-medium"
                     : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
@@ -236,7 +174,7 @@ export default function AdminLogin() {
               <button
                 type="button"
                 onClick={() => handleFillAccount("bursar")}
-                className={`text-xs px-2.5 py-1.5 border transition-colors ${
+                className={`text-xs px-2.5 py-1.5 border rounded-none transition-colors ${
                   selectedRole === "bursar"
                     ? "bg-[#0b2256] text-white border-[#0b2256] font-medium"
                     : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
@@ -248,21 +186,25 @@ export default function AdminLogin() {
           </div>
 
           <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-muted-foreground">
-            <Link href="/" className="hover:text-foreground transition-colors">
+            <Link href="/" className="hover:text-slate-900 transition-colors">
               ← Return to Website
             </Link>
             <div className="flex items-center gap-3 font-medium">
-              <Link href="/teacher" className="hover:text-foreground">
+              <Link href="/teacher" className="hover:text-slate-900">
                 Teacher
               </Link>
               <span>•</span>
-              <Link href="/student" className="hover:text-foreground">
+              <Link href="/student" className="hover:text-slate-900">
                 Student
               </Link>
             </div>
           </div>
         </div>
-      </div>
+      </main>
+
+      <footer className="py-4 text-center text-xs text-slate-400 border-t border-slate-100">
+        EDUREXA Ecosystem Platform
+      </footer>
     </div>
   );
 }

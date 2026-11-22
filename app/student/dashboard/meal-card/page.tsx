@@ -96,7 +96,7 @@ export default function StudentMealCardPage() {
               </div>
 
               {/* Card Identifier & Plan */}
-              <div className="p-3.5 rounded-2xl bg-black/15 backdrop-blur-sm border border-white/10 space-y-2 text-xs">
+              <div className="p-3.5 rounded-none bg-black/15 backdrop-blur-sm border border-white/10 space-y-2 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-amber-200">Card Identifier:</span>
                   <span className="font-mono font-bold text-white text-sm">{card.cardNumber}</span>
@@ -130,7 +130,7 @@ export default function StudentMealCardPage() {
 
               {/* Barcode Mock */}
               <div className="text-center pt-2">
-                <div className="h-9 bg-white/90 rounded-xl flex items-center justify-center font-mono text-black font-bold text-xs tracking-widest">
+                <div className="h-9 bg-white/90 rounded-none flex items-center justify-center font-mono text-black font-bold text-xs tracking-widest">
                   ||||| |||| || ||||||| |||| ||||
                 </div>
                 <div className="text-[10px] text-amber-200 mt-1.5 font-mono">{card.cardNumber}</div>
@@ -138,7 +138,7 @@ export default function StudentMealCardPage() {
             </div>
           ) : (
             <div className="p-8 rounded-3xl bg-card border border-border text-center space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 rounded-none bg-amber-500/10 text-amber-600 flex items-center justify-center mx-auto">
                 <Utensils className="w-6 h-6" />
               </div>
               <h3 className="font-bold text-base">No Meal Card Assigned</h3>
@@ -159,7 +159,7 @@ export default function StudentMealCardPage() {
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-              <div className="p-4 rounded-2xl bg-muted/40 border border-border/80 space-y-2">
+              <div className="p-4 rounded-none bg-muted/40 border border-border/80 space-y-2">
                 <div className="flex items-center justify-between text-blue-600">
                   <div className="font-bold text-xs">Morning Session</div>
                   <Coffee className="w-4 h-4" />
@@ -170,7 +170,7 @@ export default function StudentMealCardPage() {
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-muted/40 border border-border/80 space-y-2">
+              <div className="p-4 rounded-none bg-muted/40 border border-border/80 space-y-2">
                 <div className="flex items-center justify-between text-amber-600">
                   <div className="font-bold text-xs">Afternoon Session</div>
                   <Soup className="w-4 h-4" />
@@ -181,7 +181,7 @@ export default function StudentMealCardPage() {
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-muted/40 border border-border/80 space-y-2">
+              <div className="p-4 rounded-none bg-muted/40 border border-border/80 space-y-2">
                 <div className="flex items-center justify-between text-emerald-600">
                   <div className="font-bold text-xs">Evening Session</div>
                   <Coffee className="w-4 h-4" />
@@ -224,10 +224,10 @@ export default function StudentMealCardPage() {
                   return (
                     <div
                       key={log.id}
-                      className="p-3.5 rounded-2xl bg-muted/30 border border-border/60 flex items-center justify-between text-xs"
+                      className="p-3.5 rounded-none bg-muted/30 border border-border/60 flex items-center justify-between text-xs"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-xl bg-amber-500/10 text-amber-600">
+                        <div className="p-2 rounded-none bg-amber-500/10 text-amber-600">
                           {log.mealSession === "BREAKFAST" ? (
                             <Coffee className="w-4 h-4" />
                           ) : log.mealSession === "LUNCH" ? (

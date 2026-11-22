@@ -66,9 +66,9 @@ export default function RegisterStudent() {
         subtitle="Add a new student to one of your classes and create their portal login."
       />
 
-      <div className="w-full max-w-none bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+      <div className="w-full max-w-none bg-white rounded-none shadow-sm border border-gray-100 p-8">
         <div className="flex items-center gap-3 mb-6">
-          <div className="bg-orange-100 text-orange-600 p-2 rounded-lg">
+          <div className="bg-orange-100 text-orange-600 p-2 rounded-none">
             <UserPlus className="w-5 h-5" />
           </div>
           <h2 className="text-xl font-bold text-gray-900">Student Details</h2>
@@ -88,7 +88,7 @@ export default function RegisterStudent() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Assign to Class</label>
               <select
-                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-orange-500"
                 value={formData.classId}
                 onChange={(e) => setFormData({ ...formData, classId: e.target.value })}
               >
