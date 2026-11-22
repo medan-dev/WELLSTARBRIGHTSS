@@ -748,7 +748,7 @@ export default function SuperAdminFinancePage() {
   return (
     <div className="space-y-6 pb-20">
       {/* 1. TOP EXECUTIVE GLASSMORPHIC BANNER */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 lg:p-7 border border-slate-800 shadow-2xl">
+      <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white rounded-none p-6 lg:p-7 border border-slate-800 shadow-2xl">
         {/* Ambient Decorative Light Orbs */}
         <div className="absolute -top-24 -right-24 size-72 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 size-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -760,7 +760,7 @@ export default function SuperAdminFinancePage() {
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2.5">
-                <h1 className="text-2xl lg:text-3xl font-black tracking-tight text-white">
+                <h1 className="text-3xl lg:text-4xl xl:text-5xl font-black tracking-tight text-white">
                   Finance & Treasury Command
                 </h1>
                 <span className="px-3 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-widest flex items-center gap-1">

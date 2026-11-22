@@ -262,7 +262,7 @@ export default function MealCardsManagementPage() {
               <Utensils className="w-7 h-7" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-display font-black tracking-tight">
                 Dining Hall & Meal Cards Command
               </h1>
               <p className="text-sm text-muted-foreground mt-0.5">

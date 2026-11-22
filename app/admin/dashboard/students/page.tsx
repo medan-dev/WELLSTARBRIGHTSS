@@ -15,10 +15,10 @@ export default function StudentsPage() {
   const [q, setQ] = useState("");
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const [editingStudent, setEditingStudent] = useState<any>(null);
   const [editForm, setEditForm] = useState({ name: "", email: "", password: "", classId: "" });
-  
+
   const [showAdd, setShowAdd] = useState(false);
   const [newStudent, setNewStudent] = useState({ name: "", email: "", password: "", classId: "" });
   const perPage = 8;
@@ -59,7 +59,7 @@ export default function StudentsPage() {
   };
 
   const handleDeleteStudent = async (id: string) => {
-    if(!confirm("Are you sure you want to delete this student?")) return;
+    if (!confirm("Are you sure you want to delete this student?")) return;
     toast.loading("Deleting student...");
     try {
       await deleteStudent(id);
@@ -147,9 +147,9 @@ export default function StudentsPage() {
                     <td className="px-4 py-3">{s.class?.grade || "N/A"} - {s.class?.name || "N/A"}</td>
                     <td className="px-4 py-3 text-right">
                       <div className="inline-flex gap-1 justify-end">
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           onClick={() => {
                             setEditingStudent(s);
                             setEditForm({
@@ -226,7 +226,7 @@ export default function StudentsPage() {
               </div>
               <div>
                 <Label htmlFor="sclass">Assigned Class *</Label>
-                <select 
+                <select
                   id="sclass"
                   className="w-full mt-1.5 border rounded-none px-3 py-2 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
                   value={newStudent.classId}
@@ -272,7 +272,7 @@ export default function StudentsPage() {
               </div>
               <div>
                 <Label htmlFor="eclass">Assigned Class</Label>
-                <select 
+                <select
                   id="eclass"
                   className="w-full mt-1.5 border rounded-none px-3 py-2 text-sm bg-transparent outline-none focus:ring-2 focus:ring-primary/20"
                   value={editForm.classId}

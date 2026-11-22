@@ -129,17 +129,17 @@ export function PageHeader({
 }) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-      <div className="space-y-1">
+      <div className="space-y-1.5">
         {badge && (
-          <span className="inline-block text-[10px] font-extrabold uppercase tracking-wider bg-primary/10 text-primary px-2.5 py-0.5 rounded-none mb-1">
+          <span className="inline-block text-[11px] font-black uppercase tracking-wider bg-primary/10 text-primary px-3 py-1 rounded-none mb-1">
             {badge}
           </span>
         )}
-        <h1 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground m-0">
+        <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-foreground m-0">
           {title}
         </h1>
         {subtitle && (
-          <p className="text-sm text-muted-foreground max-w-2xl font-normal leading-relaxed">
+          <p className="text-sm sm:text-base text-muted-foreground max-w-2xl font-medium leading-relaxed">
             {subtitle}
           </p>
         )}
