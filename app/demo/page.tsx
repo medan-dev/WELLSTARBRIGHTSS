@@ -15,11 +15,12 @@ import {
   GraduationCap,
   Lock,
   Globe,
+  Sliders,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { StandardFrontSiteModal } from "@/components/site/StandardFrontSiteModal";
+import { SchoolAutomationWizard } from "@/components/wizard/SchoolAutomationWizard";
 import {
   loginAdminAction,
   loginTeacherAction,
@@ -81,7 +82,7 @@ export default function DemoPage() {
   const [password, setPassword] = useState("5566");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [showFrontSite, setShowFrontSite] = useState(false);
+  const [showWizard, setShowWizard] = useState(false);
 
   // When a user clicks a button below the form, populate the form
   const handleSelectRole = (opt: RoleOption) => {
@@ -179,20 +180,27 @@ export default function DemoPage() {
             priority
           />
         </Link>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <Button
             type="button"
             variant="outline"
             size="sm"
-            onClick={() => setShowFrontSite(true)}
+            onClick={() => setShowWizard(true)}
             className="h-8 rounded-none text-xs gap-1.5 border-slate-300 hover:bg-slate-50 text-slate-800"
+          >
+            <Sliders className="size-3.5 text-[#f26522]" />
+            <span>System Wizard</span>
+          </Button>
+          <Link
+            href="/front-site"
+            className="inline-flex items-center gap-1.5 h-8 px-3 border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold rounded-none transition-colors"
           >
             <Globe className="size-3.5 text-[#0b2256]" />
             <span>Front Site View</span>
-          </Button>
+          </Link>
           <Link
             href="/"
-            className="text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors"
+            className="text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors hidden sm:inline"
           >
             ← Return to Website
           </Link>
@@ -259,15 +267,27 @@ export default function DemoPage() {
               {loading ? "Logging in..." : "Login"}
             </Button>
 
-            <button
-              type="button"
-              onClick={() => setShowFrontSite(true)}
+            <Link
+              href="/front-site"
               className="w-full flex items-center justify-between py-2.5 px-3 border border-slate-200 hover:border-slate-400 bg-slate-50/80 hover:bg-slate-100 text-xs text-slate-700 rounded-none transition-colors group"
             >
               <span className="flex items-center gap-2">
                 <Globe className="size-3.5 text-[#0b2256]" />
                 <span className="font-semibold text-slate-900">Front Site View</span>
                 <span className="text-[11px] text-slate-500">• Standard School Website</span>
+              </span>
+              <ArrowRight className="size-3 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => setShowWizard(true)}
+              className="w-full flex items-center justify-between py-2 px-3 border border-dashed border-slate-300 hover:border-slate-500 bg-white text-xs text-slate-600 rounded-none transition-colors group"
+            >
+              <span className="flex items-center gap-2">
+                <Sliders className="size-3.5 text-[#f26522]" />
+                <span className="font-semibold text-slate-800">System Setup Wizard</span>
+                <span className="text-[10px] text-slate-400">• Customize School & Badge</span>
               </span>
               <ArrowRight className="size-3 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
             </button>
@@ -306,10 +326,10 @@ export default function DemoPage() {
         <p>© 2026 EDUREXA. All rights reserved.</p>
       </footer>
 
-      {/* Standard Front Site Modal View */}
-      <StandardFrontSiteModal
-        isOpen={showFrontSite}
-        onClose={() => setShowFrontSite(false)}
+      {/* School Setup & Customization Automation Wizard */}
+      <SchoolAutomationWizard
+        isOpen={showWizard}
+        onClose={() => setShowWizard(false)}
       />
     </div>
   );

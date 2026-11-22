@@ -19,8 +19,10 @@ import { PageHeader } from "@/components/admin/Widgets";
 import { getMealCardByStudent } from "../../../admin/meal-actions";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { useSchoolBrand } from "@/context/SchoolBrandContext";
 
 export default function StudentMealCardPage() {
+  const { brand } = useSchoolBrand();
   const [card, setCard] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [studentName, setStudentName] = useState("Student");
@@ -77,12 +79,16 @@ export default function StudentMealCardPage() {
               <div className="flex items-center justify-between border-b border-white/20 pb-4">
                 <div>
                   <div className="text-[10px] tracking-wider uppercase font-bold text-amber-200">
-                    EDUREXA Demo Academy
+                    {brand.name}
                   </div>
                   <div className="text-sm font-extrabold tracking-tight">DINING & MEAL PASS</div>
                 </div>
-                <div className="w-9 h-9 bg-white/20 backdrop-blur-sm flex items-center justify-center font-bold text-xs">
-                  EX
+                <div className="size-9 bg-white/20 backdrop-blur-sm flex items-center justify-center font-bold text-xs overflow-hidden">
+                  {brand.badgeUrl ? (
+                    <img src={brand.badgeUrl} alt="Crest" className="size-full object-cover" />
+                  ) : (
+                    brand.badgeInitials || "DA"
+                  )}
                 </div>
               </div>
 

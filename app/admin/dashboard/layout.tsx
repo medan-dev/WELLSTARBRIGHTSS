@@ -11,12 +11,13 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Users, GraduationCap, BookOpen, ClipboardCheck,
   Wallet, Bell, LogOut, Menu, Search, Moon, Sun, FileText, LayoutTemplate, Video, ImageIcon, ChevronLeft, ChevronRight,
-  Utensils, ShieldCheck
+  Utensils, ShieldCheck, Globe, Sliders
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { logoutAction } from "@/lib/auth-actions";
+import { SchoolAutomationWizard } from "@/components/wizard/SchoolAutomationWizard";
 
 const nav = [
   { href: "/admin/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -28,6 +29,7 @@ const nav = [
   { href: "/admin/dashboard/classes", label: "Classes", icon: BookOpen },
   { href: "/admin/dashboard/attendance", label: "Attendance", icon: ClipboardCheck },
 
+  { href: "/front-site", label: "Front Site View", icon: Globe },
   { href: "/admin/dashboard/cms", label: "Website Content", icon: LayoutTemplate },
   { href: "/admin/dashboard/media", label: "Media & Events", icon: Video },
   { href: "/admin/dashboard/gallery", label: "Gallery", icon: ImageIcon },
@@ -40,6 +42,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [collapsed, setCollapsed] = useState(false); // Desktop sidebar collapsed
   const [dark, setDark] = useState(false);
   const [authorized, setAuthorized] = useState(false);
+  const [wizardOpen, setWizardOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -167,7 +170,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
               <Input placeholder="Search students, teachers, classes…" className="pl-9 bg-secondary/50 border-none focus-visible:ring-1 rounded-none" />
             </div>
-            <div className="ml-auto flex items-center gap-3">
+            <div className="ml-auto flex items-center gap-2 sm:gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setWizardOpen(true)}
+                className="h-8 rounded-none text-xs gap-1.5 border-border hover:bg-secondary hidden sm:inline-flex"
+              >
+                <Sliders className="size-3.5 text-[#f26522]" />
+                <span>System Wizard</span>
+              </Button>
+              <Link
+                href="/front-site"
+                className="inline-flex items-center gap-1.5 h-8 px-2.5 border border-border bg-background hover:bg-secondary text-foreground text-xs font-medium rounded-none transition-colors"
+                title="View School Public Front Site"
+              >
+                <Globe className="size-3.5 text-primary" />
+                <span className="hidden md:inline">Front Site</span>
+              </Link>
               <Button variant="ghost" size="icon" onClick={toggleDark} aria-label="Toggle theme" className="rounded-full">
                 {dark ? <Sun className="size-5" /> : <Moon className="size-5" />}
               </Button>
@@ -182,6 +203,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {children}
         </main>
       </div>
+
+      {/* School Setup & Customization Automation Wizard */}
+      <SchoolAutomationWizard
+        isOpen={wizardOpen}
+        onClose={() => setWizardOpen(false)}
+      />
     </div>
   );
 }

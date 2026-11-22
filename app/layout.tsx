@@ -4,6 +4,7 @@ import { Inter, Sora } from "next/font/google";
 import "@/styles.css";
 import { Toaster } from "@/components/ui/sonner";
 import { LoaderProvider } from "@/components/site/PageLoader";
+import { SchoolBrandProvider } from "@/context/SchoolBrandContext";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { JsonLd } from "@/components/seo/JsonLd";
 
@@ -274,7 +275,9 @@ export default function RootLayout({
           }}
         />
         <LoaderProvider>
-          {children}
+          <SchoolBrandProvider>
+            {children}
+          </SchoolBrandProvider>
         </LoaderProvider>
         <Toaster position="top-right" richColors />
       </body>
