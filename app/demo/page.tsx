@@ -14,10 +14,12 @@ import {
   BookOpen,
   GraduationCap,
   Lock,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { StandardFrontSiteModal } from "@/components/site/StandardFrontSiteModal";
 import {
   loginAdminAction,
   loginTeacherAction,
@@ -79,6 +81,7 @@ export default function DemoPage() {
   const [password, setPassword] = useState("5566");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showFrontSite, setShowFrontSite] = useState(false);
 
   // When a user clicks a button below the form, populate the form
   const handleSelectRole = (opt: RoleOption) => {
@@ -176,12 +179,24 @@ export default function DemoPage() {
             priority
           />
         </Link>
-        <Link
-          href="/"
-          className="text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors"
-        >
-          ← Return to Website
-        </Link>
+        <div className="flex items-center gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setShowFrontSite(true)}
+            className="h-8 rounded-none text-xs gap-1.5 border-slate-300 hover:bg-slate-50 text-slate-800"
+          >
+            <Globe className="size-3.5 text-[#0b2256]" />
+            <span>Front Site View</span>
+          </Button>
+          <Link
+            href="/"
+            className="text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors"
+          >
+            ← Return to Website
+          </Link>
+        </div>
       </header>
 
       {/* Main Centered Form */}
@@ -243,6 +258,19 @@ export default function DemoPage() {
             >
               {loading ? "Logging in..." : "Login"}
             </Button>
+
+            <button
+              type="button"
+              onClick={() => setShowFrontSite(true)}
+              className="w-full flex items-center justify-between py-2.5 px-3 border border-slate-200 hover:border-slate-400 bg-slate-50/80 hover:bg-slate-100 text-xs text-slate-700 rounded-none transition-colors group"
+            >
+              <span className="flex items-center gap-2">
+                <Globe className="size-3.5 text-[#0b2256]" />
+                <span className="font-semibold text-slate-900">Front Site View</span>
+                <span className="text-[11px] text-slate-500">• Standard School Website</span>
+              </span>
+              <ArrowRight className="size-3 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+            </button>
           </form>
 
           {/* Quick Select Buttons Below Form */}
@@ -277,6 +305,12 @@ export default function DemoPage() {
       <footer className="py-6 text-center text-xs text-slate-400">
         <p>© 2026 EDUREXA. All rights reserved.</p>
       </footer>
+
+      {/* Standard Front Site Modal View */}
+      <StandardFrontSiteModal
+        isOpen={showFrontSite}
+        onClose={() => setShowFrontSite(false)}
+      />
     </div>
   );
 }
