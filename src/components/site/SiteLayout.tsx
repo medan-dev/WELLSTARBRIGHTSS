@@ -15,10 +15,12 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   const isSchoolSite =
     pathname?.startsWith("/front-site") ||
     pathname?.startsWith("/school") ||
+    pathname?.startsWith("/wellstar") ||
     pathname === "/about" ||
     pathname === "/academics" ||
     pathname === "/admissions" ||
     pathname === "/gallery" ||
+    pathname === "/media" ||
     pathname === "/contact" ||
     pathname === "/apply";
 

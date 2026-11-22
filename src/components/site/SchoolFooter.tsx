@@ -1,182 +1,87 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Phone,
-  Mail,
-  MapPin,
-  Clock,
-  ShieldCheck,
-  Award,
-  BookOpen,
-  ArrowRight,
-  ExternalLink,
-} from "lucide-react";
-import { useSchoolBrand } from "@/context/SchoolBrandContext";
+import Image from "next/image";
+import logo from "@/assets/logo.png";
+import { GraduationCap, Mail, MapPin, Phone, Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
 import { DynamicYear } from "./DynamicYear";
+import { useSchoolBrand } from "@/context/SchoolBrandContext";
 
 export function SchoolFooter() {
   const { brand } = useSchoolBrand();
+  const schoolName = brand?.name || "Wellstar Bright Secondary School";
+  const shortName = brand?.name ? (brand.name.includes("Secondary") ? brand.name.replace("Secondary School", "").trim() : brand.name) : "Wellstar Bright";
 
   return (
-    <footer className="bg-[#081a42] text-white border-t border-white/10 font-sans">
-      {/* Upper Footer Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-        {/* Column 1: School Identity & Accreditations */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="size-11 rounded-none bg-white text-[#0b2256] font-black text-sm grid place-items-center shrink-0 border border-amber-400">
-              {brand.badgeUrl ? (
-                <img
-                  src={brand.badgeUrl}
-                  alt={brand.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <span className="font-serif tracking-widest">{brand.badgeInitials || "SC"}</span>
-              )}
+    <footer className="relative mt-12 sm:mt-16 border-t border-border bg-secondary/20">
+      <div className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-12 sm:py-16 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-12">
+        <div className="col-span-2 space-y-4">
+          <Link href="/front-site" className="flex items-center gap-2">
+            <div className="relative size-8 sm:size-10 shrink-0">
+              <Image 
+                src={brand?.badgeUrl || logo} 
+                alt={`${schoolName} Logo`} 
+                width={40} 
+                height={40} 
+                className="w-8 h-8 sm:w-10 sm:h-10 object-contain" 
+              />
             </div>
-            <div>
-              <div className="font-serif font-bold text-sm tracking-tight uppercase leading-tight">
-                {brand.name}
-              </div>
-              <div className="text-[10px] text-amber-300 font-mono">
-                UNEB CENTER #{brand.unebCenterNumber}
-              </div>
-            </div>
-          </div>
-
-          <p className="text-xs text-slate-300 leading-relaxed">
-            &ldquo;{brand.motto}&rdquo; — Dedicated to academic rigor, holistic integrity, and transformative character development from Senior 1 to Senior 6.
+            <span className="font-display font-bold text-lg sm:text-xl">
+              {shortName}
+            </span>
+          </Link>
+          <p className="text-sm sm:text-base text-muted-foreground max-w-md">
+            {brand?.motto 
+              ? `${brand.motto}. A dedicated secondary school preparing students for a life of purpose, character, and service.`
+              : "Shaping the next generation through curiosity, character, and creativity. A Seventh-day Adventist secondary school preparing students for a life of purpose and service."}
           </p>
-
-          <div className="pt-1 flex items-center gap-2 text-[11px] text-slate-300">
-            <ShieldCheck className="size-4 text-emerald-400 shrink-0" />
-            <span>Ministry of Education & Sports Certified Center</span>
+          <div className="flex gap-2 pt-2">
+            {[Facebook, Instagram, Twitter, Linkedin].map((Icon, i) => (
+              <a
+                key={i}
+                href="#"
+                className="size-8 sm:size-10 rounded-lg border border-border grid place-items-center hover:bg-primary hover:text-primary-foreground hover:border-primary transition-smooth"
+                aria-label="Social link"
+              >
+                <Icon className="size-4" />
+              </a>
+            ))}
           </div>
         </div>
 
-        {/* Column 2: Academics & UNEB Curriculum */}
-        <div className="space-y-3 text-xs">
-          <div className="font-bold text-sm text-white uppercase tracking-wider border-b border-white/10 pb-2">
-            Academics & UNEB
-          </div>
-          <ul className="space-y-2 text-slate-300">
-            <li>
-              <Link href="/academics" className="hover:text-amber-300 transition-colors">
-                Lower Secondary (S.1–S.2 CBC Curriculum)
-              </Link>
-            </li>
-            <li>
-              <Link href="/academics" className="hover:text-amber-300 transition-colors">
-                Upper Secondary (S.3–S.4 UCE Candidates)
-              </Link>
-            </li>
-            <li>
-              <Link href="/academics" className="hover:text-amber-300 transition-colors">
-                Advanced Level (S.5–S.6 UACE Combinations)
-              </Link>
-            </li>
-            <li>
-              <Link href="/gallery" className="hover:text-amber-300 transition-colors">
-                STEM Science Laboratories & ICT Tech Hub
-              </Link>
-            </li>
-            <li>
-              <Link href="/about" className="hover:text-amber-300 transition-colors">
-                Teaching Faculty & Department Heads
-              </Link>
-            </li>
+        <div className="col-span-1">
+          <h4 className="font-display font-semibold text-sm sm:text-base mb-3 sm:mb-4">Explore</h4>
+          <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground">
+            <li><Link href="/about" className="hover:text-foreground transition-smooth">About</Link></li>
+            <li><Link href="/academics" className="hover:text-foreground transition-smooth">Academics</Link></li>
+            <li><Link href="/admissions" className="hover:text-foreground transition-smooth">Admissions</Link></li>
+            <li><Link href="/media" className="hover:text-foreground transition-smooth">Media</Link></li>
           </ul>
         </div>
 
-        {/* Column 3: Admissions & Boarding Life */}
-        <div className="space-y-3 text-xs">
-          <div className="font-bold text-sm text-white uppercase tracking-wider border-b border-white/10 pb-2">
-            Admissions & Student Life
-          </div>
-          <ul className="space-y-2 text-slate-300">
-            <li>
-              <Link href="/admissions" className="hover:text-amber-300 transition-colors">
-                2026 Academic Year Enrollment Procedure
-              </Link>
-            </li>
-            <li>
-              <Link href="/admissions" className="hover:text-amber-300 transition-colors">
-                Fee Guidelines & Installment Structures
-              </Link>
-            </li>
-            <li>
-              <Link href="/admissions" className="hover:text-amber-300 transition-colors">
-                Merit Bursaries & Academic Scholarships
-              </Link>
-            </li>
-            <li>
-              <Link href="/gallery" className="hover:text-amber-300 transition-colors">
-                Boarding Section & Dining Hall Nutrition
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" className="hover:text-amber-300 transition-colors">
-                Book a Guided Campus Visit
-              </Link>
-            </li>
+        <div className="col-span-1">
+          <h4 className="font-display font-semibold text-sm sm:text-base mb-3 sm:mb-4">Visit Us</h4>
+          <ul className="space-y-3 text-xs sm:text-sm text-muted-foreground">
+            <li className="flex gap-2 items-start"><MapPin className="size-3.5 sm:size-4 mt-0.5 text-primary shrink-0" /> <span>{brand?.location || "off Kayunga Road, Kabembe, Mukono District, Uganda"}</span></li>
+            <li className="flex gap-2 items-start"><Phone className="size-3.5 sm:size-4 mt-0.5 text-primary shrink-0" /> <span>{brand?.phone || "+256 772 589 430"}</span></li>
+            <li className="flex gap-2 items-start"><Mail className="size-3.5 sm:size-4 mt-0.5 text-primary shrink-0" /> <span className="break-all">{brand?.email || "info@wellstarbright.sc.ug"}</span></li>
           </ul>
-        </div>
-
-        {/* Column 4: Campus Inquiries & Visiting Hours */}
-        <div className="space-y-3 text-xs">
-          <div className="font-bold text-sm text-white uppercase tracking-wider border-b border-white/10 pb-2">
-            Campus Administration
-          </div>
-          <div className="space-y-2 text-slate-300">
-            <div className="flex items-start gap-2">
-              <MapPin className="size-4 text-[#f26522] shrink-0 mt-0.5" />
-              <span>{brand.location}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Phone className="size-4 text-[#f26522] shrink-0" />
-              <span>Admissions: {brand.phone}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Mail className="size-4 text-[#f26522] shrink-0" />
-              <span>{brand.email}</span>
-            </div>
-            <div className="flex items-start gap-2 pt-1 border-t border-white/10">
-              <Clock className="size-4 text-amber-400 shrink-0 mt-0.5" />
-              <div>
-                <div>Mon – Fri: 8:00 AM – 5:00 PM</div>
-                <div>Visiting Day: Every First Sunday</div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
-
-      {/* Bottom Legal & Attribution Bar */}
-      <div className="border-t border-white/10 bg-[#05112c]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <div>
-            © <DynamicYear /> {brand.name}. All institutional rights reserved.
-          </div>
-
-          <div className="flex items-center gap-4 text-[11px]">
-            <Link href="/demo" className="text-slate-300 hover:text-white transition-colors">
-              Administrative Console
-            </Link>
-            <span>•</span>
-            <Link href="/teacher" className="text-slate-300 hover:text-white transition-colors">
-              Staff Gradebook
-            </Link>
-            <span>•</span>
-            <Link href="/student" className="text-slate-300 hover:text-white transition-colors">
-              Student & Parent Portal
-            </Link>
-          </div>
-
-          <div className="text-[11px] text-slate-500">
-            Institutional OS by EDUREXA Systems
-          </div>
+      <div className="border-t border-border">
+        <div className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-muted-foreground text-center sm:text-left">
+          <p suppressHydrationWarning>© <DynamicYear /> {schoolName}. All rights reserved.</p>
+          <p>
+            Developed professionally by{' '}
+            <a 
+              href="https://mctech-hubsystems.kesug.com/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="font-bold text-primary hover:text-primary/80 transition-smooth"
+            >
+              Mctech-hub Systems
+            </a>.
+          </p>
         </div>
       </div>
     </footer>
