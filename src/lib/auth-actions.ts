@@ -341,7 +341,7 @@ export async function quickDemoLoginAction(
     };
     const token = await signSessionToken(sessionUser);
     await setSessionCookie(token);
-    return { success: true, user: sessionUser, redirectUrl: "/finance/dashboard" };
+    return { success: true, user: sessionUser, redirectUrl: "/finance" };
   }
 
   if (role === "bursar") {
@@ -359,7 +359,7 @@ export async function quickDemoLoginAction(
     };
     const token = await signSessionToken(sessionUser);
     await setSessionCookie(token);
-    return { success: true, user: sessionUser, redirectUrl: "/finance/dashboard" };
+    return { success: true, user: sessionUser, redirectUrl: "/finance" };
   }
 
   if (role === "teacher") {

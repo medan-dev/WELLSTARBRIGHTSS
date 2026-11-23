@@ -45,7 +45,7 @@ export default function DemoPage() {
       icon: Receipt,
       email: "cashier@yourschool.com",
       secret: "5566",
-      destination: "/finance/dashboard",
+      destination: "/finance",
     },
     {
       key: "admin",
@@ -109,7 +109,7 @@ export default function DemoPage() {
         const res = await loginAdminAction(email, password);
         if (res.success && res.user) {
           toast.success(`Welcome to the ${selectedRole === "admin" ? "Admin" : "Cashier"} demonstration!`);
-          router.push(selectedRole === "admin" ? "/admin/dashboard" : "/finance/dashboard");
+          router.push(selectedRole === "admin" ? "/admin/dashboard" : "/finance");
           return;
         } else {
           // Fallback to quick demo session

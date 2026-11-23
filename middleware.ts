@@ -49,21 +49,6 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // 1b. Guard Standalone Finance Dashboard routes
-  if (pathname.startsWith("/finance/dashboard")) {
-    const financeRoles = ["SUPER_ADMIN", "BURSAR", "CASHIER", "AUDITOR"];
-    if (!session || !financeRoles.includes(session.role)) {
-      const redirectUrl = new URL("/finance", req.url);
-      redirectUrl.searchParams.set("from", pathname);
-      redirectUrl.searchParams.set("error", "unauthorized");
-      const res = NextResponse.redirect(redirectUrl);
-      if (token && !session) {
-        res.cookies.delete(SESSION_COOKIE_NAME);
-      }
-      return res;
-    }
-  }
-
   // 2. Guard Teacher Dashboard routes
   if (pathname.startsWith("/teacher/dashboard")) {
     const teacherRoles = ["TEACHER", "SUPER_ADMIN"];
@@ -100,7 +85,6 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/admin/dashboard/:path*",
-    "/finance/dashboard/:path*",
     "/teacher/dashboard/:path*",
     "/student/dashboard/:path*",
   ],
