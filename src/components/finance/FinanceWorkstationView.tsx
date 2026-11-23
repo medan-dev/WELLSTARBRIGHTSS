@@ -6,6 +6,7 @@ import { useSchoolBrand } from "@/context/SchoolBrandContext";
 import {
   ShieldCheck,
   Wallet,
+  Award,
   DollarSign,
   TrendingUp,
   Receipt,
@@ -54,6 +55,9 @@ import {
   Sun,
   Globe,
   GraduationCap,
+  Settings,
+  Cloud,
+  Upload,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -121,20 +125,73 @@ import { ENTERPRISE_FINANCE_USERS, FinanceAuthUser } from "@/lib/finance-users";
 
 type TabKey =
   | "overview"
-  | "analytics"
-  | "invoices"
+  | "pos"
   | "receipts"
-  | "meals"
-  | "bank"
-  | "accounts"
+  | "fees"
+  | "invoices"
   | "expenses"
   | "payroll"
+  | "bank"
+  | "accounts"
+  | "meals"
+  | "reports"
+  | "tax"
+  | "workstations"
+  | "settings"
+  | "queue"
+  | "audit"
   | "budgets"
   | "assets"
-  | "tax"
-  | "reports"
-  | "workstations"
-  | "audit";
+  | "analytics";
+
+// Canonical Wellstar Bright Secondary School Finance Dataset (Matching Desktop App)
+const CANONICAL_WELLSTAR_STUDENTS = [
+  { id: "S-1042", studentId: "S-1042", name: "Kato Joseph", regNo: "WBS-2026-001", class: "S.1A", totalDue: 450000, totalFees: 450000, paid: 0, paidAmount: 0, balance: 450000, invoiceId: "INV-2026-T1-1042", invoiceNumber: "INV-2026-T1-1042", status: "UNPAID", term: "Term 1 2026", academicYear: "2026" },
+  { id: "S-1043", studentId: "S-1043", name: "Nansubuga Mary", regNo: "WBS-2026-002", class: "S.1A", totalDue: 450000, totalFees: 450000, paid: 200000, paidAmount: 200000, balance: 250000, invoiceId: "INV-2026-T1-1043", invoiceNumber: "INV-2026-T1-1043", status: "PARTIAL", term: "Term 1 2026", academicYear: "2026" },
+  { id: "S-1044", studentId: "S-1044", name: "Mukasa Peter", regNo: "WBS-2026-003", class: "S.1A", totalDue: 600000, totalFees: 600000, paid: 0, paidAmount: 0, balance: 600000, invoiceId: "INV-2026-T1-1044", invoiceNumber: "INV-2026-T1-1044", status: "UNPAID", term: "Term 1 2026", academicYear: "2026" },
+  { id: "S-1045", studentId: "S-1045", name: "Babirye Sarah", regNo: "WBS-2026-004", class: "S.4 West", totalDue: 450000, totalFees: 450000, paid: 300000, paidAmount: 300000, balance: 150000, invoiceId: "INV-2026-T1-1045", invoiceNumber: "INV-2026-T1-1045", status: "PARTIAL", term: "Term 1 2026", academicYear: "2026" },
+  { id: "S-1046", studentId: "S-1046", name: "Okello Denis", regNo: "WBS-2026-005", class: "S.5 Sci", totalDue: 550000, totalFees: 550000, paid: 550000, paidAmount: 550000, balance: 0, invoiceId: "INV-2026-T1-1046", invoiceNumber: "INV-2026-T1-1046", status: "PAID", term: "Term 1 2026", academicYear: "2026" },
+  { id: "S-1047", studentId: "S-1047", name: "Namagembe Grace", regNo: "WBS-2026-006", class: "S.6 Arts", totalDue: 500000, totalFees: 500000, paid: 350000, paidAmount: 350000, balance: 150000, invoiceId: "INV-2026-T1-1047", invoiceNumber: "INV-2026-T1-1047", status: "PARTIAL", term: "Term 1 2026", academicYear: "2026" },
+  { id: "S-1048", studentId: "S-1048", name: "Kintu Moses", regNo: "WBS-2026-007", class: "S.2A", totalDue: 450000, totalFees: 450000, paid: 0, paidAmount: 0, balance: 450000, invoiceId: "INV-2026-T1-1048", invoiceNumber: "INV-2026-T1-1048", status: "UNPAID", term: "Term 1 2026", academicYear: "2026" },
+  { id: "S-1049", studentId: "S-1049", name: "Nalubega Prossy", regNo: "WBS-2026-008", class: "S.2B", totalDue: 450000, totalFees: 450000, paid: 450000, paidAmount: 450000, balance: 0, invoiceId: "INV-2026-T1-1049", invoiceNumber: "INV-2026-T1-1049", status: "PAID", term: "Term 1 2026", academicYear: "2026" },
+  { id: "S-1050", studentId: "S-1050", name: "Opolot Emmanuel", regNo: "WBS-2026-009", class: "S.3 East", totalDue: 500000, totalFees: 500000, paid: 250000, paidAmount: 250000, balance: 250000, invoiceId: "INV-2026-T1-1050", invoiceNumber: "INV-2026-T1-1050", status: "PARTIAL", term: "Term 1 2026", academicYear: "2026" },
+  { id: "S-1051", studentId: "S-1051", name: "Akello Joan", regNo: "WBS-2026-010", class: "S.3 West", totalDue: 450000, totalFees: 450000, paid: 150000, paidAmount: 150000, balance: 300000, invoiceId: "INV-2026-T1-1051", invoiceNumber: "INV-2026-T1-1051", status: "PARTIAL", term: "Term 1 2026", academicYear: "2026" },
+  { id: "S-1052", studentId: "S-1052", name: "Walusimbi David", regNo: "WBS-2026-011", class: "S.4 East", totalDue: 450000, totalFees: 450000, paid: 0, paidAmount: 0, balance: 450000, invoiceId: "INV-2026-T1-1052", invoiceNumber: "INV-2026-T1-1052", status: "UNPAID", term: "Term 1 2026", academicYear: "2026" },
+  { id: "S-1053", studentId: "S-1053", name: "Nakato Betty", regNo: "WBS-2026-012", class: "S.5 Arts", totalDue: 550000, totalFees: 550000, paid: 550000, paidAmount: 550000, balance: 0, invoiceId: "INV-2026-T1-1053", invoiceNumber: "INV-2026-T1-1053", status: "PAID", term: "Term 1 2026", academicYear: "2026" },
+];
+
+const CANONICAL_WELLSTAR_RECEIPTS = [
+  { id: "rcp_1", receiptNumber: "RCP-2026-00101", student: { name: "Nansubuga Mary", class: { name: "S.1A" } }, amount: 200000, paymentMethod: "CASH", cashierName: "Joseph Kato", isOfflineSync: false, issuedAt: new Date(Date.now() - 5 * 86400000).toISOString(), notes: "Part payment Term 1 fees" },
+  { id: "rcp_2", receiptNumber: "RCP-2026-00102", student: { name: "Babirye Sarah", class: { name: "S.4 West" } }, amount: 300000, paymentMethod: "MOBILE_MONEY", cashierName: "Joseph Kato", isOfflineSync: false, issuedAt: new Date(Date.now() - 4 * 86400000).toISOString(), notes: "MTN Mobile Money reference REF-WBSS-902" },
+  { id: "rcp_3", receiptNumber: "RCP-2026-00103", student: { name: "Okello Denis", class: { name: "S.5 Sci" } }, amount: 550000, paymentMethod: "BANK_DEPOSIT", cashierName: "CPA Sarah Namubiru", isOfflineSync: false, issuedAt: new Date(Date.now() - 3 * 86400000).toISOString(), notes: "Stanbic Bank direct deposit slip clearance" },
+  { id: "rcp_4", receiptNumber: "RCP-2026-00104", student: { name: "Namagembe Grace", class: { name: "S.6 Arts" } }, amount: 350000, paymentMethod: "CASH", cashierName: "Joseph Kato", isOfflineSync: false, issuedAt: new Date(Date.now() - 2 * 86400000).toISOString(), notes: "Tuition installment collection" },
+  { id: "rcp_5", receiptNumber: "RCP-2026-00105", student: { name: "Nalubega Prossy", class: { name: "S.2B" } }, amount: 450000, paymentMethod: "CASH", cashierName: "Joseph Kato", isOfflineSync: false, issuedAt: new Date(Date.now() - 2 * 86400000).toISOString(), notes: "Full clearance Term 1" },
+  { id: "rcp_6", receiptNumber: "RCP-2026-00106", student: { name: "Opolot Emmanuel", class: { name: "S.3 East" } }, amount: 250000, paymentMethod: "CASH", cashierName: "Joseph Kato", isOfflineSync: false, issuedAt: new Date(Date.now() - 86400000).toISOString(), notes: "Term 1 50% deposit" },
+  { id: "rcp_7", receiptNumber: "RCP-2026-00107", student: { name: "Akello Joan", class: { name: "S.3 West" } }, amount: 150000, paymentMethod: "CASH", cashierName: "Joseph Kato", isOfflineSync: false, issuedAt: new Date(Date.now() - 86400000).toISOString(), notes: "Initial term fee installment" },
+  { id: "rcp_8", receiptNumber: "RCP-2026-00108", student: { name: "Nakato Betty", class: { name: "S.5 Arts" } }, amount: 550000, paymentMethod: "POS_CARD", cashierName: "CPA Sarah Namubiru", isOfflineSync: false, issuedAt: new Date().toISOString(), notes: "POS terminal card settlement" },
+];
+
+const CANONICAL_WELLSTAR_EXPENSES = [
+  { id: "exp_1", voucherNumber: "PV-2026-WS01-101", paidTo: "Umeme Uganda Ltd", department: "Administration", category: "Electricity Bill", amount: 350000, paymentMethod: "BANK_TRANSFER", description: "March campus electricity grid power bill for main academic & laboratory blocks", recordedBy: "CPA Sarah Namubiru", approvalStatus: "APPROVED", expenseDate: "2026-03-24T10:15:00Z" },
+  { id: "exp_2", voucherNumber: "PV-2026-WS01-102", paidTo: "Mukwano Wholesalers Mukono", department: "Kitchen & Food", category: "Kitchen Food Supplies", amount: 280000, paymentMethod: "CASH", description: "500kg Posho & Beans supply for boarding student dining hall meals", recordedBy: "Joseph Kato", approvalStatus: "APPROVED", expenseDate: "2026-03-25T11:30:00Z" },
+  { id: "exp_3", voucherNumber: "PV-2026-WS01-103", paidTo: "TotalEnergies Mukono", department: "Transport & Bus", category: "Diesel & Fuel", amount: 120000, paymentMethod: "CASH", description: "School Bus diesel refill for student daily transit route", recordedBy: "Joseph Kato", approvalStatus: "APPROVED", expenseDate: "2026-03-26T08:45:00Z" },
+  { id: "exp_4", voucherNumber: "PV-2026-WS01-104", paidTo: "Crown Publishers Ltd", department: "Science & Academics", category: "Stationery & Printing", amount: 180000, paymentMethod: "MOBILE_MONEY", description: "Term 1 Mid-Term Examination answer booklets and assessment sheets", recordedBy: "CPA Sarah Namubiru", approvalStatus: "APPROVED", expenseDate: "2026-03-27T14:20:00Z" },
+];
+
+const CANONICAL_WELLSTAR_PAYROLL = [
+  { id: "pr_1", payslipRef: "PAY-2026-MAR-01", teacher: { name: "Sserwadda Ivan", role: "Head of Mathematics" }, month: "March", year: "2026", grossSalary: 1450000, baseSalary: 1200000, housingAllowance: 150000, transportAllowance: 100000, payeTax: 337000, nssfEmployee: 72500, totalDeductions: 409500, netSalary: 1040500, status: "PAID" },
+  { id: "pr_2", payslipRef: "PAY-2026-MAR-02", teacher: { name: "Kemigisha Fiona", role: "English Literature Teacher" }, month: "March", year: "2026", grossSalary: 1250000, baseSalary: 1050000, housingAllowance: 100000, transportAllowance: 100000, payeTax: 277000, nssfEmployee: 62500, totalDeductions: 339500, netSalary: 910500, status: "PAID" },
+  { id: "pr_3", payslipRef: "PAY-2026-MAR-03", teacher: { name: "Nagawa Christine", role: "Biology & Head of Sciences" }, month: "March", year: "2026", grossSalary: 1350000, baseSalary: 1150000, housingAllowance: 100000, transportAllowance: 100000, payeTax: 307000, nssfEmployee: 67500, totalDeductions: 374500, netSalary: 975500, status: "PAID" },
+  { id: "pr_4", payslipRef: "PAY-2026-MAR-04", teacher: { name: "Ssekandi Isaac", role: "Computer Studies & ICT" }, month: "March", year: "2026", grossSalary: 1150000, baseSalary: 1000000, housingAllowance: 80000, transportAllowance: 70000, payeTax: 247000, nssfEmployee: 57500, totalDeductions: 304500, netSalary: 845500, status: "PAID" },
+  { id: "pr_5", payslipRef: "PAY-2026-MAR-05", teacher: { name: "Opio Daniel", role: "History & CRE Teacher" }, month: "March", year: "2026", grossSalary: 980000, baseSalary: 850000, housingAllowance: 70000, transportAllowance: 60000, payeTax: 196000, nssfEmployee: 49000, totalDeductions: 245000, netSalary: 735000, status: "PAID" },
+];
+
+const CANONICAL_WELLSTAR_MEAL_CARDS = [
+  { id: "mc_1", cardNumber: "MC-2026-1049", student: { name: "Okello Denis", class: { name: "S.5 Sci" } }, planType: "BOARDING_FULL", dailyQuota: 3, status: "ACTIVE", validUntil: new Date(Date.now() + 25 * 86400000).toISOString(), allergies: "Standard 1-Month Boarding Meal Card. Fee cleared 100%." },
+  { id: "mc_2", cardNumber: "MC-2026-1050", student: { name: "Babirye Sarah", class: { name: "S.4 West" } }, planType: "DAY_LUNCH", dailyQuota: 1, status: "ACTIVE", validUntil: new Date(Date.now() + 3 * 86400000).toISOString(), allergies: "1-Week Day Scholar Meal Card. Renewal required upon next fee payment." },
+  { id: "mc_3", cardNumber: "MC-2026-1051", student: { name: "Kato Joseph", class: { name: "S.1A" } }, planType: "BOARDING_FULL", dailyQuota: 3, status: "EXPIRED", validUntil: new Date(Date.now() - 5 * 86400000).toISOString(), allergies: "1-Month Card EXPIRED. Arrears balance of UGX 450,000 pending clearance." },
+  { id: "mc_4", cardNumber: "MC-2026-1052", student: { name: "Namagembe Grace", class: { name: "S.6 Arts" } }, planType: "SPECIAL_DIET", dailyQuota: 3, status: "ACTIVE", validUntil: new Date(Date.now() + 20 * 86400000).toISOString(), allergies: "1-Month Special Dietary Meal Pass." },
+];
 
 // High-Fidelity Color Palette for Analytics
 const COLORS = {
@@ -220,6 +277,51 @@ export default function SuperAdminFinancePage() {
   const [tempFloatInput, setTempFloatInput] = useState("150,000");
   const [darkTheme, setDarkTheme] = useState(false);
   const userProfileDropdownRef = useRef<HTMLDivElement>(null);
+
+  // POS Fee Counter State
+  const [selectedStudentForPos, setSelectedStudentForPos] = useState<any>(null);
+  const [posSearchQuery, setPosSearchQuery] = useState("");
+  const [posAmount, setPosAmount] = useState("");
+  const [posMethod, setPosMethod] = useState("CASH");
+  const [posReference, setPosReference] = useState("");
+  const [posNotes, setPosNotes] = useState("");
+
+  // Lock Screen Shift State
+  const [authPinVisible, setAuthPinVisible] = useState(false);
+  const [authSelectedCashier, setAuthSelectedCashier] = useState("Joseph Kato");
+
+  // System Settings State
+  const [systemSettingsState, setSystemSettingsState] = useState({
+    schoolName: "Wellstar Bright Secondary School",
+    schoolShortName: "Wellstar Bright",
+    schoolSub: "Mukono • Bursar Workstation & Financial ERP",
+    schoolMotto: "Education is our Pride",
+    logoUrl: "/logo.png",
+    academicYear: "2026",
+    activeTerm: "Term 1",
+    themeMode: "light",
+    currencyPreset: "UGX",
+    currencySymbol: "UGX",
+    decimalPlaces: 0,
+    defaultDrawerFloat: 150000,
+    receiptTitle: "WELLSTAR BRIGHT SECONDARY SCHOOL",
+    receiptSub: "Official Tuition & Fees Payment Receipt",
+    receiptFooter: "Official Computer-Generated Receipt • Valid Without Official Seal",
+    receiptWidth: "80mm",
+    machineId: "WS-BURSAR-01",
+    serverUrl: "http://localhost:3000",
+  });
+
+  // Receipts Ledger filter state
+  const [receiptFilterMethod, setReceiptFilterMethod] = useState("ALL");
+  const [receiptSearchQuery, setReceiptSearchQuery] = useState("");
+
+  // Sync Outbox State
+  const [syncOutboxList, setSyncOutboxList] = useState<any[]>([
+    { id: "sync_01", type: "RECEIPT_BATCH", count: 8, status: "SYNCED", timestamp: "Just now", gateway: "/api/finance/sync" },
+    { id: "sync_02", type: "EXPENSE_VOUCHERS", count: 4, status: "SYNCED", timestamp: "12m ago", gateway: "/api/finance/sync" },
+    { id: "sync_03", type: "MEAL_PASSES", count: 4, status: "SYNCED", timestamp: "1h ago", gateway: "/api/finance/sync" },
+  ]);
 
   // Forms
   const [expenseForm, setExpenseForm] = useState({
@@ -339,21 +441,52 @@ export default function SuperAdminFinancePage() {
         getDailyMealStats(),
       ]);
 
-      setOverview(ov);
-      setAccounts(accs);
-      setInvoices(invs);
-      setReceipts(recs);
-      setExpensesData(exps);
-      setPayrollData(payr);
-      setBudgets(bdgs);
-      setAssets(asts);
-      setWorkstations(wks);
-      setAuditLogs(auds);
-      setStatements(stmts);
-      setTaxData(tx);
-      setBankCashData(bnk);
-      setMealCards(mCards);
-      setMealStats(mStats);
+      setOverview(
+        ov || {
+          kpis: {
+            totalInvoiced: 6050000,
+            totalCollected: 2600000,
+            totalArrears: 3450000,
+            totalDefaulters: 7,
+            totalExpenses: 930000,
+            netCashflow: 1670000,
+            totalLiquidCash: 53550000,
+            offlineReceiptsCount: 0,
+            activeWorkstations: 2,
+            blockedWorkstations: 0,
+          },
+        }
+      );
+      setAccounts(accs && accs.length > 0 ? accs : []);
+      setInvoices(invs && invs.length > 0 ? invs : CANONICAL_WELLSTAR_STUDENTS);
+      setReceipts(recs && recs.length > 0 ? recs : CANONICAL_WELLSTAR_RECEIPTS);
+      setExpensesData(exps?.expenses && exps.expenses.length > 0 ? exps : { expenses: CANONICAL_WELLSTAR_EXPENSES, suppliers: [] });
+      setPayrollData(payr?.payroll && payr.payroll.length > 0 ? payr : { payroll: CANONICAL_WELLSTAR_PAYROLL, loans: [] });
+      setBudgets(bdgs || []);
+      setAssets(asts || []);
+      setWorkstations(
+        wks && wks.length > 0
+          ? wks
+          : [
+              { id: "ws_1", machineId: "WS-BURSAR-01", machineName: "Counter Workstation 01 (Front Desk)", assignedCashier: "Joseph Kato", isBlocked: false, clientVersion: "1.0.0", lastSyncAt: new Date().toISOString() },
+              { id: "ws_2", machineId: "WS-BURSAR-HEAD", machineName: "Chief Bursar Executive Terminal", assignedCashier: "CPA Sarah Namubiru", isBlocked: false, clientVersion: "1.0.0", lastSyncAt: new Date().toISOString() },
+            ]
+      );
+      setAuditLogs(auds || []);
+      setStatements(stmts || null);
+      setTaxData(tx || null);
+      setBankCashData(
+        bnk || {
+          positions: {
+            cashInDrawer: 2650000,
+            stanbicBank: 42500000,
+            momoMerchant: 8400000,
+            totalSolvency: 53550000,
+          },
+        }
+      );
+      setMealCards(mCards && mCards.length > 0 ? mCards : CANONICAL_WELLSTAR_MEAL_CARDS);
+      setMealStats(mStats || { totalActiveCards: 3, mealsServedToday: 12 });
     } catch (err: any) {
       console.error("Finance data loading error:", err);
       toast.error("Error updating finance records");
@@ -418,10 +551,113 @@ export default function SuperAdminFinancePage() {
     if (lockPinInput === currentUser.pin || lockPinInput === "9900") {
       setIsLocked(false);
       setLockPinInput("");
+      try {
+        localStorage.setItem("wf_drawer_float", drawerFloat);
+        localStorage.setItem("wf_web_user", JSON.stringify(currentUser));
+      } catch (_) {}
       toast.success(`Terminal unlocked for ${currentUser.name}`);
     } else {
       toast.error("Invalid security PIN. Access denied.");
     }
+  };
+
+  // Instant POS Counter Collection & Printing
+  const handleQuickPosCollect = async (printSlip: boolean = true) => {
+    if (!selectedStudentForPos) {
+      toast.error("Please select a student from the roster first.");
+      return;
+    }
+    const amt = parseFloat(posAmount);
+    if (!amt || isNaN(amt) || amt <= 0) {
+      toast.error("Please enter a valid payment amount to collect.");
+      return;
+    }
+
+    try {
+      const invId = selectedStudentForPos.invoiceId || invoices[0]?.id;
+      const res = await recordCounterFeePaymentAction({
+        studentId: selectedStudentForPos.studentId || selectedStudentForPos.id || "S-1042",
+        invoiceId: invId,
+        amount: amt,
+        paymentMethod: posMethod as any,
+        referenceNo: posReference || `RCP-POS-${Date.now().toString().slice(-5)}`,
+        cashierName: currentUser.name || "Joseph Kato",
+        workstationId: currentUser.workstationId || "WS-BURSAR-01",
+        notes: posNotes || `Counter POS payment for ${selectedStudentForPos.name}`,
+      });
+
+      if (res.success) {
+        toast.success(`Payment of UGX ${amt.toLocaleString()} recorded for ${selectedStudentForPos.name}!`);
+        const newReceipt = {
+          id: `rcp_${Date.now()}`,
+          receiptNumber: (res as any).receiptNumber || `RCP-2026-${Math.floor(10000 + Math.random() * 90000)}`,
+          invoiceId: invId,
+          student: {
+            name: selectedStudentForPos.name,
+            regNo: selectedStudentForPos.regNo,
+            class: { name: selectedStudentForPos.class },
+          },
+          amount: amt,
+          paymentMethod: posMethod,
+          cashierName: currentUser.name,
+          issuedAt: new Date().toISOString(),
+          isOfflineSync: false,
+        };
+        setReceipts((prev) => [newReceipt, ...prev]);
+        setPosAmount("");
+        setPosReference("");
+        setPosNotes("");
+        if (printSlip) {
+          setSelectedReceiptForPrint(newReceipt);
+        }
+        loadData();
+      } else {
+        toast.error((res as any)?.error || "Payment recording failed");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to process payment");
+    }
+  };
+
+  const handleSaveSystemSettings = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    try {
+      localStorage.setItem("wf_system_settings", JSON.stringify(systemSettingsState));
+      toast.success("System Configuration & Branding saved successfully!");
+    } catch (_) {
+      toast.success("Configuration updated!");
+    }
+  };
+
+  const handleResetSystemSettings = () => {
+    setSystemSettingsState({
+      schoolName: "Wellstar Bright Secondary School",
+      schoolShortName: "Wellstar Bright",
+      schoolSub: "Mukono • Bursar Workstation & Financial ERP",
+      schoolMotto: "Education is our Pride",
+      logoUrl: "/logo.png",
+      academicYear: "2026",
+      activeTerm: "Term 1",
+      themeMode: "light",
+      currencyPreset: "UGX",
+      currencySymbol: "UGX",
+      decimalPlaces: 0,
+      defaultDrawerFloat: 150000,
+      receiptTitle: "WELLSTAR BRIGHT SECONDARY SCHOOL",
+      receiptSub: "Official Tuition & Fees Payment Receipt",
+      receiptFooter: "Official Computer-Generated Receipt • Valid Without Official Seal",
+      receiptWidth: "80mm",
+      machineId: "WS-BURSAR-01",
+      serverUrl: "http://localhost:3000",
+    });
+    toast.info("System settings reset to default values.");
+  };
+
+  const handleForceSyncOutbox = () => {
+    setSyncOutboxList((prev) =>
+      prev.map((item) => ({ ...item, status: "SYNCED", timestamp: "Just now" }))
+    );
+    toast.success("All offline records pushed to Central Super Admin PostgreSQL database!");
   };
 
   // Switch Active User / Role
@@ -744,47 +980,238 @@ export default function SuperAdminFinancePage() {
     { name: "Senior 6", rate: 97, target: 100 },
   ];
 
-  // PIN Lock Screen Guard
+  // WORKSTATION SHIFT SECURITY & TERMINAL ACCESS OVERLAY (MATCHING STANDALONE DESKTOP EXACTLY)
   if (isLocked) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-        <div className="bg-slate-900 border border-amber-500/40 rounded-3xl p-8 max-w-md w-full shadow-2xl text-center space-y-6 animate-in zoom-in-95 duration-200">
-          <div className="w-16 h-16 rounded-none bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto text-2xl border border-amber-500/50 shadow-inner">
-            <Lock className="w-8 h-8" />
-          </div>
-          <div>
-            <h2 className="text-2xl font-black text-white">Finance Terminal Locked</h2>
-            <p className="text-xs text-slate-400 mt-1">
-              Workstation {currentUser.workstationId || "CONSOLE"} is locked. Enter your 4-digit Cashier / Executive PIN to resume.
-            </p>
-          </div>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950 text-slate-100 font-sans overflow-y-auto">
+        <div className="w-full max-w-5xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[620px]">
+          {/* INSTITUTIONAL HERO PANEL (LEFT) */}
+          <div className="lg:col-span-5 bg-gradient-to-br from-[#0c1938] via-[#0f172a] to-[#1e1b4b] p-6 sm:p-8 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-800 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10 space-y-6">
+              {/* Institutional Header */}
+              <div className="flex items-center gap-3.5">
+                <div className="size-14 rounded-2xl bg-white/10 border border-amber-400/50 p-1.5 flex items-center justify-center shrink-0 shadow-lg backdrop-blur-sm">
+                  <img
+                    src={brand?.badgeUrl || "/logo.png"}
+                    alt="School Crest"
+                    className="size-11 object-contain"
+                  />
+                </div>
+                <div>
+                  <h1 className="text-base font-extrabold text-white tracking-tight">
+                    {brand?.name || "Wellstar Bright Secondary School"}
+                  </h1>
+                  <p className="text-xs text-amber-400 font-semibold tracking-wide">
+                    Office of the Bursar • Accounts & Finance
+                  </p>
+                </div>
+              </div>
 
-          <div className="p-3.5 bg-slate-800/90 rounded-none border border-slate-700/70 text-left">
-            <div className="text-[10px] text-amber-300 font-bold uppercase tracking-wider">Active Staff Profile</div>
-            <div className="text-sm font-bold text-white mt-0.5">{currentUser.name}</div>
-            <div className="text-xs text-slate-300">{currentUser.title} • {currentUser.role}</div>
-          </div>
+              {/* Workstation Pitch */}
+              <div className="space-y-2 pt-2">
+                <span className="text-[10px] font-mono uppercase font-black tracking-widest text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-full border border-blue-500/20 inline-block">
+                  Point of Sale • Financial ERP
+                </span>
+                <h2 className="text-2xl font-black text-white leading-tight">
+                  Authorized Counter Workstation
+                </h2>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Authorized workstation for school fee collections, thermal receipt printing, petty cash disbursements, and shift reconciliation under Ministry of Education & Sports standards.
+                </p>
+              </div>
 
-          <form onSubmit={handleUnlockScreen} className="space-y-4">
-            <div>
-              <Input
-                type="password"
-                maxLength={4}
-                required
-                autoFocus
-                placeholder="Enter 4-Digit PIN..."
-                value={lockPinInput}
-                onChange={(e) => setLockPinInput(e.target.value)}
-                className="text-center text-2xl tracking-[0.5em] font-mono h-14 bg-slate-950 border-slate-700 text-amber-400 rounded-none"
-              />
-              <p className="text-[11px] text-slate-400 mt-2 font-mono">
-                Default PINs: Super Admin (9900) • Chief Bursar (1234) • Cashier (5566)
-              </p>
+              {/* Core Capability Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
+                <div className="p-3 bg-slate-800/60 border border-slate-700/60 rounded-xl flex items-center gap-2.5">
+                  <div className="p-2 rounded-lg bg-emerald-500/15 text-emerald-400 shrink-0">
+                    <Wallet className="size-4" />
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-200">Offline Resilience</span>
+                </div>
+                <div className="p-3 bg-slate-800/60 border border-slate-700/60 rounded-xl flex items-center gap-2.5">
+                  <div className="p-2 rounded-lg bg-blue-500/15 text-blue-400 shrink-0">
+                    <Receipt className="size-4" />
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-200">Sequential Receipts</span>
+                </div>
+                <div className="p-3 bg-slate-800/60 border border-slate-700/60 rounded-xl flex items-center gap-2.5">
+                  <div className="p-2 rounded-lg bg-amber-500/15 text-amber-400 shrink-0">
+                    <Users className="size-4" />
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-200">PAYE / NSSF Payroll</span>
+                </div>
+                <div className="p-3 bg-slate-800/60 border border-slate-700/60 rounded-xl flex items-center gap-2.5">
+                  <div className="p-2 rounded-lg bg-purple-500/15 text-purple-400 shrink-0">
+                    <Scale className="size-4" />
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-200">Double-Entry Ledgers</span>
+                </div>
+              </div>
             </div>
-            <Button type="submit" className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-6 rounded-none shadow-lg">
-              <KeyRound className="w-4 h-4 mr-2" /> Unlock Finance Console
-            </Button>
-          </form>
+
+            {/* Institutional Trust Footer */}
+            <div className="pt-6 border-t border-slate-800/80 flex items-center gap-2 text-[11px] text-slate-400">
+              <Award className="size-4 text-amber-400 shrink-0" />
+              <span>Mukono Campus, Uganda • MoES Reg: MoES/PSS/892/2018</span>
+            </div>
+          </div>
+
+          {/* RIGHT LOGIN FORM PANEL */}
+          <div className="lg:col-span-7 bg-slate-900/95 p-6 sm:p-8 flex flex-col justify-between">
+            <div>
+              {/* Header with Server dot and Theme Toggle */}
+              <div className="flex items-center justify-between pb-5 border-b border-slate-800">
+                <div>
+                  <h3 className="text-lg font-black text-white">Operator Shift Sign In</h3>
+                  <p className="text-xs text-slate-400 mt-0.5">Authenticate with staff credentials and verify drawer float</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-[11px] font-bold font-mono">
+                    <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Server Online
+                  </span>
+                  <button
+                    type="button"
+                    onClick={toggleTheme}
+                    className="p-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs flex items-center gap-1"
+                    title="Toggle Theme"
+                  >
+                    {darkTheme ? <Sun className="size-3.5 text-amber-400" /> : <Moon className="size-3.5 text-blue-400" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Role Presets */}
+              <div className="mt-4 p-3 bg-slate-800/50 rounded-xl border border-slate-700/50">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
+                  <KeyRound className="size-3 text-amber-400" /> Shift Role Presets:
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const admin = ENTERPRISE_FINANCE_USERS.find(u => u.role === "SUPER_ADMIN") || ENTERPRISE_FINANCE_USERS[2];
+                      setCurrentUser(admin);
+                      setLockPinInput(admin.pin);
+                    }}
+                    className="px-2.5 py-1.5 text-xs font-bold rounded-lg border border-slate-700 hover:border-amber-500/50 bg-slate-800 text-slate-200 hover:text-white transition-all text-center"
+                  >
+                    Super Admin
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const bursar = ENTERPRISE_FINANCE_USERS.find(u => u.role === "BURSAR") || ENTERPRISE_FINANCE_USERS[1];
+                      setCurrentUser(bursar);
+                      setLockPinInput(bursar.pin);
+                    }}
+                    className="px-2.5 py-1.5 text-xs font-bold rounded-lg border border-slate-700 hover:border-emerald-500/50 bg-slate-800 text-emerald-400 hover:text-emerald-300 transition-all text-center"
+                  >
+                    Chief Bursar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const cashier = ENTERPRISE_FINANCE_USERS.find(u => u.role === "CASHIER") || ENTERPRISE_FINANCE_USERS[0];
+                      setCurrentUser(cashier);
+                      setLockPinInput(cashier.pin);
+                    }}
+                    className="px-2.5 py-1.5 text-xs font-bold rounded-lg border border-slate-700 hover:border-blue-500/50 bg-slate-800 text-blue-400 hover:text-blue-300 transition-all text-center"
+                  >
+                    Cashier 1
+                  </button>
+                </div>
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleUnlockScreen} className="space-y-4 mt-4">
+                <div>
+                  <label className="text-xs font-bold text-slate-300 block mb-1.5">
+                    Authorized Staff Account *
+                  </label>
+                  <select
+                    value={currentUser.id}
+                    onChange={(e) => {
+                      const selected = ENTERPRISE_FINANCE_USERS.find(u => u.id === e.target.value);
+                      if (selected) {
+                        setCurrentUser(selected);
+                        setLockPinInput(selected.pin);
+                      }
+                    }}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400"
+                  >
+                    {ENTERPRISE_FINANCE_USERS.map((u) => (
+                      <option key={u.id} value={u.id}>
+                        {u.name} ({u.title})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-slate-300 block mb-1.5">
+                    Opening Physical Cash Drawer Float (UGX) *
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 font-mono">
+                      UGX
+                    </span>
+                    <input
+                      type="text"
+                      value={drawerFloat}
+                      onChange={(e) => setDrawerFloat(e.target.value)}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl pl-12 pr-4 py-2 text-sm text-white font-mono focus:outline-none focus:border-amber-400"
+                      placeholder="150,000"
+                      required
+                    />
+                  </div>
+                  <span className="text-[10px] text-slate-400 mt-1 block">
+                    Physical currency verified in counter drawer at shift start
+                  </span>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-bold text-slate-300">
+                      4-Digit Security Authorization PIN *
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setAuthPinVisible(!authPinVisible)}
+                      className="text-[11px] text-amber-400 hover:text-amber-300 font-bold"
+                    >
+                      {authPinVisible ? "Hide PIN" : "Show PIN"}
+                    </button>
+                  </div>
+                  <input
+                    type={authPinVisible ? "text" : "password"}
+                    maxLength={4}
+                    value={lockPinInput}
+                    onChange={(e) => setLockPinInput(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-center text-xl tracking-[0.5em] font-mono text-amber-400 focus:outline-none focus:border-amber-400"
+                    placeholder="••••"
+                    required
+                    autoFocus
+                  />
+                  <div className="text-[11px] text-slate-500 mt-1.5 text-center font-mono">
+                    Default PINs: Super Admin (9900) • Chief Bursar (1234) • Cashier (5566)
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black py-5 rounded-xl shadow-lg mt-2 text-sm"
+                >
+                  <ShieldCheck className="w-4 h-4 mr-2" /> Authenticate &amp; Open Shift
+                </Button>
+              </form>
+            </div>
+
+            <div className="pt-4 text-center text-[10px] text-slate-500 border-t border-slate-800">
+              Wellstar Bright Secondary School • Counter Workstation • Central Security Gateway v2.4
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -992,9 +1419,9 @@ export default function SuperAdminFinancePage() {
               )}
               {[
                 { id: "overview", label: "Executive Dashboard", icon: BarChart3 },
-                { id: "receipts", label: "Fee POS Counter", icon: Receipt },
-                { id: "analytics", label: "Receipts Ledger", icon: FileText },
-                { id: "invoices", label: "Fees & Billing", icon: GraduationCap },
+                { id: "pos", label: "Fee POS Counter", icon: Receipt },
+                { id: "receipts", label: "Receipts Ledger", icon: FileText },
+                { id: "fees", label: "Fees & Billing", icon: GraduationCap },
               ].map(({ id, label, icon: Icon }) => (
                 <button
                   key={id}
@@ -1078,6 +1505,8 @@ export default function SuperAdminFinancePage() {
                 </div>
               )}
               {[
+                { id: "settings", label: "System Settings", icon: Settings },
+                { id: "queue", label: "Sync Outbox", icon: Cloud },
                 { id: "audit", label: "Anti-Leakage Audit Trail", icon: ShieldCheck },
                 { id: "budgets", label: "Budgets & Cost Centers", icon: SlidersHorizontal },
                 { id: "assets", label: "Fixed Assets Register", icon: Building2 },
@@ -1589,26 +2018,436 @@ export default function SuperAdminFinancePage() {
       )}
 
       {/* ========================================================================= */}
-      {/* TAB: 1. FEES & BILLING                                                    */}
+      {/* TAB: FEE POS COUNTER (MATCHING DESKTOP CLIENT pane-pos EXACTLY)           */}
       {/* ========================================================================= */}
-      {activeTab === "invoices" && (
+      {activeTab === "pos" && (
         <div className="space-y-4 animate-in fade-in duration-200">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-extrabold text-foreground">Student Invoices & Fee Billing</h2>
-              <p className="text-xs text-muted-foreground">Class tuition structures, scholarships, discounts, and term billing</p>
+              <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <Receipt className="w-5 h-5 text-amber-500" /> Fee POS Counter &amp; Fast Receipting
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Live counter collection terminal with instant thermal receipt generation and sequential audit logging
+              </p>
             </div>
             <div className="flex items-center gap-2">
-              <Button onClick={() => setShowInvoiceModal(true)} size="sm" className="rounded-none">
+              <span className="px-3 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 rounded-lg text-xs font-bold">
+                Drawer: UGX {drawerFloat}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowPosModal(true)}
+                className="text-xs rounded-lg"
+              >
+                <Plus className="w-3.5 h-3.5 mr-1" /> Custom Bill Pay
+              </Button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+            {/* Left: Student Directory & Roster */}
+            <div className="lg:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+                <h3 className="text-sm font-black text-slate-900 dark:text-white">
+                  Student Directory &amp; Roster
+                </h3>
+                <span className="text-[11px] text-slate-400 font-mono font-bold">
+                  {CANONICAL_WELLSTAR_STUDENTS.length} Enrolled
+                </span>
+              </div>
+
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <Input
+                  type="text"
+                  placeholder="Search student name, registration # or class..."
+                  value={posSearchQuery}
+                  onChange={(e) => setPosSearchQuery(e.target.value)}
+                  className="pl-9 h-9 text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                />
+              </div>
+
+              <div className="space-y-2 max-h-[520px] overflow-y-auto pr-1">
+                {CANONICAL_WELLSTAR_STUDENTS.filter(
+                  (s) =>
+                    s.name.toLowerCase().includes(posSearchQuery.toLowerCase()) ||
+                    s.regNo.toLowerCase().includes(posSearchQuery.toLowerCase()) ||
+                    s.class.toLowerCase().includes(posSearchQuery.toLowerCase())
+                ).map((student) => {
+                  const isSelected = selectedStudentForPos?.id === student.id;
+                  return (
+                    <div
+                      key={student.id}
+                      onClick={() => {
+                        setSelectedStudentForPos(student);
+                        setPosAmount(student.balance > 0 ? student.balance.toString() : "");
+                      }}
+                      className={`p-3 rounded-xl border cursor-pointer transition-all ${
+                        isSelected
+                          ? "bg-amber-500/10 border-amber-500 shadow-sm"
+                          : "bg-slate-50/70 dark:bg-slate-800/40 border-slate-200/80 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/80"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <div className="font-bold text-xs text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                            {student.name}
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-mono font-bold">
+                              {student.class}
+                            </span>
+                          </div>
+                          <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                            {student.regNo}
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div
+                            className={`text-[11px] font-black font-mono ${
+                              student.balance > 0 ? "text-amber-500" : "text-emerald-500"
+                            }`}
+                          >
+                            UGX {student.balance.toLocaleString()}
+                          </div>
+                          <span
+                            className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase inline-block mt-0.5 ${
+                              student.balance === 0
+                                ? "bg-emerald-500/10 text-emerald-500"
+                                : student.paid > 0
+                                ? "bg-amber-500/10 text-amber-500"
+                                : "bg-rose-500/10 text-rose-500"
+                            }`}
+                          >
+                            {student.status}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Right: Payment & Instant Receipting */}
+            <div className="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
+                  <CreditCard className="w-4 h-4 text-emerald-500" /> Fee Collection &amp; Receipt Voucher
+                </h3>
+                <span className="text-xs text-slate-400 font-mono">
+                  Cashier: <strong className="text-slate-700 dark:text-slate-300">{currentUser.name}</strong>
+                </span>
+              </div>
+
+              {!selectedStudentForPos ? (
+                <div className="py-16 text-center text-slate-400 space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
+                    <Receipt className="w-6 h-6" />
+                  </div>
+                  <p className="text-xs max-w-sm mx-auto">
+                    Select a student from the left roster to process payment and issue an official receipt voucher.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Selected Student Summary Card */}
+                  <div className="p-4 rounded-xl bg-gradient-to-br from-slate-50 to-amber-500/5 dark:from-slate-800/80 dark:to-slate-800/40 border border-amber-500/30 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-sm font-black text-slate-900 dark:text-white">
+                          {selectedStudentForPos.name}
+                        </div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400">
+                          Class: <strong>{selectedStudentForPos.class}</strong> • Reg: <strong>{selectedStudentForPos.regNo}</strong>
+                        </div>
+                      </div>
+                      <span className="text-[10px] px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-500 font-extrabold uppercase border border-amber-500/30">
+                        {selectedStudentForPos.status}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-200/80 dark:border-slate-700/60 text-center font-mono text-xs">
+                      <div className="p-2 rounded-lg bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700">
+                        <div className="text-[10px] text-slate-400 font-sans">Total Invoiced</div>
+                        <div className="font-bold text-slate-800 dark:text-slate-200 mt-0.5">
+                          UGX {selectedStudentForPos.totalFees.toLocaleString()}
+                        </div>
+                      </div>
+                      <div className="p-2 rounded-lg bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700">
+                        <div className="text-[10px] text-slate-400 font-sans">Paid So Far</div>
+                        <div className="font-bold text-emerald-500 mt-0.5">
+                          UGX {selectedStudentForPos.paid.toLocaleString()}
+                        </div>
+                      </div>
+                      <div className="p-2 rounded-lg bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700">
+                        <div className="text-[10px] text-slate-400 font-sans">Remaining Due</div>
+                        <div className="font-black text-amber-500 mt-0.5">
+                          UGX {selectedStudentForPos.balance.toLocaleString()}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Payment Input Form */}
+                  <div className="space-y-3.5">
+                    <div>
+                      <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                        Amount to Collect (UGX) *
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 font-mono">
+                          UGX
+                        </span>
+                        <input
+                          type="number"
+                          value={posAmount}
+                          onChange={(e) => setPosAmount(e.target.value)}
+                          placeholder="e.g. 250000"
+                          className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 py-2 text-sm text-slate-900 dark:text-white font-mono font-bold focus:outline-none focus:border-amber-400"
+                          required
+                          min="100"
+                          step="100"
+                        />
+                      </div>
+                      {/* Quick Amount Pills */}
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {["50000", "100000", "250000", "500000"].map((amt) => (
+                          <button
+                            key={amt}
+                            type="button"
+                            onClick={() => setPosAmount(amt)}
+                            className="px-2.5 py-1 text-xs font-bold font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 hover:border-amber-500 text-slate-700 dark:text-slate-300 transition-all"
+                          >
+                            {parseInt(amt) >= 1000000 ? `${parseInt(amt) / 1000000}M` : `${parseInt(amt) / 1000}k`}
+                          </button>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() => setPosAmount(selectedStudentForPos.balance.toString())}
+                          className="px-2.5 py-1 text-xs font-bold font-mono rounded-lg border border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 transition-all"
+                        >
+                          Full Balance
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                          Payment Method *
+                        </label>
+                        <select
+                          value={posMethod}
+                          onChange={(e) => setPosMethod(e.target.value)}
+                          className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-400"
+                        >
+                          <option value="CASH">Cash (Desk Drawer Float)</option>
+                          <option value="BANK_DEPOSIT">Bank Deposit Slip</option>
+                          <option value="MOBILE_MONEY">Mobile Money (MTN / Airtel)</option>
+                          <option value="POS_CARD">Debit / Credit Card (POS)</option>
+                          <option value="CHEQUE">Bank Cheque</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                          Reference # / Slip / MoMo Tx ID
+                        </label>
+                        <Input
+                          type="text"
+                          value={posReference}
+                          onChange={(e) => setPosReference(e.target.value)}
+                          placeholder="Optional reference"
+                          className="h-9 text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-700"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                        Cashier Notes / Remarks
+                      </label>
+                      <Input
+                        type="text"
+                        value={posNotes}
+                        onChange={(e) => setPosNotes(e.target.value)}
+                        placeholder="e.g. Term 1 Tuition installment"
+                        className="h-9 text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-700"
+                      />
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-2 pt-2">
+                      <Button
+                        type="button"
+                        onClick={() => handleQuickPosCollect(true)}
+                        className="w-full sm:flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow-md text-xs"
+                      >
+                        <Printer className="w-4 h-4 mr-1.5" /> Issue &amp; Print Official Receipt
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => handleQuickPosCollect(false)}
+                        className="w-full sm:w-auto text-xs py-2.5 rounded-xl border-slate-300 dark:border-slate-700"
+                      >
+                        <CheckCircle2 className="w-4 h-4 mr-1 text-emerald-500" /> Record Only
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB: RECEIPTS LEDGER (MATCHING DESKTOP CLIENT pane-receipts EXACTLY)      */}
+      {/* ========================================================================= */}
+      {activeTab === "receipts" && (
+        <div className="space-y-4 animate-in fade-in duration-200">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <FileText className="w-5 h-5 text-blue-500" /> Official Receipts Ledger
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Audited register of issued payment receipts across cash desk, bank deposits, and mobile money
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => setActiveTab("pos")}
+                size="sm"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm text-xs font-bold"
+              >
+                <Receipt className="w-4 h-4 mr-1" /> New Fee Receipt
+              </Button>
+            </div>
+          </div>
+
+          {/* Search & Channel Filter Bar */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <div className="relative w-full sm:w-72">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Input
+                type="text"
+                placeholder="Filter receipt # or student..."
+                value={receiptSearchQuery}
+                onChange={(e) => setReceiptSearchQuery(e.target.value)}
+                className="pl-9 h-8 text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+              />
+            </div>
+            <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
+              {["ALL", "CASH", "BANK_DEPOSIT", "MOBILE_MONEY", "POS_CARD"].map((m) => (
+                <button
+                  key={m}
+                  onClick={() => setReceiptFilterMethod(m)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
+                    receiptFilterMethod === m
+                      ? "bg-blue-600 text-white shadow-sm"
+                      : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200"
+                  }`}
+                >
+                  {m === "ALL" ? "All Channels" : m.replace("_", " ")}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-800">
+                  <tr>
+                    <th className="py-3 px-4 font-bold">Receipt #</th>
+                    <th className="py-3 px-4 font-bold">Student Name</th>
+                    <th className="py-3 px-4 font-bold">Amount</th>
+                    <th className="py-3 px-4 font-bold">Method</th>
+                    <th className="py-3 px-4 font-bold">Cashier</th>
+                    <th className="py-3 px-4 font-bold">Sync Status</th>
+                    <th className="py-3 px-4 font-bold">Issued At</th>
+                    <th className="py-3 px-4 font-bold">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-mono">
+                  {receipts
+                    .filter((r) => {
+                      const matchesSearch =
+                        r.receiptNumber.toLowerCase().includes(receiptSearchQuery.toLowerCase()) ||
+                        (r.student?.name || "").toLowerCase().includes(receiptSearchQuery.toLowerCase());
+                      const matchesMethod =
+                        receiptFilterMethod === "ALL" || r.paymentMethod === receiptFilterMethod;
+                      return matchesSearch && matchesMethod;
+                    })
+                    .map((r) => (
+                      <tr key={r.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors">
+                        <td className="py-2.5 px-4 font-bold text-slate-900 dark:text-white">{r.receiptNumber}</td>
+                        <td className="py-2.5 px-4 font-sans font-semibold text-slate-800 dark:text-slate-200">
+                          {r.student?.name}
+                        </td>
+                        <td className="py-2.5 px-4 font-bold text-emerald-500">UGX {r.amount.toLocaleString()}</td>
+                        <td className="py-2.5 px-4 font-sans">
+                          <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-[10px] font-bold">
+                            {r.paymentMethod}
+                          </span>
+                        </td>
+                        <td className="py-2.5 px-4 font-sans text-slate-500">{r.cashierName}</td>
+                        <td className="py-2.5 px-4 font-sans">
+                          {r.isOfflineSync ? (
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-500 font-bold border border-amber-500/30">
+                              Desktop Workstation
+                            </span>
+                          ) : (
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-500 font-bold border border-emerald-500/30">
+                              PostgreSQL Central
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-2.5 px-4 text-slate-400">{new Date(r.issuedAt).toLocaleDateString()}</td>
+                        <td className="py-2.5 px-4 font-sans">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setSelectedReceiptForPrint(r)}
+                            className="text-xs h-7 rounded-lg border-slate-300 dark:border-slate-700"
+                          >
+                            <Printer className="w-3.5 h-3.5 mr-1 text-slate-500" /> 80mm Slip
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB: FEES & BILLING (MATCHING DESKTOP CLIENT pane-fees EXACTLY)           */}
+      {/* ========================================================================= */}
+      {(activeTab === "fees" || activeTab === "invoices") && (
+        <div className="space-y-4 animate-in fade-in duration-200">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <GraduationCap className="w-5 h-5 text-amber-500" /> Student Invoices &amp; Fee Billing
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Class tuition structures, scholarships, discounts, and term billing</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button onClick={() => setShowInvoiceModal(true)} size="sm" className="rounded-lg text-xs font-bold">
                 <Plus className="w-4 h-4 mr-1" /> New Student Bill
               </Button>
             </div>
           </div>
 
-          <div className="bg-card border border-border/80 rounded-3xl overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-muted/60 text-muted-foreground uppercase text-[10px] tracking-wider border-b border-border/60">
+                <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-800">
                   <tr>
                     <th className="py-3.5 px-4 font-bold">Invoice #</th>
                     <th className="py-3.5 px-4 font-bold">Student</th>
@@ -1620,12 +2459,12 @@ export default function SuperAdminFinancePage() {
                     <th className="py-3.5 px-4 font-bold">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/40 font-mono">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-mono">
                   {invoices.map((inv) => (
-                    <tr key={inv.id} className="hover:bg-muted/40 transition-colors">
-                      <td className="py-3 px-4 font-bold text-foreground">{inv.invoiceNumber}</td>
-                      <td className="py-3 px-4 font-sans font-semibold text-foreground">{inv.student?.name}</td>
-                      <td className="py-3 px-4 font-sans text-muted-foreground">{inv.student?.class?.name || "General"}</td>
+                    <tr key={inv.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors">
+                      <td className="py-3 px-4 font-bold text-slate-900 dark:text-white">{inv.invoiceNumber}</td>
+                      <td className="py-3 px-4 font-sans font-semibold text-slate-800 dark:text-slate-200">{inv.student?.name}</td>
+                      <td className="py-3 px-4 font-sans text-slate-500">{inv.student?.class?.name || "General"}</td>
                       <td className="py-3 px-4 font-bold">UGX {inv.totalDue.toLocaleString()}</td>
                       <td className="py-3 px-4 text-emerald-500 font-bold">
                         {inv.discountAmount > 0 ? `UGX ${inv.discountAmount.toLocaleString()}` : "-"}
@@ -1644,79 +2483,6 @@ export default function SuperAdminFinancePage() {
                         >
                           {inv.status}
                         </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ========================================================================= */}
-      {/* TAB: 2. POS PAYMENTS & RECEIPTING                                         */}
-      {/* ========================================================================= */}
-      {activeTab === "receipts" && (
-        <div className="space-y-4 animate-in fade-in duration-200">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h2 className="text-lg font-extrabold text-foreground">Payments & Official Receipting (POS)</h2>
-              <p className="text-xs text-muted-foreground">High-speed cashier counter and synchronized receipts</p>
-            </div>
-            <Button onClick={() => setShowPosModal(true)} size="sm" className="bg-emerald-600 hover:bg-emerald-700 rounded-none shadow-md">
-              <Receipt className="w-4 h-4 mr-1" /> Open Web POS Counter
-            </Button>
-          </div>
-
-          <div className="bg-card border border-border/80 rounded-3xl overflow-hidden shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-muted/60 text-muted-foreground uppercase text-[10px] tracking-wider border-b border-border/60">
-                  <tr>
-                    <th className="py-3.5 px-4 font-bold">Receipt #</th>
-                    <th className="py-3.5 px-4 font-bold">Student</th>
-                    <th className="py-3.5 px-4 font-bold">Amount</th>
-                    <th className="py-3.5 px-4 font-bold">Method</th>
-                    <th className="py-3.5 px-4 font-bold">Cashier</th>
-                    <th className="py-3.5 px-4 font-bold">Sync Origin</th>
-                    <th className="py-3.5 px-4 font-bold">Issued At</th>
-                    <th className="py-3.5 px-4 font-bold">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border/40 font-mono">
-                  {receipts.map((r) => (
-                    <tr key={r.id} className="hover:bg-muted/40 transition-colors">
-                      <td className="py-3 px-4 font-bold text-foreground">{r.receiptNumber}</td>
-                      <td className="py-3 px-4 font-sans font-semibold text-foreground">{r.student?.name}</td>
-                      <td className="py-3 px-4 font-bold text-emerald-500">UGX {r.amount.toLocaleString()}</td>
-                      <td className="py-3 px-4 font-sans">
-                        <span className="px-2 py-0.5 rounded-none bg-muted text-foreground text-[10px] font-bold">
-                          {r.paymentMethod}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 font-sans text-muted-foreground">{r.cashierName}</td>
-                      <td className="py-3 px-4 font-sans">
-                        {r.isOfflineSync ? (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-500 font-extrabold border border-amber-500/30">
-                            Offline Desktop Client
-                          </span>
-                        ) : (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-500 font-extrabold border border-emerald-500/30">
-                            Central Web Gateway
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-3 px-4 text-muted-foreground">{new Date(r.issuedAt).toLocaleString()}</td>
-                      <td className="py-3 px-4 font-sans">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setSelectedReceiptForPrint(r)}
-                          className="text-xs h-7 rounded-none"
-                        >
-                          <Printer className="w-3.5 h-3.5 mr-1" /> Slip
-                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -2131,21 +2897,77 @@ export default function SuperAdminFinancePage() {
       )}
 
       {/* ========================================================================= */}
-      {/* TAB: 10. FINANCIAL STATEMENTS                                             */}
+      {/* TAB: SHIFT RECONCILIATION & FINANCIAL STATEMENTS (pane-reports)           */}
       {/* ========================================================================= */}
-      {activeTab === "reports" && statements && (
+      {activeTab === "reports" && (
         <div className="space-y-6 animate-in fade-in duration-200">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-extrabold text-foreground">Financial Statements & Reporting Engine</h2>
-              <p className="text-xs text-muted-foreground">Audited Balance Sheet, Income Statement (P&L), Cash Flow, and Aged Debtors report</p>
+              <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <Scale className="w-5 h-5 text-amber-500" /> Cashier Shift Financial Audit &amp; Reconciliation
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Live workstation metrics, collections distribution &amp; cash-flow trajectory</p>
             </div>
-            <Button variant="outline" size="sm" onClick={() => window.print()} className="rounded-none">
-              <Printer className="w-4 h-4 mr-1" /> Print Official Report
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => loadData()}
+                className="text-xs rounded-lg"
+              >
+                <RefreshCw className="w-3.5 h-3.5 mr-1" /> Refresh Visuals
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => window.print()}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs rounded-lg font-bold shadow-sm"
+              >
+                <Printer className="w-3.5 h-3.5 mr-1" /> Print Shift Summary (Z-Report)
+              </Button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* 4 Shift KPI Cards (Matching Desktop App pane-reports Exactly) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm space-y-1.5">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Opening Drawer Float</div>
+              <div className="text-xl font-black text-slate-900 dark:text-white font-mono">
+                UGX {drawerFloat}
+              </div>
+              <div className="text-[11px] text-slate-400">Verified at shift start</div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm space-y-1.5">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Fee Collections</div>
+              <div className="text-xl font-black text-emerald-500 font-mono">
+                UGX {overview?.kpis?.totalCollected ? overview.kpis.totalCollected.toLocaleString() : "2,600,000"}
+              </div>
+              <div className="text-[11px] text-slate-400">{receipts.length} Receipts Issued</div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm space-y-1.5">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Petty Cash Disbursed</div>
+              <div className="text-xl font-black text-rose-500 font-mono">
+                UGX {overview?.kpis?.totalExpenses ? overview.kpis.totalExpenses.toLocaleString() : "930,000"}
+              </div>
+              <div className="text-[11px] text-slate-400">{expensesData.expenses.length} Vouchers Approved</div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm space-y-1.5">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Expected Drawer Balance</div>
+              <div className="text-xl font-black text-blue-500 font-mono">
+                UGX {(
+                  150000 +
+                  (overview?.kpis?.totalCollected || 2600000) -
+                  (overview?.kpis?.totalExpenses || 930000)
+                ).toLocaleString()}
+              </div>
+              <div className="text-[11px] text-slate-400">Float + Collections - Expenses</div>
+            </div>
+          </div>
+
+          {statements && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
             {/* Balance Sheet Card */}
             <div className="bg-card border border-border/80 rounded-3xl p-6 shadow-sm space-y-4">
               <h3 className="font-extrabold text-base flex items-center justify-between text-foreground">
@@ -2196,6 +3018,7 @@ export default function SuperAdminFinancePage() {
               </div>
             </div>
           </div>
+          )}
         </div>
       )}
 

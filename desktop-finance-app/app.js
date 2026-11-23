@@ -95,8 +95,14 @@ try {
   systemSettings = { ...DEFAULT_SYSTEM_SETTINGS };
 }
 
+const DEFAULT_ORIGIN = (typeof window !== "undefined" && window.location && window.location.origin && !window.location.origin.startsWith("file"))
+  ? window.location.origin
+  : "http://localhost:3000";
+
 const CONFIG = {
-  serverUrl: systemSettings.serverUrl || "http://localhost:3000",
+  serverUrl: systemSettings.serverUrl && systemSettings.serverUrl !== "http://localhost:3000"
+    ? systemSettings.serverUrl
+    : DEFAULT_ORIGIN,
   machineId: systemSettings.machineId || "WS-INIT",
   syncIntervalMs: 15000,
 };

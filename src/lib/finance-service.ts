@@ -1,5 +1,291 @@
 import prisma from "@/lib/prisma";
-import { AccountClass } from "../../generated/prisma/client";
+import { AccountClass, MealPlanType, MealCardStatus } from "../../generated/prisma/client";
+
+// ============================================================================
+// 0. ENSURE WELLSTAR BRIGHT FINANCIAL DATASET IS SEEDED IN POSTGRESQL
+// ============================================================================
+export async function ensureWellstarFinanceSeeded() {
+  try {
+    // 1. Initialize Chart of Accounts if empty
+    await initializeStandardChartOfAccounts();
+
+    // Ensure realistic cash & bank balances
+    await prisma.account.updateMany({
+      where: { code: "1010" },
+      data: { balance: 2650000 }, // Cash drawer float + cash collections
+    });
+    await prisma.account.updateMany({
+      where: { code: "1020" },
+      data: { balance: 2000000 }, // Petty cash float
+    });
+    await prisma.account.updateMany({
+      where: { code: "1030" },
+      data: { balance: 42500000 }, // Stanbic Bank Operating A/C
+    });
+    await prisma.account.updateMany({
+      where: { code: "1040" },
+      data: { balance: 8400000 }, // Mobile Money merchant float
+    });
+
+    // 2. Seed Workstations if empty
+    const workstationCount = await prisma.workstation.count();
+    if (workstationCount === 0) {
+      await prisma.workstation.createMany({
+        data: [
+          {
+            machineId: "WS-BURSAR-01",
+            machineName: "Counter Workstation 01 (Front Desk)",
+            assignedCashier: "Joseph Kato",
+            apiKeyHash: "ws_pos_sync_key_secure_2026",
+            isBlocked: false,
+            lastSyncAt: new Date(),
+            pendingRecords: 0,
+            clientVersion: "1.0.0",
+          },
+          {
+            machineId: "WS-BURSAR-HEAD",
+            machineName: "Chief Bursar Executive Terminal",
+            assignedCashier: "CPA Sarah Namubiru",
+            apiKeyHash: "ws_pos_sync_key_secure_2026",
+            isBlocked: false,
+            lastSyncAt: new Date(),
+            pendingRecords: 0,
+            clientVersion: "1.0.0",
+          },
+        ],
+      });
+    }
+
+    // 3. Seed Students & Invoices if empty
+    const invoiceCount = await prisma.studentFeeInvoice.count();
+    if (invoiceCount === 0) {
+      const studentRoster = [
+        { id: "S-1042", name: "Kato Joseph", className: "S.1A", grade: "S.1", invoiceNum: "INV-2026-T1-1042", fee: 450000, paid: 0, status: "UNPAID" },
+        { id: "S-1043", name: "Nansubuga Mary", className: "S.1A", grade: "S.1", invoiceNum: "INV-2026-T1-1043", fee: 450000, paid: 200000, status: "PARTIAL" },
+        { id: "S-1044", name: "Mukasa Peter", className: "S.1A", grade: "S.1", invoiceNum: "INV-2026-T1-1044", fee: 600000, paid: 0, status: "UNPAID" },
+        { id: "S-1045", name: "Babirye Sarah", className: "S.4 West", grade: "S.4", invoiceNum: "INV-2026-T1-1045", fee: 450000, paid: 300000, status: "PARTIAL" },
+        { id: "S-1046", name: "Okello Denis", className: "S.5 Sci", grade: "S.5", invoiceNum: "INV-2026-T1-1046", fee: 550000, paid: 550000, status: "PAID" },
+        { id: "S-1047", name: "Namagembe Grace", className: "S.6 Arts", grade: "S.6", invoiceNum: "INV-2026-T1-1047", fee: 500000, paid: 350000, status: "PARTIAL" },
+        { id: "S-1048", name: "Kintu Moses", className: "S.2A", grade: "S.2", invoiceNum: "INV-2026-T1-1048", fee: 450000, paid: 0, status: "UNPAID" },
+        { id: "S-1049", name: "Nalubega Prossy", className: "S.2B", grade: "S.2", invoiceNum: "INV-2026-T1-1049", fee: 450000, paid: 450000, status: "PAID" },
+        { id: "S-1050", name: "Opolot Emmanuel", className: "S.3 East", grade: "S.3", invoiceNum: "INV-2026-T1-1050", fee: 500000, paid: 250000, status: "PARTIAL" },
+        { id: "S-1051", name: "Akello Joan", className: "S.3 West", grade: "S.3", invoiceNum: "INV-2026-T1-1051", fee: 450000, paid: 150000, status: "PARTIAL" },
+        { id: "S-1052", name: "Walusimbi David", className: "S.4 East", grade: "S.4", invoiceNum: "INV-2026-T1-1052", fee: 450000, paid: 0, status: "UNPAID" },
+        { id: "S-1053", name: "Nakato Betty", className: "S.5 Arts", grade: "S.5", invoiceNum: "INV-2026-T1-1053", fee: 550000, paid: 550000, status: "PAID" },
+      ];
+
+      for (let i = 0; i < studentRoster.length; i++) {
+        const item = studentRoster[i];
+
+        // Ensure class exists
+        let cls = await prisma.class.findFirst({ where: { name: item.className } });
+        if (!cls) {
+          cls = await prisma.class.create({
+            data: { name: item.className, grade: item.grade },
+          });
+        }
+
+        // Ensure student exists
+        let student = await prisma.student.findFirst({ where: { name: item.name } });
+        if (!student) {
+          const email = `${item.name.toLowerCase().replace(/[^a-z0-9]/g, ".")}@student.wellstarbright.sc.ug`;
+          student = await prisma.student.create({
+            data: {
+              name: item.name,
+              email,
+              password: "student123",
+              classId: cls.id,
+            },
+          });
+        }
+
+        // Create invoice
+        const inv = await prisma.studentFeeInvoice.create({
+          data: {
+            invoiceNumber: item.invoiceNum,
+            studentId: student.id,
+            academicYear: "2026",
+            term: "Term 1",
+            subtotal: item.fee,
+            discountAmount: 0,
+            totalDue: item.fee,
+            paidAmount: item.paid,
+            balance: item.fee - item.paid,
+            status: item.status,
+            dueDate: new Date("2026-04-15"),
+          },
+        });
+
+        // Create payment receipt if paidAmount > 0
+        if (item.paid > 0) {
+          const methods = ["CASH", "MOBILE_MONEY", "BANK_DEPOSIT", "CASH", "CASH", "CASH", "CASH", "POS_CARD"];
+          const method = methods[i % methods.length];
+          const cashier = method === "BANK_DEPOSIT" || method === "POS_CARD" ? "CPA Sarah Namubiru" : "Joseph Kato";
+
+          await prisma.paymentReceipt.create({
+            data: {
+              receiptNumber: `RCP-2026-0010${i + 1}`,
+              invoiceId: inv.id,
+              studentId: student.id,
+              amount: item.paid,
+              paymentMethod: method,
+              referenceNo: method === "CASH" ? undefined : `REF-WBSS-90${i + 1}`,
+              cashierName: cashier,
+              workstationId: "WS-BURSAR-01",
+              isOfflineSync: false,
+              issuedAt: new Date(Date.now() - (12 - i) * 86400000),
+              notes: `Official Term 1 Tuition Collection — ${item.name}`,
+            },
+          });
+        }
+      }
+    }
+
+    // 4. Seed Expenses if empty
+    const expenseCount = await prisma.expenseRecord.count();
+    if (expenseCount === 0) {
+      const expensesList = [
+        {
+          voucherNumber: "PV-2026-WS01-101",
+          paidTo: "Umeme Uganda Ltd",
+          department: "Administration",
+          category: "Electricity Bill",
+          amount: 350000,
+          paymentMethod: "BANK_TRANSFER",
+          description: "March campus electricity grid power bill for main academic & laboratory blocks",
+          recordedBy: "CPA Sarah Namubiru",
+          workstationId: "WS-BURSAR-HEAD",
+          expenseDate: new Date("2026-03-24T10:15:00Z"),
+        },
+        {
+          voucherNumber: "PV-2026-WS01-102",
+          paidTo: "Mukwano Wholesalers Mukono",
+          department: "Kitchen & Food",
+          category: "Kitchen Food Supplies",
+          amount: 280000,
+          paymentMethod: "CASH",
+          description: "500kg Posho & Beans supply for boarding student dining hall meals",
+          recordedBy: "Joseph Kato",
+          workstationId: "WS-BURSAR-01",
+          expenseDate: new Date("2026-03-25T11:30:00Z"),
+        },
+        {
+          voucherNumber: "PV-2026-WS01-103",
+          paidTo: "TotalEnergies Mukono",
+          department: "Transport & Bus",
+          category: "Diesel & Fuel",
+          amount: 120000,
+          paymentMethod: "CASH",
+          description: "School Bus diesel refill for student daily transit route",
+          recordedBy: "Joseph Kato",
+          workstationId: "WS-BURSAR-01",
+          expenseDate: new Date("2026-03-26T08:45:00Z"),
+        },
+        {
+          voucherNumber: "PV-2026-WS01-104",
+          paidTo: "Crown Publishers Ltd",
+          department: "Science & Academics",
+          category: "Stationery & Printing",
+          amount: 180000,
+          paymentMethod: "MOBILE_MONEY",
+          description: "Term 1 Mid-Term Examination answer booklets and assessment sheets",
+          recordedBy: "CPA Sarah Namubiru",
+          workstationId: "WS-BURSAR-HEAD",
+          expenseDate: new Date("2026-03-27T14:20:00Z"),
+        },
+      ];
+
+      for (const exp of expensesList) {
+        await prisma.expenseRecord.create({
+          data: {
+            ...exp,
+            approvalStatus: "APPROVED",
+          },
+        });
+      }
+    }
+
+    // 5. Seed Staff Payroll if empty
+    const payrollCount = await prisma.staffPayrollRecord.count();
+    if (payrollCount === 0) {
+      const payrollStaff = [
+        { name: "Sserwadda Ivan", role: "Head of Mathematics", email: "sserwadda.ivan@wellstarbright.sc.ug", gross: 1450000, base: 1200000, housing: 150000, transport: 100000, paye: 337000, nssf: 72500, net: 1040500, ref: "PAY-2026-MAR-01" },
+        { name: "Kemigisha Fiona", role: "English Literature Teacher", email: "kemigisha.fiona@wellstarbright.sc.ug", gross: 1250000, base: 1050000, housing: 100000, transport: 100000, paye: 277000, nssf: 62500, net: 910500, ref: "PAY-2026-MAR-02" },
+        { name: "Nagawa Christine", role: "Biology & Head of Sciences", email: "nagawa.christine@wellstarbright.sc.ug", gross: 1350000, base: 1150000, housing: 100000, transport: 100000, paye: 307000, nssf: 67500, net: 975500, ref: "PAY-2026-MAR-03" },
+        { name: "Ssekandi Isaac", role: "Computer Studies & ICT", email: "ssekandi.isaac@wellstarbright.sc.ug", gross: 1150000, base: 1000000, housing: 80000, transport: 70000, paye: 247000, nssf: 57500, net: 845500, ref: "PAY-2026-MAR-04" },
+        { name: "Opio Daniel", role: "History & CRE Teacher", email: "opio.daniel@wellstarbright.sc.ug", gross: 980000, base: 850000, housing: 70000, transport: 60000, paye: 196000, nssf: 49000, net: 735000, ref: "PAY-2026-MAR-05" },
+      ];
+
+      for (const st of payrollStaff) {
+        let teacher = await prisma.teacher.findFirst({ where: { name: st.name } });
+        if (!teacher) {
+          teacher = await prisma.teacher.create({
+            data: {
+              name: st.name,
+              email: st.email,
+              password: "password123",
+              role: st.role,
+            },
+          });
+        }
+
+        await prisma.staffPayrollRecord.create({
+          data: {
+            teacherId: teacher.id,
+            month: "March",
+            year: "2026",
+            baseSalary: st.base,
+            housingAllowance: st.housing,
+            transportAllowance: st.transport,
+            otherAllowances: 0,
+            grossSalary: st.gross,
+            payeTax: st.paye,
+            nssfEmployee: st.nssf,
+            nssfEmployer: st.nssf * 2,
+            totalDeductions: st.paye + st.nssf,
+            netSalary: st.net,
+            status: "PAID",
+            paymentDate: new Date("2026-03-25"),
+            payslipRef: st.ref,
+          },
+        });
+      }
+    }
+
+    // 6. Seed Meal Cards if empty
+    const mealCardCount = await prisma.mealCard.count();
+    if (mealCardCount === 0) {
+      const mealCardsToSeed = [
+        { studentName: "Okello Denis", cardNum: "MC-2026-1049", plan: MealPlanType.BOARDING_FULL, quota: 3, status: MealCardStatus.ACTIVE, notes: "Standard 1-Month Boarding Meal Card. Fee cleared 100%." },
+        { studentName: "Babirye Sarah", cardNum: "MC-2026-1050", plan: MealPlanType.DAY_LUNCH, quota: 1, status: MealCardStatus.ACTIVE, notes: "1-Week Day Scholar Meal Card. Renewal required upon next fee payment." },
+        { studentName: "Kato Joseph", cardNum: "MC-2026-1051", plan: MealPlanType.BOARDING_FULL, quota: 3, status: MealCardStatus.EXPIRED, notes: "1-Month Card EXPIRED. Arrears balance of UGX 450,000 pending clearance." },
+        { studentName: "Namagembe Grace", cardNum: "MC-2026-1052", plan: MealPlanType.SPECIAL_DIET, quota: 3, status: MealCardStatus.ACTIVE, notes: "1-Month Special Dietary Meal Pass." },
+      ];
+
+      for (const mc of mealCardsToSeed) {
+        const student = await prisma.student.findFirst({ where: { name: mc.studentName } });
+        if (student) {
+          const validUntil = new Date();
+          validUntil.setDate(validUntil.getDate() + (mc.status === MealCardStatus.EXPIRED ? -5 : 25));
+
+          await prisma.mealCard.create({
+            data: {
+              cardNumber: mc.cardNum,
+              studentId: student.id,
+              planType: mc.plan,
+              dailyQuota: mc.quota,
+              status: mc.status,
+              allergies: mc.notes,
+              validUntil,
+            },
+          });
+        }
+      }
+    }
+  } catch (err) {
+    console.error("ensureWellstarFinanceSeeded error:", err);
+  }
+}
 
 // ============================================================================
 // 1. INITIALIZE STANDARD CHART OF ACCOUNTS (DOUBLE-ENTRY)

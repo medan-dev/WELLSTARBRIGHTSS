@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { revalidatePath, unstable_cache, revalidateTag } from "next/cache";
 import {
   initializeStandardChartOfAccounts,
+  ensureWellstarFinanceSeeded,
   createBalancedJournalEntry,
   logFinanceAudit,
   generateFullFinancialStatements,
@@ -44,6 +45,8 @@ export async function getSuperAdminFinanceOverview() {
       })
     );
   }
+
+  await ensureWellstarFinanceSeeded();
 
   // 1. Invoices & Receivables
   const invoices = await prisma.studentFeeInvoice.findMany({
@@ -153,6 +156,8 @@ export async function getFinanceInvoices() {
   const { campusId, isDemo } = await resolveActiveTenantContext();
   if (isDemo) return [];
 
+  await ensureWellstarFinanceSeeded();
+
   const invoices = await prisma.studentFeeInvoice.findMany({
     where: campusId ? { campusId } : {},
     orderBy: { createdAt: "desc" },
@@ -199,6 +204,8 @@ export async function getFinanceExpenses() {
   const { isDemo } = await resolveActiveTenantContext();
   if (isDemo) return { expenses: [], suppliers: [] };
 
+  await ensureWellstarFinanceSeeded();
+
   const expenses = await prisma.expenseRecord.findMany({
     orderBy: { expenseDate: "desc" },
     include: {
@@ -217,6 +224,8 @@ export async function getFinanceExpenses() {
 export async function getFinancePayroll() {
   const { campusId, isDemo } = await resolveActiveTenantContext();
   if (isDemo) return { payroll: [], loans: [] };
+
+  await ensureWellstarFinanceSeeded();
 
   const payroll = await prisma.staffPayrollRecord.findMany({
     where: campusId ? { teacher: { campusId } } : {},
