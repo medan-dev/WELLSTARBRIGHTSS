@@ -25,7 +25,7 @@ export const DEFAULT_SCHOOL_BRAND: SchoolBrandConfig = {
   motto: "A holistic school built for character & intellect.",
   unebCenterNumber: "U0482",
   curriculum: "Competence-Based Curriculum (CBC) & UNEB Standard",
-  badgeUrl: "/assets/logo.png",
+  badgeUrl: "/logo.png",
   badgeInitials: "WB",
   location: "off Kayunga Road, Kabembe, Mukono District, Uganda",
   phone: "+256 701 116 781",

@@ -35,6 +35,9 @@ export function SchoolBrandProvider({ children }: { children: React.ReactNode })
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
+        if (parsed.badgeUrl === "/assets/logo.png") {
+          parsed.badgeUrl = "/logo.png";
+        }
         setBrand({ ...DEFAULT_SCHOOL_BRAND, ...parsed });
       }
     } catch {
