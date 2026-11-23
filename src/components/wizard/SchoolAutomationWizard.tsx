@@ -26,7 +26,19 @@ import {
   Download,
   AlertCircle,
   Globe,
-  ChevronDown,
+  BookOpen,
+  Calendar,
+  Wallet,
+  Clock,
+  Users,
+  Briefcase,
+  Layers,
+  GraduationCap,
+  Barcode,
+  Receipt,
+  Settings,
+  Tag,
+  Plus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,6 +51,7 @@ import {
   extractBrandFromText,
   SAMPLE_DOCUMENTS,
   DocumentAnalysisResult,
+  generateStarterDocumentTemplate,
 } from "@/lib/school-document-analyzer";
 
 interface SchoolAutomationWizardProps {
@@ -46,19 +59,44 @@ interface SchoolAutomationWizardProps {
   onClose: () => void;
 }
 
+type WizardTab =
+  | "doc_ingest"
+  | "identity"
+  | "academics"
+  | "finance"
+  | "operations"
+  | "badge"
+  | "identification"
+  | "presets";
+
 export function SchoolAutomationWizard({ isOpen, onClose }: SchoolAutomationWizardProps) {
   const { brand, updateBrand, loadPreset, resetToDefault } = useSchoolBrand();
 
-  const [form, setForm] = useState<SchoolBrandConfig>({ ...brand });
-  const [activeTab, setActiveTab] = useState<"doc_ingest" | "profile" | "badge" | "identification" | "presets">("doc_ingest");
-  const [activePreview, setActivePreview] = useState<"id_card" | "meal_pass" | "report_card" | "receipt">("id_card");
-  const [badgePreview, setBadgePreview] = useState<string>(brand.badgeUrl);
+  const [form, setForm] = useState<SchoolBrandConfig>({
+    ...DEFAULT_SCHOOL_BRAND,
+    ...brand,
+    coreValues: brand.coreValues || [...DEFAULT_SCHOOL_BRAND.coreValues],
+    classesOffered: brand.classesOffered || [...DEFAULT_SCHOOL_BRAND.classesOffered],
+    subjectOfferings: brand.subjectOfferings || [...DEFAULT_SCHOOL_BRAND.subjectOfferings],
+    mealsOffered: brand.mealsOffered || [...DEFAULT_SCHOOL_BRAND.mealsOffered],
+    boardingHouses: brand.boardingHouses || [...DEFAULT_SCHOOL_BRAND.boardingHouses],
+    frontSiteStats: brand.frontSiteStats || { ...DEFAULT_SCHOOL_BRAND.frontSiteStats },
+  });
+
+  const [activeTab, setActiveTab] = useState<WizardTab>("doc_ingest");
+  const [activePreview, setActivePreview] = useState<"id_card" | "meal_pass" | "report_card" | "receipt" | "staff_badge">("id_card");
+  const [badgePreview, setBadgePreview] = useState<string>(brand.badgeUrl || "/logo.png");
 
   // Document & ZIP Analyzer States
   const [analyzing, setAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<DocumentAnalysisResult | null>(null);
   const [pastedText, setPastedText] = useState("");
   const [showPasteBox, setShowPasteBox] = useState(false);
+
+  // Quick tag inputs
+  const [newClassInput, setNewClassInput] = useState("");
+  const [newSubjectInput, setNewSubjectInput] = useState("");
+  const [newDormInput, setNewDormInput] = useState("");
 
   if (!isOpen) return null;
 
@@ -74,7 +112,7 @@ export function SchoolAutomationWizard({ isOpen, onClose }: SchoolAutomationWiza
       if (result.extractedBrand.badgeUrl) {
         setBadgePreview(result.extractedBrand.badgeUrl);
       }
-      toast.success(`Successfully analyzed ${file.name}! Detected ${result.detectedFieldsCount} institutional preferences.`);
+      toast.success(`Successfully analyzed ${file.name}! Detected ${result.detectedFieldsCount} institutional & system configurations.`);
     } catch (err: any) {
       toast.error(err.message || "Failed to parse document or ZIP archive.");
     } finally {
@@ -90,19 +128,27 @@ export function SchoolAutomationWizard({ isOpen, onClose }: SchoolAutomationWiza
     setAnalyzing(true);
     setTimeout(() => {
       const { brand: extractedBrand, detected } = extractBrandFromText(sample.content);
-      const score = Math.min(100, Math.round((detected.length / 10) * 100));
+      const score = Math.min(100, Math.round((detected.length / 15) * 100));
 
       const result: DocumentAnalysisResult = {
         success: true,
         fileName: sample.filename,
         fileType: sample.type.includes("JSON") ? "json" : "document",
         detectedFieldsCount: detected.length,
-        confidenceScore: Math.max(score, 75),
+        confidenceScore: Math.max(score, 80),
         extractedBrand,
         detectedItems: detected,
         extractedImages: [],
         rawTextPreview: sample.content.slice(0, 1500),
-        summary: `Parsed sample ${sample.title}. Extracted ${detected.length} preferences with ${score}% structural confidence.`,
+        summary: `Parsed ${sample.title}. Extracted ${detected.length} preferences & system settings with ${score}% structural confidence.`,
+        categoryBreakdown: {
+          identity: detected.filter((i) => i.category === "identity").length,
+          academics: detected.filter((i) => i.category === "academics").length,
+          finance: detected.filter((i) => i.category === "finance").length,
+          operations: detected.filter((i) => i.category === "operations").length,
+          leadership: detected.filter((i) => i.category === "leadership").length,
+          branding: detected.filter((i) => i.category === "branding").length,
+        }
       };
 
       setAnalysisResult(result);
@@ -110,7 +156,7 @@ export function SchoolAutomationWizard({ isOpen, onClose }: SchoolAutomationWiza
       setBadgePreview(extractedBrand.badgeUrl);
       setAnalyzing(false);
       toast.success(`Loaded sample: ${sample.title}`);
-    }, 400);
+    }, 350);
   };
 
   // Process Pasted Raw Text
@@ -123,19 +169,27 @@ export function SchoolAutomationWizard({ isOpen, onClose }: SchoolAutomationWiza
     setAnalyzing(true);
     setTimeout(() => {
       const { brand: extractedBrand, detected } = extractBrandFromText(pastedText);
-      const score = Math.min(100, Math.round((detected.length / 10) * 100));
+      const score = Math.min(100, Math.round((detected.length / 15) * 100));
 
       const result: DocumentAnalysisResult = {
         success: true,
         fileName: "Pasted_Document_Text.txt",
         fileType: "text",
         detectedFieldsCount: detected.length,
-        confidenceScore: Math.max(score, 50),
+        confidenceScore: Math.max(score, 60),
         extractedBrand,
         detectedItems: detected,
         extractedImages: [],
         rawTextPreview: pastedText.slice(0, 1500),
-        summary: `Analyzed raw document text. Detected ${detected.length} preferences with ${score}% confidence.`,
+        summary: `Analyzed raw document text. Detected ${detected.length} institutional fields & system settings with ${score}% confidence.`,
+        categoryBreakdown: {
+          identity: detected.filter((i) => i.category === "identity").length,
+          academics: detected.filter((i) => i.category === "academics").length,
+          finance: detected.filter((i) => i.category === "finance").length,
+          operations: detected.filter((i) => i.category === "operations").length,
+          leadership: detected.filter((i) => i.category === "leadership").length,
+          branding: detected.filter((i) => i.category === "branding").length,
+        }
       };
 
       setAnalysisResult(result);
@@ -145,46 +199,32 @@ export function SchoolAutomationWizard({ isOpen, onClose }: SchoolAutomationWiza
     }, 300);
   };
 
-  // Download boilerplate starter template
-  const handleDownloadTemplate = () => {
-    const templateContent = `OFFICIAL SCHOOL PROFILE & ONBOARDING TEMPLATE
-==============================================
-Fill in your institution details below and upload this file (or as a ZIP with your badge logo) into the System Setup Wizard.
-
-Institution: St. Jude Secondary School
-Short Name / Code: SJSS-2026
-Motto: "Knowledge, Discipline and Integrity"
-UNEB Examination Center Number: U0912
-Curriculum Standards: Uganda National Examinations Board (UCE & UACE) & CBC Standard
-School Category: Mixed Day & Boarding Secondary School (S.1 - S.6)
-
-Campus Location: Plot 18 Mission Road, Mukono District, Uganda
-Telephone Hotline: +256 701 445 522
-WhatsApp Helpdesk: +256 701 445 522
-Official Email: info@stjudess.ac.ug
-Institutional Portal: https://stjudess.ac.ug
-
-Administration & Leadership:
-Head of School: Dr. George William Mukasa
-Director Title: Headmaster / Principal Director
-Headmaster Bio: Committed to academic distinction and holistic student character development.
-
-Identity Colors: Deep Navy (#0b2256) and Gold Accent (#f26522).`;
-
-    const blob = new Blob([templateContent], { type: "text/plain;charset=utf-8" });
+  // Download official starter template
+  const handleDownloadTemplate = (format: "json" | "markdown") => {
+    const { filename, content } = generateStarterDocumentTemplate(format);
+    const mime = format === "json" ? "application/json" : "text/markdown";
+    const blob = new Blob([content], { type: `${mime};charset=utf-8` });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "School_Profile_Template.txt";
+    link.download = filename;
     link.click();
     URL.revokeObjectURL(url);
-    toast.success("Downloaded School_Profile_Template.txt");
+    toast.success(`Downloaded starter template: ${filename}`);
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.name.endsWith(".zip") || file.name.endsWith(".txt") || file.name.endsWith(".json") || file.name.endsWith(".csv") || file.name.endsWith(".md") || file.name.endsWith(".doc") || file.name.endsWith(".docx")) {
+      if (
+        file.name.endsWith(".zip") ||
+        file.name.endsWith(".txt") ||
+        file.name.endsWith(".json") ||
+        file.name.endsWith(".csv") ||
+        file.name.endsWith(".md") ||
+        file.name.endsWith(".doc") ||
+        file.name.endsWith(".docx")
+      ) {
         handleFileAnalysis(file);
         return;
       }
@@ -210,17 +250,17 @@ Identity Colors: Deep Navy (#0b2256) and Gold Accent (#f26522).`;
 
   const handleSave = () => {
     updateBrand(form);
-    toast.success(`Applied ${form.name} customization across Front Site & Identification Features!`);
+    toast.success(`Applied ${form.name} customization across Front Site, System Settings & Identification Features!`);
     onClose();
   };
 
-  const handleApplyPreset = (key: "demo" | "st_pauls" | "greenhill") => {
-    loadPreset(key);
+  const handleApplyPreset = (key: "demo" | "st_pauls" | "greenhill" | "kitende") => {
+    loadPreset(key as any);
     const p = PRESET_SCHOOLS[key] || DEFAULT_SCHOOL_BRAND;
     const merged = { ...DEFAULT_SCHOOL_BRAND, ...p };
     setForm(merged);
-    setBadgePreview(merged.badgeUrl);
-    toast.success(`Loaded preset: ${merged.name}`);
+    setBadgePreview(merged.badgeUrl || "/logo.png");
+    toast.success(`Loaded institutional preset: ${merged.name}`);
   };
 
   const handleReset = () => {
@@ -231,9 +271,66 @@ Identity Colors: Deep Navy (#0b2256) and Gold Accent (#f26522).`;
     toast.info("Reset system to standard zero-data demo configuration");
   };
 
+  // Add/remove class tag
+  const handleAddClass = () => {
+    if (!newClassInput.trim()) return;
+    if (!form.classesOffered.includes(newClassInput.trim())) {
+      setForm((prev) => ({
+        ...prev,
+        classesOffered: [...prev.classesOffered, newClassInput.trim()]
+      }));
+    }
+    setNewClassInput("");
+  };
+
+  const handleRemoveClass = (cls: string) => {
+    setForm((prev) => ({
+      ...prev,
+      classesOffered: prev.classesOffered.filter((c) => c !== cls)
+    }));
+  };
+
+  // Add/remove subject tag
+  const handleAddSubject = () => {
+    if (!newSubjectInput.trim()) return;
+    if (!form.subjectOfferings.includes(newSubjectInput.trim())) {
+      setForm((prev) => ({
+        ...prev,
+        subjectOfferings: [...prev.subjectOfferings, newSubjectInput.trim()]
+      }));
+    }
+    setNewSubjectInput("");
+  };
+
+  const handleRemoveSubject = (sub: string) => {
+    setForm((prev) => ({
+      ...prev,
+      subjectOfferings: prev.subjectOfferings.filter((s) => s !== sub)
+    }));
+  };
+
+  // Add/remove dorm tag
+  const handleAddDorm = () => {
+    if (!newDormInput.trim()) return;
+    if (!form.boardingHouses.includes(newDormInput.trim())) {
+      setForm((prev) => ({
+        ...prev,
+        boardingHouses: [...prev.boardingHouses, newDormInput.trim()]
+      }));
+    }
+    setNewDormInput("");
+  };
+
+  const handleRemoveDorm = (dorm: string) => {
+    setForm((prev) => ({
+      ...prev,
+      boardingHouses: prev.boardingHouses.filter((d) => d !== dorm)
+    }));
+  };
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 font-sans animate-fade-in">
-      <div className="bg-white text-slate-900 w-full max-w-4xl max-h-[92vh] flex flex-col rounded-none border border-slate-300 shadow-2xl overflow-hidden animate-scale-in">
+    <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 font-sans animate-fade-in">
+      <div className="bg-white text-slate-900 w-full max-w-5xl max-h-[94vh] flex flex-col rounded-none border border-slate-300 shadow-2xl overflow-hidden animate-scale-in">
         {/* Top Header */}
         <div className="h-14 px-5 bg-[#0b2256] text-white flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5">
@@ -243,7 +340,7 @@ Identity Colors: Deep Navy (#0b2256) and Gold Accent (#f26522).`;
             <div>
               <div className="text-xs font-bold tracking-tight">SYSTEM SETUP & AUTOMATION WIZARD</div>
               <div className="text-[10px] text-slate-300">
-                Document / ZIP AI Ingestion • Front Site Setup • Identification Features
+                Institutional Document & ZIP Ingestion • Complete System Settings • Front Site & ID Features
               </div>
             </div>
           </div>
@@ -254,14 +351,14 @@ Identity Colors: Deep Navy (#0b2256) and Gold Accent (#f26522).`;
               variant="outline"
               size="sm"
               onClick={handleReset}
-              className="h-8 rounded-none text-xs border-white/20 bg-white/10 hover:bg-white/20 text-white"
+              className="h-8 px-2.5 text-xs text-white border-white/20 bg-white/10 hover:bg-white/20 rounded-none gap-1 font-mono"
             >
-              <RefreshCw className="size-3 mr-1" />
-              <span>Reset Clean</span>
+              <RefreshCw className="size-3" />
+              <span>Reset</span>
             </Button>
             <button
               onClick={onClose}
-              className="size-8 grid place-items-center text-white/80 hover:text-white hover:bg-white/10 rounded-none transition-colors"
+              className="size-8 grid place-items-center rounded-none text-white/70 hover:text-white hover:bg-white/15 transition-colors"
             >
               <X className="size-4" />
             </button>
@@ -269,847 +366,1437 @@ Identity Colors: Deep Navy (#0b2256) and Gold Accent (#f26522).`;
         </div>
 
         {/* Wizard Step Tabs */}
-        <div className="px-5 py-2 bg-slate-50 border-b border-slate-200 flex items-center gap-2 text-xs overflow-x-auto shrink-0">
-          <button
-            onClick={() => setActiveTab("doc_ingest")}
-            className={`px-3 py-1.5 font-semibold transition-colors rounded-none flex items-center gap-1.5 ${
-              activeTab === "doc_ingest"
-                ? "bg-[#0b2256] text-white"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-            }`}
-          >
-            <FileArchive className="size-3.5 text-[#f26522]" />
-            <span>1. Document & ZIP Setup</span>
-          </button>
-          <button
-            onClick={() => setActiveTab("profile")}
-            className={`px-3 py-1.5 font-semibold transition-colors rounded-none ${
-              activeTab === "profile"
-                ? "bg-[#0b2256] text-white"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-            }`}
-          >
-            2. School Profile
-          </button>
-          <button
-            onClick={() => setActiveTab("badge")}
-            className={`px-3 py-1.5 font-semibold transition-colors rounded-none ${
-              activeTab === "badge"
-                ? "bg-[#0b2256] text-white"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-            }`}
-          >
-            3. Badge / Crest
-          </button>
-          <button
-            onClick={() => setActiveTab("identification")}
-            className={`px-3 py-1.5 font-semibold transition-colors rounded-none ${
-              activeTab === "identification"
-                ? "bg-[#0b2256] text-white"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-            }`}
-          >
-            4. ID & Features Preview
-          </button>
-          <button
-            onClick={() => setActiveTab("presets")}
-            className={`px-3 py-1.5 font-semibold transition-colors rounded-none ${
-              activeTab === "presets"
-                ? "bg-[#0b2256] text-white"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-            }`}
-          >
-            5. Presets
-          </button>
+        <div className="flex items-center border-b border-slate-200 bg-slate-50 px-3 overflow-x-auto shrink-0 scrollbar-none text-xs">
+          {[
+            { id: "doc_ingest", label: "Document & ZIP (AI)", icon: FileArchive, badge: "AI Engine" },
+            { id: "identity", label: "School Identity & Legal", icon: Building2 },
+            { id: "academics", label: "Academics & Grading", icon: BookOpen },
+            { id: "finance", label: "Finance & POS Settings", icon: Wallet },
+            { id: "operations", label: "Operations & Welfare", icon: Clock },
+            { id: "badge", label: "Badge & Brand Colors", icon: Award },
+            { id: "identification", label: "Live ID Previews", icon: QrCode },
+            { id: "presets", label: "Institutional Presets", icon: Sliders },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const active = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as WizardTab)}
+                className={`flex items-center gap-1.5 px-3.5 py-3 border-b-2 font-semibold transition-all whitespace-nowrap ${
+                  active
+                    ? "border-[#f26522] text-[#0b2256] bg-white shadow-xs font-bold"
+                    : "border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                }`}
+              >
+                <Icon className={`size-3.5 ${active ? "text-[#f26522]" : "text-slate-400"}`} />
+                <span>{tab.label}</span>
+                {tab.badge && (
+                  <span className="text-[9px] px-1.5 py-0.2 bg-[#f26522]/15 text-[#f26522] font-bold rounded-xs">
+                    {tab.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
-        {/* Tab Body */}
-        <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
-          {/* TAB 1: DOCUMENT & ZIP INGESTION (AI EXTRACTION) */}
+        {/* Wizard Main Content Body */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50/50">
+          {/* TAB 1: DOCUMENT & ZIP INGESTION (AI) */}
           {activeTab === "doc_ingest" && (
-            <div className="space-y-6 animate-fade-in">
-              <div className="border-b border-slate-100 pb-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="space-y-6 max-w-4xl mx-auto">
+              {/* Hero Banner */}
+              <div className="p-4 bg-gradient-to-r from-[#0b2256] to-slate-900 text-white rounded-none border border-slate-700 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                    <Sparkles className="size-4 text-[#f26522]" />
-                    <span>Intelligent Document & ZIP Ingestion</span>
+                  <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-amber-400/20 text-amber-300 text-[10px] font-bold uppercase tracking-wider rounded-xs mb-1">
+                    <Sparkles className="size-3" /> Universal Document & ZIP Ingestion
+                  </div>
+                  <h3 className="text-base font-bold text-white">
+                    Automate Full School Setup from an Official Document or Archive
                   </h3>
-                  <p className="text-xs text-slate-500">
-                    Upload your school prospectus, profile document, or ZIP archive. The system automatically analyzes it and configures your Front Site and badge.
+                  <p className="text-xs text-slate-300 max-w-xl mt-0.5">
+                    Upload your school prospectus, strategic plan, fee schedule, staff handbook, or a ZIP file with your badge logo. EDUREXA AI extracts all institutional identities, UNEB/MoES numbers, grading scales, fee structures, bank accounts, and daily schedules automatically.
                   </p>
                 </div>
 
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleDownloadTemplate}
-                  className="h-8 rounded-none text-xs gap-1.5 border-slate-300 hover:bg-slate-50 text-slate-700 shrink-0"
-                >
-                  <Download className="size-3 text-[#0b2256]" />
-                  <span>Download Template (.txt)</span>
-                </Button>
+                <div className="flex flex-col sm:flex-row items-stretch gap-2 shrink-0">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDownloadTemplate("markdown")}
+                    className="h-8 text-xs bg-white/10 hover:bg-white/20 text-white border-white/20 rounded-none gap-1 font-mono"
+                  >
+                    <Download className="size-3 text-amber-300" />
+                    <span>Template (.md)</span>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDownloadTemplate("json")}
+                    className="h-8 text-xs bg-white/10 hover:bg-white/20 text-white border-white/20 rounded-none gap-1 font-mono"
+                  >
+                    <Download className="size-3 text-amber-300" />
+                    <span>Template (.json)</span>
+                  </Button>
+                </div>
               </div>
 
               {/* Upload Dropzone */}
-              <div
-                className={`relative border-2 border-dashed p-6 sm:p-8 text-center transition-all ${
-                  analyzing
-                    ? "border-[#f26522] bg-[#f26522]/5"
-                    : "border-slate-300 hover:border-[#0b2256] bg-slate-50/50 hover:bg-slate-50"
-                }`}
-              >
-                {analyzing ? (
-                  <div className="space-y-3 py-4">
-                    <Loader2 className="size-10 text-[#f26522] animate-spin mx-auto" />
-                    <div className="font-bold text-sm text-slate-900">
-                      Analyzing Document Structure...
-                    </div>
-                    <p className="text-xs text-slate-500 max-w-md mx-auto">
-                      Extracting institutional identity, UNEB registration, contacts, leadership bio, and logo crests...
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <div className="size-12 rounded-none bg-[#0b2256]/10 text-[#0b2256] grid place-items-center mx-auto">
-                      <FileArchive className="size-6" />
-                    </div>
-                    <div className="space-y-1">
-                      <div className="font-bold text-sm text-slate-900">
-                        Upload School Profile Document or ZIP Archive
-                      </div>
-                      <p className="text-xs text-slate-500 max-w-lg mx-auto">
-                        Drag and drop your file here, or click to browse. Supports <strong>.zip</strong> (containing text & badge images), <strong>.txt</strong>, <strong>.json</strong>, <strong>.csv</strong>, <strong>.md</strong>, <strong>.doc</strong>, <strong>.docx</strong>.
-                      </p>
-                    </div>
-
-                    <div className="pt-2">
-                      <input
-                        type="file"
-                        id="document-upload"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) handleFileAnalysis(file);
-                        }}
-                        accept=".zip,.txt,.json,.csv,.md,.doc,.docx,.pdf"
-                        className="hidden"
-                      />
-                      <label
-                        htmlFor="document-upload"
-                        className="inline-flex items-center gap-2 h-9 px-4 bg-[#0b2256] hover:bg-[#081a42] text-white text-xs font-semibold rounded-none cursor-pointer transition-colors shadow-sm"
-                      >
-                        <Upload className="size-3.5" />
-                        <span>Select Document or ZIP File</span>
-                      </label>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* 1-Click Instant Test with Sample Documents */}
-              <div className="p-4 bg-slate-50 border border-slate-200 rounded-none space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                    <Building2 className="size-3.5 text-[#0b2256]" />
-                    <span>Test Instantly with Real-World Institutional Profiles:</span>
-                  </div>
-                  <span className="text-[10px] text-slate-500">1-click test</span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                  {SAMPLE_DOCUMENTS.map((sample) => (
-                    <button
-                      key={sample.id}
-                      type="button"
-                      onClick={() => handleLoadSample(sample.id)}
-                      className="p-3 border border-slate-300 hover:border-[#0b2256] bg-white text-left text-xs transition-colors rounded-none group space-y-1"
-                    >
-                      <div className="font-bold text-slate-900 group-hover:text-[#0b2256] truncate">
-                        {sample.title.split(" - ")[0]}
-                      </div>
-                      <div className="text-[11px] text-slate-500 truncate">
-                        {sample.type}
-                      </div>
-                      <div className="text-[10px] text-slate-400 font-mono">
-                        {sample.filename}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Collapsible Raw Text Pasting Option */}
-              <div className="border border-slate-200 p-3 bg-white">
-                <button
-                  type="button"
-                  onClick={() => setShowPasteBox(!showPasteBox)}
-                  className="w-full flex items-center justify-between text-xs font-semibold text-slate-700 hover:text-slate-900"
-                >
-                  <span className="flex items-center gap-2">
-                    <FileText className="size-3.5 text-[#0b2256]" />
-                    <span>Have plain text from an email or flyer? Paste document text directly</span>
-                  </span>
-                  <ChevronDown className={`size-3.5 transition-transform ${showPasteBox ? "rotate-180" : ""}`} />
-                </button>
-
-                {showPasteBox && (
-                  <div className="pt-3 space-y-2 animate-fade-in">
-                    <Textarea
-                      rows={5}
-                      value={pastedText}
-                      onChange={(e) => setPastedText(e.target.value)}
-                      placeholder="Paste your school brochure, prospectus, or letterhead text here..."
-                      className="text-xs border-slate-300 font-mono rounded-none"
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="md:col-span-2">
+                  <label
+                    htmlFor="wizard-file-input"
+                    className={`border-2 border-dashed rounded-none p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all ${
+                      analyzing
+                        ? "border-[#f26522] bg-orange-50/50"
+                        : "border-slate-300 hover:border-[#0b2256] hover:bg-white bg-slate-50"
+                    }`}
+                  >
+                    <input
+                      id="wizard-file-input"
+                      type="file"
+                      accept=".zip,.json,.txt,.md,.csv,.doc,.docx"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                      disabled={analyzing}
                     />
-                    <div className="flex justify-end">
-                      <Button
-                        type="button"
-                        size="sm"
-                        onClick={handleAnalyzePastedText}
-                        className="h-8 rounded-none text-xs bg-[#0b2256] hover:bg-[#081a42] text-white"
-                      >
-                        Analyze Pasted Text
-                      </Button>
+                    {analyzing ? (
+                      <div className="flex flex-col items-center gap-2 py-3">
+                        <Loader2 className="size-8 text-[#f26522] animate-spin" />
+                        <div className="text-sm font-bold text-slate-800">Analyzing Document & Ingesting Preferences...</div>
+                        <div className="text-xs text-slate-500">Extracting institutional identity, grading rules, fee schedules & crest</div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="size-12 rounded-none bg-[#0b2256]/10 text-[#0b2256] grid place-items-center">
+                          <Upload className="size-6 text-[#0b2256]" />
+                        </div>
+                        <div className="text-sm font-bold text-slate-800">
+                          Drop School Document or ZIP Archive Here
+                        </div>
+                        <p className="text-xs text-slate-500 max-w-sm">
+                          Supports <strong>.zip</strong> (with badge logo & documents), <strong>.json</strong>, <strong>.txt</strong>, <strong>.md</strong>, or <strong>.csv</strong>
+                        </p>
+                        <span className="text-[11px] font-semibold text-[#f26522] bg-[#f26522]/10 px-3 py-1 rounded-none border border-[#f26522]/20">
+                          Browse Local Files
+                        </span>
+                      </div>
+                    )}
+                  </label>
+                </div>
+
+                {/* Built-in Sample Loaders */}
+                <div className="bg-white border border-slate-200 p-4 flex flex-col justify-between">
+                  <div>
+                    <div className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                      <BookOpen className="size-3.5 text-[#0b2256]" />
+                      <span>Instant 1-Click Real Samples</span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 mb-3">
+                      Test the setup engine instantly with real Ugandan educational institution profiles:
+                    </p>
+                    <div className="space-y-1.5">
+                      {SAMPLE_DOCUMENTS.map((s) => (
+                        <button
+                          key={s.id}
+                          type="button"
+                          onClick={() => handleLoadSample(s.id)}
+                          className="w-full text-left p-2 rounded-none border border-slate-200 hover:border-[#f26522] hover:bg-orange-50/40 text-xs font-semibold text-slate-700 hover:text-slate-900 transition-all flex items-center justify-between group"
+                        >
+                          <span className="truncate pr-2 font-mono text-[11px]">{s.filename}</span>
+                          <ArrowRight className="size-3 text-slate-400 group-hover:text-[#f26522] shrink-0" />
+                        </button>
+                      ))}
                     </div>
                   </div>
-                )}
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPasteBox(!showPasteBox)}
+                    className="mt-3 text-[11px] text-[#0b2256] font-bold hover:underline flex items-center gap-1"
+                  >
+                    {showPasteBox ? "Hide Paste Raw Text" : "Or Paste Prospectus Text Manually →"}
+                  </button>
+                </div>
               </div>
 
-              {/* Analysis Result Card */}
+              {/* Paste Text Collapsible Box */}
+              {showPasteBox && (
+                <div className="p-4 bg-white border border-slate-200 rounded-none space-y-3">
+                  <div className="text-xs font-bold text-slate-800">Paste School Prospectus or Profile Content</div>
+                  <Textarea
+                    rows={4}
+                    value={pastedText}
+                    onChange={(e) => setPastedText(e.target.value)}
+                    placeholder="Paste text containing School Name, UNEB Center, Motto, Day/Boarding Fees, Bank Accounts, Class streams..."
+                    className="font-mono text-xs rounded-none"
+                  />
+                  <div className="flex justify-end">
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={handleAnalyzePastedText}
+                      disabled={analyzing || !pastedText.trim()}
+                      className="h-8 bg-[#0b2256] hover:bg-slate-900 text-white rounded-none text-xs gap-1"
+                    >
+                      <Sparkles className="size-3 text-[#f26522]" />
+                      <span>Analyze Pasted Text</span>
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Analysis Results Dashboard */}
               {analysisResult && (
-                <div className="border border-emerald-300 bg-emerald-50/40 p-4 sm:p-5 rounded-none space-y-4 animate-scale-in">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-emerald-200 pb-3">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="size-4 text-emerald-600" />
-                        <span className="font-bold text-sm text-slate-900">
-                          Institutional Analysis Complete
-                        </span>
-                        <span className="text-[10px] font-mono px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold">
-                          {analysisResult.confidenceScore}% Confidence
-                        </span>
+                <div className="bg-white border border-emerald-300 rounded-none p-5 shadow-xs space-y-4">
+                  <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="size-8 rounded-none bg-emerald-100 text-emerald-700 grid place-items-center">
+                        <CheckCircle2 className="size-5" />
                       </div>
-                      <p className="text-xs text-slate-600">
-                        {analysisResult.summary}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-2 shrink-0">
-                      <Button
-                        type="button"
-                        size="sm"
-                        onClick={handleSave}
-                        className="h-8 rounded-none text-xs bg-[#0b2256] hover:bg-[#081a42] text-white font-semibold gap-1.5 shadow-sm"
-                      >
-                        <Check className="size-3.5" />
-                        <span>Apply & View Front Site</span>
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setActiveTab("profile")}
-                        className="h-8 rounded-none text-xs border-slate-300 hover:bg-white text-slate-800"
-                      >
-                        <span>Edit Details →</span>
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Extracted Fields Highlights Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
-                    <div className="p-2.5 bg-white border border-slate-200">
-                      <span className="text-[10px] text-slate-400 font-bold uppercase block">School Name</span>
-                      <span className="font-bold text-slate-900 text-xs truncate block">{form.name}</span>
-                    </div>
-
-                    <div className="p-2.5 bg-white border border-slate-200">
-                      <span className="text-[10px] text-slate-400 font-bold uppercase block">UNEB Center #</span>
-                      <span className="font-mono font-bold text-slate-900 text-xs block">{form.unebCenterNumber}</span>
-                    </div>
-
-                    <div className="p-2.5 bg-white border border-slate-200">
-                      <span className="text-[10px] text-slate-400 font-bold uppercase block">Short Code</span>
-                      <span className="font-mono font-bold text-slate-900 text-xs block">{form.shortCode}</span>
-                    </div>
-
-                    <div className="p-2.5 bg-white border border-slate-200 sm:col-span-2">
-                      <span className="text-[10px] text-slate-400 font-bold uppercase block">Motto</span>
-                      <span className="font-medium text-slate-800 text-xs truncate block">"{form.motto}"</span>
-                    </div>
-
-                    <div className="p-2.5 bg-white border border-slate-200">
-                      <span className="text-[10px] text-slate-400 font-bold uppercase block">Admissions Phone</span>
-                      <span className="font-medium text-slate-800 text-xs block">{form.phone}</span>
-                    </div>
-
-                    <div className="p-2.5 bg-white border border-slate-200 sm:col-span-2">
-                      <span className="text-[10px] text-slate-400 font-bold uppercase block">Campus Location</span>
-                      <span className="font-medium text-slate-800 text-xs truncate block">{form.location}</span>
-                    </div>
-
-                    <div className="p-2.5 bg-white border border-slate-200">
-                      <span className="text-[10px] text-slate-400 font-bold uppercase block">Admissions Email</span>
-                      <span className="font-medium text-slate-800 text-xs truncate block">{form.email}</span>
-                    </div>
-                  </div>
-
-                  {/* Extracted Badge Notification */}
-                  {badgePreview && (
-                    <div className="p-3 bg-white border border-slate-200 flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <div className="size-10 border border-slate-300 bg-slate-50 grid place-items-center overflow-hidden shrink-0">
-                          <img src={badgePreview} alt="Extracted Badge" className="size-full object-contain" />
+                      <div>
+                        <div className="text-sm font-bold text-slate-900">
+                          {analysisResult.summary}
                         </div>
-                        <div>
-                          <div className="text-xs font-bold text-slate-900">Extracted School Badge / Crest</div>
-                          <div className="text-[11px] text-slate-500">
-                            Loaded and mapped to Front Site header, Student ID Card, and Terminal Reports.
+                        <div className="text-xs text-slate-500">
+                          Source: <span className="font-mono">{analysisResult.fileName}</span> ({analysisResult.fileType.toUpperCase()}) • Overall Confidence: <span className="font-bold text-emerald-600">{analysisResult.confidenceScore}%</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={() => setActiveTab("identity")}
+                      className="bg-[#0b2256] hover:bg-slate-900 text-white text-xs h-8 rounded-none gap-1"
+                    >
+                      <span>Review Extracted Settings</span>
+                      <ArrowRight className="size-3 text-[#f26522]" />
+                    </Button>
+                  </div>
+
+                  {/* Category Breakdown Badges */}
+                  <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
+                    {[
+                      { label: "Identity & Legal", count: analysisResult.categoryBreakdown.identity, icon: Building2 },
+                      { label: "Leadership", count: analysisResult.categoryBreakdown.leadership, icon: Users },
+                      { label: "Academics", count: analysisResult.categoryBreakdown.academics, icon: BookOpen },
+                      { label: "Finance & Fees", count: analysisResult.categoryBreakdown.finance, icon: Wallet },
+                      { label: "Operations", count: analysisResult.categoryBreakdown.operations, icon: Clock },
+                      { label: "Branding", count: analysisResult.categoryBreakdown.branding, icon: Award },
+                    ].map((c) => {
+                      const Icon = c.icon;
+                      return (
+                        <div key={c.label} className="p-2.5 bg-slate-50 border border-slate-200 rounded-none">
+                          <div className="flex items-center justify-between text-slate-500 mb-1">
+                            <Icon className="size-3.5 text-[#0b2256]" />
+                            <span className="text-xs font-bold text-slate-800">{c.count}</span>
                           </div>
+                          <div className="text-[10px] font-semibold text-slate-600 truncate">{c.label}</div>
                         </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Extracted Images from ZIP */}
+                  {analysisResult.extractedImages.length > 0 && (
+                    <div className="pt-2">
+                      <div className="text-xs font-bold text-slate-800 mb-2">
+                        Extracted Crest / Badge Candidates from ZIP:
                       </div>
-                      <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-1">
-                        ✓ Ready
-                      </span>
+                      <div className="flex items-center gap-3 overflow-x-auto pb-1">
+                        {analysisResult.extractedImages.map((img) => (
+                          <button
+                            key={img.name}
+                            type="button"
+                            onClick={() => {
+                              setBadgePreview(img.dataUrl);
+                              setForm((prev) => ({ ...prev, badgeUrl: img.dataUrl }));
+                              toast.success(`Selected ${img.name} as school crest`);
+                            }}
+                            className={`p-2 border rounded-none flex items-center gap-2 text-xs transition-all ${
+                              badgePreview === img.dataUrl
+                                ? "border-[#f26522] bg-orange-50 font-bold"
+                                : "border-slate-200 hover:border-slate-400 bg-white"
+                            }`}
+                          >
+                            <img src={img.dataUrl} alt={img.name} className="size-8 object-contain" />
+                            <div className="text-left">
+                              <div className="text-[11px] font-mono truncate max-w-[120px]">{img.name}</div>
+                              {img.isBadgeCandidate && (
+                                <span className="text-[9px] text-[#f26522] font-semibold">Recommended Crest</span>
+                              )}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   )}
+
+                  {/* Detected Items Grid Preview */}
+                  <div className="pt-2">
+                    <div className="text-xs font-bold text-slate-800 mb-2">Detailed Field Detections:</div>
+                    <div className="max-h-48 overflow-y-auto border border-slate-200 rounded-none divide-y divide-slate-100 text-xs font-mono">
+                      {analysisResult.detectedItems.map((item, idx) => (
+                        <div key={idx} className="p-2 flex items-center justify-between bg-white hover:bg-slate-50">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-600 font-bold uppercase rounded-xs">
+                              {item.category}
+                            </span>
+                            <span className="font-semibold text-slate-800">{item.label}:</span>
+                            <span className="text-slate-600 truncate max-w-md">{item.value}</span>
+                          </div>
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-xs ${
+                            item.confidence === "high"
+                              ? "bg-emerald-100 text-emerald-800"
+                              : "bg-amber-100 text-amber-800"
+                          }`}>
+                            {item.confidence.toUpperCase()}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
           )}
 
-          {/* TAB 2: SCHOOL PROFILE */}
-          {activeTab === "profile" && (
-            <div className="space-y-5 animate-fade-in">
-              <div className="border-b border-slate-100 pb-3">
-                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
-                  School Profile & Institutional Registration
-                </h3>
-                <p className="text-xs text-slate-500">
-                  This information dynamically populates the school front site, headers, invoices, and certificates.
-                </p>
+          {/* TAB 2: SCHOOL IDENTITY & LEGAL */}
+          {activeTab === "identity" && (
+            <div className="space-y-5 max-w-4xl mx-auto">
+              <div className="border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-bold text-slate-900">Institutional Identity & Legal Accreditation</h3>
+                <p className="text-xs text-slate-500">Official registered institution information displayed across front-site and documentation.</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-700">Official School Name *</Label>
+                <div>
+                  <Label className="text-xs font-bold">School Official Name</Label>
                   <Input
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    placeholder="e.g. St. Paul's Secondary School"
-                    className="h-9 rounded-none text-xs border-slate-300"
+                    className="rounded-none mt-1"
+                    placeholder="e.g. Wellstar Bright Secondary School"
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-700">Short Code / Roster Tag *</Label>
+                <div>
+                  <Label className="text-xs font-bold">Short Code / Acronym</Label>
                   <Input
                     value={form.shortCode}
                     onChange={(e) => setForm({ ...form, shortCode: e.target.value })}
-                    placeholder="e.g. SPC-2026"
-                    className="h-9 rounded-none text-xs border-slate-300"
+                    className="rounded-none mt-1 font-mono"
+                    placeholder="e.g. WBSS-2026"
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-700">School Motto / Slogan</Label>
+                <div className="md:col-span-2">
+                  <Label className="text-xs font-bold">School Motto / Tagline</Label>
                   <Input
                     value={form.motto}
                     onChange={(e) => setForm({ ...form, motto: e.target.value })}
-                    placeholder="e.g. Excellence & Moral Character"
-                    className="h-9 rounded-none text-xs border-slate-300"
+                    className="rounded-none mt-1"
+                    placeholder="e.g. A holistic school built for character & intellect."
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-700">UNEB National Examination Center #</Label>
+                <div>
+                  <Label className="text-xs font-bold">UNEB Center Examination Number</Label>
                   <Input
                     value={form.unebCenterNumber}
                     onChange={(e) => setForm({ ...form, unebCenterNumber: e.target.value })}
+                    className="rounded-none mt-1 font-mono"
                     placeholder="e.g. U0482"
-                    className="h-9 rounded-none text-xs border-slate-300 font-mono"
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-700">Campus Location / District</Label>
+                <div>
+                  <Label className="text-xs font-bold">Ministry of Education (MoES) Reg #</Label>
                   <Input
-                    value={form.location}
-                    onChange={(e) => setForm({ ...form, location: e.target.value })}
-                    placeholder="e.g. Plot 14 Lumumba Avenue, Mukono"
-                    className="h-9 rounded-none text-xs border-slate-300"
+                    value={form.moesRegNumber}
+                    onChange={(e) => setForm({ ...form, moesRegNumber: e.target.value })}
+                    className="rounded-none mt-1 font-mono"
+                    placeholder="e.g. MoES/PSS/892/2018"
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-700">Institutional Level & Category</Label>
+                <div>
+                  <Label className="text-xs font-bold">Year Established</Label>
+                  <Input
+                    value={form.establishedYear}
+                    onChange={(e) => setForm({ ...form, establishedYear: e.target.value })}
+                    className="rounded-none mt-1 font-mono"
+                    placeholder="e.g. 2018"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">School Category & Level</Label>
                   <Input
                     value={form.level}
                     onChange={(e) => setForm({ ...form, level: e.target.value })}
+                    className="rounded-none mt-1"
                     placeholder="e.g. Mixed Day & Boarding Secondary School (S.1 — S.6)"
-                    className="h-9 rounded-none text-xs border-slate-300"
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-700">Official Admissions Phone</Label>
-                  <Input
-                    value={form.phone}
-                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    placeholder="e.g. +256 758 611 414"
-                    className="h-9 rounded-none text-xs border-slate-300"
+                <div className="md:col-span-2">
+                  <Label className="text-xs font-bold">Mission Statement</Label>
+                  <Textarea
+                    rows={2}
+                    value={form.mission}
+                    onChange={(e) => setForm({ ...form, mission: e.target.value })}
+                    className="rounded-none mt-1 text-xs"
+                    placeholder="School Mission Statement..."
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-700">Admissions WhatsApp Hotline</Label>
-                  <Input
-                    value={form.whatsapp}
-                    onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
-                    placeholder="e.g. +256 758 611 414"
-                    className="h-9 rounded-none text-xs border-slate-300"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-700">Admissions & Inquiries Email</Label>
-                  <Input
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    placeholder="e.g. admissions@yourschool.com"
-                    className="h-9 rounded-none text-xs border-slate-300"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-700">Curriculum Standards</Label>
-                  <Input
-                    value={form.curriculum}
-                    onChange={(e) => setForm({ ...form, curriculum: e.target.value })}
-                    placeholder="e.g. Competence-Based Curriculum (CBC) & UNEB"
-                    className="h-9 rounded-none text-xs border-slate-300"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-700">Head of School / Director Name</Label>
-                  <Input
-                    value={form.directorName}
-                    onChange={(e) => setForm({ ...form, directorName: e.target.value })}
-                    placeholder="e.g. Nshuti Medan"
-                    className="h-9 rounded-none text-xs border-slate-300"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-700">Director Title</Label>
-                  <Input
-                    value={form.directorTitle}
-                    onChange={(e) => setForm({ ...form, directorTitle: e.target.value })}
-                    placeholder="e.g. Head of School / Principal Director"
-                    className="h-9 rounded-none text-xs border-slate-300"
+                <div className="md:col-span-2">
+                  <Label className="text-xs font-bold">Vision Statement</Label>
+                  <Textarea
+                    rows={2}
+                    value={form.vision}
+                    onChange={(e) => setForm({ ...form, vision: e.target.value })}
+                    className="rounded-none mt-1 text-xs"
+                    placeholder="School Vision Statement..."
                   />
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <Label className="text-xs font-semibold text-slate-700">Director / Head of School Bio (Front Site Address)</Label>
-                <Textarea
-                  rows={3}
-                  value={form.directorBio}
-                  onChange={(e) => setForm({ ...form, directorBio: e.target.value })}
-                  placeholder="A short leadership message introducing the institution's values..."
-                  className="text-xs border-slate-300 rounded-none"
-                />
-              </div>
-            </div>
-          )}
-
-          {/* TAB 3: BADGE / CREST */}
-          {activeTab === "badge" && (
-            <div className="space-y-6 animate-fade-in">
-              <div className="border-b border-slate-100 pb-3">
-                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
-                  Request / Upload School Badge or Crest
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Upload the official school emblem or crest image. It will be fitted onto ID cards, meal passes, reports, and headers.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                <div className="space-y-4">
-                  <div className="border-2 border-dashed border-slate-300 p-6 text-center hover:border-[#0b2256] transition-colors rounded-none bg-slate-50/50">
-                    <input
-                      type="file"
-                      id="badge-upload"
-                      onChange={handleFileUpload}
-                      accept="image/*"
-                      className="hidden"
-                    />
-                    <label htmlFor="badge-upload" className="cursor-pointer space-y-2 block">
-                      <div className="size-12 rounded-none bg-[#0b2256]/10 text-[#0b2256] grid place-items-center mx-auto">
-                        <Upload className="size-5" />
-                      </div>
-                      <div className="text-xs font-semibold text-slate-900">
-                        Click to upload School Badge / Crest
-                      </div>
-                      <div className="text-[11px] text-slate-500">
-                        PNG, JPG, SVG or WEBP up to 2MB (transparent PNG recommended)
-                      </div>
-                    </label>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <Label className="text-xs font-semibold text-slate-700">Badge Fallback Initials (2 Letters)</Label>
+              {/* Leadership Hierarchy */}
+              <div className="border-t border-slate-200 pt-4 mt-6">
+                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3">
+                  Executive Leadership & Administration
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <Label className="text-xs font-bold">Head of School / Director</Label>
                     <Input
-                      maxLength={3}
-                      value={form.badgeInitials}
-                      onChange={(e) => setForm({ ...form, badgeInitials: e.target.value.toUpperCase() })}
-                      placeholder="e.g. WB"
-                      className="h-9 w-24 rounded-none text-xs border-slate-300 font-bold uppercase tracking-wider"
+                      value={form.directorName}
+                      onChange={(e) => setForm({ ...form, directorName: e.target.value })}
+                      className="rounded-none mt-1"
+                      placeholder="e.g. Nshuti Medan"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs font-bold">Leadership Title</Label>
+                    <Input
+                      value={form.directorTitle}
+                      onChange={(e) => setForm({ ...form, directorTitle: e.target.value })}
+                      className="rounded-none mt-1"
+                      placeholder="e.g. Head of School / Director"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs font-bold">Bursar / Financial Controller</Label>
+                    <Input
+                      value={form.bursarName || ""}
+                      onChange={(e) => setForm({ ...form, bursarName: e.target.value })}
+                      className="rounded-none mt-1"
+                      placeholder="e.g. Mr. Kasule Brian"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs font-bold">Deputy Head (Academics)</Label>
+                    <Input
+                      value={form.deputyAcademics || ""}
+                      onChange={(e) => setForm({ ...form, deputyAcademics: e.target.value })}
+                      className="rounded-none mt-1"
+                      placeholder="e.g. Mr. Kigozi Emmanuel"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs font-bold">Deputy Head (Administration)</Label>
+                    <Input
+                      value={form.deputyAdmin || ""}
+                      onChange={(e) => setForm({ ...form, deputyAdmin: e.target.value })}
+                      className="rounded-none mt-1"
+                      placeholder="e.g. Ms. Namubiru Sarah"
+                    />
+                  </div>
+                  <div className="md:col-span-3">
+                    <Label className="text-xs font-bold">Director Welcome Bio</Label>
+                    <Textarea
+                      rows={2}
+                      value={form.directorBio}
+                      onChange={(e) => setForm({ ...form, directorBio: e.target.value })}
+                      className="rounded-none mt-1 text-xs"
+                      placeholder="Welcome message from the director..."
                     />
                   </div>
                 </div>
+              </div>
 
-                <div className="p-4 border border-slate-200 bg-white space-y-3">
-                  <div className="text-xs font-semibold text-slate-700">Current Badge Preview:</div>
-                  <div className="size-28 border border-slate-300 bg-slate-50 grid place-items-center overflow-hidden mx-auto shadow-sm">
-                    {badgePreview ? (
-                      <img
-                        src={badgePreview}
-                        alt="School Badge"
-                        className="w-full h-full object-contain p-2"
-                      />
-                    ) : (
-                      <div className="size-16 bg-[#0b2256] text-white font-black text-2xl grid place-items-center">
-                        {form.badgeInitials || "WB"}
-                      </div>
-                    )}
+              {/* Campus Location & Contacts */}
+              <div className="border-t border-slate-200 pt-4 mt-6">
+                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3">
+                  Campus Location & Public Contacts
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="md:col-span-2">
+                    <Label className="text-xs font-bold">Physical Campus Address</Label>
+                    <Input
+                      value={form.location}
+                      onChange={(e) => setForm({ ...form, location: e.target.value })}
+                      className="rounded-none mt-1"
+                      placeholder="e.g. off Kayunga Road, Kabembe, Mukono District, Uganda"
+                    />
                   </div>
-
-                  <div className="space-y-0.5 text-center">
-                    <div className="font-bold text-xs text-slate-900">{form.name}</div>
-                    <div className="text-[10px] text-slate-500 font-mono">UNEB Center #{form.unebCenterNumber}</div>
+                  <div>
+                    <Label className="text-xs font-bold">Telephone Hotline</Label>
+                    <Input
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      className="rounded-none mt-1 font-mono"
+                      placeholder="e.g. +256 701 116 781"
+                    />
                   </div>
-
-                  <div className="text-[10px] text-emerald-700 bg-emerald-50 border border-emerald-200 py-1 px-2 font-medium text-center">
-                    ✓ Verified for PVC ID Cards & Report Cards
+                  <div>
+                    <Label className="text-xs font-bold">WhatsApp Inquiries Hotline</Label>
+                    <Input
+                      value={form.whatsapp}
+                      onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
+                      className="rounded-none mt-1 font-mono"
+                      placeholder="e.g. +256 701 116 781"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs font-bold">Official Email</Label>
+                    <Input
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      className="rounded-none mt-1 font-mono"
+                      placeholder="e.g. info@wellstarbright.sc.ug"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs font-bold">Institutional Portal / Website</Label>
+                    <Input
+                      value={form.website}
+                      onChange={(e) => setForm({ ...form, website: e.target.value })}
+                      className="rounded-none mt-1 font-mono"
+                      placeholder="e.g. https://wellstarbright.sc.ug"
+                    />
                   </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* TAB 4: IDENTIFICATION FEATURES PREVIEW */}
-          {activeTab === "identification" && (
-            <div className="space-y-5 animate-fade-in">
-              <div className="border-b border-slate-100 pb-3">
-                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
-                  Identification Features Preview
-                </h3>
-                <p className="text-xs text-slate-500">
-                  See how the configured school information and badge are fitted into the system identification features.
-                </p>
+          {/* TAB 3: ACADEMICS & GRADING */}
+          {activeTab === "academics" && (
+            <div className="space-y-5 max-w-4xl mx-auto">
+              <div className="border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-bold text-slate-900">Academic System & Grading Configuration</h3>
+                <p className="text-xs text-slate-500">Configure academic sessions, active terms, CBC/UNEB grading scales, and subject matrices.</p>
               </div>
 
-              {/* Sub-tabs for Identification Features */}
-              <div className="flex flex-wrap gap-2 text-xs">
-                <button
-                  type="button"
-                  onClick={() => setActivePreview("id_card")}
-                  className={`px-3 py-1.5 border font-semibold rounded-none ${
-                    activePreview === "id_card"
-                      ? "bg-[#0b2256] text-white border-[#0b2256]"
-                      : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
-                  }`}
-                >
-                  <CreditCard className="size-3.5 inline mr-1.5" />
-                  Student PVC ID Card
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActivePreview("meal_pass")}
-                  className={`px-3 py-1.5 border font-semibold rounded-none ${
-                    activePreview === "meal_pass"
-                      ? "bg-[#0b2256] text-white border-[#0b2256]"
-                      : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
-                  }`}
-                >
-                  <Utensils className="size-3.5 inline mr-1.5" />
-                  Digital Meal / Dining Pass
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActivePreview("report_card")}
-                  className={`px-3 py-1.5 border font-semibold rounded-none ${
-                    activePreview === "report_card"
-                      ? "bg-[#0b2256] text-white border-[#0b2256]"
-                      : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
-                  }`}
-                >
-                  <FileText className="size-3.5 inline mr-1.5" />
-                  Terminal UNEB Report Card
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActivePreview("receipt")}
-                  className={`px-3 py-1.5 border font-semibold rounded-none ${
-                    activePreview === "receipt"
-                      ? "bg-[#0b2256] text-white border-[#0b2256]"
-                      : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
-                  }`}
-                >
-                  <ShieldCheck className="size-3.5 inline mr-1.5" />
-                  Official Fee Receipt Voucher
-                </button>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label className="text-xs font-bold">Current Academic Year</Label>
+                  <Input
+                    value={form.academicYear}
+                    onChange={(e) => setForm({ ...form, academicYear: e.target.value })}
+                    className="rounded-none mt-1 font-mono"
+                    placeholder="e.g. 2026/2027"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">Active Academic Term</Label>
+                  <select
+                    value={form.currentTerm}
+                    onChange={(e) => setForm({ ...form, currentTerm: e.target.value })}
+                    className="w-full h-9 border border-slate-300 bg-white px-3 text-xs font-semibold rounded-none mt-1"
+                  >
+                    <option value="Term 1">Term 1 (Opening / Easter Term)</option>
+                    <option value="Term 2">Term 2 (Trinity / Mid Term)</option>
+                    <option value="Term 3">Term 3 (Promotional / UNEB Term)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">Grading Framework</Label>
+                  <select
+                    value={form.gradingScale}
+                    onChange={(e) => setForm({ ...form, gradingScale: e.target.value as any })}
+                    className="w-full h-9 border border-slate-300 bg-white px-3 text-xs font-semibold rounded-none mt-1"
+                  >
+                    <option value="CBC">Competence-Based Curriculum (CBC 1.0 — 3.0)</option>
+                    <option value="UNEB">UNEB Standard (Divisions 1 - 4 & D1 - F9)</option>
+                    <option value="CAMBRIDGE">Cambridge IGCSE / GCE Standard (A* — G)</option>
+                  </select>
+                </div>
+
+                <div className="md:col-span-3">
+                  <Label className="text-xs font-bold">Term Session Dates</Label>
+                  <Input
+                    value={form.termDates}
+                    onChange={(e) => setForm({ ...form, termDates: e.target.value })}
+                    className="rounded-none mt-1"
+                    placeholder="e.g. 02 Feb 2026 — 08 May 2026"
+                  />
+                </div>
               </div>
 
-              {/* 1. STUDENT PVC ID CARD PREVIEW */}
-              {activePreview === "id_card" && (
-                <div className="max-w-md mx-auto p-4 border-2 border-slate-300 bg-white shadow-md rounded-none space-y-4">
-                  <div className="bg-[#0b2256] text-white p-3 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="size-9 bg-white/20 grid place-items-center font-bold text-xs overflow-hidden">
-                        {badgePreview ? (
-                          <img src={badgePreview} alt="Crest" className="size-full object-contain" />
-                        ) : (
-                          form.badgeInitials
-                        )}
-                      </div>
-                      <div>
-                        <div className="font-extrabold text-xs tracking-tight uppercase">{form.name}</div>
-                        <div className="text-[9px] text-[#f26522] font-semibold">{form.motto || "Excellence & Character"}</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-[9px] font-mono text-slate-300">UNEB #{form.unebCenterNumber}</div>
-                      <div className="text-[9px] text-emerald-400 font-bold uppercase">STUDENT ID</div>
-                    </div>
-                  </div>
+              {/* Class Streams Manager */}
+              <div className="border-t border-slate-200 pt-4">
+                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                  Classes & Streams Offered ({form.classesOffered.length})
+                </div>
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {form.classesOffered.map((cls) => (
+                    <span
+                      key={cls}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#0b2256]/10 text-[#0b2256] text-xs font-bold rounded-none border border-[#0b2256]/20 font-mono"
+                    >
+                      {cls}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveClass(cls)}
+                        className="hover:text-red-600 transition-colors"
+                      >
+                        <X className="size-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <div className="flex items-center gap-2 max-w-sm">
+                  <Input
+                    size={20}
+                    value={newClassInput}
+                    onChange={(e) => setNewClassInput(e.target.value)}
+                    placeholder="Add stream (e.g. S.3 Science)..."
+                    className="h-8 rounded-none text-xs"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleAddClass();
+                      }
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleAddClass}
+                    className="h-8 bg-[#0b2256] hover:bg-slate-900 text-white rounded-none text-xs gap-1"
+                  >
+                    <Plus className="size-3" />
+                    <span>Add</span>
+                  </Button>
+                </div>
+              </div>
 
-                  <div className="flex gap-4 items-center">
-                    <div className="size-20 bg-slate-200 border border-slate-300 flex items-center justify-center text-slate-400 font-bold text-xs">
-                      PHOTO
-                    </div>
-                    <div className="space-y-1 text-xs">
-                      <div><span className="text-slate-500 font-semibold">NAME:</span> <span className="font-bold text-slate-900">MUKASA BRIAN</span></div>
-                      <div><span className="text-slate-500 font-semibold">CLASS:</span> <span className="font-bold text-slate-900">SENIOR FOUR (S.4B)</span></div>
-                      <div><span className="text-slate-500 font-semibold">LIN:</span> <span className="font-mono text-slate-900">LIN-2026-0842</span></div>
-                      <div><span className="text-slate-500 font-semibold">CAMPUS:</span> <span className="text-slate-900">{form.location}</span></div>
-                    </div>
-                  </div>
+              {/* Subject Offerings Manager */}
+              <div className="border-t border-slate-200 pt-4">
+                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                  Curriculum Subject Offerings ({form.subjectOfferings.length})
+                </div>
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {form.subjectOfferings.map((sub) => (
+                    <span
+                      key={sub}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 text-slate-800 text-xs font-semibold rounded-none border border-slate-300"
+                    >
+                      {sub}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveSubject(sub)}
+                        className="hover:text-red-600 transition-colors"
+                      >
+                        <X className="size-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <div className="flex items-center gap-2 max-w-sm">
+                  <Input
+                    value={newSubjectInput}
+                    onChange={(e) => setNewSubjectInput(e.target.value)}
+                    placeholder="Add subject (e.g. Technical Drawing)..."
+                    className="h-8 rounded-none text-xs"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleAddSubject();
+                      }
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleAddSubject}
+                    className="h-8 bg-[#0b2256] hover:bg-slate-900 text-white rounded-none text-xs gap-1"
+                  >
+                    <Plus className="size-3" />
+                    <span>Add</span>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
 
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                    <span>Emergency: {form.phone}</span>
-                    <span className="font-mono">VALID: 2026/2027</span>
+          {/* TAB 4: FINANCE & POS SETTINGS */}
+          {activeTab === "finance" && (
+            <div className="space-y-5 max-w-4xl mx-auto">
+              <div className="border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-bold text-slate-900">Finance Command, Fee Structures & Anti-Leakage POS</h3>
+                <p className="text-xs text-slate-500">Configure institutional fee collections, bank clearing accounts, mobile money merchant codes, and thermal receipt headers.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label className="text-xs font-bold">Billing Currency</Label>
+                  <select
+                    value={form.currency}
+                    onChange={(e) => setForm({ ...form, currency: e.target.value })}
+                    className="w-full h-9 border border-slate-300 bg-white px-3 text-xs font-semibold rounded-none mt-1 font-mono"
+                  >
+                    <option value="UGX">UGX — Ugandan Shillings</option>
+                    <option value="USD">USD — US Dollars</option>
+                    <option value="KES">KES — Kenyan Shillings</option>
+                  </select>
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">Day Scholar Tuition Fee / Term</Label>
+                  <Input
+                    value={form.termFeesDay}
+                    onChange={(e) => setForm({ ...form, termFeesDay: e.target.value })}
+                    className="rounded-none mt-1 font-mono"
+                    placeholder="e.g. 850,000"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">Boarding Student Tuition Fee / Term</Label>
+                  <Input
+                    value={form.termFeesBoarding}
+                    onChange={(e) => setForm({ ...form, termFeesBoarding: e.target.value })}
+                    className="rounded-none mt-1 font-mono"
+                    placeholder="e.g. 1,450,000"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">Official School Bank Name</Label>
+                  <Input
+                    value={form.paymentBankName}
+                    onChange={(e) => setForm({ ...form, paymentBankName: e.target.value })}
+                    className="rounded-none mt-1"
+                    placeholder="e.g. Stanbic Bank Uganda"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">Bank Account Number</Label>
+                  <Input
+                    value={form.paymentAccountNumber}
+                    onChange={(e) => setForm({ ...form, paymentAccountNumber: e.target.value })}
+                    className="rounded-none mt-1 font-mono font-bold text-[#0b2256]"
+                    placeholder="e.g. 9030018829401"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">MTN MoMo Pay Merchant Code</Label>
+                  <Input
+                    value={form.momoMerchantCode}
+                    onChange={(e) => setForm({ ...form, momoMerchantCode: e.target.value })}
+                    className="rounded-none mt-1 font-mono font-bold text-amber-600"
+                    placeholder="e.g. 612450"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">Airtel Money Merchant Code</Label>
+                  <Input
+                    value={form.airtelMerchantCode}
+                    onChange={(e) => setForm({ ...form, airtelMerchantCode: e.target.value })}
+                    className="rounded-none mt-1 font-mono font-bold text-red-600"
+                    placeholder="e.g. 189420"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <Label className="text-xs font-bold">POS Thermal Receipt Header Title</Label>
+                  <Input
+                    value={form.posReceiptHeader}
+                    onChange={(e) => setForm({ ...form, posReceiptHeader: e.target.value })}
+                    className="rounded-none mt-1 font-mono text-xs uppercase"
+                    placeholder="e.g. WELLSTAR BRIGHT SS — BURSARY & POS COMMAND"
+                  />
+                </div>
+
+                <div className="md:col-span-3">
+                  <Label className="text-xs font-bold">POS Thermal Receipt Footer Note</Label>
+                  <Input
+                    value={form.posReceiptFooter || ""}
+                    onChange={(e) => setForm({ ...form, posReceiptFooter: e.target.value })}
+                    className="rounded-none mt-1 text-xs"
+                    placeholder="e.g. Fees once paid are non-refundable. Verified by EDUREXA Ledger."
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 5: OPERATIONS & WELFARE */}
+          {activeTab === "operations" && (
+            <div className="space-y-5 max-w-4xl mx-auto">
+              <div className="border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-bold text-slate-900">Campus Operations, Schedules & Student Welfare</h3>
+                <p className="text-xs text-slate-500">Configure daily timetable periods, attendance tracking modes, meal service tiers, and boarding dormitories.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label className="text-xs font-bold">Daily School Reporting Time</Label>
+                  <Input
+                    value={form.dailyStartTime}
+                    onChange={(e) => setForm({ ...form, dailyStartTime: e.target.value })}
+                    className="rounded-none mt-1 font-mono"
+                    placeholder="e.g. 07:30 AM"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">Daily Dismissal Time</Label>
+                  <Input
+                    value={form.dailyEndTime}
+                    onChange={(e) => setForm({ ...form, dailyEndTime: e.target.value })}
+                    className="rounded-none mt-1 font-mono"
+                    placeholder="e.g. 04:30 PM"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">Period Duration (Minutes)</Label>
+                  <Input
+                    type="number"
+                    value={form.periodDurationMinutes}
+                    onChange={(e) => setForm({ ...form, periodDurationMinutes: parseInt(e.target.value, 10) || 40 })}
+                    className="rounded-none mt-1 font-mono"
+                    placeholder="40"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">Attendance Tracking Mode</Label>
+                  <select
+                    value={form.attendanceMode}
+                    onChange={(e) => setForm({ ...form, attendanceMode: e.target.value as any })}
+                    className="w-full h-9 border border-slate-300 bg-white px-3 text-xs font-semibold rounded-none mt-1"
+                  >
+                    <option value="Biometric">Biometric (Smart RFID Card / Turnstile)</option>
+                    <option value="Daily">Daily Morning Rollcall</option>
+                    <option value="Period">Period-by-Period Subject Attendance</option>
+                  </select>
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">Admissions Application Form Fee</Label>
+                  <Input
+                    value={form.applicationFee}
+                    onChange={(e) => setForm({ ...form, applicationFee: e.target.value })}
+                    className="rounded-none mt-1 font-mono"
+                    placeholder="e.g. 50,000"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs font-bold">Total Student Capacity</Label>
+                  <Input
+                    value={form.studentCapacity}
+                    onChange={(e) => setForm({ ...form, studentCapacity: e.target.value })}
+                    className="rounded-none mt-1 font-mono"
+                    placeholder="e.g. 1,500"
+                  />
+                </div>
+              </div>
+
+              {/* Boarding Houses */}
+              <div className="border-t border-slate-200 pt-4">
+                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                  Boarding Houses / Dormitories ({form.boardingHouses.length})
+                </div>
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {form.boardingHouses.map((dorm) => (
+                    <span
+                      key={dorm}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 text-amber-900 text-xs font-bold rounded-none border border-amber-300"
+                    >
+                      {dorm}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveDorm(dorm)}
+                        className="hover:text-red-600 transition-colors"
+                      >
+                        <X className="size-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <div className="flex items-center gap-2 max-w-sm">
+                  <Input
+                    value={newDormInput}
+                    onChange={(e) => setNewDormInput(e.target.value)}
+                    placeholder="Add house (e.g. Mandela House)..."
+                    className="h-8 rounded-none text-xs"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleAddDorm();
+                      }
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleAddDorm}
+                    className="h-8 bg-[#0b2256] hover:bg-slate-900 text-white rounded-none text-xs gap-1"
+                  >
+                    <Plus className="size-3" />
+                    <span>Add</span>
+                  </Button>
+                </div>
+              </div>
+
+              {/* Front-Site Public Statistics */}
+              <div className="border-t border-slate-200 pt-4">
+                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                  Front-Site Public Showcase Statistics
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div>
+                    <Label className="text-[11px] font-bold">Students Count</Label>
+                    <Input
+                      value={form.frontSiteStats.students}
+                      onChange={(e) => setForm({
+                        ...form,
+                        frontSiteStats: { ...form.frontSiteStats, students: e.target.value }
+                      })}
+                      className="rounded-none mt-1 h-8 text-xs font-mono font-bold"
+                      placeholder="1,250+"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-[11px] font-bold">UNEB Pass Rate</Label>
+                    <Input
+                      value={form.frontSiteStats.passRate}
+                      onChange={(e) => setForm({
+                        ...form,
+                        frontSiteStats: { ...form.frontSiteStats, passRate: e.target.value }
+                      })}
+                      className="rounded-none mt-1 h-8 text-xs font-mono font-bold text-emerald-600"
+                      placeholder="98.4%"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-[11px] font-bold">Expert Teachers</Label>
+                    <Input
+                      value={form.frontSiteStats.teachers}
+                      onChange={(e) => setForm({
+                        ...form,
+                        frontSiteStats: { ...form.frontSiteStats, teachers: e.target.value }
+                      })}
+                      className="rounded-none mt-1 h-8 text-xs font-mono font-bold"
+                      placeholder="56"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-[11px] font-bold">Campuses</Label>
+                    <Input
+                      value={form.frontSiteStats.campuses}
+                      onChange={(e) => setForm({
+                        ...form,
+                        frontSiteStats: { ...form.frontSiteStats, campuses: e.target.value }
+                      })}
+                      className="rounded-none mt-1 h-8 text-xs font-mono font-bold"
+                      placeholder="2"
+                    />
                   </div>
                 </div>
-              )}
+              </div>
+            </div>
+          )}
 
-              {/* 2. MEAL PASS PREVIEW */}
-              {activePreview === "meal_pass" && (
-                <div className="max-w-md mx-auto p-4 border border-emerald-300 bg-white shadow-md rounded-none space-y-4">
-                  <div className="bg-emerald-800 text-white p-3 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="size-8 bg-white/20 grid place-items-center font-bold text-xs overflow-hidden">
-                        {badgePreview ? (
-                          <img src={badgePreview} alt="Crest" className="size-full object-contain" />
-                        ) : (
-                          form.badgeInitials
-                        )}
-                      </div>
-                      <div>
-                        <div className="font-bold text-xs uppercase">{form.name}</div>
-                        <div className="text-[9px] text-emerald-200">OFFICIAL DINING PASS • BOARDING SECTION</div>
-                      </div>
-                    </div>
-                    <Utensils className="size-4 text-emerald-300" />
+          {/* TAB 6: BADGE & BRAND COLORS */}
+          {activeTab === "badge" && (
+            <div className="space-y-6 max-w-4xl mx-auto">
+              <div className="border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-bold text-slate-900">School Badge Crest & Visual Palette</h3>
+                <p className="text-xs text-slate-500">Upload and configure the official school crest, emblem monogram, and primary/accent theme colors.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Badge Upload & Preview */}
+                <div className="p-5 bg-white border border-slate-200 rounded-none space-y-4">
+                  <div className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    School Crest / Official Emblem
                   </div>
 
-                  <div className="flex items-center justify-between p-3 bg-emerald-50 border border-emerald-200">
-                    <div className="space-y-0.5">
-                      <div className="text-xs font-bold text-emerald-950">Active Meal Roster: LUNCH & SUPPER</div>
-                      <div className="text-[10px] text-emerald-700">Student: NAMUGGA SARAH (S.3 EAST)</div>
-                    </div>
-                    <div className="font-mono font-black text-xs text-emerald-800">
-                      PASS #MP-4821
-                    </div>
-                  </div>
-
-                  <div className="text-center font-mono text-[10px] text-slate-400">
-                    Scan QR at kitchen turnstile • Non-transferable
-                  </div>
-                </div>
-              )}
-
-              {/* 3. TERMINAL REPORT CARD PREVIEW */}
-              {activePreview === "report_card" && (
-                <div className="max-w-md mx-auto p-4 border border-slate-300 bg-white shadow-md rounded-none space-y-3">
-                  <div className="text-center space-y-1 border-b border-slate-200 pb-3">
-                    <div className="size-10 mx-auto grid place-items-center overflow-hidden">
+                  <div className="flex items-center gap-4">
+                    <div className="size-20 bg-slate-50 border-2 border-dashed border-slate-300 rounded-none grid place-items-center p-2 shrink-0">
                       {badgePreview ? (
-                        <img src={badgePreview} alt="Crest" className="size-full object-contain" />
+                        <img src={badgePreview} alt="Crest Preview" className="size-full object-contain" />
                       ) : (
-                        <div className="size-8 bg-[#0b2256] text-white font-bold text-xs grid place-items-center">
-                          {form.badgeInitials}
-                        </div>
+                        <Award className="size-8 text-slate-400" />
                       )}
                     </div>
-                    <div className="font-black text-xs uppercase tracking-tight text-slate-900">{form.name}</div>
-                    <div className="text-[9px] text-slate-600 italic">"{form.motto}"</div>
-                    <div className="text-[9px] font-mono text-slate-500">
-                      UNEB Center No: {form.unebCenterNumber} • {form.location}
-                    </div>
-                    <div className="text-[10px] font-extrabold text-[#0b2256] uppercase tracking-wider pt-1">
-                      TERMINAL ACADEMIC PROGRESS REPORT • TERM I 2026
+                    <div>
+                      <Label htmlFor="badge-upload-btn" className="cursor-pointer">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0b2256] text-white text-xs font-bold rounded-none hover:bg-slate-900 transition-colors">
+                          <Upload className="size-3 text-[#f26522]" />
+                          Upload New Crest Image
+                        </span>
+                        <input
+                          id="badge-upload-btn"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileUpload}
+                          className="hidden"
+                        />
+                      </Label>
+                      <div className="text-[11px] text-slate-500 mt-1.5">
+                        PNG, JPG, or WebP. Transparent backgrounds look best.
+                      </div>
                     </div>
                   </div>
 
-                  <div className="text-[10px] space-y-1">
-                    <div className="flex justify-between border-b border-slate-100 py-1">
-                      <span className="font-bold">Student: KATO IVAN</span>
-                      <span className="font-mono">LIN: LIN-2026-0311</span>
-                    </div>
-                    <div className="flex justify-between border-b border-slate-100 py-1">
-                      <span>Class: Senior 2 Alpha</span>
-                      <span className="font-bold text-emerald-700">Division 1 (Aggregate: 14)</span>
+                  <div>
+                    <Label className="text-xs font-bold">Crest Monogram Initials</Label>
+                    <Input
+                      maxLength={4}
+                      value={form.badgeInitials}
+                      onChange={(e) => setForm({ ...form, badgeInitials: e.target.value.toUpperCase() })}
+                      className="rounded-none mt-1 font-mono text-center font-bold text-lg w-24"
+                      placeholder="WB"
+                    />
+                    <span className="text-[10px] text-slate-500">Used as fallback watermark when crest is loading</span>
+                  </div>
+                </div>
+
+                {/* Color Schemes */}
+                <div className="p-5 bg-white border border-slate-200 rounded-none space-y-4">
+                  <div className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    Visual Brand Colors
+                  </div>
+
+                  <div>
+                    <Label className="text-xs font-bold">Primary Institutional Color</Label>
+                    <div className="flex items-center gap-2 mt-1">
+                      <input
+                        type="color"
+                        value={form.primaryColor}
+                        onChange={(e) => setForm({ ...form, primaryColor: e.target.value })}
+                        className="size-9 rounded-none border border-slate-300 cursor-pointer p-0.5"
+                      />
+                      <Input
+                        value={form.primaryColor}
+                        onChange={(e) => setForm({ ...form, primaryColor: e.target.value })}
+                        className="rounded-none font-mono text-xs uppercase w-32"
+                      />
                     </div>
                   </div>
 
-                  <div className="text-[9px] text-slate-400 text-center italic pt-1">
-                    Head of School: {form.directorName} • {form.directorTitle}
+                  <div>
+                    <Label className="text-xs font-bold">Accent Highlight Color</Label>
+                    <div className="flex items-center gap-2 mt-1">
+                      <input
+                        type="color"
+                        value={form.accentColor}
+                        onChange={(e) => setForm({ ...form, accentColor: e.target.value })}
+                        className="size-9 rounded-none border border-slate-300 cursor-pointer p-0.5"
+                      />
+                      <Input
+                        value={form.accentColor}
+                        onChange={(e) => setForm({ ...form, accentColor: e.target.value })}
+                        className="rounded-none font-mono text-xs uppercase w-32"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label className="text-xs font-bold">School Uniform Colors</Label>
+                    <Input
+                      value={form.uniformColors || ""}
+                      onChange={(e) => setForm({ ...form, uniformColors: e.target.value })}
+                      className="rounded-none mt-1 text-xs"
+                      placeholder="e.g. Navy Blue Blazers, White Shirts & Khaki Trousers"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 7: IDENTIFICATION FEATURES LIVE PREVIEWS */}
+          {activeTab === "identification" && (
+            <div className="space-y-4 max-w-4xl mx-auto">
+              <div className="border-b border-slate-200 pb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900">Identification Features Live Preview</h3>
+                  <p className="text-xs text-slate-500">Visual proof of how your school's badge, legal credentials, and colors render on official assets.</p>
+                </div>
+
+                <div className="flex items-center gap-1 overflow-x-auto text-xs bg-slate-100 p-1 rounded-none border border-slate-200">
+                  {[
+                    { id: "id_card", label: "Student ID", icon: QrCode },
+                    { id: "meal_pass", label: "Smart Meal Pass", icon: Utensils },
+                    { id: "report_card", label: "Terminal Report Card", icon: FileText },
+                    { id: "receipt", label: "Thermal POS Receipt", icon: Receipt },
+                    { id: "staff_badge", label: "Staff Badge", icon: Briefcase },
+                  ].map((p) => {
+                    const Icon = p.icon;
+                    return (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() => setActivePreview(p.id as any)}
+                        className={`flex items-center gap-1 px-2.5 py-1 font-semibold rounded-none transition-all ${
+                          activePreview === p.id
+                            ? "bg-[#0b2256] text-white font-bold"
+                            : "text-slate-600 hover:text-slate-900"
+                        }`}
+                      >
+                        <Icon className="size-3" />
+                        <span>{p.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* PREVIEW 1: STUDENT ID CARD */}
+              {activePreview === "id_card" && (
+                <div className="flex justify-center py-6">
+                  <div className="w-[360px] sm:w-[400px] bg-white rounded-none border-2 border-slate-300 shadow-xl overflow-hidden font-sans">
+                    {/* ID Header */}
+                    <div style={{ backgroundColor: form.primaryColor }} className="p-3 text-white flex items-center gap-3">
+                      <img src={badgePreview} alt="Badge" className="size-11 object-contain bg-white/10 p-1 border border-white/20" />
+                      <div className="min-w-0">
+                        <div className="text-xs font-black tracking-tight uppercase truncate">{form.name}</div>
+                        <div className="text-[10px] text-white/80 font-mono">UNEB CENTER: {form.unebCenterNumber}</div>
+                        <div className="text-[9px] text-amber-300 italic truncate font-serif">"{form.motto}"</div>
+                      </div>
+                    </div>
+
+                    {/* ID Body */}
+                    <div className="p-4 grid grid-cols-3 gap-3 items-center bg-slate-50/50">
+                      <div className="col-span-1 size-24 bg-slate-200 border border-slate-300 grid place-items-center text-slate-400 font-bold text-xs uppercase font-mono">
+                        PHOTO
+                      </div>
+                      <div className="col-span-2 text-xs space-y-1">
+                        <div>
+                          <div className="text-[9px] uppercase font-bold text-slate-400">STUDENT NAME</div>
+                          <div className="font-extrabold text-slate-900">KASULE BRIAN MEDAN</div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-1 text-[11px]">
+                          <div>
+                            <span className="text-[9px] text-slate-400 font-bold block">CLASS</span>
+                            <span className="font-bold text-slate-800">S.4 SCIENCE</span>
+                          </div>
+                          <div>
+                            <span className="text-[9px] text-slate-400 font-bold block">REG NUMBER</span>
+                            <span className="font-mono font-bold text-slate-800">{form.shortCode}-0482</span>
+                          </div>
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          Expires: <span className="font-bold text-slate-700">NOV 2026</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* ID Footer Barcode */}
+                    <div className="p-2.5 bg-slate-100 border-t border-slate-200 flex items-center justify-between font-mono text-[9px] text-slate-500">
+                      <div className="flex items-center gap-1 font-bold text-slate-700">
+                        <Barcode className="size-5" />
+                        <span>*{form.shortCode}*0482*</span>
+                      </div>
+                      <div className="text-right">OFFICIAL STUDENT ID</div>
+                    </div>
                   </div>
                 </div>
               )}
 
-              {/* 4. OFFICIAL FEE RECEIPT PREVIEW */}
+              {/* PREVIEW 2: SMART MEAL PASS / NFC CARD */}
+              {activePreview === "meal_pass" && (
+                <div className="flex justify-center py-6">
+                  <div className="w-[360px] sm:w-[400px] bg-gradient-to-br from-slate-900 to-[#0b2256] text-white rounded-none border border-slate-700 shadow-xl p-5 relative overflow-hidden font-sans">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-2">
+                        <img src={badgePreview} alt="Crest" className="size-10 object-contain p-0.5 bg-white/10" />
+                        <div>
+                          <div className="text-xs font-black uppercase tracking-tight">{form.shortCode}</div>
+                          <div className="text-[10px] text-amber-300 font-bold">SMART MEAL PASS & NFC</div>
+                        </div>
+                      </div>
+                      <Utensils className="size-6 text-[#f26522]" />
+                    </div>
+
+                    <div className="my-6">
+                      <div className="text-[10px] font-mono text-slate-400">NFC CHIP RFID ENCRYPTED</div>
+                      <div className="text-lg font-mono font-black tracking-widest text-emerald-400">
+                        RFID • 8849-0294-821
+                      </div>
+                      <div className="text-xs font-bold text-white mt-1">PLAN: FULL BOARDING MEALS (4 TIER)</div>
+                    </div>
+
+                    <div className="flex items-center justify-between border-t border-white/10 pt-3 text-[10px] text-slate-300">
+                      <div>HOLDER: KASULE BRIAN</div>
+                      <div className="font-bold text-emerald-400 flex items-center gap-1">
+                        <CheckCircle2 className="size-3" /> VERIFIED ACTIVE
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* PREVIEW 3: TERMINAL REPORT CARD */}
+              {activePreview === "report_card" && (
+                <div className="flex justify-center py-4">
+                  <div className="w-full max-w-2xl bg-white border border-slate-300 shadow-lg p-6 font-serif text-slate-900 text-xs space-y-4">
+                    {/* Report Header */}
+                    <div className="text-center border-b-2 border-slate-800 pb-3">
+                      <div className="flex items-center justify-center gap-3 mb-1">
+                        <img src={badgePreview} alt="Crest" className="size-12 object-contain" />
+                        <div>
+                          <h2 className="text-base font-black tracking-tight uppercase font-sans">{form.name}</h2>
+                          <div className="text-[11px] italic">"{form.motto}"</div>
+                          <div className="text-[10px] font-sans font-mono text-slate-600">
+                            UNEB CENTER NO: {form.unebCenterNumber} • MoES REG: {form.moesRegNumber}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-xs font-bold font-sans uppercase bg-slate-100 py-1 tracking-wider mt-2">
+                        OFFICIAL TERMINAL ACADEMIC REPORT — {form.currentTerm.toUpperCase()} {form.academicYear}
+                      </div>
+                    </div>
+
+                    {/* Student Metadata Bar */}
+                    <div className="grid grid-cols-3 gap-2 font-sans text-[11px] bg-slate-50 p-2 border border-slate-200">
+                      <div><strong>STUDENT:</strong> KASULE BRIAN</div>
+                      <div><strong>CLASS:</strong> S.4 SCIENCE</div>
+                      <div><strong>GRADING:</strong> {form.gradingScale} STANDARD</div>
+                    </div>
+
+                    {/* Sample Marks Table */}
+                    <table className="w-full text-left font-sans text-xs border border-slate-300 border-collapse">
+                      <thead>
+                        <tr className="bg-slate-100 border-b border-slate-300 text-[10px] font-bold">
+                          <th className="p-2">SUBJECT</th>
+                          <th className="p-2 text-center">SCORE</th>
+                          <th className="p-2 text-center">GRADE</th>
+                          <th className="p-2">REMARKS</th>
+                          <th className="p-2">TEACHER</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200 text-[11px]">
+                        <tr>
+                          <td className="p-2 font-semibold">Mathematics</td>
+                          <td className="p-2 text-center font-mono font-bold">88%</td>
+                          <td className="p-2 text-center font-mono font-bold text-emerald-700">D1 / 3.0</td>
+                          <td className="p-2">Exceptional grasp of calculus</td>
+                          <td className="p-2 font-mono">Mr. Kigozi E.</td>
+                        </tr>
+                        <tr>
+                          <td className="p-2 font-semibold">Physics</td>
+                          <td className="p-2 text-center font-mono font-bold">84%</td>
+                          <td className="p-2 text-center font-mono font-bold text-emerald-700">D1 / 3.0</td>
+                          <td className="p-2">Outstanding laboratory work</td>
+                          <td className="p-2 font-mono">Mr. Kato P.</td>
+                        </tr>
+                        <tr>
+                          <td className="p-2 font-semibold">Chemistry</td>
+                          <td className="p-2 text-center font-mono font-bold">78%</td>
+                          <td className="p-2 text-center font-mono font-bold text-blue-700">D2 / 2.8</td>
+                          <td className="p-2">Very strong organic reactions</td>
+                          <td className="p-2 font-mono">Ms. Nalule R.</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    {/* Principal Signature Line */}
+                    <div className="pt-4 flex justify-between font-sans text-xs border-t border-slate-200">
+                      <div>
+                        <div className="text-[10px] text-slate-400">HEAD OF SCHOOL</div>
+                        <div className="font-bold text-slate-900">{form.directorName}</div>
+                        <div className="text-[10px] text-slate-500 italic">Signature & Institutional Stamp</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-[10px] text-slate-400">NEXT TERM BEGINS</div>
+                        <div className="font-bold text-[#f26522]">MAY 25, 2026</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* PREVIEW 4: THERMAL POS RECEIPT */}
               {activePreview === "receipt" && (
-                <div className="max-w-md mx-auto p-4 border border-slate-300 bg-white shadow-md rounded-none space-y-3">
-                  <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="size-7 bg-slate-100 grid place-items-center font-bold text-[10px] overflow-hidden">
-                        {badgePreview ? (
-                          <img src={badgePreview} alt="Crest" className="size-full object-contain" />
-                        ) : (
-                          form.badgeInitials
-                        )}
+                <div className="flex justify-center py-6">
+                  <div className="w-[300px] bg-white border border-slate-300 shadow-md p-4 font-mono text-[11px] text-slate-800 space-y-2">
+                    <div className="text-center border-b border-dashed border-slate-300 pb-2">
+                      <div className="font-black text-xs uppercase">{form.posReceiptHeader}</div>
+                      <div className="text-[10px] text-slate-500">{form.location}</div>
+                      <div className="text-[10px] text-slate-500">TEL: {form.phone}</div>
+                    </div>
+
+                    <div className="space-y-0.5 text-[10px]">
+                      <div>RECEIPT NO: <span className="font-bold">RCP-2026-08912</span></div>
+                      <div>DATE: <span className="font-bold">23/11/2026 13:42</span></div>
+                      <div>STUDENT: <span className="font-bold">KASULE BRIAN (S.4)</span></div>
+                      <div>CASHIER: <span className="font-bold">{form.bursarName || "BURSAR"}</span></div>
+                    </div>
+
+                    <div className="border-t border-b border-dashed border-slate-300 py-1.5 space-y-1">
+                      <div className="flex justify-between">
+                        <span>BOARDING TUITION:</span>
+                        <span className="font-bold">UGX {form.termFeesBoarding}</span>
+                      </div>
+                      <div className="flex justify-between text-slate-500">
+                        <span>AMOUNT PAID:</span>
+                        <span className="font-bold text-emerald-700">UGX {form.termFeesBoarding}</span>
+                      </div>
+                      <div className="flex justify-between font-bold">
+                        <span>BALANCE DUE:</span>
+                        <span>UGX 0.00</span>
+                      </div>
+                    </div>
+
+                    <div className="text-[9px] text-center text-slate-500 pt-1">
+                      <div>BANK: {form.paymentBankName} A/C {form.paymentAccountNumber}</div>
+                      <div>MTN MoMo: {form.momoMerchantCode} | AIRTEL: {form.airtelMerchantCode}</div>
+                      <div className="mt-1 italic">{form.posReceiptFooter}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* PREVIEW 5: STAFF BADGE */}
+              {activePreview === "staff_badge" && (
+                <div className="flex justify-center py-6">
+                  <div className="w-[320px] bg-white rounded-none border border-slate-300 shadow-xl overflow-hidden font-sans">
+                    <div style={{ backgroundColor: form.primaryColor }} className="p-3 text-white text-center">
+                      <div className="text-xs font-bold uppercase tracking-tight">{form.name}</div>
+                      <div className="text-[10px] text-amber-300 font-mono">OFFICIAL FACULTY & STAFF BADGE</div>
+                    </div>
+                    <div className="p-4 flex flex-col items-center text-center space-y-2">
+                      <div className="size-20 rounded-full border-2 border-slate-300 bg-slate-100 grid place-items-center font-bold text-xs text-slate-400">
+                        STAFF PHOTO
                       </div>
                       <div>
-                        <div className="font-bold text-xs uppercase">{form.name}</div>
-                        <div className="text-[8px] text-slate-500">BURSAR'S OFFICE • OFFICIAL RECEIPT</div>
+                        <div className="text-sm font-extrabold text-slate-900">{form.directorName}</div>
+                        <div className="text-xs text-[#f26522] font-bold">{form.directorTitle}</div>
+                        <div className="text-[11px] font-mono text-slate-500">FACULTY ID: STF-001</div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-[9px] font-mono text-slate-400">REC-2026-9021</div>
-                      <div className="text-[9px] font-bold text-emerald-600">PAID IN FULL</div>
+                    <div className="p-2 bg-slate-100 border-t border-slate-200 text-center font-mono text-[9px] text-slate-500">
+                      *AUTHORIZED ADMINISTRATIVE PERSONNEL*
                     </div>
-                  </div>
-
-                  <div className="text-xs space-y-1">
-                    <div className="flex justify-between text-[11px]">
-                      <span className="text-slate-500">Student:</span>
-                      <span className="font-semibold">SSEKITTO JOSHUA (S.1)</span>
-                    </div>
-                    <div className="flex justify-between text-[11px]">
-                      <span className="text-slate-500">Payment:</span>
-                      <span className="font-bold text-slate-900">UGX 1,250,000</span>
-                    </div>
-                    <div className="flex justify-between text-[11px]">
-                      <span className="text-slate-500">Purpose:</span>
-                      <span>Term 1 Tuition & Boarding Pass</span>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 border-t border-slate-100 text-[9px] text-slate-400 text-center">
-                    Authorized Cashier • {form.phone} • {form.email}
                   </div>
                 </div>
               )}
             </div>
           )}
 
-          {/* TAB 5: PRESETS */}
+          {/* TAB 8: PRESETS */}
           {activeTab === "presets" && (
-            <div className="space-y-4 animate-fade-in">
-              <div className="border-b border-slate-100 pb-3">
-                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
-                  Select a Pre-configured School Benchmark
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Switch instantly between demo institution benchmarks to demonstrate system flexibility.
-                </p>
+            <div className="space-y-4 max-w-4xl mx-auto">
+              <div className="border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-bold text-slate-900">Pre-configured Institutional Presets</h3>
+                <p className="text-xs text-slate-500">Load ready-to-use institutional configurations tailored for Ugandan secondary institutions.</p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <button
-                  type="button"
-                  onClick={() => handleApplyPreset("demo")}
-                  className="p-4 border text-left bg-white hover:border-[#0b2256] transition-colors rounded-none space-y-2 group"
-                >
-                  <div className="size-8 bg-[#0b2256] text-white font-black text-xs grid place-items-center">
-                    WB
-                  </div>
-                  <div className="font-bold text-xs text-slate-900 group-hover:text-[#0b2256]">
-                    Wellstar Bright Secondary
-                  </div>
-                  <div className="text-[11px] text-slate-500">
-                    Authentic standalone secondary school benchmark with Mukono campus.
-                  </div>
-                  <div className="text-[10px] text-slate-400 font-mono">UNEB Center #U0482</div>
-                </button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[
+                  {
+                    key: "demo",
+                    name: "Wellstar Bright Secondary School",
+                    code: "WBSS-2026",
+                    badge: "/logo.png",
+                    desc: "Flagship Mixed Day & Boarding Secondary School in Mukono with CBC competence grading and biometric smart card attendance.",
+                    colors: ["#0b2256", "#f26522"]
+                  },
+                  {
+                    key: "st_pauls",
+                    name: "St. Paul's College",
+                    code: "SPC-2026",
+                    badge: "/gallery/stem-lab.png",
+                    desc: "Traditional Anglican boarding college with rigorous UNEB standard curriculum and Centenary Bank integration.",
+                    colors: ["#065f46", "#d97706"]
+                  },
+                  {
+                    key: "greenhill",
+                    name: "Greenhill Secondary",
+                    code: "GHS-2026",
+                    badge: "/gallery/arts-studio.png",
+                    desc: "Modern multi-campus academy in Kibuli with high-tech ICT labs, multi-tier meal programs, and Standard Chartered clearance.",
+                    colors: ["#1d4ed8", "#ea580c"]
+                  },
+                  {
+                    key: "kitende",
+                    name: "St. Mary's SS Kitende",
+                    code: "SMSS-KITENDE",
+                    badge: "/logo.png",
+                    desc: "Multi-campus sports and academic powerhouse with 3,500 student capacity, Dfcu Treasury, and 100% Division 1-2 pass rate.",
+                    colors: ["#800020", "#d4af37"]
+                  }
+                ].map((item) => (
+                  <div key={item.key} className="p-4 bg-white border border-slate-200 rounded-none flex flex-col justify-between hover:border-[#f26522] transition-all">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <img src={item.badge} alt={item.name} className="size-8 object-contain" />
+                        <div>
+                          <div className="text-xs font-bold text-slate-900">{item.name}</div>
+                          <div className="text-[10px] font-mono text-slate-500">{item.code}</div>
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-600 mb-3">{item.desc}</p>
+                    </div>
 
-                <button
-                  type="button"
-                  onClick={() => handleApplyPreset("st_pauls")}
-                  className="p-4 border text-left bg-white hover:border-[#0b2256] transition-colors rounded-none space-y-2 group"
-                >
-                  <div className="size-8 bg-emerald-800 text-white font-black text-xs grid place-items-center">
-                    SP
+                    <div className="flex items-center justify-between border-t border-slate-100 pt-3">
+                      <div className="flex items-center gap-1">
+                        {item.colors.map((c) => (
+                          <div key={c} style={{ backgroundColor: c }} className="size-4 border border-slate-300" />
+                        ))}
+                      </div>
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={() => handleApplyPreset(item.key as any)}
+                        className="h-7 text-xs bg-[#0b2256] hover:bg-slate-900 text-white rounded-none"
+                      >
+                        Load Preset
+                      </Button>
+                    </div>
                   </div>
-                  <div className="font-bold text-xs text-slate-900 group-hover:text-emerald-800">
-                    St. Paul's College
-                  </div>
-                  <div className="text-[11px] text-slate-500">
-                    Traditional boarding academy benchmark with O & A Level pathways.
-                  </div>
-                  <div className="text-[10px] text-slate-400 font-mono">UNEB Center #U0115</div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleApplyPreset("greenhill")}
-                  className="p-4 border text-left bg-white hover:border-[#0b2256] transition-colors rounded-none space-y-2 group"
-                >
-                  <div className="size-8 bg-blue-700 text-white font-black text-xs grid place-items-center">
-                    GH
-                  </div>
-                  <div className="font-bold text-xs text-slate-900 group-hover:text-blue-700">
-                    Greenhill Secondary
-                  </div>
-                  <div className="text-[11px] text-slate-500">
-                    Competence-based curriculum day & boarding secondary school.
-                  </div>
-                  <div className="text-[10px] text-slate-400 font-mono">UNEB Center #U0840</div>
-                </button>
+                ))}
               </div>
             </div>
           )}
         </div>
 
         {/* Wizard Footer Controls */}
-        <div className="h-16 px-5 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
-          <div className="text-xs text-slate-500 truncate max-w-sm">
-            Current Active School: <span className="font-bold text-slate-900">{form.name}</span>
+        <div className="h-16 px-5 border-t border-slate-200 bg-white flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <span className="font-semibold text-slate-700">Active School:</span>
+            <span className="font-bold text-[#0b2256]">{form.name}</span>
+            <span className="font-mono text-[11px] text-slate-400">({form.shortCode} • {form.unebCenterNumber})</span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={onClose}
-              className="h-9 rounded-none text-xs border-slate-300"
+              className="h-9 px-4 text-xs rounded-none border-slate-300"
             >
               Cancel
             </Button>
@@ -1117,10 +1804,10 @@ Identity Colors: Deep Navy (#0b2256) and Gold Accent (#f26522).`;
               type="button"
               size="sm"
               onClick={handleSave}
-              className="h-9 rounded-none text-xs font-semibold bg-[#0b2256] hover:bg-[#081a42] text-white shadow-none gap-1.5"
+              className="h-9 px-5 bg-gradient-to-r from-amber-500 to-[#f26522] hover:from-amber-600 hover:to-orange-700 text-white font-extrabold text-xs rounded-none shadow-md gap-1.5 border-0"
             >
               <Check className="size-3.5" />
-              <span>Apply & Save to Front Site</span>
+              <span>Apply & Save Full Configuration</span>
             </Button>
           </div>
         </div>
