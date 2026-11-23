@@ -16,7 +16,8 @@ import {
   ChevronDown,
   RotateCcw,
   Sparkles,
-  DollarSign
+  DollarSign,
+  Download
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CampusSwitcher } from "@/components/navigation/CampusSwitcher";
@@ -222,6 +223,17 @@ export default function StandaloneFinanceLayout({ children }: { children: React.
                 </div>
               )}
             </div>
+
+            {/* Download Desktop App Link */}
+            <a
+              href="/api/finance/download?target=installer"
+              download="Wellstar-Finance-POS-Setup-1.0.0.exe"
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all"
+              title="Download Desktop App / Installer for Windows (.exe)"
+            >
+              <Download className="size-3.5 text-slate-950" />
+              <span>Download Desktop App</span>
+            </a>
 
             {/* Front Site Link */}
             <Button asChild variant="outline" size="sm" className="h-8 text-xs bg-white/10 hover:bg-white/20 text-white border-white/20 rounded-none gap-1 hidden sm:inline-flex">

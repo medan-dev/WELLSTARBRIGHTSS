@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const path = require("path");
 const os = require("os");
 
@@ -6,11 +6,11 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 840,
+    width: 1366,
+    height: 860,
     minWidth: 1024,
     minHeight: 700,
-    title: "Wellstar Bright - Finance & POS Desk [Offline-First]",
+    title: "Wellstar Bright — Financial Workstation & POS [Connected Client]",
     icon: path.join(__dirname, "logo.png"),
     backgroundColor: "#090d16",
     webPreferences: {
@@ -21,7 +21,34 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, "index.html"));
+  // Target the live standalone Web Finance portal first
+  const targetServerUrl =
+    process.env.FINANCE_SERVER_URL ||
+    process.env.NEXT_PUBLIC_APP_URL ||
+    "http://localhost:3000/finance";
+
+  // Attempt to load the live web portal so updates are instantaneous and appearance is identical
+  mainWindow
+    .loadURL(targetServerUrl)
+    .then(() => {
+      console.log(`[Finance POS Desktop] Connected to live web standalone: ${targetServerUrl}`);
+    })
+    .catch((err) => {
+      console.warn(
+        `[Finance POS Desktop] Could not connect to central server (${targetServerUrl}). Falling back to embedded offline POS:`,
+        err.message
+      );
+      // Fallback to local offline-first interface
+      mainWindow.loadFile(path.join(__dirname, "index.html"));
+    });
+
+  // Handle navigation errors dynamically (e.g. server restart)
+  mainWindow.webContents.on("did-fail-load", (event, errorCode, errorDescription, validatedURL) => {
+    if (validatedURL.includes("localhost") || validatedURL.includes("http")) {
+      console.warn(`[Finance POS Desktop] Connection lost to ${validatedURL}, falling back to offline POS...`);
+      mainWindow.loadFile(path.join(__dirname, "index.html"));
+    }
+  });
 
   mainWindow.on("closed", () => {
     mainWindow = null;

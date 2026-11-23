@@ -198,6 +198,7 @@ export default function SuperAdminFinancePage() {
   const [showPayrollModal, setShowPayrollModal] = useState(false);
   const [showAssetModal, setShowAssetModal] = useState(false);
   const [showBudgetModal, setShowBudgetModal] = useState(false);
+  const [showDownloadAppModal, setShowDownloadAppModal] = useState(false);
   const [selectedReceiptForPrint, setSelectedReceiptForPrint] = useState<any>(null);
   const [selectedPayslipForPrint, setSelectedPayslipForPrint] = useState<any>(null);
 
@@ -803,6 +804,16 @@ export default function SuperAdminFinancePage() {
               className="bg-red-500/10 border-red-500/30 text-red-300 hover:bg-red-500/20 text-xs font-bold rounded-none"
             >
               <Lock className="w-3.5 h-3.5 mr-1" /> Lock Terminal
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowDownloadAppModal(true)}
+              className="bg-amber-400 hover:bg-amber-300 text-slate-950 font-black border-amber-500/40 text-xs rounded-none shadow-md gap-1.5"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Desktop POS App</span>
             </Button>
 
             <Button
@@ -2758,6 +2769,143 @@ export default function SuperAdminFinancePage() {
           setMealCards(updatedCards);
         }}
       />
+
+      {/* DOWNLOAD DESKTOP WORKSTATION APP MODAL */}
+      {showDownloadAppModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-4">
+          <div className="bg-card text-card-foreground border border-border max-w-2xl w-full p-6 sm:p-8 rounded-none shadow-2xl space-y-6">
+            <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
+              <div className="flex items-center gap-3">
+                <div className="size-12 bg-amber-500/20 text-amber-500 border border-amber-500/30 flex items-center justify-center font-bold text-2xl">
+                  💼
+                </div>
+                <div>
+                  <h3 className="font-display font-extrabold text-lg sm:text-xl text-foreground">
+                    Wellstar Finance POS Desktop Client
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
+                    Offline-capable counter executable for Bursars, Cashiers, and Accounts Desks
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowDownloadAppModal(false)}
+                className="text-muted-foreground hover:text-foreground text-sm font-bold"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-3.5 bg-secondary/30 border border-border space-y-1">
+                  <div className="text-[10px] uppercase font-mono font-bold text-muted-foreground">Live Telemetry</div>
+                  <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                    <CheckCircle2 className="size-3" /> Shared Central DB
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">Real-time sync via /api/finance/sync</div>
+                </div>
+
+                <div className="p-3.5 bg-secondary/30 border border-border space-y-1">
+                  <div className="text-[10px] uppercase font-mono font-bold text-muted-foreground">Thermal POS</div>
+                  <div className="text-xs font-bold text-foreground flex items-center gap-1">
+                    <Printer className="size-3 text-amber-500" /> 80mm ESC/POS
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">Native thermal receipt printer integration</div>
+                </div>
+
+                <div className="p-3.5 bg-secondary/30 border border-border space-y-1">
+                  <div className="text-[10px] uppercase font-mono font-bold text-muted-foreground">Developer Updates</div>
+                  <div className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                    <Sparkles className="size-3" /> Hot Web-Synced
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">Live updates stream directly to desktop client</div>
+                </div>
+              </div>
+
+              {/* Download Option Cards */}
+              <div className="space-y-3 pt-2">
+                {/* 1. Windows Installer */}
+                <div className="p-4 bg-secondary/20 hover:bg-secondary/40 border border-border transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-sm text-foreground">Windows NSIS Setup Installer (.exe)</span>
+                      <span className="text-[9px] px-1.5 py-0.5 bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono font-bold">RECOMMENDED</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Standard Windows installer with desktop shortcuts, auto-shift launcher, and printer drivers.
+                    </p>
+                    <div className="text-[11px] font-mono text-muted-foreground mt-1">Size: 76.5 MB &bull; Target: Windows 10 / 11 x64</div>
+                  </div>
+                  <a
+                    href="/api/finance/download?target=installer"
+                    download="Wellstar-Finance-POS-Setup-1.0.0.exe"
+                    className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-[#f26522] hover:bg-[#d95314] text-white font-extrabold text-xs shadow-sm transition-all"
+                  >
+                    <Download className="size-4" />
+                    <span>Download Installer</span>
+                  </a>
+                </div>
+
+                {/* 2. Windows Portable */}
+                <div className="p-4 bg-secondary/20 hover:bg-secondary/40 border border-border transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-sm text-foreground">Windows Portable Standalone (.exe)</span>
+                      <span className="text-[9px] px-1.5 py-0.5 bg-blue-500/20 text-blue-600 dark:text-blue-400 font-mono font-bold">NO INSTALL REQUIRED</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Zero installation required. Run directly from a USB flash drive or temporary counter laptop.
+                    </p>
+                    <div className="text-[11px] font-mono text-muted-foreground mt-1">Size: 76.2 MB &bull; Target: Windows 10 / 11 x64</div>
+                  </div>
+                  <a
+                    href="/api/finance/download?target=portable"
+                    download="Wellstar-Finance-POS-1.0.0.exe"
+                    className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-950 font-bold text-xs shadow-sm transition-all border border-border"
+                  >
+                    <Download className="size-4" />
+                    <span>Download Portable</span>
+                  </a>
+                </div>
+
+                {/* 3. Linux / Cross-Platform */}
+                <div className="p-4 bg-secondary/20 hover:bg-secondary/40 border border-border transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div>
+                    <span className="font-bold text-sm text-foreground">Linux &amp; Unix Standalone Package (.tar.gz)</span>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Debian, Ubuntu, RedHat and POSIX cashier terminal package.
+                    </p>
+                    <div className="text-[11px] font-mono text-muted-foreground mt-1">Size: 6.2 MB &bull; Target: Linux x64 / POSIX</div>
+                  </div>
+                  <a
+                    href="/api/finance/download?target=linux"
+                    download="wellstar-finance-desktop-1.0.0.tar.gz"
+                    className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs shadow-sm transition-all border border-border"
+                  >
+                    <Download className="size-4" />
+                    <span>Download Tarball</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t border-border pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-muted-foreground">
+              <div>
+                Connected Sync Gateway: <code className="text-primary font-mono font-bold">/api/finance/sync</code>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowDownloadAppModal(false)}
+                className="rounded-none text-xs"
+              >
+                Close Window
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

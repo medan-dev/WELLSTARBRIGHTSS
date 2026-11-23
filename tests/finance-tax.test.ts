@@ -111,4 +111,22 @@ describe("Uganda Statutory Tax Compliance Engine (URA & NSSF)", () => {
       expect(() => validateDoubleEntry(imbalanced)).toThrow(/Double-entry mismatch/);
     });
   });
+
+  describe("Desktop Workstation App & Sync Gateway Contract", () => {
+    it("should expose installer package metadata and sync endpoint", async () => {
+      const { GET } = await import("../app/api/finance/download/route");
+      const { NextRequest } = await import("next/server");
+
+      const req = new NextRequest("http://localhost:3000/api/finance/download?info=1");
+      const res = await GET(req);
+      expect(res.status).toBe(200);
+
+      const data = await res.json();
+      expect(data.success).toBe(true);
+      expect(data.appName).toContain("Finance POS");
+      expect(data.files.installer.downloadUrl).toBe("/api/finance/download?target=installer");
+      expect(data.files.portable.downloadUrl).toBe("/api/finance/download?target=portable");
+      expect(data.syncGateway).toBe("/api/finance/sync");
+    });
+  });
 });
