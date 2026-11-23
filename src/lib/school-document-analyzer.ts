@@ -1,5 +1,6 @@
 import JSZip from "jszip";
 import { SchoolBrandConfig, DEFAULT_SCHOOL_BRAND } from "@/lib/school-brand-types";
+import { sanitizeText } from "@/lib/sanitization";
 
 export interface DetectedField {
   field: keyof SchoolBrandConfig | string;
@@ -432,13 +433,14 @@ export function extractBrandFromText(text: string, baseBrand: SchoolBrandConfig 
     value: string,
     confidence: "high" | "medium" | "low"
   ) => {
-    if (value && value.trim()) {
+    const cleanValue = sanitizeText(value);
+    if (cleanValue) {
       if (field === "periodDurationMinutes") {
-        brand.periodDurationMinutes = parseInt(value, 10);
+        brand.periodDurationMinutes = parseInt(cleanValue, 10);
       } else {
-        (brand as any)[field] = value.trim();
+        (brand as any)[field] = cleanValue;
       }
-      detected.push({ field, category, label, value: value.trim(), confidence });
+      detected.push({ field, category, label, value: cleanValue, confidence });
     }
   };
 

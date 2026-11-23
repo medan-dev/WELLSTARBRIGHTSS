@@ -188,7 +188,7 @@ function HeroTextAnimation() {
       clearTimeout(t);
       clearInterval(interval);
     };
-  }, []);
+  }, [fullText.length]);
 
   const currentText = fullText.substring(0, charIndex);
   const isDone = charIndex === fullText.length;

@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { unstable_cache, revalidateTag } from "next/cache";
 import { requireAuth } from "@/lib/auth-service";
 import { resolveActiveTenantContext } from "../actions";
+import { sanitizeMealCard } from "@/lib/sanitization";
 
 export type MealPlanType = 
   | "BOARDING_FULL" 
@@ -15,21 +16,6 @@ export type MealPlanType =
 export type MealCardStatus = "ACTIVE" | "SUSPENDED" | "EXPIRED";
 
 export type MealSession = "BREAKFAST" | "LUNCH" | "DINNER" | "SPECIAL_BREAK";
-
-// Helper to guarantee clean runtime objects without legacy references
-function sanitizeMealCard<T extends Record<string, any>>(card: T | null | undefined): T | null {
-  if (!card) return null;
-  const cleaned: Record<string, any> = { ...card };
-  if (cleaned.planType === "MILK_NUTRITION_AWARD" || (cleaned.planType as string) === "MILK_NUTRITION_SCHEME") {
-    cleaned.planType = "BURSARY_SUBSIDIZED";
-  }
-  if (cleaned.notes && typeof cleaned.notes === "string") {
-    cleaned.notes = cleaned.notes.replace(/milk cans? daily\.?/gi, "meals daily.").replace(/milk/gi, "meal");
-  }
-  delete cleaned.milkQuota;
-  delete cleaned.dailyMilkQuota;
-  return cleaned as T;
-}
 
 // ============================================================================
 // 1. READ ACTIONS (CACHED)
