@@ -7,12 +7,11 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { 
   Menu, X, Sun, Moon, ChevronDown, 
-  GraduationCap, BookOpen, ShieldCheck, ArrowRight, Sparkles, Sliders 
+  GraduationCap, BookOpen, ShieldCheck 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSchoolBrand } from "@/context/SchoolBrandContext";
-import { SchoolAutomationWizard } from "@/components/wizard/SchoolAutomationWizard";
 
 const links = [
   { href: "/front-site", label: "Home" },
@@ -52,7 +51,6 @@ export function SchoolNavbar() {
   const { brand } = useSchoolBrand();
   const [open, setOpen] = useState(false);
   const [portalMenuOpen, setPortalMenuOpen] = useState(false);
-  const [wizardOpen, setWizardOpen] = useState(false);
   const portalDropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
@@ -200,30 +198,12 @@ export function SchoolNavbar() {
                 <Button asChild size="default" className="bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-slate-950 font-extrabold px-6 h-10 rounded-full shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all border-0 text-sm">
                   <Link href="/apply">Apply Now</Link>
                 </Button>
-
-                {/* Discrete Setup Wizard Trigger */}
-                <button
-                  type="button"
-                  onClick={() => setWizardOpen(true)}
-                  title="Customize School Information & Badge"
-                  className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/20 backdrop-blur-md transition-all active:scale-95 flex items-center justify-center"
-                >
-                  <Sliders className="size-4 text-amber-300" />
-                </button>
               </div>
             </div>
 
             {/* Mobile Hamburger */}
             <div className="flex items-center gap-2.5 lg:hidden">
               <ThemeToggle />
-              <button
-                type="button"
-                onClick={() => setWizardOpen(true)}
-                title="Customize School"
-                className="p-2.5 rounded-full bg-white/15 hover:bg-white/25 text-white border border-white/25 backdrop-blur-md transition-smooth"
-              >
-                <Sliders className="size-4 text-amber-300" />
-              </button>
               <button
                 className="p-2.5 rounded-full bg-white/15 hover:bg-white/25 text-white border border-white/25 backdrop-blur-md transition-smooth"
                 onClick={() => setOpen(true)}
@@ -333,9 +313,6 @@ export function SchoolNavbar() {
           </Button>
         </div>
       </aside>
-
-      {/* School Setup Wizard */}
-      <SchoolAutomationWizard isOpen={wizardOpen} onClose={() => setWizardOpen(false)} />
     </>
   );
 }
