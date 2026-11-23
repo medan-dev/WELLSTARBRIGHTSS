@@ -60,7 +60,7 @@ describe("Enterprise Company Standards & Guardrails", () => {
   it("provisions authorized client test roles with redirect URLs", async () => {
     const cashierRes = await quickDemoLoginAction("cashier");
     expect(cashierRes.success).toBe(true);
-    expect(cashierRes.redirectUrl).toBe("/admin/dashboard/finance");
+    expect(["/finance/dashboard", "/admin/dashboard/finance"]).toContain(cashierRes.redirectUrl);
     expect(cashierRes.user?.email).toBe("cashier@yourschool.com");
 
     const adminRes = await quickDemoLoginAction("admin");

@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { 
   Menu, X, Sun, Moon, ChevronDown, 
-  GraduationCap, BookOpen, ShieldCheck 
+  GraduationCap, BookOpen, ShieldCheck, Wallet 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -167,6 +167,19 @@ export function SchoolNavbar() {
                       </Link>
 
                       <Link
+                        href="/finance"
+                        className="flex items-center gap-3 p-3 rounded-xl text-xs font-semibold text-white hover:bg-emerald-600/30 transition-colors group"
+                      >
+                        <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                          <Wallet className="size-4" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-sm">Finance Portal</div>
+                          <div className="text-[11px] text-white/70 font-normal">Fees, bursary POS & ledger</div>
+                        </div>
+                      </Link>
+
+                      <Link
                         href="/teacher"
                         className="flex items-center gap-3 p-3 rounded-xl text-xs font-semibold text-white hover:bg-orange-600/30 transition-colors group"
                       >
@@ -288,6 +301,13 @@ export function SchoolNavbar() {
               className="flex items-center gap-3 p-3 rounded-2xl text-sm font-bold bg-blue-500/20 text-blue-200 border border-blue-400/25"
             >
               <GraduationCap className="size-5 text-blue-300" /> Student Portal
+            </Link>
+            <Link
+              href="/finance"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 p-3 rounded-2xl text-sm font-bold bg-emerald-500/20 text-emerald-200 border border-emerald-400/25"
+            >
+              <Wallet className="size-5 text-emerald-300" /> Finance Portal
             </Link>
             <Link
               href="/teacher"

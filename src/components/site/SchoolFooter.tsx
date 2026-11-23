@@ -56,6 +56,7 @@ export function SchoolFooter() {
             <li><Link href="/academics" className="hover:text-foreground transition-smooth">Academics</Link></li>
             <li><Link href="/admissions" className="hover:text-foreground transition-smooth">Admissions</Link></li>
             <li><Link href="/media" className="hover:text-foreground transition-smooth">Media</Link></li>
+            <li><Link href="/finance" className="hover:text-foreground transition-smooth text-amber-500 dark:text-amber-400 font-semibold">Finance Portal</Link></li>
           </ul>
         </div>
 
