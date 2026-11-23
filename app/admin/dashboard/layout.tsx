@@ -81,6 +81,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     );
   }
 
+  // When viewing Finance, render the standalone finance application directly without conflicting outer admin navigation
+  if (pathname.startsWith("/admin/dashboard/finance")) {
+    return <>{children}</>;
+  }
+
   return (
     <div className="min-h-screen bg-secondary/30 flex" suppressHydrationWarning>
       {/* Sidebar */}

@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import Link from "next/link";
+import { useSchoolBrand } from "@/context/SchoolBrandContext";
 import {
   ShieldCheck,
   Wallet,
@@ -45,6 +47,13 @@ import {
   Utensils,
   Ban,
   Check,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  Moon,
+  Sun,
+  Globe,
+  GraduationCap,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -202,6 +211,16 @@ export default function SuperAdminFinancePage() {
   const [selectedReceiptForPrint, setSelectedReceiptForPrint] = useState<any>(null);
   const [selectedPayslipForPrint, setSelectedPayslipForPrint] = useState<any>(null);
 
+  // Standalone Application Layout State (Matching Desktop Client Exactly)
+  const { brand } = useSchoolBrand();
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [userProfileMenuOpen, setUserProfileMenuOpen] = useState(false);
+  const [drawerFloat, setDrawerFloat] = useState("150,000");
+  const [showFloatModal, setShowFloatModal] = useState(false);
+  const [tempFloatInput, setTempFloatInput] = useState("150,000");
+  const [darkTheme, setDarkTheme] = useState(false);
+  const userProfileDropdownRef = useRef<HTMLDivElement>(null);
+
   // Forms
   const [expenseForm, setExpenseForm] = useState({
     title: "",
@@ -355,7 +374,43 @@ export default function SuperAdminFinancePage() {
         if (matched) setCurrentUser(matched);
       } catch (e) {}
     }
+    const isDark = typeof window !== "undefined" && (document.documentElement.classList.contains("dark") || localStorage.getItem("ns_theme") === "dark");
+    setDarkTheme(isDark);
+    if (typeof window !== "undefined") {
+      const savedFloat = localStorage.getItem("wf_drawer_float");
+      if (savedFloat) setDrawerFloat(savedFloat);
+    }
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (userProfileDropdownRef.current && !userProfileDropdownRef.current.contains(e.target as Node)) {
+        setUserProfileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const toggleTheme = () => {
+    const nextDark = !darkTheme;
+    setDarkTheme(nextDark);
+    document.documentElement.classList.toggle("dark", nextDark);
+    try {
+      localStorage.setItem("ns_theme", nextDark ? "dark" : "light");
+    } catch (_) {}
+    toast.success(`Theme switched to ${nextDark ? "Dark Theme" : "Light Theme"}`);
+  };
+
+  const handleSaveDrawerFloat = (e: React.FormEvent) => {
+    e.preventDefault();
+    setDrawerFloat(tempFloatInput);
+    try {
+      localStorage.setItem("wf_drawer_float", tempFloatInput);
+    } catch (_) {}
+    setShowFloatModal(false);
+    toast.success(`Opening Cash Float updated to UGX ${tempFloatInput}`);
+  };
 
   // Unlock Screen with PIN
   const handleUnlockScreen = (e: React.FormEvent) => {
@@ -747,256 +802,323 @@ export default function SuperAdminFinancePage() {
   }
 
   return (
-    <div className="space-y-6 pb-20">
-      {/* 1. TOP EXECUTIVE GLASSMORPHIC BANNER */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white rounded-none p-6 lg:p-7 border border-slate-800 shadow-2xl">
-        {/* Ambient Decorative Light Orbs */}
-        <div className="absolute -top-24 -right-24 size-72 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 size-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-          <div className="flex items-center gap-4">
-            <div className="size-16 rounded-none bg-gradient-to-tr from-amber-500/30 to-amber-400/10 border border-amber-500/40 flex items-center justify-center text-amber-300 font-black text-3xl shadow-xl">
-              💼
-            </div>
-            <div>
-              <div className="flex flex-wrap items-center gap-2.5">
-                <h1 className="text-3xl lg:text-4xl xl:text-5xl font-black tracking-tight text-white">
-                  Finance & Treasury Command
-                </h1>
-                <span className="px-3 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-widest flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-amber-400" /> Executive Analytics Suite
-                </span>
-              </div>
-              <p className="text-xs text-slate-300 mt-1 flex items-center gap-2">
-                <span>Double-Entry Ledgers</span> • <span>Live Recharts Telemetry</span> • <span>Bi-Directional Desktop POS Sync</span>
-              </p>
-            </div>
+    <div className="h-screen w-screen flex flex-col overflow-hidden bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 font-sans selection:bg-[#f26522] selection:text-white">
+      {/* ========================================================================= */}
+      {/* 1. TOP STATUS & CONTROL BAR (MATCHING STANDALONE DESKTOP CLIENT EXACTLY)  */}
+      {/* ========================================================================= */}
+      <header className="flex items-center justify-between px-4 sm:px-6 py-2.5 min-h-[66px] bg-white dark:bg-[#0f172a] border-b border-slate-200 dark:border-slate-800 shadow-sm shrink-0 w-full gap-4 z-30">
+        {/* Left: School Crest, Name & Subtitle */}
+        <div className="flex items-center gap-3.5 shrink-0">
+          <div className="size-11 rounded-xl bg-white dark:bg-slate-900 border border-amber-400/50 p-1 flex items-center justify-center shrink-0 shadow-sm">
+            <img
+              src={brand?.badgeUrl || "/logo.png"}
+              alt="School Crest"
+              className="size-9 object-contain"
+            />
           </div>
-
-          {/* User Badge & Top Quick Actions */}
-          <div className="flex flex-wrap items-center gap-2.5">
-            <div
-              onClick={() => setShowSwitchUserModal(true)}
-              className="cursor-pointer flex items-center gap-3 px-3.5 py-2 rounded-none bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md transition-all shadow-sm"
-              title="Click to Switch Staff Role"
-            >
-              <div className="size-8 rounded-none bg-gradient-to-tr from-amber-400 to-yellow-300 text-slate-950 flex items-center justify-center font-black text-xs shadow-md">
-                {currentUser.name.slice(0, 2).toUpperCase()}
-              </div>
-              <div className="text-left">
-                <div className="text-xs font-bold leading-none flex items-center gap-1.5">
-                  {currentUser.name}
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 font-mono font-bold">
-                    {currentUser.role}
-                  </span>
-                </div>
-                <div className="text-[10px] text-slate-300 mt-0.5 leading-none">
-                  {currentUser.title}
-                </div>
-              </div>
+          <div className="flex flex-col">
+            <div className="font-display text-base font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+              {brand?.name || "Wellstar Bright Secondary School"}
             </div>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsLocked(true)}
-              className="bg-red-500/10 border-red-500/30 text-red-300 hover:bg-red-500/20 text-xs font-bold rounded-none"
-            >
-              <Lock className="w-3.5 h-3.5 mr-1" /> Lock Terminal
-            </Button>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowDownloadAppModal(true)}
-              className="bg-amber-400 hover:bg-amber-300 text-slate-950 font-black border-amber-500/40 text-xs rounded-none shadow-md gap-1.5"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Desktop POS App</span>
-            </Button>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={loadData}
-              disabled={refreshing}
-              className="border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs rounded-none"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 mr-1 ${refreshing ? "animate-spin" : ""}`} />
-              Refresh
-            </Button>
+            <div className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 tracking-wider">
+              Mukono &bull; Bursar Workstation &amp; Financial ERP
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* 2. THE 12-MODULE MODERN TAB NAVIGATOR */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-border/80 scrollbar-none">
-        <button
-          onClick={() => setActiveTab("overview")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "overview"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
+        {/* Right: Shift Controls, Actions & Profile */}
+        <div className="flex items-center gap-2 sm:gap-2.5 ml-auto shrink-0">
+          {/* Physical Cash Drawer Float Pill (Clickable to adjust opening float) */}
+          <button
+            type="button"
+            onClick={() => {
+              setTempFloatInput(drawerFloat);
+              setShowFloatModal(true);
+            }}
+            className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-amber-400 transition-colors shadow-2xs"
+            title="Click to verify/adjust opening drawer cash float"
+          >
+            <Wallet className="size-3.5 text-emerald-600 dark:text-emerald-400" />
+            <span>Drawer: <strong className="text-amber-600 dark:text-amber-400 font-mono font-bold">UGX {drawerFloat}</strong></span>
+          </button>
+
+          {/* Theme Toggle Button (Light Theme / Dark Theme) */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+            title="Toggle Light / Dark Theme"
+          >
+            {darkTheme ? <Sun className="size-3.5 text-amber-400" /> : <Moon className="size-3.5" />}
+            <span className="hidden md:inline">{darkTheme ? "Light Mode" : "Dark Mode"}</span>
+          </button>
+
+          {/* Live Central Server Sync Status Pill */}
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700">
+            <span className="size-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" />
+            <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">Server Connected</span>
+          </div>
+
+          {/* Sync Now Button */}
+          <button
+            type="button"
+            onClick={loadData}
+            disabled={refreshing}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 text-xs font-semibold bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors"
+            title="Synchronize records with central PostgreSQL database"
+          >
+            <RefreshCw className={`size-3.5 ${refreshing ? "animate-spin text-amber-500" : ""}`} />
+            <span className="hidden sm:inline">Sync Now</span>
+          </button>
+
+          {/* Download Desktop POS App Button */}
+          <button
+            type="button"
+            onClick={() => setShowDownloadAppModal(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#f26522] hover:bg-[#d95314] text-white text-xs font-extrabold shadow-sm transition-all"
+            title="Download Offline Desktop POS App &amp; Installer (.exe)"
+          >
+            <Download className="size-3.5" />
+            <span className="hidden lg:inline">Download App</span>
+          </button>
+
+          {/* Front Site Link */}
+          <Link
+            href="/front-site"
+            className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <Globe className="size-3.5 text-blue-500" />
+            <span>Front Site</span>
+          </Link>
+
+          {/* User Profile / Shift Menu */}
+          <div className="relative" ref={userProfileDropdownRef}>
+            <button
+              type="button"
+              onClick={() => setUserProfileMenuOpen(!userProfileMenuOpen)}
+              className="flex items-center gap-2 py-1 px-3 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-slate-300 transition-all text-left"
+            >
+              <div className="size-7 rounded-full bg-gradient-to-tr from-blue-700 to-sky-500 text-white font-bold text-xs flex items-center justify-center shrink-0">
+                {currentUser.name.slice(0, 2).toUpperCase()}
+              </div>
+              <div className="hidden sm:flex flex-col text-left">
+                <span className="text-xs font-bold leading-tight text-slate-900 dark:text-white">{currentUser.name}</span>
+                <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{currentUser.role}</span>
+              </div>
+              <ChevronDown className="size-3.5 text-slate-400" />
+            </button>
+
+            {userProfileMenuOpen && (
+              <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl rounded-xl p-2 z-50 animate-scale-in text-xs">
+                <div className="p-2 border-b border-slate-100 dark:border-slate-800 mb-1">
+                  <div className="font-bold text-sm text-slate-900 dark:text-white">{currentUser.name}</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">{currentUser.title} &bull; {currentUser.email}</div>
+                </div>
+                <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 px-2 py-1">
+                  Switch Active Operator
+                </div>
+                <div className="space-y-0.5">
+                  {ENTERPRISE_FINANCE_USERS.map((u) => (
+                    <button
+                      key={u.id}
+                      onClick={() => {
+                        handleSwitchUser(u);
+                        setUserProfileMenuOpen(false);
+                      }}
+                      className={`w-full text-left p-2 rounded-lg flex items-center justify-between transition-colors ${
+                        currentUser.id === u.id ? "bg-amber-500/15 text-amber-700 dark:text-amber-300 font-bold" : "hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
+                      }`}
+                    >
+                      <div>
+                        <div className="font-bold">{u.name}</div>
+                        <div className="text-[10px] text-slate-400">{u.title}</div>
+                      </div>
+                      <span className="text-[9px] px-1.5 py-0.5 bg-slate-200 dark:bg-slate-800 rounded font-mono font-bold uppercase">{u.role}</span>
+                    </button>
+                  ))}
+                </div>
+                <div className="border-t border-slate-100 dark:border-slate-800 mt-2 pt-1">
+                  <button
+                    onClick={() => {
+                      setIsLocked(true);
+                      setUserProfileMenuOpen(false);
+                    }}
+                    className="w-full text-left p-2 rounded-lg text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 flex items-center gap-2 font-bold"
+                  >
+                    <Lock className="size-3.5" /> Lock Workstation Shift
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* ========================================================================= */}
+      {/* 2. MAIN LAYOUT: SIDEBAR MODULE NAVIGATION + CONTENT AREA                  */}
+      {/* ========================================================================= */}
+      <div className="flex-1 flex overflow-hidden w-full">
+        {/* SIDEBAR MODULE NAVIGATION (MATCHING STANDALONE DESKTOP CLIENT EXACTLY) */}
+        <nav
+          className={`bg-white dark:bg-[#0b1329] border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0 overflow-y-auto overflow-x-hidden transition-all duration-200 z-20 ${
+            sidebarCollapsed ? "w-16 min-w-16 p-2" : "w-64 min-w-64 p-3"
           }`}
         >
-          <PieChartIcon className="w-4 h-4" /> Overview & Charts
-        </button>
+          {/* Sidebar Toggle Header */}
+          <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-200 dark:border-slate-800">
+            {!sidebarCollapsed && (
+              <span className="text-[11px] font-black uppercase tracking-wider text-slate-400">
+                Modules
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className="p-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
+              title={sidebarCollapsed ? "Expand Modules Sidebar" : "Minimize Modules Sidebar"}
+            >
+              {sidebarCollapsed ? <ChevronRight className="size-4" /> : <ChevronLeft className="size-4" />}
+            </button>
+          </div>
 
-        <button
-          onClick={() => setActiveTab("analytics")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "analytics"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <BarChart3 className="w-4 h-4 text-emerald-400" /> Deep Analytics
-        </button>
+          {/* Module Categories */}
+          <div className="space-y-4 flex-1">
+            {/* Category: Counter & Billing */}
+            <div className="space-y-1">
+              {!sidebarCollapsed && (
+                <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 px-2 py-0.5">
+                  Counter &amp; Billing
+                </div>
+              )}
+              {[
+                { id: "overview", label: "Executive Dashboard", icon: BarChart3 },
+                { id: "receipts", label: "Fee POS Counter", icon: Receipt },
+                { id: "analytics", label: "Receipts Ledger", icon: FileText },
+                { id: "invoices", label: "Fees & Billing", icon: GraduationCap },
+              ].map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  onClick={() => setActiveTab(id as any)}
+                  title={sidebarCollapsed ? label : undefined}
+                  className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold rounded-lg transition-all ${
+                    activeTab === id
+                      ? "bg-[#1d4ed8] text-white shadow-sm"
+                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80"
+                  } ${sidebarCollapsed ? "justify-center px-0" : ""}`}
+                >
+                  <Icon className="size-4 shrink-0" />
+                  {!sidebarCollapsed && <span>{label}</span>}
+                </button>
+              ))}
+            </div>
 
-        <button
-          onClick={() => setActiveTab("invoices")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "invoices"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <FileText className="w-4 h-4 text-blue-400" /> 1. Fees & Billing
-        </button>
+            {/* Category: Treasury & Disbursements */}
+            <div className="space-y-1">
+              {!sidebarCollapsed && (
+                <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 px-2 py-0.5">
+                  Treasury &amp; Disbursements
+                </div>
+              )}
+              {[
+                { id: "expenses", label: "Petty Cash & Vouchers", icon: CreditCard },
+                { id: "payroll", label: "Staff Payroll & Slips", icon: Users },
+                { id: "bank", label: "Bank & Cash Accounts", icon: Landmark },
+                { id: "accounts", label: "Chart of Accounts", icon: SlidersHorizontal },
+              ].map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  onClick={() => setActiveTab(id as any)}
+                  title={sidebarCollapsed ? label : undefined}
+                  className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold rounded-lg transition-all ${
+                    activeTab === id
+                      ? "bg-[#1d4ed8] text-white shadow-sm"
+                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80"
+                  } ${sidebarCollapsed ? "justify-center px-0" : ""}`}
+                >
+                  <Icon className="size-4 shrink-0" />
+                  {!sidebarCollapsed && <span>{label}</span>}
+                </button>
+              ))}
+            </div>
 
-        <button
-          onClick={() => setActiveTab("receipts")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "receipts"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <Receipt className="w-4 h-4 text-emerald-400" /> 2. POS Receipts
-        </button>
+            {/* Category: Operations & Audit */}
+            <div className="space-y-1">
+              {!sidebarCollapsed && (
+                <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 px-2 py-0.5">
+                  Operations &amp; Audit
+                </div>
+              )}
+              {[
+                { id: "meals", label: "Meal Cards", icon: Utensils },
+                { id: "reports", label: "Shift Reconciliation", icon: Scale },
+                { id: "tax", label: "Tax Compliance", icon: FileCheck },
+                { id: "workstations", label: "Workstations & Remote Lock", icon: HardDrive },
+              ].map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  onClick={() => setActiveTab(id as any)}
+                  title={sidebarCollapsed ? label : undefined}
+                  className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold rounded-lg transition-all ${
+                    activeTab === id
+                      ? "bg-[#1d4ed8] text-white shadow-sm"
+                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80"
+                  } ${sidebarCollapsed ? "justify-center px-0" : ""}`}
+                >
+                  <Icon className="size-4 shrink-0" />
+                  {!sidebarCollapsed && <span>{label}</span>}
+                </button>
+              ))}
+            </div>
 
-        <button
-          onClick={() => setActiveTab("meals")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "meals"
-              ? "bg-amber-600 text-white shadow-lg shadow-amber-600/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <Utensils className="w-4 h-4 text-amber-400" /> 3. Meal Cards & Dining Passes
-        </button>
+            {/* Category: System & Data */}
+            <div className="space-y-1">
+              {!sidebarCollapsed && (
+                <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 px-2 py-0.5">
+                  System &amp; Data
+                </div>
+              )}
+              {[
+                { id: "audit", label: "Anti-Leakage Audit Trail", icon: ShieldCheck },
+                { id: "budgets", label: "Budgets & Cost Centers", icon: SlidersHorizontal },
+                { id: "assets", label: "Fixed Assets Register", icon: Building2 },
+              ].map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  onClick={() => setActiveTab(id as any)}
+                  title={sidebarCollapsed ? label : undefined}
+                  className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold rounded-lg transition-all ${
+                    activeTab === id
+                      ? "bg-[#1d4ed8] text-white shadow-sm"
+                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80"
+                  } ${sidebarCollapsed ? "justify-center px-0" : ""}`}
+                >
+                  <Icon className="size-4 shrink-0" />
+                  {!sidebarCollapsed && <span>{label}</span>}
+                </button>
+              ))}
+            </div>
+          </div>
 
-        <button
-          onClick={() => setActiveTab("bank")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "bank"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <Landmark className="w-4 h-4 text-cyan-400" /> 3. Bank & Cash Float
-        </button>
+          {/* Sidebar Footer Lock Shift */}
+          <div className="pt-3 border-t border-slate-200 dark:border-slate-800">
+            <button
+              type="button"
+              onClick={() => setIsLocked(true)}
+              className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition-colors ${
+                sidebarCollapsed ? "justify-center px-0" : ""
+              }`}
+              title="Lock Workstation Shift"
+            >
+              <Lock className="size-4 shrink-0" />
+              {!sidebarCollapsed && <span>Lock Workstation</span>}
+            </button>
+          </div>
+        </nav>
 
-        <button
-          onClick={() => setActiveTab("accounts")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "accounts"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <Building2 className="w-4 h-4 text-indigo-400" /> 4. General Ledger
-        </button>
-
-        <button
-          onClick={() => setActiveTab("expenses")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "expenses"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <Briefcase className="w-4 h-4 text-amber-400" /> 5. Accounts Payable
-        </button>
-
-        <button
-          onClick={() => setActiveTab("payroll")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "payroll"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <Users className="w-4 h-4 text-pink-400" /> 6. Staff Payroll
-        </button>
-
-        <button
-          onClick={() => setActiveTab("budgets")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "budgets"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <Scale className="w-4 h-4 text-teal-400" /> 7. Cost Centers
-        </button>
-
-        <button
-          onClick={() => setActiveTab("assets")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "assets"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <HardDrive className="w-4 h-4 text-orange-400" /> 8. Fixed Assets
-        </button>
-
-        <button
-          onClick={() => setActiveTab("tax")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "tax"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <Calculator className="w-4 h-4 text-yellow-400" /> 9. Tax Compliance
-        </button>
-
-        <button
-          onClick={() => setActiveTab("reports")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "reports"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <FileSpreadsheet className="w-4 h-4 text-blue-500" /> 10. Financial Statements
-        </button>
-
-        <button
-          onClick={() => setActiveTab("workstations")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "workstations"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <ShieldCheck className="w-4 h-4 text-emerald-500" /> 11. Workstation Security
-        </button>
-
-        <button
-          onClick={() => setActiveTab("audit")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-extrabold transition-all whitespace-nowrap ${
-            activeTab === "audit"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-102"
-              : "text-muted-foreground hover:bg-muted/80"
-          }`}
-        >
-          <Clock className="w-4 h-4 text-purple-400" /> Audit Log
-        </button>
-      </div>
+        {/* ========================================================================= */}
+        {/* 3. CONTENT AREA (PANES WRAPPER)                                           */}
+        {/* ========================================================================= */}
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-slate-50 dark:bg-[#070b14] space-y-6">
 
       {/* ========================================================================= */}
       {/* TAB: OVERVIEW & INTERACTIVE CHARTS                                        */}
@@ -2115,6 +2237,8 @@ export default function SuperAdminFinancePage() {
           onToggleStatus={handleToggleMealPassStatus}
         />
       )}
+        </main>
+      </div>
 
       {/* ========================================================================= */}
       {/* ALL INTERACTIVE MODALS                                                    */}
@@ -2903,6 +3027,72 @@ export default function SuperAdminFinancePage() {
                 Close Window
               </Button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* PHYSICAL DRAWER FLOAT ADJUSTMENT MODAL */}
+      {showFloatModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-4">
+          <div className="bg-card text-card-foreground border border-border max-w-md w-full p-6 rounded-none shadow-2xl space-y-4 animate-in zoom-in-95 duration-150">
+            <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="size-9 bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold">
+                  <Wallet className="size-4" />
+                </div>
+                <div>
+                  <h3 className="font-display font-bold text-base text-foreground">
+                    Physical Drawer Cash Float
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
+                    Verify or adjust the shift opening physical cash balance.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowFloatModal(false)}
+                className="text-muted-foreground hover:text-foreground text-sm font-bold"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveDrawerFloat} className="space-y-4">
+              <div>
+                <label className="text-xs font-semibold text-muted-foreground block mb-1">
+                  Cash Float Amount (UGX)
+                </label>
+                <Input
+                  type="text"
+                  required
+                  value={tempFloatInput}
+                  onChange={(e) => setTempFloatInput(e.target.value)}
+                  placeholder="e.g. 150,000"
+                  className="font-mono text-sm rounded-none"
+                />
+                <div className="text-[11px] text-muted-foreground mt-1">
+                  Current Drawer Float: <strong className="font-mono text-amber-600 dark:text-amber-400">UGX {drawerFloat}</strong>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowFloatModal(false)}
+                  className="rounded-none text-xs"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="rounded-none text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white"
+                >
+                  Save Float Balance
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       )}
