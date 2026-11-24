@@ -1,6 +1,6 @@
 "use client";
 
-import { Utensils, Sparkles, Plus, Search, CheckCircle2, Ban, Check } from "lucide-react";
+import { Utensils, Sparkles, Plus, Search, CheckCircle2, Ban, Check, AlertTriangle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -194,8 +194,9 @@ export function FinanceMealCardsTab({
                           {card.student?.class?.name || "General"}
                         </div>
                         {card.allergies && (
-                          <div className="text-[10px] text-rose-500 font-normal">
-                            ⚠️ Dietary: {card.allergies}
+                          <div className="text-[10px] text-rose-500 font-normal flex items-center gap-1">
+                            <AlertTriangle className="size-3 text-amber-500 shrink-0" />
+                            <span>Dietary: {card.allergies}</span>
                           </div>
                         )}
                       </td>
@@ -222,8 +223,9 @@ export function FinanceMealCardsTab({
                       </td>
                       <td className="p-4">
                         {hasArrears ? (
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/15 text-rose-600 border border-rose-500/30">
-                            ⚠️ Arrears: UGX {Number(balance).toLocaleString()}
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/15 text-rose-600 border border-rose-500/30 flex items-center gap-1 w-fit">
+                            <AlertCircle className="size-3 text-rose-500 shrink-0" />
+                            <span>Arrears: UGX {Number(balance).toLocaleString()}</span>
                           </span>
                         ) : (
                           <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-600 border border-emerald-500/30 flex items-center gap-1 w-fit">

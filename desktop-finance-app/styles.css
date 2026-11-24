@@ -147,16 +147,16 @@ body.dark-theme {
   min-height: 44px;
   max-width: 44px;
   max-height: 44px;
-  border-radius: 12px;
-  background: #ffffff;
-  border: 1px solid rgba(251, 191, 36, 0.45);
-  padding: 4px;
+  border-radius: 0;
+  background: transparent !important;
+  border: none !important;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden !important;
+  overflow: visible !important;
   flex-shrink: 0;
-  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.18);
+  box-shadow: none !important;
 }
 
 .brand-info {
@@ -172,6 +172,10 @@ body.dark-theme {
   letter-spacing: -0.02em;
   color: var(--text-primary);
   line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
 }
 
 .brand-sub {
@@ -180,9 +184,19 @@ body.dark-theme {
   color: var(--accent-gold);
   letter-spacing: 0.04em;
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
 }
 
 .top-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+}
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -1437,15 +1451,15 @@ body.dark-theme .quick-amt-btn:hover {
   min-height: 48px;
   max-width: 48px;
   max-height: 48px;
-  border-radius: 14px;
-  background: #ffffff;
-  border: 1px solid rgba(251, 191, 36, 0.4);
-  padding: 4px;
+  border-radius: 0;
+  background: transparent !important;
+  border: none !important;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden !important;
-  box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
+  overflow: visible !important;
+  box-shadow: none !important;
   flex-shrink: 0;
 }
 

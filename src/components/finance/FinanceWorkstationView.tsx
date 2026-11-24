@@ -58,6 +58,7 @@ import {
   Settings,
   Cloud,
   Upload,
+  X,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -991,11 +992,11 @@ export default function SuperAdminFinancePage() {
             <div className="relative z-10 space-y-6">
               {/* Institutional Header */}
               <div className="flex items-center gap-3.5">
-                <div className="size-14 rounded-2xl bg-white/10 border border-amber-400/50 p-1.5 flex items-center justify-center shrink-0 shadow-lg backdrop-blur-sm">
+                <div className="size-14 flex items-center justify-center shrink-0">
                   <img
                     src={brand?.badgeUrl || "/logo.png"}
                     alt="School Crest"
-                    className="size-11 object-contain"
+                    className="size-12 object-contain"
                   />
                 </div>
                 <div>
@@ -1236,25 +1237,25 @@ export default function SuperAdminFinancePage() {
       <header className="flex items-center justify-between px-4 sm:px-6 py-2.5 min-h-[66px] bg-white dark:bg-[#0f172a] border-b border-slate-200 dark:border-slate-800 shadow-sm shrink-0 w-full gap-4 z-30">
         {/* Left: School Crest, Name & Subtitle */}
         <div className="flex items-center gap-3.5 shrink-0">
-          <div className="size-11 rounded-xl bg-white dark:bg-slate-900 border border-amber-400/50 p-1 flex items-center justify-center shrink-0 shadow-sm">
+          <div className="size-11 flex items-center justify-center shrink-0">
             <img
               src={brand?.badgeUrl || "/logo.png"}
               alt="School Crest"
-              className="size-9 object-contain"
+              className="size-10 object-contain"
             />
           </div>
-          <div className="flex flex-col">
-            <div className="font-display text-base font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+          <div className="flex flex-col min-w-0">
+            <div className="font-display text-base font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight truncate max-w-[200px] sm:max-w-xs md:max-w-md">
               {brand?.name || "Wellstar Bright Secondary School"}
             </div>
-            <div className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 tracking-wider">
+            <div className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 tracking-wider truncate whitespace-nowrap">
               Mukono &bull; Bursar Workstation &amp; Financial ERP
             </div>
           </div>
         </div>
 
         {/* Right: Shift Controls, Actions & Profile */}
-        <div className="flex items-center gap-2 sm:gap-2.5 ml-auto shrink-0">
+        <div className="flex items-center gap-2 sm:gap-2.5 ml-auto shrink-0 flex-nowrap">
           {/* Physical Cash Drawer Float Pill (Clickable to adjust opening float) */}
           <button
             type="button"
@@ -2973,7 +2974,7 @@ export default function SuperAdminFinancePage() {
               <h3 className="font-extrabold text-base flex items-center justify-between text-foreground">
                 <span>Balance Sheet (Statement of Financial Position)</span>
                 <span className="text-xs font-mono text-emerald-500 font-extrabold">
-                  {statements.balanceSheet.isBalanced ? "✓ Debits == Credits" : "Reconciliation Notice"}
+                  {statements.balanceSheet.isBalanced ? "Balanced: Debits Equal Credits" : "Reconciliation Notice"}
                 </span>
               </h3>
 
@@ -3075,7 +3076,7 @@ export default function SuperAdminFinancePage() {
               <h3 className="font-bold text-lg flex items-center gap-2">
                 <UserCheck className="w-5 h-5 text-primary" /> Switch Staff Profile
               </h3>
-              <button onClick={() => setShowSwitchUserModal(false)} className="text-muted-foreground hover:text-foreground">✕</button>
+              <button onClick={() => setShowSwitchUserModal(false)} className="text-muted-foreground hover:text-foreground p-1 rounded-sm"><X className="size-4" /></button>
             </div>
             <div className="space-y-2">
               {ENTERPRISE_FINANCE_USERS.map((u) => (
@@ -3112,7 +3113,7 @@ export default function SuperAdminFinancePage() {
               <h3 className="font-bold text-lg flex items-center gap-2">
                 <Receipt className="w-5 h-5 text-emerald-500" /> Fast POS Fee Collection
               </h3>
-              <button onClick={() => setShowPosModal(false)} className="text-muted-foreground hover:text-foreground">✕</button>
+              <button onClick={() => setShowPosModal(false)} className="text-muted-foreground hover:text-foreground p-1 rounded-sm"><X className="size-4" /></button>
             </div>
 
             <form onSubmit={handleRecordPosPayment} className="space-y-3">
@@ -3196,8 +3197,9 @@ export default function SuperAdminFinancePage() {
                 <Button type="button" variant="outline" onClick={() => setShowPosModal(false)} className="rounded-none">
                   Cancel
                 </Button>
-                <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 rounded-none font-bold">
-                  🖨️ Collect & Issue Receipt
+                <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 rounded-none font-bold inline-flex items-center gap-1.5">
+                  <Printer className="size-4" />
+                  <span>Collect & Issue Receipt</span>
                 </Button>
               </div>
             </form>
@@ -3251,7 +3253,7 @@ export default function SuperAdminFinancePage() {
           <div className="bg-card border border-border rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-lg">Issue Term Fee Invoice</h3>
-              <button onClick={() => setShowInvoiceModal(false)} className="text-muted-foreground hover:text-foreground">✕</button>
+              <button onClick={() => setShowInvoiceModal(false)} className="text-muted-foreground hover:text-foreground p-1 rounded-sm"><X className="size-4" /></button>
             </div>
 
             <form onSubmit={handleCreateInvoice} className="space-y-3">
@@ -3320,7 +3322,7 @@ export default function SuperAdminFinancePage() {
           <div className="bg-card border border-border rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-lg">Record Expenditure Voucher</h3>
-              <button onClick={() => setShowExpenseModal(false)} className="text-muted-foreground hover:text-foreground">✕</button>
+              <button onClick={() => setShowExpenseModal(false)} className="text-muted-foreground hover:text-foreground p-1 rounded-sm"><X className="size-4" /></button>
             </div>
 
             <form onSubmit={handleCreateExpense} className="space-y-3">
@@ -3401,7 +3403,7 @@ export default function SuperAdminFinancePage() {
               <h3 className="font-bold text-lg flex items-center gap-2">
                 <ArrowRightLeft className="w-5 h-5 text-purple-500" /> Internal Funds Transfer
               </h3>
-              <button onClick={() => setShowTransferModal(false)} className="text-muted-foreground hover:text-foreground">✕</button>
+              <button onClick={() => setShowTransferModal(false)} className="text-muted-foreground hover:text-foreground p-1 rounded-sm"><X className="size-4" /></button>
             </div>
 
             <form onSubmit={handleTransferFunds} className="space-y-3">
@@ -3473,7 +3475,7 @@ export default function SuperAdminFinancePage() {
               <h3 className="font-bold text-lg flex items-center gap-2">
                 <Scale className="w-5 h-5 text-indigo-500" /> Manual Journal Voucher
               </h3>
-              <button onClick={() => setShowJournalModal(false)} className="text-muted-foreground hover:text-foreground">✕</button>
+              <button onClick={() => setShowJournalModal(false)} className="text-muted-foreground hover:text-foreground p-1 rounded-sm"><X className="size-4" /></button>
             </div>
             <p className="text-xs text-muted-foreground">
               Posts an authenticated balanced double-entry transaction to the General Ledger.
@@ -3552,7 +3554,7 @@ export default function SuperAdminFinancePage() {
               <h3 className="font-bold text-lg flex items-center gap-2">
                 <Users className="w-5 h-5 text-pink-500" /> Run Faculty & Staff Payroll
               </h3>
-              <button onClick={() => setShowPayrollModal(false)} className="text-muted-foreground hover:text-foreground">✕</button>
+              <button onClick={() => setShowPayrollModal(false)} className="text-muted-foreground hover:text-foreground p-1 rounded-sm"><X className="size-4" /></button>
             </div>
 
             <form onSubmit={handleProcessPayroll} className="space-y-3">
@@ -3723,8 +3725,8 @@ export default function SuperAdminFinancePage() {
           <div className="bg-card text-card-foreground border border-border max-w-2xl w-full p-6 sm:p-8 rounded-none shadow-2xl space-y-6">
             <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
               <div className="flex items-center gap-3">
-                <div className="size-12 bg-amber-500/20 text-amber-500 border border-amber-500/30 flex items-center justify-center font-bold text-2xl">
-                  💼
+                <div className="size-12 bg-amber-500/20 text-amber-500 border border-amber-500/30 flex items-center justify-center font-bold">
+                  <Download className="size-6 text-amber-500" />
                 </div>
                 <div>
                   <h3 className="font-display font-extrabold text-lg sm:text-xl text-foreground">
@@ -3736,10 +3738,11 @@ export default function SuperAdminFinancePage() {
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => setShowDownloadAppModal(false)}
-                className="text-muted-foreground hover:text-foreground text-sm font-bold"
+                className="text-muted-foreground hover:text-foreground p-1 rounded-sm"
               >
-                ✕
+                <X className="size-4" />
               </button>
             </div>
 
@@ -3875,9 +3878,9 @@ export default function SuperAdminFinancePage() {
               <button
                 type="button"
                 onClick={() => setShowFloatModal(false)}
-                className="text-muted-foreground hover:text-foreground text-sm font-bold"
+                className="text-muted-foreground hover:text-foreground p-1 rounded-sm"
               >
-                ✕
+                <X className="size-4" />
               </button>
             </div>
 

@@ -368,7 +368,7 @@ export function SchoolAutomationWizard({ isOpen, onClose }: SchoolAutomationWiza
         {/* Wizard Step Tabs */}
         <div className="flex items-center border-b border-slate-200 bg-slate-50 px-3 overflow-x-auto shrink-0 scrollbar-none text-xs">
           {[
-            { id: "doc_ingest", label: "Document & ZIP (AI)", icon: FileArchive, badge: "AI Engine" },
+            { id: "doc_ingest", label: "Document & ZIP Ingestion", icon: FileArchive, badge: "Automated" },
             { id: "identity", label: "School Identity & Legal", icon: Building2 },
             { id: "academics", label: "Academics & Grading", icon: BookOpen },
             { id: "finance", label: "Finance & POS Settings", icon: Wallet },
@@ -403,7 +403,7 @@ export function SchoolAutomationWizard({ isOpen, onClose }: SchoolAutomationWiza
 
         {/* Wizard Main Content Body */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50/50">
-          {/* TAB 1: DOCUMENT & ZIP INGESTION (AI) */}
+          {/* TAB 1: DOCUMENT & ARCHIVE INGESTION */}
           {activeTab === "doc_ingest" && (
             <div className="space-y-6 max-w-4xl mx-auto">
               {/* Hero Banner */}
@@ -416,7 +416,7 @@ export function SchoolAutomationWizard({ isOpen, onClose }: SchoolAutomationWiza
                     Automate Full School Setup from an Official Document or Archive
                   </h3>
                   <p className="text-xs text-slate-300 max-w-xl mt-0.5">
-                    Upload your school prospectus, strategic plan, fee schedule, staff handbook, or a ZIP file with your badge logo. EDUREXA AI extracts all institutional identities, UNEB/MoES numbers, grading scales, fee structures, bank accounts, and daily schedules automatically.
+                    Upload your school prospectus, strategic plan, fee schedule, staff handbook, or a ZIP file with your badge logo. EDUREXA automatically extracts all institutional identities, UNEB/MoES numbers, grading scales, fee structures, bank accounts, and daily schedules automatically.
                   </p>
                 </div>
 

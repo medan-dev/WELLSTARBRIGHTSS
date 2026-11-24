@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Utensils } from "lucide-react";
+import { Utensils, X } from "lucide-react";
 
 interface IssueMealCardModalProps {
   isOpen: boolean;
@@ -57,10 +57,11 @@ export function IssueMealCardModal({
             Issue Student Dining Pass
           </h3>
           <button
+            type="button"
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground text-xl"
+            className="text-muted-foreground hover:text-foreground p-1 rounded-sm"
           >
-            ✕
+            <X className="size-4" />
           </button>
         </div>
         <p className="text-xs text-muted-foreground">

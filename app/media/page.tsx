@@ -21,6 +21,8 @@ import {
   Clock,
   MoreHorizontal,
   ChevronDown,
+  Calendar,
+  MapPin,
 } from "lucide-react";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
@@ -726,7 +728,7 @@ export default function MediaPage() {
           <div className="relative z-10 px-6 sm:px-10 lg:px-16 pt-16 pb-12">
             {/* Label */}
             <p className="text-amber-400 text-xs font-bold uppercase tracking-[0.25em] mb-3">
-              🎵 EDUREXA Campus
+              EDUREXA Campus
             </p>
             <h1 className="text-white font-display font-black text-5xl md:text-7xl leading-none mb-4">
               Media Hub
@@ -915,8 +917,18 @@ export default function MediaPage() {
                           <h3 className="text-white font-bold text-base mb-2 leading-snug">{notice.title}</h3>
                           {(notice.eventDate || notice.location) && (
                             <div className="space-y-1 mb-3 p-2.5 rounded-lg bg-white/5 text-xs text-white/50">
-                              {notice.eventDate && <div>📅 <span className="text-white/70">{notice.eventDate}</span></div>}
-                              {notice.location && <div>📍 <span className="text-white/70">{notice.location}</span></div>}
+                              {notice.eventDate && (
+                                <div className="flex items-center gap-1.5">
+                                  <Calendar className="size-3 text-amber-400 shrink-0" />
+                                  <span className="text-white/70">{notice.eventDate}</span>
+                                </div>
+                              )}
+                              {notice.location && (
+                                <div className="flex items-center gap-1.5">
+                                  <MapPin className="size-3 text-amber-400 shrink-0" />
+                                  <span className="text-white/70">{notice.location}</span>
+                                </div>
+                              )}
                             </div>
                           )}
                           <p className="text-xs text-white/40 leading-relaxed line-clamp-3">{notice.content}</p>

@@ -49,7 +49,7 @@ const socialReviews = [
     avatar: "ND",
     rating: 5,
     date: "Yesterday",
-    content: "Congratulations to Wellstar Bright choir for winning the National Music & Drama school finals once again! The talent at this school is unmatched. 🌟🏆 #WellstarBright #Mukono"
+    content: "Congratulations to Wellstar Bright choir for winning the National Music & Drama school finals once again! The talent at this school is unmatched. #WellstarBright #Mukono"
   },
   {
     id: 4,

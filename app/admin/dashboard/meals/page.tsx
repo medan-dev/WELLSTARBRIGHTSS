@@ -27,6 +27,7 @@ import {
   Eye,
   SlidersHorizontal,
   ChevronDown,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -754,8 +755,9 @@ export default function MealCardsManagementPage() {
                         <td className="p-4 font-semibold text-foreground">
                           {card.student?.name || "Unknown"}
                           {card.allergies && (
-                            <span className="block text-xs font-normal text-rose-500">
-                              ⚠️ {card.allergies}
+                            <span className="flex items-center gap-1 text-xs font-normal text-rose-500 mt-0.5">
+                              <AlertTriangle className="size-3 text-amber-500 shrink-0" />
+                              <span>{card.allergies}</span>
                             </span>
                           )}
                         </td>
@@ -967,10 +969,11 @@ export default function MealCardsManagementPage() {
                 Issue Student Meal Pass
               </h3>
               <button
+                type="button"
                 onClick={() => setShowIssueModal(false)}
-                className="text-muted-foreground hover:text-foreground text-xl"
+                className="text-muted-foreground hover:text-foreground p-1 rounded-sm"
               >
-                ✕
+                <X className="size-4" />
               </button>
             </div>
 

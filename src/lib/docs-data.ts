@@ -782,7 +782,7 @@ Verify online: https://edurexa.com/verify
             language: "text",
             code: `Dear Mr. Patrick Mutebi,
 
-✅ Payment Confirmation:
+Payment Confirmation:
 We have received UGX 1,200,000 for Ronald Mutebi (Senior 4 East).
 Official Receipt Number: #REC-8924.
 Remaining Term Balance: UGX 0.

@@ -479,8 +479,8 @@ export default function AdminNoticeBoard() {
                         onChange={(e) => setNewStudent(prev => ({ ...prev, status: e.target.value as any }))}
                         className="w-full px-2.5 py-1.5 bg-white border border-gray-200 rounded text-xs focus:ring-1 focus:ring-amber-500"
                       >
-                        <option value="top">🏆 Outperforming / Honor Roll</option>
-                        <option value="attention">⚠️ Academic Intervention / Needs Support</option>
+                        <option value="top">Outperforming / Honor Roll</option>
+                        <option value="attention">Academic Intervention / Needs Support</option>
                       </select>
                     </div>
                     <div>
@@ -589,12 +589,12 @@ export default function AdminNoticeBoard() {
                     onChange={(e) => setCategory(e.target.value)}
                     className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded text-xs font-medium focus:ring-1 focus:ring-orange-500"
                   >
-                    <option value="General">📢 General</option>
-                    <option value="Academic">🏆 Academic</option>
-                    <option value="Event">📅 Event</option>
-                    <option value="Sports">⚽ Sports</option>
-                    <option value="Urgent">🚨 Urgent</option>
-                    <option value="Celebration">🎉 Celebration</option>
+                    <option value="General">General</option>
+                    <option value="Academic">Academic</option>
+                    <option value="Event">Event</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Urgent">Urgent</option>
+                    <option value="Celebration">Celebration</option>
                   </select>
                 </div>
 
@@ -719,10 +719,10 @@ export default function AdminNoticeBoard() {
           <div className="flex flex-wrap gap-1.5">
             {[
               { id: "ALL", label: "All Formats" },
-              { id: "ANNOUNCEMENT", label: "📢 Announcements" },
-              { id: "EVENT", label: "📅 Events" },
-              { id: "PERFORMANCE", label: "🏆 Performance" },
-              { id: "MEDIA", label: "🎥 Video" }
+              { id: "ANNOUNCEMENT", label: "Announcements" },
+              { id: "EVENT", label: "Events" },
+              { id: "PERFORMANCE", label: "Performance" },
+              { id: "MEDIA", label: "Video" }
             ].map(f => (
               <button
                 key={f.id}

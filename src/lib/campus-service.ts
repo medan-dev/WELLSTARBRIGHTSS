@@ -48,7 +48,7 @@ export async function initializeDefaultSchoolAndCampus() {
         contactPhone: "+256 758 611 414",
         website: "https://edurexa.com",
         status: "ACTIVE",
-        maxCampuses: MAX_CAMPUSES_PER_SCHOOL, // 🛡️ 20 Campus Hard Limit
+        maxCampuses: MAX_CAMPUSES_PER_SCHOOL, // 20 Campus Hard Limit
       },
     });
   }
@@ -183,7 +183,7 @@ export async function createCampusWithGuardrails(data: {
     throw new Error("School Organization not found.");
   }
 
-  // 🛡️ Enterprise Hard Limit Check
+  // Enterprise Hard Limit Check
   if (org._count.campuses >= org.maxCampuses) {
     throw new Error(
       `Enterprise Guardrail Triggered: This school group has reached its maximum contract limit of ${org.maxCampuses} campuses.`

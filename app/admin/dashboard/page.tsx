@@ -64,7 +64,7 @@ export default function Overview() {
     <>
       <div className="flex items-start justify-between mb-8">
         <div className="space-y-1.5">
-          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">Welcome back, Administrator 👋</h1>
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">Welcome back, Administrator</h1>
           <p className="text-sm sm:text-base text-muted-foreground font-medium">Here's what's happening across the academy today.</p>
         </div>
         <LiveClock />
