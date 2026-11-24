@@ -1,20 +1,22 @@
 "use client";
 
-import { useEffect } from "react";
+import dynamic from "next/dynamic";
+
+const FinanceWorkstationView = dynamic(
+  () => import("@/components/finance/FinanceWorkstationView"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="min-h-screen w-full bg-slate-50 dark:bg-[#090d16] flex flex-col items-center justify-center gap-3 text-slate-900 dark:text-slate-100 font-sans">
+        <div className="size-10 rounded-full border-3 border-amber-500 border-t-transparent animate-spin" />
+        <div className="text-xs font-mono tracking-widest text-slate-500 uppercase">
+          Initializing Bursar Workstation...
+        </div>
+      </div>
+    ),
+  }
+);
 
 export default function StandaloneFinanceDashboardPage() {
-  useEffect(() => {
-    document.title = "Wellstar Bright — Bursar Financial Workstation";
-  }, []);
-
-  return (
-    <div className="fixed inset-0 w-screen h-screen m-0 p-0 overflow-hidden bg-[#090d16] z-50">
-      <iframe
-        src="/finance-app/index.html"
-        className="w-full h-full border-0 block"
-        title="Wellstar Bright — Financial Workstation & POS"
-        allow="clipboard-read; clipboard-write; print"
-      />
-    </div>
-  );
+  return <FinanceWorkstationView />;
 }
