@@ -52,6 +52,7 @@ desktop-finance-app/dist/
 # ==============================================================================
 logs/
 *.log
+launcher/server.pid
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
